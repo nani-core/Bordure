@@ -40,12 +40,21 @@ Shader "Utility/Projective Transform by Corners" {
 			float4 _UvTopRight;
 
 			fixed4 FragmentProgram(FragmentInput i) : SV_Target {
+				// Restore projected coordinates back to 3D space.
+				_UvBottomLeft.xy = _UvBottomLeft.xy * _UvBottomLeft.z;
+				_UvBottomRight.xy = _UvBottomRight.xy * _UvBottomRight.z;
+				_UvTopLeft.xy = _UvTopLeft.xy * _UvTopLeft.z;
+				_UvTopRight.xy = _UvTopRight.xy * _UvTopRight.z;
+
 				float2 uv = i.uv;
 
-				float2 bottom = lerp(_UvBottomLeft, _UvBottomRight, uv.x);
-				float2 top = lerp(_UvTopLeft, _UvTopRight, uv.x);
+				float3 bottom = lerp(_UvBottomLeft, _UvBottomRight, uv.x);
+				float3 top = lerp(_UvTopLeft, _UvTopRight, uv.x);
 
-				float2 samplePoint = lerp(bottom, top, uv.y);
+				float3 samplePoint = lerp(bottom, top, uv.y);
+
+				// Project back to screen.
+				samplePoint.xy = samplePoint.xy / samplePoint.z;
 
 				return tex2D(_MainTex, samplePoint);
 			}

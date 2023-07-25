@@ -39,21 +39,17 @@ namespace NaniCore.UnityPlayground {
 
 		#region Functions
 		#region Display texture
-		/// <summary>
-		/// Apply perspective twist on display texture based on the relative
-		/// transform of the main camera to twin.
-		/// </summary>
 		protected void SkewTexture() {
-			if(twin == null || Camera.main == null)
+			if(twin == null)
 				return;
 
-			Camera camera = Camera.main;
-			RenderSettings.UvRectAnchor anchors = renderSettings.uvAnchors;
+			Camera camera = twin.viewCamera;
+			RenderSettings.UvRectAnchor anchors = twin.renderSettings.uvAnchors;
 
-			Vector2 bottomLeft = camera.WorldToViewportPoint(anchors.bottomLeft.position);
-			Vector2 bottomRight = camera.WorldToViewportPoint(anchors.bottomRight.position);
-			Vector2 topLeft = camera.WorldToViewportPoint(anchors.topLeft.position);
-			Vector2 topRight = camera.WorldToViewportPoint(anchors.topRight.position);
+			Vector3 bottomLeft = camera.WorldToViewportPoint(anchors.bottomLeft.position);
+			Vector3 bottomRight = camera.WorldToViewportPoint(anchors.bottomRight.position);
+			Vector3 topLeft = camera.WorldToViewportPoint(anchors.topLeft.position);
+			Vector3 topRight = camera.WorldToViewportPoint(anchors.topRight.position);
 
 			projectiveTransformMaterial.SetVector("_UvBottomLeft", bottomLeft);
 			projectiveTransformMaterial.SetVector("_UvBottomRight", bottomRight);
@@ -118,6 +114,11 @@ namespace NaniCore.UnityPlayground {
 			if(twin != null) {
 				if(viewCamera.targetTexture != twin.unskewedTexture)
 					viewCamera.targetTexture = twin.unskewedTexture;
+			}
+
+			// Sync FOV to main camera.
+			if(Camera.main) {
+				viewCamera.fieldOfView = Camera.main.fieldOfView;
 			}
 		}
 
