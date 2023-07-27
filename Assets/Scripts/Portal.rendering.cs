@@ -9,6 +9,7 @@ namespace NaniCore.UnityPlayground {
 	 * Here implements how a portal is rendered.
 	 */
 	public partial class Portal : MonoBehaviour {
+		#region Constants & statics
 		const string targetTexturePropertyName = "_MainTex";
 		const string portalLayerName = "Portal";
 
@@ -16,7 +17,9 @@ namespace NaniCore.UnityPlayground {
 		static Shader projectiveTransformShader;
 		static Material projectiveTransformMaterial;
 		static LayerMask viewCameraLayerMask;
+		#endregion
 
+		#region Serialized fields
 		[Serializable]
 		public class RenderSettings {
 			public MeshRenderer renderer;
@@ -28,8 +31,6 @@ namespace NaniCore.UnityPlayground {
 			}
 			public UvRectAnchor uvAnchors;
 		}
-
-		#region Serialized fields
 		public RenderSettings renderSettings;
 		#endregion
 

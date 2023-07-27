@@ -1,8 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
-using System.Linq;
 using System;
-using UnityEditor.Experimental.GraphView;
 
 namespace NaniCore.UnityPlayground {
 	/*
@@ -15,23 +13,22 @@ namespace NaniCore.UnityPlayground {
 		public abstract class Passenger : IDisposable {
 			public readonly Collider root;
 			public readonly Transform transform;
-			public Vector3[] originalVertices;
+			public Mesh originalMesh, clampedMesh;
 			protected Matrix4x4 lastRelativeMatrix;
 
-			public Passenger(Collider root, Transform transform) {
+			public Passenger(Collider root, Transform transform, Mesh originalMesh) {
 				this.root = root;
 				this.transform = transform;
+				this.originalMesh = originalMesh;
+				clampedMesh = Instantiate(originalMesh);
+				clampedMesh.name = $"{originalMesh.name} (portal- clampped instance)";
 			}
 
-			public abstract Mesh Mesh { get; }
-
 			public void ClampMeshToPortal(Portal portal) {
-				Mesh mesh = Mesh;
-				if(mesh == null)
+				if(originalMesh == null)
 					return;
 
-				Vector3[] clampedVertices = new Vector3[originalVertices.Length];
-				originalVertices.CopyTo(clampedVertices, 0);
+				Vector3[] clampedVertices = originalMesh.vertices;
 
 				Matrix4x4 localToPortal = portal.transform.worldToLocalMatrix * transform.localToWorldMatrix;
 				Matrix4x4 portalToLocal = localToPortal.inverse;
@@ -40,18 +37,17 @@ namespace NaniCore.UnityPlayground {
 					Vector3 positionUnderPortal = localToPortal.MultiplyPoint(clampedVertices[i]);
 					if(positionUnderPortal.z > 0) {
 						positionUnderPortal.z = 0;
-						clampedVertices[i] = portalToLocal.MultiplyPoint(positionUnderPortal);
+						Vector3 restoredLocalPosition = portalToLocal.MultiplyPoint(positionUnderPortal);
+						restoredLocalPosition.x = 0;
+						restoredLocalPosition.y = 0;
+						clampedVertices[i] = restoredLocalPosition;
 					}
 				}
 
-				mesh.vertices = clampedVertices;
+				clampedMesh.vertices = clampedVertices;
 			}
 
-			public void Dispose() {
-				Mesh mesh = Mesh;
-				if(mesh != null)
-					mesh.vertices = originalVertices;
-			}
+			public abstract void Dispose();
 
 			public bool ReclampMeshIfNecessary(Portal portal) {
 				Matrix4x4 relativeMatrix = portal.transform.worldToLocalMatrix * transform.localToWorldMatrix;
@@ -66,23 +62,31 @@ namespace NaniCore.UnityPlayground {
 		public class MeshFilterPassenger : Passenger {
 			public readonly MeshFilter meshFilter;
 
-			public MeshFilterPassenger(Collider root, MeshFilter meshFilter) : base(root, meshFilter.transform) {
+			public MeshFilterPassenger(Collider root, MeshFilter meshFilter)
+				: base(root, meshFilter.transform, meshFilter.sharedMesh) {
 				this.meshFilter = meshFilter;
-				originalVertices = Mesh?.vertices;
+				meshFilter.sharedMesh = clampedMesh;
 			}
 
-			public override Mesh Mesh => meshFilter?.sharedMesh;
+			public override void Dispose() {
+				if(meshFilter != null)
+					meshFilter.sharedMesh = originalMesh;
+			}
 		}
 
 		public class MeshColliderPassenger : Passenger {
 			public readonly MeshCollider meshCollider;
 
-			public MeshColliderPassenger(Collider root, MeshCollider meshCollider) : base(root, meshCollider.transform) {
+			public MeshColliderPassenger(Collider root, MeshCollider meshCollider)
+				: base(root, meshCollider.transform, meshCollider.sharedMesh) {
 				this.meshCollider = meshCollider;
-				originalVertices = Mesh?.vertices;
+				meshCollider.sharedMesh = clampedMesh;
 			}
 
-			public override Mesh Mesh => meshCollider?.sharedMesh;
+			public override void Dispose() {
+				if(meshCollider != null)
+					meshCollider.sharedMesh = originalMesh;
+			}
 		}
 		#endregion
 
@@ -130,7 +134,7 @@ namespace NaniCore.UnityPlayground {
 		#region Life cycle
 		protected void OnColliderEnterPortal(Collider collider) {
 			HashSet<Passenger> set = TryAddRoot(collider, out string addError);
-			
+
 			if(!string.IsNullOrEmpty(addError))
 				Debug.LogWarning($"{collider.name} enters portal {name}, but is not recorded as root: {addError}", this);
 			else
