@@ -40,17 +40,19 @@ namespace NaniCore.UnityPlayground {
 
 		protected void LateUpdate() {
 			LateUpdateRendering();
+			LastUpdatePassenger();
 		}
 
 		protected void OnBecameVisible() => enabled = true;
 		protected void OnBecameInvisible() => enabled = false;
 
 		protected void OnTriggerEnter(Collider other) {
-			OnObjectEnterPortal(other);
+			Debug.Log(other, other);
+			OnColliderEnterPortal(other);
 		}
 
 		protected void OnTriggerExit(Collider other) {
-			OnObjectExitPortal(other);
+			OnColliderExitPortal(other);
 		}
 		#endregion
 	}

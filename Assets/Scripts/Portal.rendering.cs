@@ -59,7 +59,9 @@ namespace NaniCore.UnityPlayground {
 
 			Graphics.Blit(unskewedTexture, displayTexture, projectiveTransformMaterial);
 		}
+		#endregion
 
+		#region Life cycle
 		private void GlobalOnPostRenderCallback(Camera camera) {
 			if(camera == viewCamera)
 				OnViewCameraPostRender();
