@@ -1,8 +1,10 @@
 using UnityEngine;
+using UnityEngine.Rendering;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 using System;
+using System.Linq;
 
 namespace NaniCore.UnityPlayground {
 	/*
@@ -10,7 +12,7 @@ namespace NaniCore.UnityPlayground {
 	 */
 	public partial class Portal : MonoBehaviour {
 		#region Constants & statics
-		const string targetTexturePropertyName = "_MainTex";
+		const string targetTexturePropertyName = "_BaseMap";
 		const string portalLayerName = "Portal";
 
 		const string projectiveTransformShaderName = "Utility/Projective Transform by Corners";
@@ -63,8 +65,8 @@ namespace NaniCore.UnityPlayground {
 		#endregion
 
 		#region Life cycle
-		private void GlobalOnPostRenderCallback(Camera camera) {
-			if(camera == viewCamera)
+		private void GlobalOnPostRenderCallback(ScriptableRenderContext context, Camera[] cameras) {
+			if(cameras.Contains(viewCamera))
 				OnViewCameraPostRender();
 		}
 
@@ -91,11 +93,11 @@ namespace NaniCore.UnityPlayground {
 			viewCamera.transform.SetParent(transform, false);
 			viewCamera.backgroundColor = Color.black;
 			viewCamera.cullingMask = viewCameraLayerMask;
-			Camera.onPostRender += GlobalOnPostRenderCallback;
+			RenderPipelineManager.endFrameRendering += GlobalOnPostRenderCallback;
 		}
 
 		protected void FinalizeRendering() {
-			Camera.onPostRender -= GlobalOnPostRenderCallback;
+			RenderPipelineManager.endFrameRendering -= GlobalOnPostRenderCallback;
 			RenderTexture.ReleaseTemporary(unskewedTexture);
 			RenderTexture.ReleaseTemporary(displayTexture);
 		}
