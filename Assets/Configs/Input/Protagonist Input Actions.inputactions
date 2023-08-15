@@ -6,6 +6,15 @@
             "id": "836effa2-4650-4bf8-b92f-02ee47a5b648",
             "actions": [
                 {
+                    "name": "MoveDelta",
+                    "type": "Value",
+                    "id": "1fb07ab1-2e47-443b-9b4f-c45e64e350ce",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
                     "name": "OrientDelta",
                     "type": "Value",
                     "id": "6979c56e-1a1e-41ba-ba4b-dd9f2ffbed92",
@@ -16,6 +25,61 @@
                 }
             ],
             "bindings": [
+                {
+                    "name": "WASD",
+                    "id": "f15d1c45-1745-4b8f-97ba-bf4bc5d36dd6",
+                    "path": "2DVector",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MoveDelta",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "up",
+                    "id": "94e518b6-7205-4193-a805-7653cf5c0545",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PC",
+                    "action": "MoveDelta",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "down",
+                    "id": "09649d8c-8dc3-455b-b3fa-867337ac664c",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PC",
+                    "action": "MoveDelta",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "left",
+                    "id": "9f1cc7f3-2a72-49f1-8249-02edb6fab87b",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PC",
+                    "action": "MoveDelta",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "right",
+                    "id": "9b22f9b2-22e8-4b30-ab9c-ec7b4e22d3ae",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PC",
+                    "action": "MoveDelta",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
                 {
                     "name": "",
                     "id": "65e71a65-679b-467d-b0f9-dff64627c0a2",

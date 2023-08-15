@@ -7,6 +7,7 @@ namespace NaniCore.UnityPlayground {
 	public class ProtagonistInputHandler : MonoBehaviour {
 		#region Fields
 		protected Protagonist protagonist;
+		protected Vector2 moveDelta;
 		#endregion
 
 		#region Life cycle
@@ -21,6 +22,10 @@ namespace NaniCore.UnityPlayground {
 		protected void OnDisable() {
 			Cursor.lockState = CursorLockMode.None;
 		}
+
+		protected void FixedUpdate() {
+			Protagonist.MoveDelta(moveDelta * Time.fixedDeltaTime);
+		}
 		#endregion
 
 		#region Internal accessors
@@ -28,10 +33,12 @@ namespace NaniCore.UnityPlayground {
 		#endregion
 
 		#region Handlers
+		protected void OnMoveDelta(InputValue value) {
+			moveDelta = value.Get<Vector2>();
+		}
+
 		protected void OnOrientDelta(InputValue value) {
-			Vector2 raw = value.Get<Vector2>();
-			Protagonist.Azimuth += raw.x;
-			Protagonist.Zenith += raw.y;
+			Protagonist.OrientDelta(value.Get<Vector2>());
 		}
 		#endregion
 	}

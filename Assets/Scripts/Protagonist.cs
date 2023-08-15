@@ -8,13 +8,22 @@ namespace NaniCore.UnityPlayground {
 		#region Serialized fields
 		[Header("Geometry")]
 		[SerializeField] protected CapsuleCollider capsuleCollider;
-		[SerializeField] [Min(0)] protected float height;
-		[SerializeField] [Min(0)] protected float radius;
+		[SerializeField][Min(0)] protected float height;
+		[SerializeField][Min(0)] protected float radius;
 		[SerializeField] protected Transform eye;
-		[SerializeField] [Min(0)] protected float eyeHanging;
+		[SerializeField][Min(0)] protected float eyeHanging;
 
 		[Header("Physics")]
 		protected new Rigidbody rigidbody;
+
+		[Header("Control")]
+		[SerializeField][Min(0)] protected float walkingSpeed;
+		[SerializeField][Min(0)] protected float runningSpeed;
+		[SerializeField][Min(0)] protected float orientingSpeed;
+		#endregion
+
+		#region Fields
+		protected bool isRunning = false;
 		#endregion
 
 		#region Life cycle
@@ -31,7 +40,7 @@ namespace NaniCore.UnityPlayground {
 			capsuleCollider.center = Vector3.Scale(capsuleCollider.center, Vector3.one - Vector3.up) + Vector3.up * (height * .5f);
 			capsuleCollider.radius = radius;
 
-			rigidbody =	GetComponent<Rigidbody>();
+			rigidbody = GetComponent<Rigidbody>();
 
 			if(eye != null) {
 				eye.localPosition = Vector3.up * (height - eyeHanging);
@@ -39,7 +48,14 @@ namespace NaniCore.UnityPlayground {
 		}
 		#endregion
 
-		#region Movement control
+		#region Control
+		public bool IsRunning {
+			get => isRunning;
+			set => isRunning = value;
+		}
+
+		protected float MovingSpeed => IsRunning ? runningSpeed : walkingSpeed;
+
 		/// <summary>
 		/// What direction is the protagonist looking at, in rad.
 		/// </summary>
@@ -76,6 +92,17 @@ namespace NaniCore.UnityPlayground {
 				degree = Mathf.Clamp(degree, -90, 90);
 				eye.localRotation = Quaternion.Euler(-degree, 0, 0);
 			}
+		}
+
+		public void OrientDelta(Vector2 delta) {
+			delta *= orientingSpeed;
+			Azimuth += delta.x;
+			Zenith += delta.y;
+		}
+
+		public void MoveDelta(Vector2 delta) {
+			delta *= MovingSpeed;
+			transform.position += eye.transform.right * delta.x + transform.forward * delta.y;
 		}
 		#endregion
 	}
