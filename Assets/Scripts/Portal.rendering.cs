@@ -12,7 +12,7 @@ namespace NaniCore.UnityPlayground {
 	 */
 	public partial class Portal : MonoBehaviour {
 		#region Constants & statics
-		const string targetTexturePropertyName = "_BaseMap";
+		const string targetTexturePropertyName = "_MainTex";
 		const string portalLayerName = "Portal";
 
 		const string projectiveTransformShaderName = "Utility/Projective Transform by Corners";
