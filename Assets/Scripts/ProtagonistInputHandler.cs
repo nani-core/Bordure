@@ -40,6 +40,10 @@ namespace NaniCore.UnityPlayground {
 		protected void OnOrientDelta(InputValue value) {
 			Protagonist.OrientDelta(value.Get<Vector2>());
 		}
+
+		protected void OnSetSprinting(InputValue value) {
+			Protagonist.IsSprinting = value.Get<float>() > .5f;
+		}
 		#endregion
 	}
 }

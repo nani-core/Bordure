@@ -22,6 +22,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "SetSprinting",
+                    "type": "Button",
+                    "id": "33a43011-a3c7-4907-8472-8f0dc8fe6ab0",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press(behavior=2)",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -88,6 +97,17 @@
                     "processors": "InvertVector2(invertX=false,invertY=false),ScaleVector2(x=0.004,y=0.004)",
                     "groups": "PC",
                     "action": "OrientDelta",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e387ccc3-e5ec-4ebe-aeec-73145a2349fe",
+                    "path": "<Keyboard>/leftShift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PC",
+                    "action": "SetSprinting",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

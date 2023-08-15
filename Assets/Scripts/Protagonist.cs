@@ -18,7 +18,7 @@ namespace NaniCore.UnityPlayground {
 
 		[Header("Control")]
 		[SerializeField][Min(0)] protected float walkingSpeed;
-		[SerializeField][Min(0)] protected float runningSpeed;
+		[SerializeField][Min(0)] protected float sprintingSpeed;
 		[SerializeField][Min(0)] protected float orientingSpeed;
 		#endregion
 
@@ -49,12 +49,12 @@ namespace NaniCore.UnityPlayground {
 		#endregion
 
 		#region Control
-		public bool IsRunning {
+		public bool IsSprinting {
 			get => isRunning;
 			set => isRunning = value;
 		}
 
-		protected float MovingSpeed => IsRunning ? runningSpeed : walkingSpeed;
+		protected float MovingSpeed => IsSprinting ? sprintingSpeed : walkingSpeed;
 
 		/// <summary>
 		/// What direction is the protagonist looking at, in rad.
