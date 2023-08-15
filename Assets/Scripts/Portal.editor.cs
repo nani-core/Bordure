@@ -21,6 +21,10 @@ namespace NaniCore.UnityPlayground {
 				previousTwin = twin;
 			}
 		}
+
+		protected void OnDrawGizmos() {
+			//
+		}
 		#endregion
 	}
 }

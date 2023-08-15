@@ -11,12 +11,14 @@ namespace NaniCore.UnityPlayground {
 	public partial class Portal : MonoBehaviour {
 		#region Passenger definitions
 		public abstract class Passenger : IDisposable {
-			public readonly Collider root;
+			public Portal portal;
+			public readonly Transform root;
 			public readonly Transform transform;
 			public Mesh originalMesh, clampedMesh;
 			protected Matrix4x4 lastRelativeMatrix;
 
-			public Passenger(Collider root, Transform transform, Mesh originalMesh) {
+			public Passenger(Portal portal, Transform root, Transform transform, Mesh originalMesh) {
+				this.portal = portal;
 				this.root = root;
 				this.transform = transform;
 				this.originalMesh = originalMesh;
@@ -24,7 +26,7 @@ namespace NaniCore.UnityPlayground {
 				clampedMesh.name = $"{originalMesh.name} (portal- clampped instance)";
 			}
 
-			public void ClampMeshToPortal(Portal portal) {
+			public void ClampMeshToPortal() {
 				if(originalMesh == null)
 					return;
 
@@ -45,6 +47,8 @@ namespace NaniCore.UnityPlayground {
 				}
 
 				clampedMesh.vertices = clampedVertices;
+
+				lastRelativeMatrix = localToPortal;
 			}
 
 			public abstract void Dispose();
@@ -53,8 +57,7 @@ namespace NaniCore.UnityPlayground {
 				Matrix4x4 relativeMatrix = portal.transform.worldToLocalMatrix * transform.localToWorldMatrix;
 				if(lastRelativeMatrix == relativeMatrix)
 					return false;
-				ClampMeshToPortal(portal);
-				lastRelativeMatrix = relativeMatrix;
+				ClampMeshToPortal();
 				return true;
 			}
 		}
@@ -62,8 +65,8 @@ namespace NaniCore.UnityPlayground {
 		public class MeshFilterPassenger : Passenger {
 			public readonly MeshFilter meshFilter;
 
-			public MeshFilterPassenger(Collider root, MeshFilter meshFilter)
-				: base(root, meshFilter.transform, meshFilter.sharedMesh) {
+			public MeshFilterPassenger(Portal portal, Transform root, MeshFilter meshFilter)
+				: base(portal, root, meshFilter.transform, meshFilter.sharedMesh) {
 				this.meshFilter = meshFilter;
 				meshFilter.sharedMesh = clampedMesh;
 			}
@@ -77,8 +80,8 @@ namespace NaniCore.UnityPlayground {
 		public class MeshColliderPassenger : Passenger {
 			public readonly MeshCollider meshCollider;
 
-			public MeshColliderPassenger(Collider root, MeshCollider meshCollider)
-				: base(root, meshCollider.transform, meshCollider.sharedMesh) {
+			public MeshColliderPassenger(Portal portal, Transform root, MeshCollider meshCollider)
+				: base(portal, root, meshCollider.transform, meshCollider.sharedMesh) {
 				this.meshCollider = meshCollider;
 				meshCollider.sharedMesh = clampedMesh;
 			}
@@ -91,65 +94,88 @@ namespace NaniCore.UnityPlayground {
 		#endregion
 
 		#region Fields
-		protected Dictionary<Collider, HashSet<Passenger>> rootedPassengers = new Dictionary<Collider, HashSet<Passenger>>();
+		protected Dictionary<Transform, HashSet<Passenger>> rootedPassengers = new Dictionary<Transform, HashSet<Passenger>>();
 		#endregion
 
 		#region Functions
-		protected HashSet<Passenger> TryAddRoot(Collider collider, out string error) {
+		protected HashSet<Passenger> TryAddRoot(Transform root, out string error) {
 			error = null;
 
 			// Check if collider is already recorded as root.
-			if(rootedPassengers.ContainsKey(collider)) {
+			if(rootedPassengers.ContainsKey(root)) {
 				error = "Root already recorded.";
-				return rootedPassengers[collider];
+				return rootedPassengers[root];
 			}
 
 			// Check if collider is a child of any recorded root.
-			foreach(Collider root in rootedPassengers.Keys) {
-				if(collider.transform.IsChildOf(root.transform)) {
-					error = $"Is child of an existing root {root.name}";
-					return rootedPassengers[root];
+			foreach(Transform existingRoot in rootedPassengers.Keys) {
+				if(root.transform.IsChildOf(existingRoot.transform)) {
+					error = $"Is child of an existing root {existingRoot.name}";
+					return rootedPassengers[existingRoot];
 				}
 			}
 
 			// Admit the collider as a new root and create a set for it.
 			HashSet<Passenger> set = new HashSet<Passenger>();
-			rootedPassengers.Add(collider, set);
+			rootedPassengers.Add(root, set);
 			return set;
 		}
 
-		protected void TryRemoveRoot(Collider collider) {
-			if(!rootedPassengers.ContainsKey(collider))
+		protected void TryRemoveRoot(Transform root) {
+			if(!rootedPassengers.ContainsKey(root))
 				return;
 
 			// Restore all the root's children passengers' mesh.
-			foreach(Passenger passenger in rootedPassengers[collider])
+			foreach(Passenger passenger in rootedPassengers[root])
 				passenger.Dispose();
 
 			// Remove the record to the root itself.
-			rootedPassengers.Remove(collider);
+			rootedPassengers.Remove(root);
+		}
+
+		protected void Teleport(Transform root) {
+			if(root == null || twin == null)
+				return;
+
+			HashSet<Passenger> oldPassengerSet = null;
+
+			if(rootedPassengers.ContainsKey(root)) {
+				oldPassengerSet = rootedPassengers[root];
+				rootedPassengers.Remove(root);
+			}
+
+			// TODO
+
+			HashSet<Passenger> newPassengerSet = twin.TryAddRoot(root, out string error);
+			if(oldPassengerSet != null) {
+				foreach(Passenger passenger in oldPassengerSet) {
+					newPassengerSet.Add(passenger);
+					passenger.portal = twin;
+					passenger.ClampMeshToPortal();
+				}
+			}
 		}
 		#endregion
 
 		#region Life cycle
 		protected void OnColliderEnterPortal(Collider collider) {
-			HashSet<Passenger> set = TryAddRoot(collider, out string addError);
+			Transform root = collider.transform;
+			HashSet<Passenger> set = TryAddRoot(root, out string addError);
 
-			if(!string.IsNullOrEmpty(addError))
-				Debug.LogWarning($"{collider.name} enters portal {name}, but is not recorded as root: {addError}", this);
-			else
-				Debug.Log($"{collider.name} enters portal {name}.", this);
+			if(string.IsNullOrEmpty(addError))
+				Debug.Log($"{root.name} enters portal {name}.", this);
 
-			foreach(MeshFilter meshFilter in collider.GetComponentsInChildren<MeshFilter>(true))
-				set.Add(new MeshFilterPassenger(collider, meshFilter));
+			foreach(MeshFilter meshFilter in root.GetComponentsInChildren<MeshFilter>(true))
+				set.Add(new MeshFilterPassenger(this, root, meshFilter));
 
-			foreach(MeshCollider meshCollider in collider.GetComponentsInChildren<MeshCollider>(true))
-				set.Add(new MeshColliderPassenger(collider, meshCollider));
+			foreach(MeshCollider meshCollider in root.GetComponentsInChildren<MeshCollider>(true))
+				set.Add(new MeshColliderPassenger(this, root, meshCollider));
 		}
 
 		protected void OnColliderExitPortal(Collider collider) {
-			Debug.Log($"{collider.name} exits portal {name}.", this);
-			TryRemoveRoot(collider);
+			Transform root = collider.transform;
+			Debug.Log($"{root.name} exits portal {name}.", this);
+			TryRemoveRoot(root.transform);
 		}
 
 		protected void LastUpdatePassenger() {

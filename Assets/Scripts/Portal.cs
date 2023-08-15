@@ -47,7 +47,6 @@ namespace NaniCore.UnityPlayground {
 		protected void OnBecameInvisible() => enabled = false;
 
 		protected void OnTriggerEnter(Collider other) {
-			Debug.Log(other, other);
 			OnColliderEnterPortal(other);
 		}
 
