@@ -9,8 +9,8 @@ namespace NaniCore.UnityPlayground {
 			rigidbody = GetComponent<Rigidbody>();
 		}
 
-		public abstract void OnFocusEnter();
-		public abstract void OnFocusLeave();
-		public abstract void OnInteract();
+		protected abstract void OnFocusEnter();
+		protected abstract void OnFocusLeave();
+		protected abstract void OnInteract();
 	}
 }

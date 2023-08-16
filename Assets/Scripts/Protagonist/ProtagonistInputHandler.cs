@@ -44,6 +44,10 @@ namespace NaniCore.UnityPlayground {
 		protected void OnSetSprinting(InputValue value) {
 			Protagonist.IsSprinting = value.Get<float>() > .5f;
 		}
+
+		protected void OnInteract() {
+			Protagonist.Interact();
+		}
 		#endregion
 	}
 }

@@ -23,7 +23,8 @@ namespace NaniCore.UnityPlayground {
 		#endregion
 
 		#region Fields
-		protected Interaction focusingInteraction;
+		protected Interaction focusing;
+		protected Grabbable grabbing;
 		#endregion
 
 		#region Life cycle
@@ -34,14 +35,16 @@ namespace NaniCore.UnityPlayground {
 #endif
 
 		protected void StartInteraction() {
-			FocusingInteraction = null;
+			Focusing = null;
 			FocusUi = focusUiMap.normal;
 		}
 
 		protected void UpdateInteraction() {
-			RaycastHit hitInfo;
-			bool isHit = Physics.Raycast(camera.ViewportPointToRay(Vector2.one * .5f), out hitInfo, maxInteractionDistance, interactionLayerMask);
-			FocusingInteraction = isHit ? hitInfo.collider.GetComponent<Interaction>() : null;
+			if(Grabbing == null) {
+				RaycastHit hitInfo;
+				bool isHit = Physics.Raycast(camera.ViewportPointToRay(Vector2.one * .5f), out hitInfo, maxInteractionDistance, interactionLayerMask);
+				Focusing = isHit ? hitInfo.collider.GetComponent<Interaction>() : null;
+			}
 		}
 		#endregion
 
@@ -59,23 +62,52 @@ namespace NaniCore.UnityPlayground {
 			}
 		}
 
-		public Interaction FocusingInteraction {
-			get {
-				// Don't optimize. Could avoid returning invalidated components.
-				if(focusingInteraction == null)
-					return null;
-				return focusingInteraction;
-			}
+		protected void UpdateFocusUi() {
+			if(Grabbing)
+				FocusUi = focusUiMap.grabbing;
+			else if(Focusing)
+				FocusUi = focusUiMap.hovering;
+			else
+				FocusUi = focusUiMap.normal;
+		}
+
+		public Interaction Focusing {
+			get => focusing;
 			set {
-				if(focusingInteraction == value)
+				if(focusing == value)
 					return;
 
-				focusingInteraction?.OnFocusLeave();
-				focusingInteraction = value;
-				focusingInteraction?.OnFocusEnter();
+				if(focusing)
+					focusing.SendMessage("OnFocusLeave");
+				focusing = value;
+				if(focusing)
+					focusing.SendMessage("OnFocusEnter");
 
-				FocusUi = focusingInteraction == null ? focusUiMap.normal : focusUiMap.hovering;
+				UpdateFocusUi();
 			}
+		}
+
+		public Grabbable Grabbing {
+			get => grabbing;
+			set {
+				if(grabbing == value)
+					return;
+
+				if(grabbing)
+					grabbing.SendMessage("OnGrabEnd");
+				grabbing = value;
+				if(grabbing)
+					grabbing.SendMessage("OnGrabStart");
+
+				UpdateFocusUi();
+			}
+		}
+
+		public void Interact() {
+			if(Grabbing == null)
+				Focusing?.SendMessage("OnInteract");
+			else
+				Grabbing = null;
 		}
 		#endregion
 	}
