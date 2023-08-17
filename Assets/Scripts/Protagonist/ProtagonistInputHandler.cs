@@ -7,7 +7,7 @@ namespace NaniCore.UnityPlayground {
 	public class ProtagonistInputHandler : MonoBehaviour {
 		#region Fields
 		protected Protagonist protagonist;
-		protected Vector2 moveDelta;
+		protected Vector2 moveVelocity;
 		#endregion
 
 		#region Life cycle
@@ -24,7 +24,7 @@ namespace NaniCore.UnityPlayground {
 		}
 
 		protected void FixedUpdate() {
-			Protagonist.MoveDelta(moveDelta * Time.fixedDeltaTime);
+			Protagonist.MoveVelocity(moveVelocity);
 		}
 		#endregion
 
@@ -33,8 +33,8 @@ namespace NaniCore.UnityPlayground {
 		#endregion
 
 		#region Handlers
-		protected void OnMoveDelta(InputValue value) {
-			moveDelta = value.Get<Vector2>();
+		protected void OnMoveVelocity(InputValue value) {
+			moveVelocity = value.Get<Vector2>();
 		}
 
 		protected void OnOrientDelta(InputValue value) {
