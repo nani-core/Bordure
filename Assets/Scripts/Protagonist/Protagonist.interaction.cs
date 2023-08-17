@@ -20,6 +20,8 @@ namespace NaniCore.UnityPlayground {
 			public Sprite grabbing;
 		}
 		[SerializeField] protected FocusUiMap focusUiMap;
+		[SerializeField][Min(0)] protected float grabbingDistance;
+		[SerializeField][Min(0)] protected float grabbingTime;
 		#endregion
 
 		#region Fields
@@ -49,6 +51,9 @@ namespace NaniCore.UnityPlayground {
 		#endregion
 
 		#region Functions
+		public float GrabbingDistance => grabbingDistance;
+		public float GrabbingTime => grabbingTime;
+
 		public Sprite FocusUi {
 			get => focusUi?.sprite;
 			set {

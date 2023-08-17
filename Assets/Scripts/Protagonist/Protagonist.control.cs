@@ -42,7 +42,9 @@ namespace NaniCore.UnityPlayground {
 #endif
 		#endregion
 
-		#region Control
+		#region Functions
+		public Transform Eye => eye;
+
 		public bool IsSprinting {
 			get => isRunning;
 			set => isRunning = value;
