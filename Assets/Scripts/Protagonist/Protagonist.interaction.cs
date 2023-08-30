@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using System.Collections;
+using static UnityEngine.GraphicsBuffer;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -20,40 +22,36 @@ namespace NaniCore.UnityPlayground {
 			public Sprite grabbing;
 		}
 		[SerializeField] protected FocusUiMap focusUiMap;
-		[SerializeField][Min(0)] protected float grabbingDistance;
-		[SerializeField][Min(0)] protected float grabbingTime;
 		#endregion
 
 		#region Fields
-		protected Interaction focusing;
-		protected Grabbable grabbing;
+		private Interaction focusingObject;
+		private Grabbable grabbingObject;
+		private Coroutine grabbingCoroutine;
 		#endregion
 
 		#region Life cycle
 #if UNITY_EDITOR
-		protected void ValidateInteraction() {
+		private void ValidateInteraction() {
 			EditorApplication.delayCall += () => FocusUi = focusUiMap.hovering;
 		}
 #endif
 
-		protected void StartInteraction() {
-			Focusing = null;
+		private void StartInteraction() {
+			FocusingObject = null;
 			FocusUi = focusUiMap.normal;
 		}
 
-		protected void UpdateInteraction() {
-			if(Grabbing == null) {
+		private void UpdateInteraction() {
+			if(GrabbingObject == null) {
 				RaycastHit hitInfo;
 				bool isHit = Physics.Raycast(camera.ViewportPointToRay(Vector2.one * .5f), out hitInfo, maxInteractionDistance, interactionLayerMask);
-				Focusing = isHit ? hitInfo.collider.GetComponent<Interaction>() : null;
+				FocusingObject = isHit ? hitInfo.collider.GetComponent<Interaction>() : null;
 			}
 		}
 		#endregion
 
 		#region Functions
-		public float GrabbingDistance => grabbingDistance;
-		public float GrabbingTime => grabbingTime;
-
 		public Sprite FocusUi {
 			get => focusUi?.sprite;
 			set {
@@ -67,52 +65,75 @@ namespace NaniCore.UnityPlayground {
 			}
 		}
 
-		protected void UpdateFocusUi() {
-			if(Grabbing)
+		private void UpdateFocusUi() {
+			if(GrabbingObject)
 				FocusUi = focusUiMap.grabbing;
-			else if(Focusing)
+			else if(FocusingObject)
 				FocusUi = focusUiMap.hovering;
 			else
 				FocusUi = focusUiMap.normal;
 		}
 
-		public Interaction Focusing {
-			get => focusing;
+		public Interaction FocusingObject {
+			get => focusingObject;
 			set {
-				if(focusing == value)
+				if(focusingObject == value)
 					return;
 
-				if(focusing)
-					focusing.SendMessage("OnFocusLeave");
-				focusing = value;
-				if(focusing)
-					focusing.SendMessage("OnFocusEnter");
+				if(focusingObject)
+					focusingObject.SendMessage("OnFocusLeave");
+				focusingObject = value;
+				if(focusingObject)
+					focusingObject.SendMessage("OnFocusEnter");
 
 				UpdateFocusUi();
 			}
 		}
 
-		public Grabbable Grabbing {
-			get => grabbing;
+		#region Grabbing
+		public Grabbable GrabbingObject {
+			get => grabbingObject;
 			set {
-				if(grabbing == value)
+				if(grabbingObject == value)
 					return;
 
-				if(grabbing)
-					grabbing.SendMessage("OnGrabEnd");
-				grabbing = value;
-				if(grabbing)
-					grabbing.SendMessage("OnGrabStart");
+				if(grabbingObject)
+					StartCoroutine(EndGrabbingCoroutine(grabbingObject));
+				grabbingObject = value;
+				if(grabbingObject)
+					grabbingCoroutine = StartCoroutine(BeginGrabbingCoroutine(grabbingObject));
 
 				UpdateFocusUi();
 			}
 		}
+
+		private IEnumerator BeginGrabbingCoroutine(Grabbable target) {
+			grabbingObject.SendMessage("OnGrabBegin");
+			grabbingObject.transform.SetParent(eye.transform);
+			yield return GrabbingCoroutine(target);
+		}
+
+		private IEnumerator GrabbingCoroutine(Grabbable target) {
+			while(GrabbingObject == target) {
+				yield return new WaitForFixedUpdate();
+			}
+		}
+
+		private IEnumerator EndGrabbingCoroutine(Grabbable target) {
+			if(grabbingCoroutine != null) {
+				StopCoroutine(grabbingCoroutine);
+				grabbingCoroutine = null;
+			}
+			target.SendMessage("OnGrabEnd");
+			yield break;
+		}
+		#endregion
 
 		public void Interact() {
-			if(Grabbing == null)
-				Focusing?.SendMessage("OnInteract");
+			if(GrabbingObject == null)
+				FocusingObject?.SendMessage("OnInteract");
 			else
-				Grabbing = null;
+				GrabbingObject = null;
 		}
 		#endregion
 	}

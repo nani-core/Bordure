@@ -3,6 +3,7 @@ using System.Collections;
 
 namespace NaniCore.UnityPlayground {
 	public class Grabbable : Interaction {
+		#region Overridden message handlers
 		protected override void OnFocusEnter() {
 		}
 
@@ -10,62 +11,52 @@ namespace NaniCore.UnityPlayground {
 		}
 
 		protected override void OnInteract() {
-			Protagonist.instance.Grabbing = this;
+			Protagonist.instance.GrabbingObject = this;
 		}
+		#endregion
 
 		#region Grabbing
-		protected RigidbodyConstraints originalConstraints;
-		protected Coroutine grabbingCoroutine;
+		private bool isKinematic = false;
+		private RigidbodyConstraints originalConstraints;
+		private Transform originalParent;
 
-		protected void OnGrabStart() {
-			if(grabbingCoroutine != null) {
-				StopCoroutine(grabbingCoroutine);
-				grabbingCoroutine = null;
+		public bool IsKinematic {
+			get => isKinematic;
+			set {
+				if(rigidbody == null)
+					return;
+				if(value == isKinematic)
+					return;
+				if(value) {
+					originalConstraints = rigidbody.constraints;
+					originalParent = transform.parent;
+
+					rigidbody.constraints = RigidbodyConstraints.FreezeAll;
+					transform.SetParent(null);
+				}
+				else {
+					rigidbody.constraints = originalConstraints;
+					transform.SetParent(originalParent);
+
+					originalConstraints = RigidbodyConstraints.None;
+					originalParent = null;
+				}
+				isKinematic = value;
 			}
-			if(rigidbody != null) {
-				originalConstraints = rigidbody.constraints;
-				rigidbody.constraints = RigidbodyConstraints.FreezeAll;
-			}
-			grabbingCoroutine = StartCoroutine(GrabStartCoroutine());
+		}
+
+		protected void OnGrabBegin() {
+			IsKinematic = true;
+		}
+
+		protected void OnGrabEnd() {
+			IsKinematic = false;
 		}
 
 		protected void OnCollisionEnter(Collision _) {
 			var protagonist = Protagonist.instance;
-			if(protagonist.Grabbing == this)
-				protagonist.Grabbing = null;
-		}
-
-		protected void OnGrabEnd() {
-			if(grabbingCoroutine != null) {
-				StopCoroutine(grabbingCoroutine);
-				grabbingCoroutine = null;
-			}
-			transform.SetParent(null);
-			if(rigidbody != null) {
-				rigidbody.constraints = originalConstraints;
-				grabbingCoroutine = StartCoroutine(GrabEndCoroutine());
-			}
-		}
-
-		protected IEnumerator GrabStartCoroutine() {
-			Protagonist protagonist = Protagonist.instance;
-			transform.SetParent(protagonist.Eye);
-			Vector3 startPos = transform.localPosition;
-			Vector3 targetPos = Vector3.forward * protagonist.GrabbingDistance;
-			float startTime = Time.time;
-			float t;
-			while((t = Time.time - startTime) < protagonist.GrabbingTime) {
-				transform.localPosition = Vector3.Lerp(startPos, targetPos, t / protagonist.GrabbingTime);
-				yield return new WaitForFixedUpdate();
-			}
-			transform.localPosition = targetPos;
-		}
-
-		protected IEnumerator GrabEndCoroutine() {
-			if(rigidbody != null)
-				yield break;
-			yield return new WaitForSeconds(.1f);
-			yield return new WaitUntil(() => Vector3.SqrMagnitude(rigidbody.velocity) > .01f);
+			if(protagonist.GrabbingObject == this)
+				protagonist.GrabbingObject = null;
 		}
 		#endregion
 	}
