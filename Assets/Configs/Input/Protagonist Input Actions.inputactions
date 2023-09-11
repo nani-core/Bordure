@@ -40,15 +40,6 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
-                },
-                {
-                    "name": "SetGrabbingOrienting",
-                    "type": "Button",
-                    "id": "02f53557-e322-4cc7-b5bb-669be58f5c12",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "Press(behavior=2)",
-                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -139,10 +130,27 @@
                     "action": "Interact",
                     "isComposite": false,
                     "isPartOfComposite": false
-                },
+                }
+            ]
+        },
+        {
+            "name": "Grabbing",
+            "id": "e34f51e8-a057-4165-b140-a53d0a12a58f",
+            "actions": [
+                {
+                    "name": "SetGrabbingOrienting",
+                    "type": "Button",
+                    "id": "c994d009-9813-47d5-a76e-42857e971bae",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press(behavior=2)",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
                 {
                     "name": "",
-                    "id": "78ebf64f-c2f3-487e-8093-eeecce3d13b5",
+                    "id": "192c7105-c8c2-4996-84cf-c1bc19ae42fc",
                     "path": "<Mouse>/rightButton",
                     "interactions": "",
                     "processors": "",

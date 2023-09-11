@@ -1,6 +1,7 @@
 using UnityEngine;
 
 namespace NaniCore.UnityPlayground {
+	[RequireComponent(typeof(ProtagonistInputHandler))]
 	public partial class Protagonist : MonoBehaviour {
 		#region Singleton
 		public static Protagonist instance;

@@ -1,9 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 using System;
 using System.Collections;
-using static UnityEngine.GraphicsBuffer;
-using static UnityEngine.Rendering.DebugUI;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -32,6 +31,7 @@ namespace NaniCore.UnityPlayground {
 		private Grabbable grabbingObject;
 		private Coroutine grabbingCoroutine;
 		private bool grabbingOrienting;
+		private InputActionMap grabbingActionMap;
 		#endregion
 
 		#region Life cycle
@@ -44,6 +44,7 @@ namespace NaniCore.UnityPlayground {
 		private void StartInteraction() {
 			FocusingObject = null;
 			FocusUi = focusUiMap.normal;
+			grabbingActionMap = GetComponent<PlayerInput>().actions.FindActionMap("Grabbing");
 		}
 
 		private void UpdateInteraction() {
@@ -111,6 +112,10 @@ namespace NaniCore.UnityPlayground {
 					grabbingCoroutine = StartCoroutine(GrabCoroutine(grabbingObject));
 
 				UpdateFocusUi();
+				if(grabbingObject)
+					grabbingActionMap.Enable();
+				else
+					grabbingActionMap.Disable();
 			}
 		}
 
