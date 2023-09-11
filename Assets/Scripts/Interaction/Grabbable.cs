@@ -1,8 +1,13 @@
 using UnityEngine;
-using System.Collections;
+using UnityEngine.Events;
 
 namespace NaniCore.UnityPlayground {
 	public class Grabbable : Interaction {
+		#region Serialized fields
+		[SerializeField] private UnityEvent onGrabBegin;
+		[SerializeField] private UnityEvent onGrabEnd;
+		#endregion
+
 		#region Overridden message handlers
 		protected override void OnFocusEnter() {
 		}
@@ -47,10 +52,12 @@ namespace NaniCore.UnityPlayground {
 
 		protected void OnGrabBegin() {
 			IsKinematic = true;
+			onGrabBegin.Invoke();
 		}
 
 		protected void OnGrabEnd() {
 			IsKinematic = false;
+			onGrabEnd.Invoke();
 		}
 
 		protected void OnCollisionEnter(Collision _) {
