@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using System;
 using System.Collections;
 using static UnityEngine.GraphicsBuffer;
+using static UnityEngine.Rendering.DebugUI;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -22,12 +23,15 @@ namespace NaniCore.UnityPlayground {
 			public Sprite grabbing;
 		}
 		[SerializeField] protected FocusUiMap focusUiMap;
+		[SerializeField][Range(0, 1)] protected float grabbingTransitionDuration;
+		[SerializeField][Range(0, 1)] protected float grabbingEasingFactor;
 		#endregion
 
 		#region Fields
 		private Interaction focusingObject;
 		private Grabbable grabbingObject;
 		private Coroutine grabbingCoroutine;
+		private bool grabbingOrienting;
 		#endregion
 
 		#region Life cycle
@@ -97,34 +101,78 @@ namespace NaniCore.UnityPlayground {
 				if(grabbingObject == value)
 					return;
 
-				if(grabbingObject)
+				if(grabbingObject) {
+					if(grabbingCoroutine != null)
+						StopCoroutine(grabbingCoroutine);
 					StartCoroutine(EndGrabbingCoroutine(grabbingObject));
+				}
 				grabbingObject = value;
 				if(grabbingObject)
-					grabbingCoroutine = StartCoroutine(BeginGrabbingCoroutine(grabbingObject));
+					grabbingCoroutine = StartCoroutine(GrabCoroutine(grabbingObject));
 
 				UpdateFocusUi();
 			}
 		}
 
-		private IEnumerator BeginGrabbingCoroutine(Grabbable target) {
-			grabbingObject.SendMessage("OnGrabBegin");
-			grabbingObject.transform.SetParent(eye.transform);
-			yield return GrabbingCoroutine(target);
+		public bool GrabbingOrienting {
+			get => grabbingObject != null && grabbingOrienting;
+			set => grabbingOrienting = grabbingObject != null && value;
 		}
 
-		private IEnumerator GrabbingCoroutine(Grabbable target) {
+		public void GrabbingOrientDelta(float delta) {
+			delta *= orientingSpeed;
+			float grabbingAzimuth = grabbingObject.transform.localRotation.eulerAngles.y * Mathf.PI / 180;
+			grabbingAzimuth += delta;
+			grabbingObject.transform.localRotation = Quaternion.Euler(0, grabbingAzimuth * 180 / Mathf.PI, 0);
+		}
+
+		private IEnumerator GrabCoroutine(Grabbable target) {
+			yield return BeginGrabbingCoroutine(target);
 			while(GrabbingObject == target) {
+				yield return DuringGrabbingCoroutine(target);
 				yield return new WaitForFixedUpdate();
 			}
+			yield return EndGrabbingCoroutine(target);
+			grabbingCoroutine = null;
+		}
+
+		private IEnumerator BeginGrabbingCoroutine(Grabbable target) {
+			target.SendMessage("OnGrabBegin");
+
+			target.transform.SetParent(eye.transform, true);
+
+			float grabbingDistance = Vector3.Distance(target.transform.position, eye.transform.position);
+			float grabbingAzimuth = target.transform.localRotation.eulerAngles.y * Mathf.PI / 180;
+
+			Vector3
+				startPosition = target.transform.localPosition,
+				endPosition = Vector3.forward * grabbingDistance;
+			Quaternion
+				startRotation = target.transform.localRotation,
+				endRotation = Quaternion.Euler(0, grabbingAzimuth * 180 / Mathf.PI, 0);
+
+			float startTime = Time.time;
+			for(float t; (t = (Time.time - startTime) / grabbingTransitionDuration) < 1;) {
+				t = MathUtility.Ease(t, grabbingEasingFactor);
+				target.transform.localPosition = Vector3.Lerp(startPosition, endPosition, t);
+				target.transform.localRotation = Quaternion.Slerp(startRotation, endRotation, t);
+				yield return new WaitForFixedUpdate();
+			}
+			target.transform.localPosition = endPosition;
+			target.transform.localRotation = endRotation;
+
+			yield break;
+		}
+
+		private IEnumerator DuringGrabbingCoroutine(Grabbable target) {
+			yield break;
 		}
 
 		private IEnumerator EndGrabbingCoroutine(Grabbable target) {
-			if(grabbingCoroutine != null) {
-				StopCoroutine(grabbingCoroutine);
-				grabbingCoroutine = null;
-			}
+			target.transform.SetParent(null, true);
+
 			target.SendMessage("OnGrabEnd");
+
 			yield break;
 		}
 		#endregion

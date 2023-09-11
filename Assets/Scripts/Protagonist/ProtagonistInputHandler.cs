@@ -38,7 +38,11 @@ namespace NaniCore.UnityPlayground {
 		}
 
 		protected void OnOrientDelta(InputValue value) {
-			Protagonist.OrientDelta(value.Get<Vector2>());
+			Vector2 raw = value.Get<Vector2>();
+			if(!Protagonist.GrabbingOrienting)
+				Protagonist.OrientDelta(raw);
+			else
+				Protagonist.GrabbingOrientDelta(-raw.x);
 		}
 
 		protected void OnSetSprinting(InputValue value) {
@@ -47,6 +51,11 @@ namespace NaniCore.UnityPlayground {
 
 		protected void OnInteract() {
 			Protagonist.Interact();
+		}
+
+		protected void OnSetGrabbingOrienting(InputValue value) {
+			bool raw = value.Get<float>() > .5f;
+			Protagonist.GrabbingOrienting = raw;
 		}
 		#endregion
 	}
