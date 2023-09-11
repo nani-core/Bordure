@@ -2,22 +2,15 @@ using UnityEngine;
 using UnityEngine.Events;
 
 namespace NaniCore.UnityPlayground {
-	public class Grabbable : Interaction {
+	[RequireComponent(typeof(Collider))]
+	public class Grabbable : MonoBehaviour {
 		#region Serialized fields
 		[SerializeField] private UnityEvent onGrabBegin;
 		[SerializeField] private UnityEvent onGrabEnd;
 		#endregion
 
-		#region Overridden message handlers
-		protected override void OnFocusEnter() {
-		}
-
-		protected override void OnFocusLeave() {
-		}
-
-		protected override void OnInteract() {
-			Protagonist.instance.GrabbingObject = this;
-		}
+		#region Fields
+		private new Rigidbody rigidbody;
 		#endregion
 
 		#region Grabbing
@@ -50,6 +43,10 @@ namespace NaniCore.UnityPlayground {
 			}
 		}
 
+		protected void OnInteract() {
+			Protagonist.instance.GrabbingObject = this;
+		}
+
 		protected void OnGrabBegin() {
 			IsKinematic = true;
 			onGrabBegin.Invoke();
@@ -58,6 +55,12 @@ namespace NaniCore.UnityPlayground {
 		protected void OnGrabEnd() {
 			IsKinematic = false;
 			onGrabEnd.Invoke();
+		}
+		#endregion
+
+		#region Life cycle
+		protected void Start() {
+			rigidbody = GetComponent<Rigidbody>();
 		}
 
 		protected void OnCollisionEnter(Collision _) {

@@ -27,7 +27,7 @@ namespace NaniCore.UnityPlayground {
 		#endregion
 
 		#region Fields
-		private Interaction focusingObject;
+		private GameObject focusingObject;
 		private Grabbable grabbingObject;
 		private Coroutine grabbingCoroutine;
 		private bool grabbingOrienting;
@@ -51,7 +51,7 @@ namespace NaniCore.UnityPlayground {
 			if(GrabbingObject == null) {
 				RaycastHit hitInfo;
 				bool isHit = Physics.Raycast(camera.ViewportPointToRay(Vector2.one * .5f), out hitInfo, maxInteractionDistance, interactionLayerMask);
-				FocusingObject = isHit ? hitInfo.collider.GetComponent<Interaction>() : null;
+				FocusingObject = isHit ? hitInfo.collider.gameObject : null;
 			}
 		}
 		#endregion
@@ -79,17 +79,17 @@ namespace NaniCore.UnityPlayground {
 				FocusUi = focusUiMap.normal;
 		}
 
-		public Interaction FocusingObject {
+		public GameObject FocusingObject {
 			get => focusingObject;
 			set {
 				if(focusingObject == value)
 					return;
 
 				if(focusingObject)
-					focusingObject.SendMessage("OnFocusLeave");
+					focusingObject.SendMessage("OnFocusLeave", SendMessageOptions.DontRequireReceiver);
 				focusingObject = value;
 				if(focusingObject)
-					focusingObject.SendMessage("OnFocusEnter");
+					focusingObject.SendMessage("OnFocusEnter", SendMessageOptions.DontRequireReceiver);
 
 				UpdateFocusUi();
 			}
