@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace NaniCore.UnityPlayground {
 	[RequireComponent(typeof(BoxCollider))]
@@ -8,10 +9,12 @@ namespace NaniCore.UnityPlayground {
 		[SerializeField] private Transform surface;
 		[SerializeField][Min(0)] private float height = 1;
 		[SerializeField][Min(0)] private float speed = 1;
+		[SerializeField][Range(0, 1)] private float resistance = .5f;
 		#endregion
 
 		#region Fields
 		private Coroutine targetHeightCoroutine;
+		private HashSet<Floatable> floatables = new HashSet<Floatable>();
 		#endregion
 
 		#region Functions
@@ -51,6 +54,40 @@ namespace NaniCore.UnityPlayground {
 			}
 			Height = value;
 			targetHeightCoroutine = null;
+		}
+
+		private void UpdateFloatablePhysicsOnEndOfFixedUpdate(Floatable floatable) {
+			var rb = floatable.Rigidbody;
+			var downward = Physics.gravity.normalized;
+			// Positive is downward.
+			var offsetToSurface = Vector3.Dot(downward, rb.position - transform.position) + height;
+			var buoyancy = downward * -Mathf.Clamp(offsetToSurface, 0, 1);
+			var friction = -rb.velocity * resistance;
+			friction = downward * Vector3.Dot(downward, friction);
+			// TODO: make this time-independent.
+			rb.velocity += buoyancy + friction;
+		}
+		#endregion
+
+		#region Life cycle
+		protected void OnTriggerEnter(Collider other) {
+			var floatable = other.transform.GetComponent<Floatable>();
+			if(floatable != null)
+				floatables.Add(floatable);
+		}
+		protected void OnTriggerExit(Collider other) {
+			var floatable = other.transform.GetComponent<Floatable>();
+			if(floatable != null)
+				floatables.Remove(floatable);
+		}
+
+		protected void FixedUpdate() {
+			floatables.RemoveWhere(f => f == null);
+			foreach(var floatable in floatables) {
+				if(!floatable.isActiveAndEnabled)
+					continue;
+				UpdateFloatablePhysicsOnEndOfFixedUpdate(floatable);
+			}
 		}
 		#endregion
 	}
