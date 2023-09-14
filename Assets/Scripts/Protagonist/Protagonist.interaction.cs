@@ -13,7 +13,6 @@ namespace NaniCore.UnityPlayground {
 		[Header("Interaction")]
 		public new Camera camera;
 		[SerializeField][Min(0)] protected float maxInteractionDistance;
-		[SerializeField] protected LayerMask interactionLayerMask;
 		[SerializeField] protected Image focusUi;
 		[Serializable]
 		public struct FocusUiMap {
@@ -27,7 +26,7 @@ namespace NaniCore.UnityPlayground {
 		#endregion
 
 		#region Fields
-		private GameObject focusingObject;
+		private Interactable focusingObject;
 		private Grabbable grabbingObject;
 		private Coroutine grabbingCoroutine;
 		private bool grabbingOrienting;
@@ -50,8 +49,8 @@ namespace NaniCore.UnityPlayground {
 		private void UpdateInteraction() {
 			if(GrabbingObject == null) {
 				RaycastHit hitInfo;
-				bool isHit = Physics.Raycast(camera.ViewportPointToRay(Vector2.one * .5f), out hitInfo, maxInteractionDistance, interactionLayerMask);
-				FocusingObject = isHit ? hitInfo.collider.gameObject : null;
+				bool isHit = Physics.Raycast(camera.ViewportPointToRay(Vector2.one * .5f), out hitInfo, maxInteractionDistance);
+				FocusingObject = isHit ? hitInfo.collider.GetComponent<Interactable>() : null;
 			}
 		}
 		#endregion
@@ -79,7 +78,7 @@ namespace NaniCore.UnityPlayground {
 				FocusUi = focusUiMap.normal;
 		}
 
-		public GameObject FocusingObject {
+		public Interactable FocusingObject {
 			get => focusingObject;
 			set {
 				if(focusingObject == value)
