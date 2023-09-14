@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.Events;
 
 namespace NaniCore.UnityPlayground {
-	[RequireComponent(typeof(Collider))]
 	public class Grabbable : Interactable {
 		#region Serialized fields
 		[SerializeField] private UnityEvent onGrabBegin;
@@ -11,13 +10,8 @@ namespace NaniCore.UnityPlayground {
 
 		#region Inherited interface
 		protected override void OnInteract() {
+			base.OnInteract();
 			Protagonist.instance.GrabbingObject = this;
-		}
-
-		protected override void OnFocusEnter() {
-		}
-
-		protected override void OnFocusLeave() {
 		}
 		#endregion
 

@@ -1,9 +1,15 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace NaniCore.UnityPlayground {
 	[RequireComponent(typeof(Collider))]
-	public abstract class Interactable : MonoBehaviour {
+	public class Interactable : MonoBehaviour {
+		#region Serialized fields
 		[SerializeField] protected new Rigidbody rigidbody;
+		[SerializeField] protected UnityEvent onFocusEnter;
+		[SerializeField] protected UnityEvent onFocusLeave;
+		[SerializeField] protected UnityEvent onInteract;
+		#endregion
 
 #if UNITY_EDITOR
 		protected void OnValidate() {
@@ -11,8 +17,16 @@ namespace NaniCore.UnityPlayground {
 		}
 #endif
 
-		protected abstract void OnFocusEnter();
-		protected abstract void OnFocusLeave();
-		protected abstract void OnInteract();
+		protected virtual void OnFocusEnter() {
+			onFocusEnter?.Invoke();
+		}
+
+		protected virtual void OnFocusLeave() {
+			onFocusLeave?.Invoke();
+		}
+
+		protected virtual void OnInteract() {
+			onInteract?.Invoke();
+		}
 	}
 }

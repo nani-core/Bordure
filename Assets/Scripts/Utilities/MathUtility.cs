@@ -12,5 +12,18 @@ namespace NaniCore.UnityPlayground {
 			t = (t + 1) * .5f;
 			return t;
 		}
+
+		public static float InvertColorChannel(float f) {
+			int i = Mathf.FloorToInt(f * 256);
+			i ^= 0xff;
+			return (float)i / 256;
+		}
+
+		public static Color Invert(this Color c) {
+			c.r = InvertColorChannel(c.r);
+			c.g = InvertColorChannel(c.g);
+			c.b = InvertColorChannel(c.b);
+			return c;
+		}
 	}
 }

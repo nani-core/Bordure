@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace NaniCore.UnityPlayground {
 	[RequireComponent(typeof(BoxCollider))]
@@ -15,12 +16,14 @@ namespace NaniCore.UnityPlayground {
 		#region Fields
 		private Coroutine targetHeightCoroutine;
 		private HashSet<Floatable> floatables = new HashSet<Floatable>();
+		// Could be buggy.
+		private HashSet<Waterlet> waterlets = new HashSet<Waterlet>();
 		#endregion
 
 		#region Functions
 		private BoxCollider Collider => GetComponent<BoxCollider>();
 
-		private float Height {
+		public float Height {
 			get => height;
 			set {
 				Vector3 center = Collider.center;
@@ -28,7 +31,12 @@ namespace NaniCore.UnityPlayground {
 				Collider.center = center;
 				Collider.size = new Vector3(1, value, 1);
 				surface.localPosition = Vector3.up * value;
+				var previousHeight = height;
 				height = value;
+				if(previousHeight != height) {
+					foreach(var waterlet in ActiveWaterlets)
+						waterlet.SendMessage("OnWaterHeightChange", previousHeight, SendMessageOptions.DontRequireReceiver);
+				}
 			}
 		}
 
@@ -66,6 +74,37 @@ namespace NaniCore.UnityPlayground {
 			friction = downward * Vector3.Dot(downward, friction);
 			// TODO: make this time-independent.
 			rb.velocity += buoyancy + friction;
+		}
+
+		public void AddWaterlet(Waterlet waterlet) {
+			if(waterlets == null)
+				waterlets = new HashSet<Waterlet>();
+			waterlets.Add(waterlet);
+		}
+
+		public void RemoveWaterlet(Waterlet waterlet) {
+			waterlets.Remove(waterlet);
+		}
+
+		public IEnumerable<Waterlet> ActiveWaterlets {
+			get => waterlets.Where(waterlet => waterlet.IsActive);
+		}
+
+		public void UpdateTargetHeight() {
+			var activeWaterlets = ActiveWaterlets;
+			List<Waterlet> pumps = new List<Waterlet>(), sewages = new List<Waterlet>();
+			foreach(var waterlet in activeWaterlets) {
+				if(waterlet is WaterPump)
+					pumps.Add(waterlet);
+				if(waterlet is WaterSewage)
+					sewages.Add(waterlet);
+			}
+			float height = Height;
+			foreach(var sewage in sewages)
+				height = Mathf.Min(height, sewage.Height);
+			foreach(var pump in pumps)
+				height = Mathf.Max(height, pump.Height);
+			TargetHeight = height;
 		}
 		#endregion
 
