@@ -7,7 +7,7 @@ namespace NaniCore.UnityPlayground {
 		protected void OnValidate() {
 			if(Application.isPlaying)
 				return;
-			Height = height;
+			Height = Height;
 		}
 		#endregion
 	}

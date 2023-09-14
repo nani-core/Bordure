@@ -33,10 +33,8 @@ namespace NaniCore.UnityPlayground {
 				surface.localPosition = Vector3.up * value;
 				var previousHeight = height;
 				height = value;
-				if(previousHeight != height) {
-					foreach(var waterlet in ActiveWaterlets)
-						waterlet.SendMessage("OnWaterHeightChange", previousHeight, SendMessageOptions.DontRequireReceiver);
-				}
+				foreach(var waterlet in ActiveWaterlets)
+					waterlet.SendMessage("OnWaterHeightChange", previousHeight, SendMessageOptions.DontRequireReceiver);
 			}
 		}
 
@@ -68,7 +66,7 @@ namespace NaniCore.UnityPlayground {
 			var rb = floatable.Rigidbody;
 			var downward = Physics.gravity.normalized;
 			// Positive is downward.
-			var offsetToSurface = Vector3.Dot(downward, rb.position - transform.position) + height;
+			var offsetToSurface = Vector3.Dot(downward, rb.position - transform.position) + Height;
 			var buoyancy = downward * -Mathf.Clamp(offsetToSurface, 0, 1);
 			var friction = -rb.velocity * resistance;
 			friction = downward * Vector3.Dot(downward, friction);

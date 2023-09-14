@@ -1,11 +1,15 @@
 using UnityEngine;
 
 namespace NaniCore.UnityPlayground {
-	public class Waterlet : MonoBehaviour {
+	public abstract class Waterlet : MonoBehaviour {
 		#region Serialized fields
 		[SerializeField] protected Water water;
 		[SerializeField] protected Transform pivot;
 		[SerializeField] private bool active;
+		#endregion
+
+		#region Fields
+		private bool isFlowing;
 		#endregion
 
 		#region Functions
@@ -30,19 +34,35 @@ namespace NaniCore.UnityPlayground {
 				return pivotRelativePosition.y;
 			}
 		}
+
+		public bool IsFlowing {
+			get => isFlowing;
+			set {
+				isFlowing = value;
+				UpdateVisualState();
+			}
+		}
+
+		protected abstract void UpdateFlowingState();
+		protected abstract void UpdateVisualState();
+		protected virtual void UpdateVisualFrame() {
+		}
 		#endregion
 
 		#region Message handlers
 		protected virtual void OnSetActivity() {
+			water.UpdateTargetHeight();
+			UpdateFlowingState();
 		}
 
-		protected virtual void OnWaterLevelChange(float previousHeight) {
+		protected virtual void OnWaterHeightChange(float previousHeight) {
 			float det = (Height - previousHeight) * (Height - water.Height);
-			if(det < 0)
-				OnWaterLevelPass();
+			if(det <= 0)
+				OnWaterHeightPass();
 		}
 
-		protected virtual void OnWaterLevelPass() {
+		protected virtual void OnWaterHeightPass() {
+			UpdateFlowingState();
 		}
 		#endregion
 
@@ -54,6 +74,12 @@ namespace NaniCore.UnityPlayground {
 
 		protected void OnDestroy() {
 			water?.RemoveWaterlet(this);
+		}
+
+		protected void FixedUpdate() {
+			if(IsFlowing) {
+				UpdateVisualFrame();
+			}
 		}
 		#endregion
 	}
