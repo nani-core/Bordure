@@ -1,7 +1,7 @@
 using UnityEngine;
 
 namespace NaniCore.UnityPlayground {
-	public class WaterSewage : Waterlet {
+	public class WaterDump : Waterlet {
 		#region Serialized fields
 		[SerializeField] private Renderer swirl;
 		#endregion

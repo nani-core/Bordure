@@ -90,16 +90,16 @@ namespace NaniCore.UnityPlayground {
 
 		public void UpdateTargetHeight() {
 			var activeWaterlets = ActiveWaterlets;
-			List<Waterlet> pumps = new List<Waterlet>(), sewages = new List<Waterlet>();
+			List<Waterlet> pumps = new List<Waterlet>(), dumps = new List<Waterlet>();
 			foreach(var waterlet in activeWaterlets) {
 				if(waterlet is WaterPump)
 					pumps.Add(waterlet);
-				if(waterlet is WaterSewage)
-					sewages.Add(waterlet);
+				if(waterlet is WaterDump)
+					dumps.Add(waterlet);
 			}
 			float height = Height;
-			foreach(var sewage in sewages)
-				height = Mathf.Min(height, sewage.Height);
+			foreach(var dump in dumps)
+				height = Mathf.Min(height, dump.Height);
 			foreach(var pump in pumps)
 				height = Mathf.Max(height, pump.Height);
 			TargetHeight = height;
