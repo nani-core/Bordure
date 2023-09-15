@@ -7,7 +7,7 @@ namespace NaniCore.UnityPlayground {
 	public class ProtagonistInputHandler : MonoBehaviour {
 		#region Fields
 		protected Protagonist protagonist;
-		protected Vector2 moveDelta;
+		protected Vector2 moveVelocity;
 		#endregion
 
 		#region Life cycle
@@ -24,7 +24,7 @@ namespace NaniCore.UnityPlayground {
 		}
 
 		protected void FixedUpdate() {
-			Protagonist.MoveDelta(moveDelta * Time.fixedDeltaTime);
+			Protagonist.MoveVelocity(moveVelocity);
 		}
 		#endregion
 
@@ -33,16 +33,29 @@ namespace NaniCore.UnityPlayground {
 		#endregion
 
 		#region Handlers
-		protected void OnMoveDelta(InputValue value) {
-			moveDelta = value.Get<Vector2>();
+		protected void OnMoveVelocity(InputValue value) {
+			moveVelocity = value.Get<Vector2>();
 		}
 
 		protected void OnOrientDelta(InputValue value) {
-			Protagonist.OrientDelta(value.Get<Vector2>());
+			Vector2 raw = value.Get<Vector2>();
+			if(!Protagonist.GrabbingOrienting)
+				Protagonist.OrientDelta(raw);
+			else
+				Protagonist.GrabbingOrientDelta(-raw.x);
 		}
 
 		protected void OnSetSprinting(InputValue value) {
 			Protagonist.IsSprinting = value.Get<float>() > .5f;
+		}
+
+		protected void OnInteract() {
+			Protagonist.Interact();
+		}
+
+		protected void OnSetGrabbingOrienting(InputValue value) {
+			bool raw = value.Get<float>() > .5f;
+			Protagonist.GrabbingOrienting = raw;
 		}
 		#endregion
 	}

@@ -6,7 +6,7 @@
             "id": "836effa2-4650-4bf8-b92f-02ee47a5b648",
             "actions": [
                 {
-                    "name": "MoveDelta",
+                    "name": "MoveVelocity",
                     "type": "Value",
                     "id": "1fb07ab1-2e47-443b-9b4f-c45e64e350ce",
                     "expectedControlType": "Vector2",
@@ -31,6 +31,15 @@
                     "processors": "",
                     "interactions": "Press(behavior=2)",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "Interact",
+                    "type": "Button",
+                    "id": "81417e00-f0c2-463e-a098-1ba9859ee677",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -41,7 +50,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "MoveDelta",
+                    "action": "MoveVelocity",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -52,7 +61,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "PC",
-                    "action": "MoveDelta",
+                    "action": "MoveVelocity",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -63,7 +72,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "PC",
-                    "action": "MoveDelta",
+                    "action": "MoveVelocity",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -74,7 +83,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "PC",
-                    "action": "MoveDelta",
+                    "action": "MoveVelocity",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -85,7 +94,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "PC",
-                    "action": "MoveDelta",
+                    "action": "MoveVelocity",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -108,6 +117,45 @@
                     "processors": "",
                     "groups": "PC",
                     "action": "SetSprinting",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "951a717f-e32d-4e2e-a2e2-847160c60864",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PC",
+                    "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Grabbing",
+            "id": "e34f51e8-a057-4165-b140-a53d0a12a58f",
+            "actions": [
+                {
+                    "name": "SetGrabbingOrienting",
+                    "type": "Button",
+                    "id": "c994d009-9813-47d5-a76e-42857e971bae",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press(behavior=2)",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "192c7105-c8c2-4996-84cf-c1bc19ae42fc",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PC",
+                    "action": "SetGrabbingOrienting",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

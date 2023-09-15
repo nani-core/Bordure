@@ -1,20 +1,17 @@
 using UnityEngine;
 
 namespace NaniCore.UnityPlayground {
-	[ExecuteInEditMode]
-	[RequireComponent(typeof(CapsuleCollider))]
-	[RequireComponent(typeof(Rigidbody))]
-	public class Protagonist : MonoBehaviour {
+	[RequireComponent(typeof(CharacterController))]
+	public partial class Protagonist : MonoBehaviour {
 		#region Serialized fields
 		[Header("Geometry")]
-		[SerializeField] protected CapsuleCollider capsuleCollider;
 		[SerializeField][Min(0)] protected float height;
 		[SerializeField][Min(0)] protected float radius;
 		[SerializeField] protected Transform eye;
 		[SerializeField][Min(0)] protected float eyeHanging;
 
 		[Header("Physics")]
-		protected new Rigidbody rigidbody;
+		[SerializeField] protected CharacterController characterController;
 
 		[Header("Control")]
 		[SerializeField][Min(0)] protected float walkingSpeed;
@@ -27,28 +24,25 @@ namespace NaniCore.UnityPlayground {
 		#endregion
 
 		#region Life cycle
-		protected void Update() {
-			if(!Application.isPlaying) {
-				EditorUpdate();
-				return;
+#if UNITY_EDITOR
+		protected void ValidateControl() {
+			characterController = GetComponent<CharacterController>();
+			if(characterController != null) {
+				characterController.height = height;
+				characterController.center = Vector3.up * (height * .5f);
+				characterController.radius = radius;
 			}
-		}
-
-		protected void EditorUpdate() {
-			capsuleCollider = GetComponent<CapsuleCollider>();
-			capsuleCollider.height = height;
-			capsuleCollider.center = Vector3.Scale(capsuleCollider.center, Vector3.one - Vector3.up) + Vector3.up * (height * .5f);
-			capsuleCollider.radius = radius;
-
-			rigidbody = GetComponent<Rigidbody>();
 
 			if(eye != null) {
 				eye.localPosition = Vector3.up * (height - eyeHanging);
 			}
 		}
+#endif
 		#endregion
 
-		#region Control
+		#region Functions
+		public Transform Eye => eye;
+
 		public bool IsSprinting {
 			get => isRunning;
 			set => isRunning = value;
@@ -100,9 +94,10 @@ namespace NaniCore.UnityPlayground {
 			Zenith += delta.y;
 		}
 
-		public void MoveDelta(Vector2 delta) {
-			delta *= MovingSpeed;
-			transform.position += eye.transform.right * delta.x + transform.forward * delta.y;
+		public void MoveVelocity(Vector2 vXy) {
+			vXy *= MovingSpeed;
+			Vector3 v = eye.transform.right * vXy.x + transform.forward * vXy.y;
+			characterController.SimpleMove(v);
 		}
 		#endregion
 	}
