@@ -35,7 +35,7 @@ namespace NaniCore.Loopool {
 			}
 		}
 
-		public bool IsFlowing {
+		protected bool IsFlowing {
 			get => isFlowing;
 			set {
 				isFlowing = value;

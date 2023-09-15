@@ -56,7 +56,8 @@ namespace NaniCore.Loopool {
 		#endregion
 
 		#region Functions
-		public Sprite FocusUi {
+#pragma warning disable IDE0052 // Remove unread private members
+		private Sprite FocusUi {
 			get => focusUi?.sprite;
 			set {
 				if(focusUi != null) {
@@ -68,6 +69,7 @@ namespace NaniCore.Loopool {
 				}
 			}
 		}
+#pragma warning restore IDE0052 // Remove unread private members
 
 		private void UpdateFocusUi() {
 			if(GrabbingObject)

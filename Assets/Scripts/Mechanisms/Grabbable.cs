@@ -20,7 +20,8 @@ namespace NaniCore.Loopool {
 		private RigidbodyConstraints originalConstraints;
 		private Transform originalParent;
 
-		public bool IsKinematic {
+#pragma warning disable IDE0052 // Remove unread private members
+		private bool IsKinematic {
 			get => isKinematic;
 			set {
 				if(rigidbody == null)
@@ -44,6 +45,7 @@ namespace NaniCore.Loopool {
 				isKinematic = value;
 			}
 		}
+#pragma warning restore IDE0052 // Remove unread private members
 
 		protected void OnGrabBegin() {
 			IsKinematic = true;

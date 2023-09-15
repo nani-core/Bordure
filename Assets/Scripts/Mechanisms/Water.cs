@@ -84,7 +84,7 @@ namespace NaniCore.Loopool {
 			waterlets.Remove(waterlet);
 		}
 
-		public IEnumerable<Waterlet> ActiveWaterlets {
+		private IEnumerable<Waterlet> ActiveWaterlets {
 			get => waterlets.Where(waterlet => waterlet.IsActive);
 		}
 
