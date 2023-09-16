@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEditor;
 
-namespace NaniCore.Loopool {
+namespace NaniCore {
 	public partial class MeshTile : MonoBehaviour {
 		#region Fields
 		private const string gizmosRootName = "$MeshTileGizmosRoot";

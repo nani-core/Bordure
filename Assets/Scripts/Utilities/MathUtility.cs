@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace NaniCore.Loopool {
+namespace NaniCore {
 	public static class MathUtility {
 		public static float Ease(float t, float alpha) {
 			float power = (1 - alpha) / (1 + alpha);
@@ -25,5 +25,16 @@ namespace NaniCore.Loopool {
 			c.b = InvertColorChannel(c.b);
 			return c;
 		}
+
+		public static Matrix4x4 RelativeTransform(Matrix4x4 from, Matrix4x4 to) {
+			return to.inverse * from;
+		}
+
+		/// <summary>
+		/// Given two transforms, returns a matrix that maps the local space of
+		/// the self transform to the local space of the target transform.
+		/// </summary>
+		public static Matrix4x4 RelativeTransform(this Transform self, Transform target)
+			=> RelativeTransform(self.localToWorldMatrix, target.localToWorldMatrix);
 	}
 }

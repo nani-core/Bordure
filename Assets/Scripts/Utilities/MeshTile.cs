@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace NaniCore.Loopool {
+namespace NaniCore {
 	public partial class MeshTile : MonoBehaviour {
 		#region Serialized fields
 		public GameObject tile;
