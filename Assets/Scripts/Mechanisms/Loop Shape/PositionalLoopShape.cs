@@ -58,6 +58,10 @@ namespace NaniCore.Loopool {
 
 			return true;
 		}
+
+		public void DestroyGastro() {
+			Destroy(gastro.gameObject);
+		}
 		#endregion
 	}
 }
