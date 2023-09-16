@@ -3,30 +3,27 @@ using UnityEngine.Events;
 
 namespace NaniCore.Loopool {
 	[RequireComponent(typeof(Collider))]
-	public class Interactable : MonoBehaviour {
-		#region Serialized fields
-		[SerializeField] protected new Rigidbody rigidbody;
-		[SerializeField] protected UnityEvent onFocusEnter;
-		[SerializeField] protected UnityEvent onFocusLeave;
-		[SerializeField] protected UnityEvent onInteract;
+	public abstract class Interactable : MonoBehaviour {
+		#region Fields
+		private new Rigidbody rigidbody;
 		#endregion
 
-#if UNITY_EDITOR
-		protected void OnValidate() {
-			rigidbody = GetComponent<Rigidbody>();
+		#region Properties
+		protected Rigidbody Rigidbody {
+			get {
+				if(rigidbody != null && rigidbody.transform == transform)
+					return rigidbody;
+				return rigidbody = GetComponent<Rigidbody>();
+			}
 		}
-#endif
+		#endregion
 
-		protected virtual void OnFocusEnter() {
-			onFocusEnter?.Invoke();
-		}
+		#region Message handlers
+		protected virtual void OnFocusEnter() { }
 
-		protected virtual void OnFocusLeave() {
-			onFocusLeave?.Invoke();
-		}
+		protected virtual void OnFocusLeave() { }
 
-		protected virtual void OnInteract() {
-			onInteract?.Invoke();
-		}
+		protected virtual void OnInteract() { }
+		#endregion
 	}
 }

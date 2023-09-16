@@ -8,9 +8,8 @@ namespace NaniCore.Loopool {
 		[SerializeField] private UnityEvent onGrabEnd;
 		#endregion
 
-		#region Inherited interface
+		#region Message handlers
 		protected override void OnInteract() {
-			base.OnInteract();
 			Protagonist.instance.GrabbingObject = this;
 		}
 		#endregion
@@ -24,19 +23,19 @@ namespace NaniCore.Loopool {
 		private bool IsKinematic {
 			get => isKinematic;
 			set {
-				if(rigidbody == null)
+				if(Rigidbody == null)
 					return;
 				if(value == isKinematic)
 					return;
 				if(value) {
-					originalConstraints = rigidbody.constraints;
+					originalConstraints = Rigidbody.constraints;
 					originalParent = transform.parent;
 
-					rigidbody.constraints = RigidbodyConstraints.FreezeAll;
+					Rigidbody.constraints = RigidbodyConstraints.FreezeAll;
 					transform.SetParent(null);
 				}
 				else {
-					rigidbody.constraints = originalConstraints;
+					Rigidbody.constraints = originalConstraints;
 					transform.SetParent(originalParent);
 
 					originalConstraints = RigidbodyConstraints.None;
