@@ -14,6 +14,7 @@ namespace NaniCore.Loopool {
 		public new Camera camera;
 		[SerializeField][Min(0)] protected float maxInteractionDistance;
 		[SerializeField] protected Image focusUi;
+		[SerializeField] protected Focus focus;
 		[Serializable]
 		public struct FocusUiMap {
 			public Sprite normal;
@@ -78,7 +79,19 @@ namespace NaniCore.Loopool {
 				FocusUi = focusUiMap.hovering;
 			else
 				FocusUi = focusUiMap.normal;
+			UpdateFocusAnimated();
 		}
+
+		private void UpdateFocusAnimated()
+        {
+			if (focus == null) return;
+			if (GrabbingObject)
+				focus.UpdateFocusAnimated(2);
+			else if (FocusingObject)
+				focus.UpdateFocusAnimated(1);
+			else
+				focus.UpdateFocusAnimated(0);
+        }
 
 		public Interactable FocusingObject {
 			get => focusingObject;
