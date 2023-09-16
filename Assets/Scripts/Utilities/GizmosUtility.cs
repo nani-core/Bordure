@@ -1,5 +1,7 @@
 #if UNITY_EDITOR
 using UnityEngine;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace NaniCore {
 	public static class GizmosUtility {
@@ -11,6 +13,17 @@ namespace NaniCore {
 				m = Matrix4x4.TRS(position, rotation, Vector3.one) * m;
 				Gizmos.DrawMesh(meshFilter.sharedMesh, m.GetPosition(), m.rotation, m.lossyScale);
 			}
+		}
+
+		public static void DrawPolygon(IEnumerable<Vector3> vertices) {
+			if(vertices == null)
+				return;
+			int length = vertices.Count();
+			if(length <= 1)
+				return;
+			var list = vertices.ToList();
+			for(int i = 0; i < length; ++i)
+				Gizmos.DrawLine(list[i], list[(i + 1) % length]);
 		}
 	}
 }

@@ -1087,7 +1087,7 @@ Transform:
   m_GameObject: {fileID: 1067548042}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.5, z: -5}
+  m_LocalPosition: {x: 0, y: 1.5, z: -15}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1107,7 +1107,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   blasto: {fileID: 603823707}
   gastro: {fileID: 632589730}
-  idealGastroPlacementRatio: 0.5
+  allowedPositioningAzimuth: {x: -5, y: 5}
+  allowedPositioningDistanceRatio: {x: 0.25, y: 1}
+  idealPlacementDistanceRatio: 0.43
+  allowedPlacementDistanceRatio: {x: 0.4, y: 0.46}
+  idealPlacementAzimuth: 0
+  allowedPlacementAzimuth: {x: -5, y: 5}
 --- !u!1001 &1082237145
 PrefabInstance:
   m_ObjectHideFlags: 0

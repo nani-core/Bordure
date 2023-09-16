@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 
 namespace NaniCore {
 	public static class MathUtility {
@@ -26,9 +27,8 @@ namespace NaniCore {
 			return c;
 		}
 
-		public static Matrix4x4 RelativeTransform(Matrix4x4 from, Matrix4x4 to) {
-			return to.inverse * from;
-		}
+		public static Matrix4x4 RelativeTransform(Matrix4x4 from, Matrix4x4 to)
+			=> to.inverse * from;
 
 		/// <summary>
 		/// Given two transforms, returns a matrix that maps the local space of
@@ -36,5 +36,44 @@ namespace NaniCore {
 		/// </summary>
 		public static Matrix4x4 RelativeTransform(this Transform self, Transform target)
 			=> RelativeTransform(self.localToWorldMatrix, target.localToWorldMatrix);
+
+		public static bool InRange(this float x, Vector2 range)
+			=> x >= range.x && x <= range.y;
+
+		[Serializable]
+		public struct CylindricalCoordinate {
+			public float radius;
+			public float azimuth;
+			public float y;
+
+			public CylindricalCoordinate(float radius, float azimuth, float y) {
+				this.radius = radius;
+				this.azimuth = azimuth;
+				this.y = y;
+			}
+
+			public static CylindricalCoordinate FromCartesian(Vector3 cartesian) {
+				float azimuth = Mathf.Atan2(cartesian.x, cartesian.z);
+				float y = cartesian.y;
+				cartesian.y = 0;
+				float radius = cartesian.magnitude;
+				return new CylindricalCoordinate(radius, azimuth, y);
+			}
+
+			public static Vector3 ToCartesian(CylindricalCoordinate cylindrical) {
+				Vector3 result = Vector3.zero;
+				result.z = Mathf.Cos(cylindrical.azimuth);
+				result.x = Mathf.Sin(cylindrical.azimuth);
+				result *= cylindrical.radius;
+				result.y = cylindrical.y;
+				return result;
+			}
+
+			public static explicit operator CylindricalCoordinate(Vector3 cartesian)
+				=> FromCartesian(cartesian);
+
+			public static explicit operator Vector3(CylindricalCoordinate cylindrical)
+				=> ToCartesian(cylindrical);
+		}
 	}
 }

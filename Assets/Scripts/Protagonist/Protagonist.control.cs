@@ -42,6 +42,7 @@ namespace NaniCore.Loopool {
 
 		#region Functions
 		public Transform Eye => eye;
+		public Vector3 EyeOffset => transform.localToWorldMatrix.MultiplyVector(eye.localPosition);
 
 		public bool IsSprinting {
 			get => isRunning;

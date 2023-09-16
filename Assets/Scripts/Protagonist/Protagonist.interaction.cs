@@ -1,12 +1,7 @@
-#define NEW_UI
-
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System;
 using System.Collections;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 
 namespace NaniCore.Loopool {
 	public partial class Protagonist : MonoBehaviour {
@@ -14,18 +9,7 @@ namespace NaniCore.Loopool {
 		[Header("Interaction")]
 		public new Camera camera;
 		[SerializeField][Min(0)] protected float maxInteractionDistance;
-#if NEW_UI
 		[SerializeField] protected FocusUi focus;
-#else
-		[SerializeField] protected Image focusUi;
-		[Serializable]
-		public struct FocusUiMap {
-			public Sprite normal;
-			public Sprite hovering;
-			public Sprite grabbing;
-		}
-		[SerializeField] protected FocusUiMap focusUiMap;
-#endif
 		[SerializeField][Range(0, 1)] protected float grabbingTransitionDuration;
 		[SerializeField][Range(0, 1)] protected float grabbingEasingFactor;
 		#endregion
@@ -50,11 +34,14 @@ namespace NaniCore.Loopool {
 				bool isHit = Physics.Raycast(camera.ViewportPointToRay(Vector2.one * .5f), out hitInfo, maxInteractionDistance);
 				FocusingObject = isHit ? hitInfo.collider.GetComponent<Interactable>() : null;
 			}
+			foreach(var loopshape in LoopShape.All) {
+				if(loopshape.Satisfied(eye))
+					Debug.Log(loopshape.gameObject.name);
+			}
 		}
 		#endregion
 
 		#region Functions
-#if NEW_UI
 		private void UpdateFocusAnimated() {
 			if(focus == null) return;
 			if(GrabbingObject)
@@ -64,34 +51,8 @@ namespace NaniCore.Loopool {
 			else
 				focus.UpdateFocusAnimated(0);
 		}
-#else
-#pragma warning disable IDE0052 // Remove unread private members
-		private Sprite FocusUi {
-			get => focusUi?.sprite;
-			set {
-				if(focusUi != null) {
-					focusUi.sprite = value;
-					if(value == null)
-						focusUi.rectTransform.sizeDelta = Vector2.zero;
-					else
-						focusUi.SetNativeSize();
-				}
-			}
-		}
-#pragma warning restore IDE0052 // Remove unread private members
-
-#endif
 		private void UpdateFocusUi() {
-#if NEW_UI
 			UpdateFocusAnimated();
-#else
-			if(GrabbingObject)
-				FocusUi = focusUiMap.grabbing;
-			else if(FocusingObject)
-				FocusUi = focusUiMap.hovering;
-			else
-				FocusUi = focusUiMap.normal;
-#endif
 		}
 
 		public Interactable FocusingObject {
