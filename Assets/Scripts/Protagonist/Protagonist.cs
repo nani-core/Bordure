@@ -12,7 +12,6 @@ namespace NaniCore.Loopool {
 		protected void OnValidate() {
 			if(!Application.isPlaying) {
 				ValidateControl();
-				ValidateInteraction();
 			}
 		}
 #endif

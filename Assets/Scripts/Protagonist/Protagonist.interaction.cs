@@ -1,5 +1,6 @@
+#define NEW_UI
+
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using System;
 using System.Collections;
@@ -13,8 +14,10 @@ namespace NaniCore.Loopool {
 		[Header("Interaction")]
 		public new Camera camera;
 		[SerializeField][Min(0)] protected float maxInteractionDistance;
+#if NEW_UI
+		[SerializeField] protected FocusUi focus;
+#else
 		[SerializeField] protected Image focusUi;
-		[SerializeField] protected Focus focus;
 		[Serializable]
 		public struct FocusUiMap {
 			public Sprite normal;
@@ -22,6 +25,7 @@ namespace NaniCore.Loopool {
 			public Sprite grabbing;
 		}
 		[SerializeField] protected FocusUiMap focusUiMap;
+#endif
 		[SerializeField][Range(0, 1)] protected float grabbingTransitionDuration;
 		[SerializeField][Range(0, 1)] protected float grabbingEasingFactor;
 		#endregion
@@ -35,15 +39,8 @@ namespace NaniCore.Loopool {
 		#endregion
 
 		#region Life cycle
-#if UNITY_EDITOR
-		private void ValidateInteraction() {
-			EditorApplication.delayCall += () => FocusUi = focusUiMap.hovering;
-		}
-#endif
-
 		private void StartInteraction() {
 			FocusingObject = null;
-			FocusUi = focusUiMap.normal;
 			grabbingActionMap = GetComponent<PlayerInput>().actions.FindActionMap("Grabbing");
 		}
 
@@ -57,6 +54,17 @@ namespace NaniCore.Loopool {
 		#endregion
 
 		#region Functions
+#if NEW_UI
+		private void UpdateFocusAnimated() {
+			if(focus == null) return;
+			if(GrabbingObject)
+				focus.UpdateFocusAnimated(2);
+			else if(FocusingObject)
+				focus.UpdateFocusAnimated(1);
+			else
+				focus.UpdateFocusAnimated(0);
+		}
+#else
 #pragma warning disable IDE0052 // Remove unread private members
 		private Sprite FocusUi {
 			get => focusUi?.sprite;
@@ -72,26 +80,19 @@ namespace NaniCore.Loopool {
 		}
 #pragma warning restore IDE0052 // Remove unread private members
 
+#endif
 		private void UpdateFocusUi() {
+#if NEW_UI
+			UpdateFocusAnimated();
+#else
 			if(GrabbingObject)
 				FocusUi = focusUiMap.grabbing;
 			else if(FocusingObject)
 				FocusUi = focusUiMap.hovering;
 			else
 				FocusUi = focusUiMap.normal;
-			UpdateFocusAnimated();
+#endif
 		}
-
-		private void UpdateFocusAnimated()
-        {
-			if (focus == null) return;
-			if (GrabbingObject)
-				focus.UpdateFocusAnimated(2);
-			else if (FocusingObject)
-				focus.UpdateFocusAnimated(1);
-			else
-				focus.UpdateFocusAnimated(0);
-        }
 
 		public Interactable FocusingObject {
 			get => focusingObject;
@@ -202,6 +203,6 @@ namespace NaniCore.Loopool {
 			else
 				GrabbingObject = null;
 		}
-		#endregion
+#endregion
 	}
 }

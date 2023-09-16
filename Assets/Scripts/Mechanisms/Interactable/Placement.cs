@@ -1,6 +1,6 @@
 using UnityEngine;
 
 namespace NaniCore.Loopool {
-	public class Placement : MonoBehaviour {
+	public class Placement : Interactable {
 	}
 }

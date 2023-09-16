@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 
 namespace NaniCore.Loopool {
-	public class Focus : MonoBehaviour {
+	public class FocusUi : MonoBehaviour {
 		#region Serialized fields
 		[SerializeField] private Material material;
 		[Serializable]
