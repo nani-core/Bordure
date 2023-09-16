@@ -4,12 +4,12 @@ using UnityEngine.Events;
 namespace NaniCore.Loopool {
 	public class Clickable : Interactable {
 		#region Serialized fields
-		[SerializeField] protected UnityEvent onInteract;
+		[SerializeField] protected UnityEvent onClick;
 		#endregion
 
 		#region Message handlers
 		protected override void OnInteract() {
-			onInteract?.Invoke();
+			onClick?.Invoke();
 		}
 		#endregion
 	}
