@@ -48,14 +48,12 @@ namespace NaniCore.Loopool {
 		}
 
 		private IEnumerator IZoomCubic(float newr) {
-			float x = 0f, oldr = r;
-			while(x < 1f) {
-				x += speed * Time.deltaTime;
+			for(float x = 0f; x < 1f; x += speed * Time.deltaTime) {
 				float y = 5.093f * x * x * x - 10.231f * x * x + 6.139f * x;
-				r = oldr + (newr - oldr) * y;
-				SetRadius(r);
-				yield return 0;
+				SetRadius(r + (newr - r) * y);
+				yield return new WaitForEndOfFrame();
 			}
+			SetRadius(r = newr);
 		}
 		#endregion
 
