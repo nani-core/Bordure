@@ -12,7 +12,7 @@ namespace NaniCore {
 		const float boxWidth = 52;
 
 		public override float GetPropertyHeight(SerializedProperty property, GUIContent label) {
-			target = fieldInfo.GetValue(property.serializedObject.targetObject) as FloatRange;
+			target = property.managedReferenceValue as FloatRange;
 			hasPivot = target is FloatPivotRange;
 			range = attribute as RangeAttribute;
 			if(target == null)
@@ -63,7 +63,7 @@ namespace NaniCore {
 				position.y += EditorGUIUtility.singleLineHeight;
 
 				pivot = EditorGUI.FloatField(new Rect(position) {
-					x = xMin - boxWidth - slitWidth,
+					xMin = xMin - boxWidth - slitWidth,
 					width = boxWidth,
 				}, pivot);
 				pivot = Mathf.Clamp(pivot, min, max);

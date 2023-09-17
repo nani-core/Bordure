@@ -5,12 +5,17 @@ using System;
 namespace NaniCore {
 	[CustomPropertyDrawer(typeof(FloatRange))]
 	public class FloatRangePropertyDrawer : PropertyDrawer {
+		FloatRange target;
+		const float slitWidth = 4;
+		const float labelWidth = 32;
+
 		public override float GetPropertyHeight(SerializedProperty property, GUIContent label) {
+			target = property.managedReferenceValue as FloatRange;
+			if(target == null)
+				property.managedReferenceValue = target = Activator.CreateInstance(typeof(FloatRange)) as FloatRange;
 			return EditorGUIUtility.singleLineHeight;
 		}
 
-		const float slitWidth = 4;
-		const float labelWidth = 32;
 
 		private void DrawInputBox(ref Rect position, string label, ref float field) {
 			EditorGUI.LabelField(new Rect(position) { width = labelWidth, }, label);
@@ -19,11 +24,8 @@ namespace NaniCore {
 		}
 
 		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label) {
-			FloatRange target = fieldInfo.GetValue(property.serializedObject.targetObject) as FloatRange;
-			if(target == null) {
-				target = Activator.CreateInstance(fieldInfo.FieldType) as FloatRange;
-				fieldInfo.SetValue(property.serializedObject, target);
-			}
+			if(target == null)
+				return;
 
 			bool hasPivot = target is FloatPivotRange;
 			float fieldCount = hasPivot ? 3 : 2;

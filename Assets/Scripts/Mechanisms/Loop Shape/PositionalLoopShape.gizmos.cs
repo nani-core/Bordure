@@ -19,13 +19,6 @@ namespace NaniCore.Loopool {
 		#endregion
 
 		#region Life cycle
-		protected void OnValidate() {
-			if(allowedPlacementDistanceRatio.x > idealPlacementDistanceRatio)
-				allowedPlacementDistanceRatio.x = idealPlacementDistanceRatio;
-			if(allowedPlacementDistanceRatio.y < idealPlacementDistanceRatio)
-				allowedPlacementDistanceRatio.y = idealPlacementDistanceRatio;
-		}
-
 		protected void OnDrawGizmos() {
 			// Self-indicating ball
 			{
@@ -49,23 +42,26 @@ namespace NaniCore.Loopool {
 					extremeColor.a = .5f;
 
 					Gizmos.color = idealColor;
-					DrawGastroAlongLine(idealPlacementDistanceRatio);
+					DrawGastroAlongLine(placement.distanceRatio.pivot);
 
 					Gizmos.color = extremeColor;
-					DrawGastroAlongLine(allowedPlacementDistanceRatio.x);
-					DrawGastroAlongLine(allowedPlacementDistanceRatio.y);
+					DrawGastroAlongLine(placement.distanceRatio.min);
+					DrawGastroAlongLine(placement.distanceRatio.max);
 				}
 
 				// Positioning range
 				{
-					Vector2 allowedPositioningAzimuthRadian = allowedPositioningAzimuth * Mathf.PI / 180;
+					var azimuthRadian = new FloatRange(positioning.azimuth);
+					azimuthRadian.min *= Mathf.PI / 180;
+					azimuthRadian.max *= Mathf.PI / 180;
+					var distanceRatio = positioning.distanceRatio;
 					var rawVertices = new List<CC> {
-						new CC(allowedPositioningDistanceRatio.x, allowedPositioningAzimuthRadian.x, 0),
-						new CC(allowedPositioningDistanceRatio.x, 0, 0),
-						new CC(allowedPositioningDistanceRatio.x, allowedPositioningAzimuthRadian.y, 0),
-						new CC(allowedPositioningDistanceRatio.y, allowedPositioningAzimuthRadian.y, 0),
-						new CC(allowedPositioningDistanceRatio.y, 0, 0),
-						new CC(allowedPositioningDistanceRatio.y, allowedPositioningAzimuthRadian.x, 0),
+						new CC(distanceRatio.min, azimuthRadian.min, 0),
+						new CC(distanceRatio.min, 0, 0),
+						new CC(distanceRatio.min, azimuthRadian.max, 0),
+						new CC(distanceRatio.max, azimuthRadian.max, 0),
+						new CC(distanceRatio.max, 0, 0),
+						new CC(distanceRatio.max, azimuthRadian.min, 0),
 					};
 					Gizmos.color = Color.yellow;
 					GizmosUtility.DrawPolygon(rawVertices.Select(cc => {
