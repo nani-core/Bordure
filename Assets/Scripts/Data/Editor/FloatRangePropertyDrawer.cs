@@ -1,0 +1,64 @@
+using UnityEngine;
+using UnityEditor;
+using System;
+
+namespace NaniCore {
+	[CustomPropertyDrawer(typeof(FloatRange))]
+	public class FloatRangePropertyDrawer : PropertyDrawer {
+		public override float GetPropertyHeight(SerializedProperty property, GUIContent label) {
+			return EditorGUIUtility.singleLineHeight;
+		}
+
+		const float slitWidth = 4;
+		const float labelWidth = 32;
+
+		private void DrawInputBox(ref Rect position, string label, ref float field) {
+			EditorGUI.LabelField(new Rect(position) { width = labelWidth, }, label);
+			field = EditorGUI.FloatField(new Rect(position) { xMin = position.xMin + labelWidth + slitWidth, }, field);
+			position.x += position.width + slitWidth;
+		}
+
+		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label) {
+			FloatRange target = fieldInfo.GetValue(property.serializedObject.targetObject) as FloatRange;
+			if(target == null) {
+				target = Activator.CreateInstance(fieldInfo.FieldType) as FloatRange;
+				fieldInfo.SetValue(property.serializedObject, target);
+			}
+
+			bool hasPivot = target is FloatPivotRange;
+			float fieldCount = hasPivot ? 3 : 2;
+
+			EditorGUI.LabelField(new Rect(position) { width = EditorGUIUtility.labelWidth }, label);
+
+			Rect inputBoxPosition = position;
+			inputBoxPosition.xMin += EditorGUIUtility.labelWidth;
+			inputBoxPosition.width = (inputBoxPosition.width - slitWidth * (fieldCount - 1)) / fieldCount;
+
+			if(hasPivot) {
+				var pTarget = target as FloatPivotRange;
+				var avatar = new FloatPivotRange(pTarget);
+				EditorGUI.BeginChangeCheck();
+				DrawInputBox(ref inputBoxPosition, "Min", ref avatar.min);
+				DrawInputBox(ref inputBoxPosition, "Piv", ref avatar.pivot);
+				DrawInputBox(ref inputBoxPosition, "Max", ref avatar.max);
+				if(EditorGUI.EndChangeCheck()) {
+					Undo.RecordObject(property.serializedObject.targetObject, $"Setting {fieldInfo.Name}");
+					pTarget.min = avatar.min;
+					pTarget.max = avatar.max;
+					pTarget.pivot = avatar.pivot;
+				}
+			}
+			else {
+				var avatar = new FloatRange(target);
+				EditorGUI.BeginChangeCheck();
+				DrawInputBox(ref inputBoxPosition, "Min", ref avatar.min);
+				DrawInputBox(ref inputBoxPosition, "Max", ref avatar.max);
+				if(EditorGUI.EndChangeCheck()) {
+					Undo.RecordObject(property.serializedObject.targetObject, $"Setting {fieldInfo.Name}");
+					target.min = avatar.min;
+					target.max = avatar.max;
+				}
+			}
+		}
+	}
+}
