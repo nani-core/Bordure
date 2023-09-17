@@ -14,17 +14,15 @@ namespace NaniCore.Loopool {
 
 		#region Properties
 		private Vector3 BlastoPosition => blasto.transform.position;
-		private Vector3 InitialViewDirection => BlastoPosition - InitialViewPosition;
-		private Vector3 InitialViewPosition => transform.position;
-		private Quaternion IdealPlacementRotation => Quaternion.Euler(0, placement.azimuth.pivot, 0) * Quaternion.LookRotation(InitialViewDirection, -Physics.gravity);
-		private Matrix4x4 BlastoToWorldMatrix => Matrix4x4.TRS(BlastoPosition, Quaternion.LookRotation(-InitialViewDirection, -Physics.gravity), Vector3.one);
+		private Vector3 ViewDirection => BlastoPosition - transform.position;
+		private Quaternion IdealPlacementRotation => Quaternion.Euler(0, placement.azimuth.pivot, 0) * Quaternion.LookRotation(ViewDirection, -Physics.gravity);
 		#endregion
 
 		#region Functions
 		private Vector3 GetPositionAlongViewingLine(float ratio) {
 			if(blasto == null)
 				return transform.position;
-			return Vector3.Lerp(InitialViewPosition, BlastoPosition, ratio);
+			return Vector3.Lerp(transform.position, BlastoPosition, ratio);
 		}
 
 		public override bool Satisfied(Transform eye) {
@@ -32,27 +30,23 @@ namespace NaniCore.Loopool {
 				return false;
 
 			// Validate positioning
-			var positioningCc = (MathUtility.CylindricalCoordinate)BlastoToWorldMatrix.inverse.MultiplyPoint(eye.position);
-			positioningCc.radius /= InitialViewDirection.magnitude;
-			bool positioningRadiusInRange = positioning.distanceRatio.Contains(positioningCc.radius);
-			bool positioningAzimuthInRange = positioning.azimuth.Contains(positioningCc.azimuth * 180 / Mathf.PI);   // Should be fixed for radians.
-			if(!(positioningRadiusInRange && positioningAzimuthInRange))
+			Vector3 inversedEyeRotation = eye.rotation.eulerAngles;
+			inversedEyeRotation.y += 180;
+			if(!positioning.Check(blasto.transform.position, Quaternion.LookRotation(-ViewDirection), transform.position, eye.position, Quaternion.Euler(inversedEyeRotation)))
 				return false;
 
 			// Validate placement
-			var gt = gastro.transform;
-			var placementCc = (MathUtility.CylindricalCoordinate)eye.worldToLocalMatrix.MultiplyPoint(gt.position);
-			placementCc.radius /= Vector3.Distance(eye.position, BlastoPosition);
-			bool placementRadiusInRange = placement.distanceRatio.Contains(placementCc.radius);
-			bool placementAzimuthInRange = placement.azimuth.Contains(placementCc.azimuth * 180 / Mathf.PI);
-			if(!(placementRadiusInRange && placementAzimuthInRange))
+			if(!placement.Check(eye.position, Quaternion.LookRotation(ViewDirection), blasto.transform.position, gastro.transform.position, gastro.transform.rotation))
 				return false;
 
 			return true;
 		}
 
 		public void DestroyGastro() {
+			if(gastro == null)
+				return;
 			Destroy(gastro.gameObject);
+			gastro = null;
 		}
 		#endregion
 	}

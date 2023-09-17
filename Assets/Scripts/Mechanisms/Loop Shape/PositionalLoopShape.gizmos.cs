@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace NaniCore.Loopool {
-	using CC = MathUtility.CylindricalCoordinate;
-
 	public partial class PositionalLoopShape : LoopShape {
 		#region Functions
 		private void DrawGastroAlongLine(float ratio) {
@@ -25,14 +23,14 @@ namespace NaniCore.Loopool {
 				Color color = Color.red;
 				color.a = .5f;
 				Gizmos.color = color;
-				Gizmos.DrawSphere(InitialViewPosition, .125f);
+				Gizmos.DrawSphere(transform.position, .125f);
 			}
 
 			if(blasto != null) {
 				// View line to blasto
 				{
 					Gizmos.color = Color.cyan;
-					Gizmos.DrawLine(BlastoPosition, InitialViewPosition);
+					Gizmos.DrawLine(BlastoPosition, transform.position);
 				}
 
 				// Gastro phantom
@@ -50,25 +48,8 @@ namespace NaniCore.Loopool {
 				}
 
 				// Positioning range
-				{
-					var azimuthRadian = new FloatRange(positioning.azimuth);
-					azimuthRadian.min *= Mathf.PI / 180;
-					azimuthRadian.max *= Mathf.PI / 180;
-					var distanceRatio = positioning.distanceRatio;
-					var rawVertices = new List<CC> {
-						new CC(distanceRatio.min, azimuthRadian.min, 0),
-						new CC(distanceRatio.min, 0, 0),
-						new CC(distanceRatio.min, azimuthRadian.max, 0),
-						new CC(distanceRatio.max, azimuthRadian.max, 0),
-						new CC(distanceRatio.max, 0, 0),
-						new CC(distanceRatio.max, azimuthRadian.min, 0),
-					};
-					Gizmos.color = Color.yellow;
-					GizmosUtility.DrawPolygon(rawVertices.Select(cc => {
-						cc.radius *= InitialViewDirection.magnitude;
-						return BlastoToWorldMatrix.MultiplyPoint((Vector3)cc);
-					}));
-				}
+				Gizmos.color = Color.yellow;
+				positioning.DrawGizmos(blasto.transform.position, Quaternion.LookRotation(-ViewDirection), transform.position);
 			}
 		}
 		#endregion
