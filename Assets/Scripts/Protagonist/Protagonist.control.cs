@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace NaniCore.Loopool {
@@ -5,42 +6,30 @@ namespace NaniCore.Loopool {
 	public partial class Protagonist : MonoBehaviour {
 		#region Serialized fields
 		[Header("Geometry")]
-		[SerializeField][Min(0)] protected float height;
-		[SerializeField][Min(0)] protected float radius;
-		[SerializeField] protected Transform eye;
-		[SerializeField][Min(0)] protected float eyeHanging;
+		[SerializeField][Min(0)] private float height;
+		[SerializeField][Min(0)] private float radius;
+		[SerializeField] private Transform eye;
+		[SerializeField][Min(0)] private float eyeHanging;
 
 		[Header("Physics")]
-		[SerializeField] protected CharacterController characterController;
+		[SerializeField] private CharacterController characterController;
 
 		[Header("Control")]
-		[SerializeField][Min(0)] protected float walkingSpeed;
-		[SerializeField][Min(0)] protected float sprintingSpeed;
-		[SerializeField][Min(0)] protected float orientingSpeed;
+		[SerializeField][Min(0)] private float walkingSpeed;
+		[SerializeField][Min(0)] private float sprintingSpeed;
+		[SerializeField][Min(0)] private float stepDistance;
+		[SerializeField] private AudioSource footAudioSource;
+		[SerializeField] private List<AudioClip> stepAudioClips = new List<AudioClip>();
+		[SerializeField][Min(0)] private float orientingSpeed;
 		#endregion
 
 		#region Fields
-		protected bool isRunning = false;
+		private bool isRunning = false;
+		private float steppedDistance = 0;
+		private Vector3 accumulatedMovementVelocity;
 		#endregion
 
-		#region Life cycle
-#if UNITY_EDITOR
-		protected void ValidateControl() {
-			characterController = GetComponent<CharacterController>();
-			if(characterController != null) {
-				characterController.height = height;
-				characterController.center = Vector3.up * (height * .5f);
-				characterController.radius = radius;
-			}
-
-			if(eye != null) {
-				eye.localPosition = Vector3.up * (height - eyeHanging);
-			}
-		}
-#endif
-		#endregion
-
-		#region Functions
+		#region Properties
 		public Transform Eye => eye;
 		public Vector3 EyeOffset => transform.localToWorldMatrix.MultiplyVector(eye.localPosition);
 
@@ -49,7 +38,22 @@ namespace NaniCore.Loopool {
 			set => isRunning = value;
 		}
 
-		protected float MovingSpeed => IsSprinting ? sprintingSpeed : walkingSpeed;
+		private float MovingSpeed => IsSprinting ? sprintingSpeed : walkingSpeed;
+
+#pragma warning disable IDE0052 // Remove unread private members
+		private float SteppedDistance {
+			get => steppedDistance;
+			set {
+				steppedDistance = value;
+				if(stepDistance <= 0)
+					return;
+				if(steppedDistance < 0 || steppedDistance > stepDistance) {
+					steppedDistance = steppedDistance.Mod(stepDistance);
+					footAudioSource.PlayOneShot(stepAudioClips.PickRandom());
+				}
+			}
+		}
+#pragma warning restore IDE0052 // Remove unread private members
 
 		/// <summary>
 		/// What direction is the protagonist looking at, in rad.
@@ -88,7 +92,32 @@ namespace NaniCore.Loopool {
 				eye.localRotation = Quaternion.Euler(-degree, 0, 0);
 			}
 		}
+		#endregion
 
+		#region Life cycle
+#if UNITY_EDITOR
+		private void ValidateControl() {
+			characterController = GetComponent<CharacterController>();
+			if(characterController != null) {
+				characterController.height = height;
+				characterController.center = Vector3.up * (height * .5f);
+				characterController.radius = radius;
+			}
+
+			if(eye != null) {
+				eye.localPosition = Vector3.up * (height - eyeHanging);
+			}
+		}
+#endif
+
+		protected void FixedUpdate() {
+			if(characterController.SimpleMove(accumulatedMovementVelocity)) {
+				SteppedDistance += accumulatedMovementVelocity.magnitude * Time.fixedDeltaTime;
+			}
+		}
+		#endregion
+
+		#region Functions
 		public void OrientDelta(Vector2 delta) {
 			delta *= orientingSpeed;
 			Azimuth += delta.x;
@@ -97,8 +126,12 @@ namespace NaniCore.Loopool {
 
 		public void MoveVelocity(Vector2 vXy) {
 			vXy *= MovingSpeed;
-			Vector3 v = eye.transform.right * vXy.x + transform.forward * vXy.y;
-			characterController.SimpleMove(v);
+			accumulatedMovementVelocity = eye.transform.right * vXy.x + transform.forward * vXy.y;
+		}
+
+		public void MoveDelta(Vector3 delta) {
+			characterController.SimpleMove(delta);
+			SteppedDistance += delta.magnitude;
 		}
 		#endregion
 	}

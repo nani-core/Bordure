@@ -39,6 +39,8 @@ namespace NaniCore {
 		private void OnValidate() {
 			if(Application.isPlaying)
 				return;
+			if(this == null)
+				return;
 			EditorApplication.delayCall += RegenerateInEditMode;
 		}
 
