@@ -1,7 +1,5 @@
 #if UNITY_EDITOR
 using UnityEngine;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace NaniCore.Loopool {
 	public partial class PositionalLoopShape : LoopShape {
@@ -10,7 +8,7 @@ namespace NaniCore.Loopool {
 			if(blasto == null)
 				return;
 			if(gastro != null)
-				gastro.DrawPhantom(GetPositionAlongViewingLine(ratio), IdealPlacementRotation);
+				gastro.DrawPhantom(GetPositionAlongViewingLine(ratio), Quaternion.Euler(0, placement.azimuth.pivot, 0) * Quaternion.LookRotation(BlastoPos - OriginPos));
 			else
 				Gizmos.DrawSphere(GetPositionAlongViewingLine(ratio), .0625f);
 		}
@@ -23,14 +21,14 @@ namespace NaniCore.Loopool {
 				Color color = Color.red;
 				color.a = .5f;
 				Gizmos.color = color;
-				Gizmos.DrawSphere(transform.position, .125f);
+				Gizmos.DrawSphere(OriginPos, .125f);
 			}
 
 			if(blasto != null) {
 				// View line to blasto
 				{
 					Gizmos.color = Color.cyan;
-					Gizmos.DrawLine(BlastoPosition, transform.position);
+					Gizmos.DrawLine(BlastoPos, OriginPos);
 				}
 
 				// Gastro phantom
@@ -49,7 +47,7 @@ namespace NaniCore.Loopool {
 
 				// Positioning range
 				Gizmos.color = Color.yellow;
-				positioning.DrawGizmos(blasto.transform.position, Quaternion.LookRotation(-ViewDirection), transform.position);
+				positioning.DrawGizmos(BlastoPos, Quaternion.LookRotation(OriginPos - BlastoPos), OriginPos);
 			}
 		}
 		#endregion

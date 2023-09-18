@@ -11,7 +11,7 @@ namespace NaniCore.Loopool {
 			EditorGUILayout.Space();
 			if(GUILayout.Button("Align Scene Camera to View")) {
 				foreach(SceneView sceneView in SceneView.sceneViews) {
-					sceneView.AlignViewToObject(Target.transform);
+					sceneView.AlignViewToObject(Target.origin);
 				}
 			}
 		}

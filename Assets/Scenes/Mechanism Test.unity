@@ -490,8 +490,9 @@ GameObject:
   - component: {fileID: 603823711}
   - component: {fileID: 603823710}
   - component: {fileID: 603823709}
+  - component: {fileID: 603823712}
   m_Layer: 0
-  m_Name: Square
+  m_Name: Square Loop Shape
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -584,6 +585,77 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 603823707}
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &603823712
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 603823707}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0f1b06f5b0a1094db6ffd1b04502b72, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onSatisfy:
+    m_PersistentCalls:
+      m_Calls: []
+  onUnsatisfy:
+    m_PersistentCalls:
+      m_Calls: []
+  onOpen:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 603823712}
+        m_TargetAssemblyTypeName: NaniCore.Loopool.PositionalLoopShape, Assembly-CSharp
+        m_MethodName: DestroyGastro
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  blasto: {fileID: 603823707}
+  gastro: {fileID: 632589730}
+  origin: {fileID: 883607476}
+  positioning:
+    azimuth:
+      rid: 8277693482192076800
+    distanceRatio:
+      rid: 8277693482192076801
+  placement:
+    azimuth:
+      rid: 8277693482192076802
+    distanceRatio:
+      rid: 8277693482192076803
+  references:
+    version: 2
+    RefIds:
+    - rid: 8277693482192076800
+      type: {class: FloatRange, ns: NaniCore, asm: Assembly-CSharp}
+      data:
+        min: -5
+        max: 5
+    - rid: 8277693482192076801
+      type: {class: FloatRange, ns: NaniCore, asm: Assembly-CSharp}
+      data:
+        min: 0.1
+        max: 1
+    - rid: 8277693482192076802
+      type: {class: FloatPivotRange, ns: NaniCore, asm: Assembly-CSharp}
+      data:
+        min: -5
+        max: 5
+        pivot: 0
+    - rid: 8277693482192076803
+      type: {class: FloatPivotRange, ns: NaniCore, asm: Assembly-CSharp}
+      data:
+        min: 0.4
+        max: 0.46
+        pivot: 0.43
 --- !u!1 &605961232
 GameObject:
   m_ObjectHideFlags: 0
@@ -951,6 +1023,37 @@ Transform:
   - {fileID: 597183491}
   m_Father: {fileID: 1457753276}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &883607475
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 883607476}
+  m_Layer: 0
+  m_Name: Square Loop Shape Origin
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &883607476
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 883607475}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.5, z: -2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1779074230}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &935743354
 GameObject:
   m_ObjectHideFlags: 0
@@ -1049,108 +1152,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!1 &1067548042
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1067548043}
-  - component: {fileID: 1067548044}
-  m_Layer: 0
-  m_Name: Square Loop Shape
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1067548043
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1067548042}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.5, z: -10}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1779074230}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1067548044
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1067548042}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c0f1b06f5b0a1094db6ffd1b04502b72, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  onSatisfy:
-    m_PersistentCalls:
-      m_Calls: []
-  onUnsatisfy:
-    m_PersistentCalls:
-      m_Calls: []
-  onOpen:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1067548044}
-        m_TargetAssemblyTypeName: NaniCore.Loopool.PositionalLoopShape, Assembly-CSharp
-        m_MethodName: DestroyGastro
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  blasto: {fileID: 603823707}
-  gastro: {fileID: 632589730}
-  positioning:
-    azimuth:
-      rid: 8277693482192076800
-    distanceRatio:
-      rid: 8277693482192076801
-  placement:
-    azimuth:
-      rid: 8277693482192076802
-    distanceRatio:
-      rid: 8277693482192076803
-  references:
-    version: 2
-    RefIds:
-    - rid: 8277693482192076800
-      type: {class: FloatRange, ns: NaniCore, asm: Assembly-CSharp}
-      data:
-        min: -5
-        max: 5
-    - rid: 8277693482192076801
-      type: {class: FloatRange, ns: NaniCore, asm: Assembly-CSharp}
-      data:
-        min: 0.25
-        max: 1
-    - rid: 8277693482192076802
-      type: {class: FloatPivotRange, ns: NaniCore, asm: Assembly-CSharp}
-      data:
-        min: -5
-        max: 5
-        pivot: 0
-    - rid: 8277693482192076803
-      type: {class: FloatPivotRange, ns: NaniCore, asm: Assembly-CSharp}
-      data:
-        min: 0.4
-        max: 0.46
-        pivot: 0.43
 --- !u!1001 &1082237145
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1893,7 +1894,7 @@ Transform:
   m_Children:
   - {fileID: 935743355}
   - {fileID: 603823708}
-  - {fileID: 1067548043}
+  - {fileID: 883607476}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1900936776
