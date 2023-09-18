@@ -8,7 +8,7 @@ namespace NaniCore.Loopool {
 			if(blasto == null)
 				return;
 			if(gastro != null)
-				gastro.DrawPhantom(GetPositionAlongViewingLine(ratio), Quaternion.Euler(0, placement.azimuth.pivot, 0) * Quaternion.LookRotation(BlastoPos - OriginPos));
+				GizmosUtility.DrawPhantom(gastro, GetPositionAlongViewingLine(ratio), Quaternion.Euler(0, placement.azimuth.pivot, 0) * Quaternion.LookRotation(BlastoPos - OriginPos));
 			else
 				Gizmos.DrawSphere(GetPositionAlongViewingLine(ratio), .0625f);
 		}

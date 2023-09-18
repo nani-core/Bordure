@@ -5,7 +5,12 @@ using System.Linq;
 
 namespace NaniCore {
 	public static class GizmosUtility {
-		public static void DrawPhantom(this GameObject reference, Vector3 position, Quaternion rotation) {
+		public static void SetColor(Color color, float alpha = 1) {
+			color.a = alpha;
+			Gizmos.color = color;
+		}
+
+		public static void DrawPhantom(GameObject reference, Vector3 position, Quaternion rotation) {
 			var baseTransform = reference.transform;
 			var basis = Matrix4x4.TRS(baseTransform.position, baseTransform.rotation, Vector3.one);
 			foreach(var meshFilter in reference.GetComponentsInChildren<MeshFilter>()) {
@@ -14,6 +19,9 @@ namespace NaniCore {
 				Gizmos.DrawMesh(meshFilter.sharedMesh, m.GetPosition(), m.rotation, m.lossyScale);
 			}
 		}
+
+		public static void DrawPhantom(GameObject reference, Transform transform)
+			=> DrawPhantom(reference, transform.position, transform.rotation);
 
 		public static void DrawPolygon(IEnumerable<Vector3> vertices) {
 			if(vertices == null)

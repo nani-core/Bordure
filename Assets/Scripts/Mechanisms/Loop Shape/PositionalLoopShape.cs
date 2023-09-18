@@ -47,7 +47,7 @@ namespace NaniCore.Loopool {
 		public void DestroyGastro() {
 			if(gastro == null)
 				return;
-			Destroy(gastro.gameObject);
+			gastro.gameObject.SetActive(false);
 			gastro = null;
 		}
 		#endregion
