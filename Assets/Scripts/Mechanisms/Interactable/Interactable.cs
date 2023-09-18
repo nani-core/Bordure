@@ -24,5 +24,10 @@ namespace NaniCore.Loopool {
 
 		protected virtual void OnInteract() { }
 		#endregion
+
+		#region Life cycle
+		// Dummy handler to make every child class disablable(?).
+		protected void Start() { }
+		#endregion
 	}
 }

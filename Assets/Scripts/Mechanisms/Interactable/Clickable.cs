@@ -9,6 +9,8 @@ namespace NaniCore.Loopool {
 
 		#region Message handlers
 		protected override void OnInteract() {
+			if(!isActiveAndEnabled)
+				return;
 			onClick?.Invoke();
 		}
 		#endregion
