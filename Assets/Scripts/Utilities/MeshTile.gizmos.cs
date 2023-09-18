@@ -21,6 +21,8 @@ namespace NaniCore {
 		private void RegenerateInEditMode() {
 			if(Application.isPlaying)
 				return;
+			if (this == null)
+				return;
 			if(gizmosRoot == null)
 				gizmosRoot = transform.Find(gizmosRootName);
 			if(gizmosRoot != null) {
@@ -39,7 +41,7 @@ namespace NaniCore {
 		private void OnValidate() {
 			if(Application.isPlaying)
 				return;
-			if(this == null)
+			if(!(enabled && gameObject.activeInHierarchy))
 				return;
 			EditorApplication.delayCall += RegenerateInEditMode;
 		}
