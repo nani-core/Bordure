@@ -1,5 +1,4 @@
 using UnityEngine;
-using NaughtyAttributes;
 
 namespace NaniCore.Loopool {
 	public partial class PositionalLoopShape : LoopShape {
@@ -9,30 +8,23 @@ namespace NaniCore.Loopool {
 		/// µº
 		[SerializeField][Tooltip("µº")] private GameObject gastro;
 
-		[Header("Positioning")]
-		[SerializeField][MinMaxSlider(-90, 90)] private Vector2 allowedPositioningAzimuth;
-		[SerializeField][MinMaxSlider(0, 1)] private Vector2 allowedPositioningDistanceRatio;
-
-		[Header("Placement")]
-		[SerializeField][Range(0, 1)] private float idealPlacementDistanceRatio = .5f;
-		[SerializeField][MinMaxSlider(0, 1)] private Vector2 allowedPlacementDistanceRatio;
-		[SerializeField][Range(-180, 180)] private float idealPlacementAzimuth = 0f;
-		[SerializeField][MinMaxSlider(-90, 90)] private Vector2 allowedPlacementAzimuth;
+		[Header("Geometry")]
+		[SerializeField] public Transform origin;
+		[SerializeField] public NoPivotCheeseSlice positioning;
+		[SerializeField] public PivotCheeseSlice placement;
 		#endregion
 
 		#region Properties
-		private Vector3 BlastoPosition => blasto.transform.position;
-		private Vector3 InitialViewDirection => BlastoPosition - InitialViewPosition;
-		private Vector3 InitialViewPosition => transform.position;
-		private Quaternion IdealPlacementRotation => Quaternion.Euler(0, idealPlacementAzimuth, 0) * Quaternion.LookRotation(InitialViewDirection, -Physics.gravity);
-		private Matrix4x4 BlastoToWorldMatrix => Matrix4x4.TRS(BlastoPosition, Quaternion.LookRotation(-InitialViewDirection, -Physics.gravity), Vector3.one);
+		public Vector3 OriginPos => origin.position;
+		public Vector3 BlastoPos => blasto.transform.position;
+		public Vector3 GastroPos => gastro.transform.position;
 		#endregion
 
 		#region Functions
 		private Vector3 GetPositionAlongViewingLine(float ratio) {
 			if(blasto == null)
-				return transform.position;
-			return Vector3.Lerp(InitialViewPosition, BlastoPosition, ratio);
+				return OriginPos;
+			return Vector3.Lerp(OriginPos, BlastoPos, ratio);
 		}
 
 		public override bool Satisfied(Transform eye) {
@@ -40,27 +32,23 @@ namespace NaniCore.Loopool {
 				return false;
 
 			// Validate positioning
-			var positioningCc = (MathUtility.CylindricalCoordinate)BlastoToWorldMatrix.inverse.MultiplyPoint(eye.position);
-			positioningCc.radius /= InitialViewDirection.magnitude;
-			bool positioningRadiusInRange = positioningCc.radius.InRange(allowedPositioningDistanceRatio);
-			bool positioningAzimuthInRange = (positioningCc.azimuth * 180 / Mathf.PI).InRange(allowedPositioningAzimuth);	// Should be fixed for radians.
-			if(!(positioningRadiusInRange && positioningAzimuthInRange))
+			Vector3 inversedEyeRotation = eye.rotation.eulerAngles;
+			inversedEyeRotation.y += 180;
+			if(!positioning.Check(BlastoPos, Quaternion.LookRotation(OriginPos - BlastoPos), OriginPos, eye.position, Quaternion.Euler(inversedEyeRotation)))
 				return false;
 
 			// Validate placement
-			var gt = gastro.transform;
-			var placementCc = (MathUtility.CylindricalCoordinate)eye.worldToLocalMatrix.MultiplyPoint(gt.position);
-			placementCc.radius /= Vector3.Distance(eye.position, BlastoPosition);
-			bool placementRadiusInRange = placementCc.radius.InRange(allowedPlacementDistanceRatio);
-			bool placementAzimuthInRange = placementCc.azimuth.InRange(allowedPlacementAzimuth);
-			if(!(placementRadiusInRange && placementAzimuthInRange))
+			if(!placement.Check(eye.position, Quaternion.LookRotation(BlastoPos - OriginPos), BlastoPos, GastroPos, gastro.transform.rotation))
 				return false;
 
 			return true;
 		}
 
 		public void DestroyGastro() {
+			if(gastro == null)
+				return;
 			Destroy(gastro.gameObject);
+			gastro = null;
 		}
 		#endregion
 	}

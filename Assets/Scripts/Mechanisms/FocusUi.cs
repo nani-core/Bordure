@@ -1,11 +1,12 @@
 using UnityEngine;
 using System;
 using System.Collections;
+using UnityEngine.UI;
 
 namespace NaniCore.Loopool {
 	public class FocusUi : MonoBehaviour {
 		#region Serialized fields
-		[SerializeField] private Material material;
+		[SerializeField] private Image image;
 		[Serializable]
 		public struct FocusRadiusMap {
 			public float Normal;
@@ -42,15 +43,24 @@ namespace NaniCore.Loopool {
 			currCoroutine = StartCoroutine(IZoomCubic(newr));
 		}
 
+		private void SetRadius(float r) {
+			image.material.SetFloat("_Radius", r);
+		}
+
 		private IEnumerator IZoomCubic(float newr) {
-			float x = 0f, oldr = r;
-			while(x < 1f) {
-				x += speed * Time.deltaTime;
+			for(float x = 0f; x < 1f; x += speed * Time.deltaTime) {
 				float y = 5.093f * x * x * x - 10.231f * x * x + 6.139f * x;
-				r = oldr + (newr - oldr) * y;
-				material.SetFloat("_Radius", r);
-				yield return 0;
+				SetRadius(r + (newr - r) * y);
+				yield return new WaitForEndOfFrame();
 			}
+			SetRadius(r = newr);
+		}
+		#endregion
+
+		#region Life cycle
+		protected void Start() {
+			image.material = new Material(image.material);
+			SetRadius(focusRadiusMap.Normal);
 		}
 		#endregion
 		#endregion

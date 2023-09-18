@@ -37,8 +37,30 @@ namespace NaniCore {
 		public static Matrix4x4 RelativeTransform(this Transform self, Transform target)
 			=> RelativeTransform(self.localToWorldMatrix, target.localToWorldMatrix);
 
+		public static bool InRange(this float x, float min, float max)
+			=> x >= min && x <= max;
+
 		public static bool InRange(this float x, Vector2 range)
-			=> x >= range.x && x <= range.y;
+			=> x.InRange(range.x, range.y);
+
+		public static float Residue(this float x, float divisor)
+			=> Mathf.Floor(x / divisor);
+
+		public static float Mod(this float x, float divisor)
+			=> x - divisor * x.Residue(divisor);
+
+		public static bool DegreeInRange(float x, float min, float max) {
+			if(max < min) {
+				float t = max;
+				max = min;
+				min = t;
+			}
+			float minRes = min.Residue(360);
+			min += minRes;
+			max += minRes;
+			x += x.Residue(360);
+			return x.InRange(min, max) || (x + 360).InRange(min, max) || (x - 360).InRange(min, max);
+		}
 
 		[Serializable]
 		public struct CylindricalCoordinate {
