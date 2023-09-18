@@ -91,16 +91,31 @@ namespace NaniCore.Loopool {
 			grabbingActionMap = GetComponent<PlayerInput>().actions.FindActionMap("Grabbing");
 		}
 
-		private void UpdateInteraction() {
+		private void LateUpdateInteraction() {
+			// If not grabbing anything, check for focus.
 			if(GrabbingObject == null) {
 				RaycastHit hitInfo;
 				bool isHit = Physics.Raycast(camera.ViewportPointToRay(Vector2.one * .5f), out hitInfo, maxInteractionDistance);
 				FocusingObject = isHit ? hitInfo.collider.GetComponent<Interactable>() : null;
 			}
+			// If grabbing blocked, drop.
+			else {
+				RaycastHit hitInfo;
+				bool isHit = Physics.Raycast(camera.ViewportPointToRay(Vector2.one * .5f), out hitInfo, maxInteractionDistance);
+				// Don't drop if not hit, might be due to orienting too fast.
+				if(isHit) {
+					bool isHitPointIntertweening = Vector3.Distance(hitInfo.point, Eye.position) < Vector3.Distance(GrabbingObject.transform.position, Eye.position);
+					bool isNotDescendantOfGrabbingObject = !hitInfo.transform.IsChildOf(GrabbingObject.transform);
+					if(isHitPointIntertweening && isNotDescendantOfGrabbingObject)
+						GrabbingObject = null;
+				}
+			}
+			// If any loop shape is satisfied, check for invalidation.
 			if(SatisfiedLoopShape != null) {
 				if(!SatisfiedLoopShape.isActiveAndEnabled || !SatisfiedLoopShape.Satisfied(eye))
 					SatisfiedLoopShape = null;
 			}
+			// If no loop shape is satisfied, seek for activation.
 			else {
 				foreach(var loopshape in LoopShape.All) {
 					if(!loopshape.isActiveAndEnabled)
