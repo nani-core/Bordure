@@ -49,7 +49,7 @@ namespace NaniCore.Loopool {
 					return;
 				if(steppedDistance < 0 || steppedDistance > stepDistance) {
 					steppedDistance = steppedDistance.Mod(stepDistance);
-					footAudioSource?.PlayOneShot(stepAudioClips.PickRandom());
+					footAudioSource.PlayOneShot(stepAudioClips.PickRandom());
 				}
 			}
 		}
