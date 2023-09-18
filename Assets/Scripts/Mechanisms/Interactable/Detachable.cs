@@ -1,9 +1,16 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using NaughtyAttributes;
 
 namespace NaniCore.Loopool {
-	public class Detachable : Interactable {
+	public partial class Detachable : Interactable {
+		#region Serialized fields
+		[SerializeField] private bool useDetachingEjection;
+		[ShowIf("useDetachingEjection")][SerializeField] private Vector3 ejectionVelocity;
+		[ShowIf("useDetachingEjection")][SerializeField] private Vector3 ejectionOrigin;
+		#endregion
+
 		#region Fields
 		private List<Grabbable> disabledGrabbables = new List<Grabbable>();
 		#endregion
@@ -25,6 +32,13 @@ namespace NaniCore.Loopool {
 			transform.SetParent(null, true);
 			if(Rigidbody) {
 				Rigidbody.isKinematic = false;
+				if(useDetachingEjection) {
+					Rigidbody.AddForceAtPosition(
+						transform.localToWorldMatrix.MultiplyVector(ejectionVelocity),
+						transform.localToWorldMatrix.MultiplyPoint(ejectionOrigin),
+						ForceMode.VelocityChange
+					);
+				}
 			}
 
 			yield return new WaitForEndOfFrame();
