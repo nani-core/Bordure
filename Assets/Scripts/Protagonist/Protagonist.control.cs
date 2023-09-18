@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace NaniCore.Loopool {
@@ -18,8 +17,6 @@ namespace NaniCore.Loopool {
 		[SerializeField][Min(0)] private float walkingSpeed;
 		[SerializeField][Min(0)] private float sprintingSpeed;
 		[SerializeField][Min(0)] private float stepDistance;
-		[SerializeField] private AudioSource footAudioSource;
-		[SerializeField] private List<AudioClip> stepAudioClips = new List<AudioClip>();
 		[SerializeField][Min(0)] private float orientingSpeed;
 		#endregion
 
@@ -49,7 +46,7 @@ namespace NaniCore.Loopool {
 					return;
 				if(steppedDistance < 0 || steppedDistance > stepDistance) {
 					steppedDistance = steppedDistance.Mod(stepDistance);
-					footAudioSource.PlayOneShot(stepAudioClips.PickRandom());
+					PlayFootstepSound();
 				}
 			}
 		}

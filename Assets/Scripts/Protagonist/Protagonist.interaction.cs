@@ -33,8 +33,10 @@ namespace NaniCore.Loopool {
 				if(focusingObject)
 					focusingObject.SendMessage("OnFocusLeave", SendMessageOptions.DontRequireReceiver);
 				focusingObject = value;
-				if(focusingObject)
+				if(focusingObject) {
 					focusingObject.SendMessage("OnFocusEnter", SendMessageOptions.DontRequireReceiver);
+					PlaySfx(onFocusSound);
+				}
 
 				UpdateFocusUi();
 			}
@@ -165,6 +167,7 @@ namespace NaniCore.Loopool {
 
 		private IEnumerator BeginGrabbingCoroutine(Grabbable target) {
 			target.SendMessage("OnGrabBegin");
+			PlaySfx(onGrabSound);
 
 			target.transform.SetParent(eye.transform, true);
 
@@ -199,6 +202,7 @@ namespace NaniCore.Loopool {
 			target.transform.SetParent(null, true);
 
 			target.SendMessage("OnGrabEnd");
+			PlaySfx(onDropSound);
 
 			yield break;
 		}
