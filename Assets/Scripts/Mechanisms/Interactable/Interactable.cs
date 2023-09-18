@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace NaniCore.Loopool {
 	[RequireComponent(typeof(Collider))]
