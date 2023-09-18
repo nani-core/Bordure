@@ -28,8 +28,8 @@ namespace NaniCore.Loopool {
 			StartInteraction();
 		}
 
-		protected void Update() {
-			UpdateInteraction();
+		protected void LateUpdate() {
+			LateUpdateInteraction();
 		}
 		#endregion
 	}

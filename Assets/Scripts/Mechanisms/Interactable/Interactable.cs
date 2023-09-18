@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace NaniCore.Loopool {
 	[RequireComponent(typeof(Collider))]
@@ -24,6 +23,11 @@ namespace NaniCore.Loopool {
 		protected virtual void OnFocusLeave() { }
 
 		protected virtual void OnInteract() { }
+		#endregion
+
+		#region Life cycle
+		// Dummy handler to make every child class disablable(?).
+		protected void Start() { }
 		#endregion
 	}
 }

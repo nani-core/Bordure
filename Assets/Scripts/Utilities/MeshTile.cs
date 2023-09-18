@@ -4,7 +4,7 @@ namespace NaniCore {
 	public partial class MeshTile : MonoBehaviour {
 		#region Serialized fields
 		public GameObject tile;
-		public Vector3 spacing = Vector3Int.one;
+		public Vector3 i = Vector3.right, j = Vector3.up, k = Vector3.forward;
 		public Vector3Int count = Vector3Int.one;
 		public Vector3 uvw = Vector3.one * .5f;
 		#endregion
@@ -18,7 +18,8 @@ namespace NaniCore {
 				for(int iy = 0; iy < count.y; ++iy) {
 					for(int iz = 0; iz < count.z; ++iz) {
 						var instance = instantiator(tile, under).transform;
-						instance.localPosition = Vector3.Scale(spacing, new Vector3(ix, iy, iz) - Vector3.Scale(count - Vector3.one, uvw));
+						var selfOffset = i * ix + j * iy + k * iz;
+						instance.localPosition = selfOffset - Vector3.Scale(count - Vector3.one, uvw);
 					}
 				}
 			}

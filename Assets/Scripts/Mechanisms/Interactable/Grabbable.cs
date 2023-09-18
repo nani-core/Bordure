@@ -10,6 +10,8 @@ namespace NaniCore.Loopool {
 
 		#region Message handlers
 		protected override void OnInteract() {
+			if(!isActiveAndEnabled)
+				return;
 			Protagonist.instance.GrabbingObject = this;
 		}
 		#endregion
