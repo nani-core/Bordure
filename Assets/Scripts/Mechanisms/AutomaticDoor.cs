@@ -5,7 +5,11 @@ namespace NaniCore.Loopool {
 	public partial class AutomaticDoor : MonoBehaviour {
 		#region Serialized fields
 		[SerializeField] private Transform door;
+		/// Not yet to be implemented.
+		[SerializeField] private AudioClip movingSound;
+		[SerializeField] private AudioClip onClosedSound;
 		[SerializeField] private Transform closedTransform;
+		[SerializeField] private AudioClip onOpenedSound;
 		[SerializeField] private Transform openedTransform;
 		[SerializeField] private bool isOpened = false;
 		[SerializeField][Min(0)] private float openingDuration = 1f;
@@ -43,7 +47,11 @@ namespace NaniCore.Loopool {
 		}
 
 		private IEnumerator SetOpeningStateCoroutine(bool targetOpened, float duration) {
+			if(targetOpened == true && isOpened == false)
+				StartCoroutine(AudioUtility.PlayOneShotAtCoroutine(onOpenedSound, transform.position, transform));
 			yield return EaseProgressCoroutine(targetOpened ? 1f : 0f, duration);
+			if(targetOpened == false && isOpened == true)
+				StartCoroutine(AudioUtility.PlayOneShotAtCoroutine(onClosedSound, transform.position, transform));
 			isOpened = targetOpened;
 		}
 

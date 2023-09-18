@@ -40,6 +40,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Cheat",
+                    "type": "Button",
+                    "id": "b2fe41bf-15bf-4217-a5a1-ba31ea663154",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -128,6 +137,17 @@
                     "processors": "",
                     "groups": "PC",
                     "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e209677f-7796-4814-ac9c-ccac933a4f31",
+                    "path": "<Keyboard>/backquote",
+                    "interactions": "Press",
+                    "processors": "",
+                    "groups": "PC",
+                    "action": "Cheat",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

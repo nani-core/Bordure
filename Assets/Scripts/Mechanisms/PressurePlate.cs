@@ -10,8 +10,10 @@ namespace NaniCore.Loopool {
 		[SerializeField] private Transform plate;
 		[SerializeField][Min(0)] private float sinkingDistance = .1f;
 		[SerializeField] private List<GameObject> targets = new List<GameObject>();
-		
+
+		[SerializeField] private AudioClip onPressedSound;
 		[SerializeField] private UnityEvent onPressed;
+		[SerializeField] private AudioClip onReleasedSound;
 		[SerializeField] private UnityEvent onReleased;
 		#endregion
 
@@ -29,10 +31,12 @@ namespace NaniCore.Loopool {
 					return;
 				if(pressed = value) {
 					plate.localPosition = startingPosition + Vector3.down * sinkingDistance;
+					StartCoroutine(AudioUtility.PlayOneShotAtCoroutine(onPressedSound, transform.position, transform));
 					onPressed?.Invoke();
 				}
 				else {
 					plate.localPosition = startingPosition;
+					StartCoroutine(AudioUtility.PlayOneShotAtCoroutine(onReleasedSound, transform.position, transform));
 					onReleased?.Invoke();
 				}
 			}

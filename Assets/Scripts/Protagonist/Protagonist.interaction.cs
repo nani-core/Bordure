@@ -33,8 +33,10 @@ namespace NaniCore.Loopool {
 				if(focusingObject)
 					focusingObject.SendMessage("OnFocusLeave", SendMessageOptions.DontRequireReceiver);
 				focusingObject = value;
-				if(focusingObject)
+				if(focusingObject) {
 					focusingObject.SendMessage("OnFocusEnter", SendMessageOptions.DontRequireReceiver);
+					PlaySfx(onFocusSound);
+				}
 
 				UpdateFocusUi();
 			}
@@ -94,14 +96,12 @@ namespace NaniCore.Loopool {
 		private void LateUpdateInteraction() {
 			// If not grabbing anything, check for focus.
 			if(GrabbingObject == null) {
-				RaycastHit hitInfo;
-				bool isHit = Physics.Raycast(camera.ViewportPointToRay(Vector2.one * .5f), out hitInfo, maxInteractionDistance);
+				bool isHit = Raycast(out RaycastHit hitInfo);
 				FocusingObject = isHit ? hitInfo.collider.GetComponent<Interactable>() : null;
 			}
 			// If grabbing blocked, drop.
 			else {
-				RaycastHit hitInfo;
-				bool isHit = Physics.Raycast(camera.ViewportPointToRay(Vector2.one * .5f), out hitInfo, maxInteractionDistance);
+				bool isHit = Raycast(out RaycastHit hitInfo);
 				// Don't drop if not hit, might be due to orienting too fast.
 				if(isHit) {
 					bool isHitPointIntertweening = Vector3.Distance(hitInfo.point, Eye.position) < Vector3.Distance(GrabbingObject.transform.position, Eye.position);
@@ -143,6 +143,10 @@ namespace NaniCore.Loopool {
 				focus.UpdateFocusAnimated(0);
 		}
 
+		private bool Raycast(out RaycastHit hitInfo) {
+			return Physics.Raycast(camera.ViewportPointToRay(Vector2.one * .5f), out hitInfo, maxInteractionDistance);
+		}
+
 		#region Grabbing
 		public void GrabbingOrientDelta(float delta) {
 			delta *= orientingSpeed;
@@ -163,6 +167,7 @@ namespace NaniCore.Loopool {
 
 		private IEnumerator BeginGrabbingCoroutine(Grabbable target) {
 			target.SendMessage("OnGrabBegin");
+			PlaySfx(onGrabSound);
 
 			target.transform.SetParent(eye.transform, true);
 
@@ -197,6 +202,7 @@ namespace NaniCore.Loopool {
 			target.transform.SetParent(null, true);
 
 			target.SendMessage("OnGrabEnd");
+			PlaySfx(onDropSound);
 
 			yield break;
 		}

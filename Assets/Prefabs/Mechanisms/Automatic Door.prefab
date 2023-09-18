@@ -79,9 +79,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   door: {fileID: 2333202212841269695}
+  movingSound: {fileID: 0}
+  onClosedSound: {fileID: 8300000, guid: ac04cd0b5396c0b42b5c8ad301a6106d, type: 3}
   closedTransform: {fileID: 8641172071095634965}
+  onOpenedSound: {fileID: 8300000, guid: a40088113dc806a4180a2046b5ea54b3, type: 3}
   openedTransform: {fileID: 7168967520737913995}
   isOpened: 0
+  openingDuration: 1
 --- !u!1 &8018384609884158802
 GameObject:
   m_ObjectHideFlags: 0
@@ -140,7 +144,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9166740471945008416}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 0.5}
   m_ConstrainProportionsScale: 0
