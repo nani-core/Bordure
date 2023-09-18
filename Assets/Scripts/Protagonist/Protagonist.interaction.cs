@@ -10,8 +10,8 @@ namespace NaniCore.Loopool {
 		public new Camera camera;
 		[SerializeField][Min(0)] protected float maxInteractionDistance;
 		[SerializeField] protected FocusUi focus;
-		[SerializeField][Range(0, 1)] protected float grabbingTransitionDuration;
-		[SerializeField][Range(0, 1)] protected float grabbingEasingFactor;
+		[SerializeField][UnityEngine.Range(0, 1)] protected float grabbingTransitionDuration;
+		[SerializeField][UnityEngine.Range(0, 1)] protected float grabbingEasingFactor;
 		#endregion
 
 		#region Fields

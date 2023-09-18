@@ -10,7 +10,7 @@ namespace NaniCore.Loopool {
 		[SerializeField] private Transform surface;
 		[SerializeField][Min(0)] private float height = 1;
 		[SerializeField][Min(0)] private float speed = 1;
-		[SerializeField][Range(0, 1)] private float resistance = .5f;
+		[SerializeField][UnityEngine.Range(0, 1)] private float resistance = .5f;
 		#endregion
 
 		#region Fields
