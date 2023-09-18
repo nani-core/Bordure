@@ -97,7 +97,20 @@ namespace NaniCore.Loopool {
 			// If not grabbing anything, check for focus.
 			if(GrabbingObject == null) {
 				bool isHit = Raycast(out RaycastHit hitInfo);
-				FocusingObject = isHit ? hitInfo.collider.GetComponent<Interactable>() : null;
+				if(!isHit)
+					FocusingObject = null;
+				else {
+					// Don't focus on inactive targets.
+					bool set = false;
+					foreach(var interactable in hitInfo.transform.GetComponents<Interactable>()) {
+						if(!interactable.isActiveAndEnabled)
+							continue;
+						FocusingObject = interactable;
+						set = true;
+					}
+					if(!set)
+						FocusingObject = null;
+				}
 			}
 			// If grabbing blocked, drop.
 			else {
