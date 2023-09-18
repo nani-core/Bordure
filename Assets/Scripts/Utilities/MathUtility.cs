@@ -63,39 +63,41 @@ namespace NaniCore {
 		}
 
 		[Serializable]
-		public struct CylindricalCoordinate {
+		public struct SphericalCoordinate {
 			public float radius;
 			public float azimuth;
-			public float y;
+			public float zenith;
 
-			public CylindricalCoordinate(float radius, float azimuth, float y) {
+			public SphericalCoordinate(float radius, float azimuth, float zenith) {
 				this.radius = radius;
 				this.azimuth = azimuth;
-				this.y = y;
+				this.zenith = zenith;
 			}
 
-			public static CylindricalCoordinate FromCartesian(Vector3 cartesian) {
+			public static SphericalCoordinate FromCartesian(Vector3 cartesian) {
 				float azimuth = Mathf.Atan2(cartesian.x, cartesian.z);
+				float radius = cartesian.magnitude;
 				float y = cartesian.y;
 				cartesian.y = 0;
-				float radius = cartesian.magnitude;
-				return new CylindricalCoordinate(radius, azimuth, y);
+				float zenith = Mathf.Atan2(y, cartesian.magnitude);
+				return new SphericalCoordinate(radius, azimuth, zenith);
 			}
 
-			public static Vector3 ToCartesian(CylindricalCoordinate cylindrical) {
+			public static Vector3 ToCartesian(SphericalCoordinate cylindrical) {
 				Vector3 result = Vector3.zero;
 				result.z = Mathf.Cos(cylindrical.azimuth);
 				result.x = Mathf.Sin(cylindrical.azimuth);
+				result *= Mathf.Cos(cylindrical.zenith);
+				result.y = Mathf.Sin(cylindrical.zenith);
 				result *= cylindrical.radius;
-				result.y = cylindrical.y;
 				return result;
 			}
 
-			public static explicit operator CylindricalCoordinate(Vector3 cartesian)
+			public static explicit operator SphericalCoordinate(Vector3 cartesian)
 				=> FromCartesian(cartesian);
 
-			public static explicit operator Vector3(CylindricalCoordinate cylindrical)
-				=> ToCartesian(cylindrical);
+			public static explicit operator Vector3(SphericalCoordinate spherical)
+				=> ToCartesian(spherical);
 		}
 	}
 }

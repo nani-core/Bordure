@@ -286,9 +286,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tile: {fileID: 7078305486055922736, guid: 5305d6dd686a9a941afdc694baacc3bc, type: 3}
-  spacing: {x: 1, y: 1, z: 1}
+  i: {x: 1, y: 0, z: 0}
+  j: {x: 0, y: 1, z: 0}
+  k: {x: 0, y: 0, z: 1}
   count: {x: 5, y: 1, z: 5}
   uvw: {x: 0.5, y: 0, z: 0.5}
+  hollowObjects: []
 --- !u!1 &253501696
 GameObject:
   m_ObjectHideFlags: 0
@@ -509,9 +512,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tile: {fileID: 7078305486055922736, guid: 5305d6dd686a9a941afdc694baacc3bc, type: 3}
-  spacing: {x: 1, y: 1, z: 1}
+  i: {x: 1, y: 0, z: 0}
+  j: {x: 0, y: 1, z: 0}
+  k: {x: 0, y: 0, z: 1}
   count: {x: 8, y: 1, z: 2}
   uvw: {x: 0, y: 0.5, z: 0.5}
+  hollowObjects: []
 --- !u!1 &603823707
 GameObject:
   m_ObjectHideFlags: 0
@@ -658,11 +664,15 @@ MonoBehaviour:
   positioning:
     azimuth:
       rid: 8277693482192076800
+    zenith:
+      rid: 8277693490853314564
     distanceRatio:
       rid: 8277693482192076801
   placement:
     azimuth:
       rid: 8277693482192076802
+    zenith:
+      rid: 8277693490853314565
     distanceRatio:
       rid: 8277693482192076803
   references:
@@ -690,6 +700,17 @@ MonoBehaviour:
         min: 0.4
         max: 0.46
         pivot: 0.43
+    - rid: 8277693490853314564
+      type: {class: FloatRange, ns: NaniCore, asm: Assembly-CSharp}
+      data:
+        min: -5
+        max: 5
+    - rid: 8277693490853314565
+      type: {class: FloatPivotRange, ns: NaniCore, asm: Assembly-CSharp}
+      data:
+        min: -5
+        max: 5
+        pivot: 0
 --- !u!1 &605961232
 GameObject:
   m_ObjectHideFlags: 0
@@ -735,9 +756,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tile: {fileID: 7078305486055922736, guid: 5305d6dd686a9a941afdc694baacc3bc, type: 3}
-  spacing: {x: 1, y: 1, z: 1}
+  i: {x: 1, y: 0, z: 0}
+  j: {x: 0, y: 1, z: 0}
+  k: {x: 0, y: 0, z: 1}
   count: {x: 8, y: 1, z: 2}
   uvw: {x: 0, y: 0.5, z: 0.5}
+  hollowObjects: []
 --- !u!1001 &632589729
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -971,9 +995,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tile: {fileID: 7078305486055922736, guid: 5305d6dd686a9a941afdc694baacc3bc, type: 3}
-  spacing: {x: 1, y: 1, z: 1}
+  i: {x: 1, y: 0, z: 0}
+  j: {x: 0, y: 1, z: 0}
+  k: {x: 0, y: 0, z: 1}
   count: {x: 10, y: 1, z: 10}
   uvw: {x: 0.5, y: 0, z: 0.5}
+  hollowObjects: []
 --- !u!1 &678472651
 GameObject:
   m_ObjectHideFlags: 0
@@ -1019,9 +1046,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tile: {fileID: 7078305486055922736, guid: 5305d6dd686a9a941afdc694baacc3bc, type: 3}
-  spacing: {x: 1, y: 1, z: 1}
+  i: {x: 1, y: 0, z: 0}
+  j: {x: 0, y: 1, z: 0}
+  k: {x: 0, y: 0, z: 1}
   count: {x: 10, y: 1, z: 10}
   uvw: {x: 0.5, y: 0, z: 0.5}
+  hollowObjects: []
 --- !u!1 &680829403
 GameObject:
   m_ObjectHideFlags: 1
@@ -1396,7 +1426,7 @@ Transform:
   m_GameObject: {fileID: 883607475}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.5, z: -2}
+  m_LocalPosition: {x: 0, y: 1.5, z: -15}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1447,9 +1477,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tile: {fileID: 7078305486055922736, guid: 5305d6dd686a9a941afdc694baacc3bc, type: 3}
-  spacing: {x: 1, y: 1, z: 1}
+  i: {x: 1, y: 0, z: 0}
+  j: {x: 0, y: 1, z: 0}
+  k: {x: 0, y: 0, z: 1}
   count: {x: 10, y: 1, z: 10}
   uvw: {x: 0.5, y: 0, z: 0.5}
+  hollowObjects: []
 --- !u!1 &984330066 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2506356413860954058, guid: c6e1d7e3a0a98a94a9d1879cb8f0eaad, type: 3}
@@ -1500,6 +1533,57 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!1 &1070606612
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1070606613}
+  - component: {fileID: 1070606614}
+  m_Layer: 0
+  m_Name: Dummy Staircases
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1070606613
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1070606612}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -1, z: -0, w: 0.0000029504295}
+  m_LocalPosition: {x: -4.5, y: 0, z: 3}
+  m_LocalScale: {x: 1, y: 1, z: 2}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2008706978}
+  m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
+--- !u!114 &1070606614
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1070606612}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4a1df8fde466b44095b2e9a47bd1dd7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tile: {fileID: 338603383112598162, guid: a30ad95efd77b6240b0993d2889fa05a, type: 3}
+  i: {x: 1, y: 0, z: 0}
+  j: {x: 0, y: 1, z: 0}
+  k: {x: 0, y: 1, z: 1}
+  count: {x: 1, y: 1, z: 4}
+  uvw: {x: 0.5, y: 0.5, z: 0}
+  hollowObjects: []
 --- !u!1001 &1082237145
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1650,9 +1734,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tile: {fileID: 7078305486055922736, guid: 6d6884c25d34e7a45809fcb3f0f8508a, type: 3}
-  spacing: {x: 1, y: 1, z: 1}
+  i: {x: 1, y: 0, z: 0}
+  j: {x: 0, y: 1, z: 0}
+  k: {x: 0, y: 0, z: 1}
   count: {x: 6, y: 2, z: 1}
   uvw: {x: 0.5, y: 0.5, z: 0.5}
+  hollowObjects: []
 --- !u!1 &1246185129
 GameObject:
   m_ObjectHideFlags: 0
@@ -1732,9 +1819,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tile: {fileID: 7078305486055922736, guid: 6d6884c25d34e7a45809fcb3f0f8508a, type: 3}
-  spacing: {x: 1, y: 1, z: 1}
+  i: {x: 1, y: 0, z: 0}
+  j: {x: 0, y: 1, z: 0}
+  k: {x: 0, y: 0, z: 1}
   count: {x: 6, y: 2, z: 1}
   uvw: {x: 0.5, y: 0.5, z: 0.5}
+  hollowObjects: []
 --- !u!1 &1314185556
 GameObject:
   m_ObjectHideFlags: 0
@@ -1780,9 +1870,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tile: {fileID: 7078305486055922736, guid: 6d6884c25d34e7a45809fcb3f0f8508a, type: 3}
-  spacing: {x: 1, y: 1, z: 1}
+  i: {x: 1, y: 0, z: 0}
+  j: {x: 0, y: 1, z: 0}
+  k: {x: 0, y: 0, z: 1}
   count: {x: 6, y: 2, z: 1}
   uvw: {x: 0.5, y: 0.5, z: 0.5}
+  hollowObjects: []
 --- !u!1 &1445923466
 GameObject:
   m_ObjectHideFlags: 0
@@ -1877,9 +1970,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tile: {fileID: 7078305486055922736, guid: 5305d6dd686a9a941afdc694baacc3bc, type: 3}
-  spacing: {x: 1, y: 1, z: 1}
+  i: {x: 1, y: 0, z: 0}
+  j: {x: 0, y: 1, z: 0}
+  k: {x: 0, y: 0, z: 1}
   count: {x: 10, y: 1, z: 10}
   uvw: {x: 0.5, y: 0, z: 0.5}
+  hollowObjects: []
 --- !u!1 &1457753275
 GameObject:
   m_ObjectHideFlags: 0
@@ -1991,9 +2087,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tile: {fileID: 7078305486055922736, guid: 5305d6dd686a9a941afdc694baacc3bc, type: 3}
-  spacing: {x: 1, y: 1, z: 1}
+  i: {x: 1, y: 0, z: 0}
+  j: {x: 0, y: 1, z: 0}
+  k: {x: 0, y: 0, z: 1}
   count: {x: 8, y: 1, z: 2}
   uvw: {x: 0, y: 0.5, z: 0.5}
+  hollowObjects: []
 --- !u!1 &1663686706
 GameObject:
   m_ObjectHideFlags: 0
@@ -2039,9 +2138,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tile: {fileID: 7078305486055922736, guid: 5305d6dd686a9a941afdc694baacc3bc, type: 3}
-  spacing: {x: 1, y: 1, z: 1}
+  i: {x: 1, y: 0, z: 0}
+  j: {x: 0, y: 1, z: 0}
+  k: {x: 0, y: 0, z: 1}
   count: {x: 8, y: 1, z: 2}
   uvw: {x: 0, y: 0.5, z: 0.5}
+  hollowObjects: []
 --- !u!1 &1754578501
 GameObject:
   m_ObjectHideFlags: 0
@@ -2423,9 +2525,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tile: {fileID: 7078305486055922736, guid: 6d6884c25d34e7a45809fcb3f0f8508a, type: 3}
-  spacing: {x: 1, y: 1, z: 1}
+  i: {x: 1, y: 0, z: 0}
+  j: {x: 0, y: 1, z: 0}
+  k: {x: 0, y: 0, z: 1}
   count: {x: 6, y: 2, z: 1}
   uvw: {x: 0.5, y: 0.5, z: 0.5}
+  hollowObjects: []
 --- !u!1 &1919227743
 GameObject:
   m_ObjectHideFlags: 0
@@ -2471,9 +2576,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tile: {fileID: 7078305486055922736, guid: d4749246dcb4d01429a6ea6b326e13d2, type: 3}
-  spacing: {x: 1, y: 1, z: 1}
+  i: {x: 1, y: 0, z: 0}
+  j: {x: 0, y: 1, z: 0}
+  k: {x: 0, y: 0, z: 1}
   count: {x: 6, y: 1, z: 6}
   uvw: {x: 0.5, y: 0.5, z: 0.5}
+  hollowObjects: []
 --- !u!1 &2008706977
 GameObject:
   m_ObjectHideFlags: 0
@@ -2505,6 +2613,7 @@ Transform:
   m_Children:
   - {fileID: 673356108}
   - {fileID: 725342696}
+  - {fileID: 1070606613}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2104156152

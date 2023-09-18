@@ -16,27 +16,30 @@ namespace NaniCore {
 			instance.hideFlags = gizmosHideFlag;
 			return instance;
 		}
+
+		[ContextMenu("Regenerate in Edit Mode")]
+		private void RegenerateInEditMode() {
+			if(Application.isPlaying)
+				return;
+			if(gizmosRoot == null)
+				gizmosRoot = transform.Find(gizmosRootName);
+			if(gizmosRoot != null) {
+				DestroyImmediate(gizmosRoot.gameObject);
+				gizmosRoot = null;
+			}
+			gizmosRoot = new GameObject(gizmosRootName).transform;
+			gizmosRoot.SetParent(transform, false);
+			gizmosRoot.gameObject.hideFlags = gizmosHideFlag;
+			Construct(gizmosRoot, InstantiateGizmos);
+			gizmosRoot?.gameObject?.SetActive(enabled);
+		}
 		#endregion
 
 		#region Life cycle
 		private void OnValidate() {
 			if(Application.isPlaying)
 				return;
-			EditorApplication.delayCall += () => {
-				if(Application.isPlaying)
-					return;
-				if(gizmosRoot == null)
-					gizmosRoot = transform.Find(gizmosRootName);
-				if(gizmosRoot != null) {
-					DestroyImmediate(gizmosRoot.gameObject);
-					gizmosRoot = null;
-				}
-				gizmosRoot = new GameObject(gizmosRootName).transform;
-				gizmosRoot.SetParent(transform, false);
-				gizmosRoot.gameObject.hideFlags = gizmosHideFlag;
-				Construct(gizmosRoot, InstantiateGizmos);
-				gizmosRoot?.gameObject?.SetActive(enabled);
-			};
+			EditorApplication.delayCall += RegenerateInEditMode;
 		}
 
 		private void OnEnable() {

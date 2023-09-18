@@ -31,10 +31,10 @@ namespace NaniCore.Loopool {
 					return;
 
 				if(focusingObject)
-					focusingObject.SendMessage("OnFocusLeave");
+					focusingObject.SendMessage("OnFocusLeave", SendMessageOptions.DontRequireReceiver);
 				focusingObject = value;
 				if(focusingObject)
-					focusingObject.SendMessage("OnFocusEnter");
+					focusingObject.SendMessage("OnFocusEnter", SendMessageOptions.DontRequireReceiver);
 
 				UpdateFocusUi();
 			}
