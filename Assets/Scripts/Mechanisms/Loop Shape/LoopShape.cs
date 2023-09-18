@@ -6,7 +6,13 @@ namespace NaniCore.Loopool {
 	public abstract class LoopShape : MonoBehaviour {
 		#region Static
 		protected static HashSet<LoopShape> all;
-		public static HashSet<LoopShape> All => all;
+		public static HashSet<LoopShape> All {
+			get {
+				if(all == null)
+					all = new HashSet<LoopShape>();
+				return all;
+			}
+		}
 		#endregion
 
 		#region Serialized fields
@@ -35,16 +41,12 @@ namespace NaniCore.Loopool {
 		#endregion
 
 		#region Life cycle
-		protected void Awake() {
-			all = new HashSet<LoopShape>();
-		}
-
 		protected void Start() {
-			all.Add(this);
+			All.Add(this);
 		}
 
 		protected void OnDestroy() {
-			all.Remove(this);
+			All.Remove(this);
 		}
 		#endregion
 	}
