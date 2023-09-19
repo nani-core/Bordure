@@ -1,5 +1,7 @@
 #if UNITY_EDITOR
 using UnityEngine;
+using UnityEditor;
+using System.Linq;
 
 namespace NaniCore.Loopool {
 	public partial class PositionalLoopShape : LoopShape {
@@ -16,6 +18,13 @@ namespace NaniCore.Loopool {
 
 		#region Life cycle
 		protected void OnDrawGizmos() {
+			if(!isActiveAndEnabled)
+				return;
+			bool isRelavantSelected = new GameObject[] { gameObject, gastro, blasto }.Any(go => Selection.Contains(go));
+			bool isParentSelected = Selection.gameObjects.Any(go => transform.IsChildOf(go.transform));
+			if(!(isRelavantSelected || isParentSelected))
+				return;
+
 			// Self-indicating ball
 			{
 				Color color = Color.red;
