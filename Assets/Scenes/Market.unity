@@ -2546,15 +2546,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3380539396451463770, guid: 54f8be217e05f2142b1f5b6fd3833463, type: 3}
       propertyPath: m_LocalScale.x
-      value: 2.4
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: 3380539396451463770, guid: 54f8be217e05f2142b1f5b6fd3833463, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.1
+      value: 0.02
       objectReference: {fileID: 0}
     - target: {fileID: 3380539396451463770, guid: 54f8be217e05f2142b1f5b6fd3833463, type: 3}
       propertyPath: m_LocalScale.z
-      value: 1.9
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3380539396451463770, guid: 54f8be217e05f2142b1f5b6fd3833463, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2625,14 +2625,29 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 405417741}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d272af244dc21ca40884c70c96f24cfd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   useDetachingEjection: 1
-  ejectionVelocity: {x: 0, y: 5, z: 0}
-  ejectionOrigin: {x: 0, y: 0.5, z: 0}
+  ejectionVelocity: {x: 0, y: 30, z: 0}
+  ejectionOrigin: {x: -0.5, y: 0, z: 0}
+  onDetached:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1365413432}
+        m_TargetAssemblyTypeName: UnityEngine.Renderer, UnityEngine
+        m_MethodName: set_material
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 2100000, guid: 0c1b70200be13cb4087e5254321f86a2, type: 2}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Material, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &414717354
 GameObject:
   m_ObjectHideFlags: 0
@@ -3251,15 +3266,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3380539396451463770, guid: 54f8be217e05f2142b1f5b6fd3833463, type: 3}
       propertyPath: m_LocalScale.x
-      value: 2.4
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: 3380539396451463770, guid: 54f8be217e05f2142b1f5b6fd3833463, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.1
+      value: 0.02
       objectReference: {fileID: 0}
     - target: {fileID: 3380539396451463770, guid: 54f8be217e05f2142b1f5b6fd3833463, type: 3}
       propertyPath: m_LocalScale.z
-      value: 1.9
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3380539396451463770, guid: 54f8be217e05f2142b1f5b6fd3833463, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3336,8 +3351,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   useDetachingEjection: 1
-  ejectionVelocity: {x: 0, y: 5, z: 0}
-  ejectionOrigin: {x: 0, y: 0.5, z: 0}
+  ejectionVelocity: {x: 0, y: 30, z: 0}
+  ejectionOrigin: {x: -0.5, y: 0, z: 0}
+  onDetached:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &458837222
 GameObject:
   m_ObjectHideFlags: 0
@@ -6716,6 +6734,9 @@ MonoBehaviour:
   useDetachingEjection: 1
   ejectionVelocity: {x: 5, y: 0, z: 0}
   ejectionOrigin: {x: 0, y: 0.5, z: 0}
+  onDetached:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &915116665
 GameObject:
   m_ObjectHideFlags: 0
@@ -7853,15 +7874,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3380539396451463770, guid: 54f8be217e05f2142b1f5b6fd3833463, type: 3}
       propertyPath: m_LocalScale.x
-      value: 2.4
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: 3380539396451463770, guid: 54f8be217e05f2142b1f5b6fd3833463, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.100000024
+      value: 0.02
       objectReference: {fileID: 0}
     - target: {fileID: 3380539396451463770, guid: 54f8be217e05f2142b1f5b6fd3833463, type: 3}
       propertyPath: m_LocalScale.z
-      value: 2.4
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: 3380539396451463770, guid: 54f8be217e05f2142b1f5b6fd3833463, type: 3}
       propertyPath: m_LocalPosition.x
@@ -7932,14 +7953,29 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1025461355}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d272af244dc21ca40884c70c96f24cfd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   useDetachingEjection: 1
-  ejectionVelocity: {x: 0, y: -5, z: 0}
-  ejectionOrigin: {x: 0, y: 0.5, z: 0}
+  ejectionVelocity: {x: 0, y: -30, z: 0}
+  ejectionOrigin: {x: -0.5, y: 0, z: 0}
+  onDetached:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1765121981}
+        m_TargetAssemblyTypeName: UnityEngine.Renderer, UnityEngine
+        m_MethodName: set_material
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 2100000, guid: 0c1b70200be13cb4087e5254321f86a2, type: 2}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Material, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1029682571
 GameObject:
   m_ObjectHideFlags: 0
@@ -9909,15 +9945,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3380539396451463770, guid: 54f8be217e05f2142b1f5b6fd3833463, type: 3}
       propertyPath: m_LocalScale.x
-      value: 2.4
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: 3380539396451463770, guid: 54f8be217e05f2142b1f5b6fd3833463, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.100000024
+      value: 0.02
       objectReference: {fileID: 0}
     - target: {fileID: 3380539396451463770, guid: 54f8be217e05f2142b1f5b6fd3833463, type: 3}
       propertyPath: m_LocalScale.z
-      value: 1.9
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3380539396451463770, guid: 54f8be217e05f2142b1f5b6fd3833463, type: 3}
       propertyPath: m_LocalPosition.x
@@ -9988,14 +10024,29 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1310363890}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d272af244dc21ca40884c70c96f24cfd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   useDetachingEjection: 1
-  ejectionVelocity: {x: 0, y: -5, z: 0}
-  ejectionOrigin: {x: 0, y: 0.5, z: 0}
+  ejectionVelocity: {x: 0, y: -30, z: 0}
+  ejectionOrigin: {x: -0.5, y: 0, z: 0}
+  onDetached:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1452133447}
+        m_TargetAssemblyTypeName: UnityEngine.Renderer, UnityEngine
+        m_MethodName: set_material
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 2100000, guid: 0c1b70200be13cb4087e5254321f86a2, type: 2}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Material, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1316292696
 GameObject:
   m_ObjectHideFlags: 0
@@ -10342,6 +10393,11 @@ MonoBehaviour:
   onGrabEnd:
     m_PersistentCalls:
       m_Calls: []
+--- !u!23 &1365413432 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 7018031289639929289, guid: 54f8be217e05f2142b1f5b6fd3833463, type: 3}
+  m_PrefabInstance: {fileID: 405417739}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1365849982
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10356,15 +10412,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3380539396451463770, guid: 54f8be217e05f2142b1f5b6fd3833463, type: 3}
       propertyPath: m_LocalScale.x
-      value: 2.4
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: 3380539396451463770, guid: 54f8be217e05f2142b1f5b6fd3833463, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.100000024
+      value: 0.02
       objectReference: {fileID: 0}
     - target: {fileID: 3380539396451463770, guid: 54f8be217e05f2142b1f5b6fd3833463, type: 3}
       propertyPath: m_LocalScale.z
-      value: 1.9
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3380539396451463770, guid: 54f8be217e05f2142b1f5b6fd3833463, type: 3}
       propertyPath: m_LocalPosition.x
@@ -10435,14 +10491,29 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1365849984}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d272af244dc21ca40884c70c96f24cfd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   useDetachingEjection: 1
-  ejectionVelocity: {x: 0, y: -5, z: 0}
-  ejectionOrigin: {x: 0, y: 0.5, z: 0}
+  ejectionVelocity: {x: 0, y: -30, z: 0}
+  ejectionOrigin: {x: -0.5, y: 0, z: 0}
+  onDetached:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1510624448}
+        m_TargetAssemblyTypeName: UnityEngine.Renderer, UnityEngine
+        m_MethodName: set_material
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 2100000, guid: 0c1b70200be13cb4087e5254321f86a2, type: 2}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Material, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1001 &1411382099
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10457,15 +10528,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3380539396451463770, guid: 54f8be217e05f2142b1f5b6fd3833463, type: 3}
       propertyPath: m_LocalScale.x
-      value: 2.4
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: 3380539396451463770, guid: 54f8be217e05f2142b1f5b6fd3833463, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.1
+      value: 0.02
       objectReference: {fileID: 0}
     - target: {fileID: 3380539396451463770, guid: 54f8be217e05f2142b1f5b6fd3833463, type: 3}
       propertyPath: m_LocalScale.z
-      value: 1.9
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3380539396451463770, guid: 54f8be217e05f2142b1f5b6fd3833463, type: 3}
       propertyPath: m_LocalPosition.x
@@ -10536,14 +10607,29 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1411382101}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d272af244dc21ca40884c70c96f24cfd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   useDetachingEjection: 1
-  ejectionVelocity: {x: 0, y: -5, z: 0}
-  ejectionOrigin: {x: 0, y: 0.5, z: 0}
+  ejectionVelocity: {x: 0, y: -30, z: 0}
+  ejectionOrigin: {x: -0.5, y: 0, z: 0}
+  onDetached:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2016667454}
+        m_TargetAssemblyTypeName: UnityEngine.Renderer, UnityEngine
+        m_MethodName: set_material
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 2100000, guid: 0c1b70200be13cb4087e5254321f86a2, type: 2}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Material, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1001 &1419754117
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10786,6 +10872,11 @@ MonoBehaviour:
   hollowObjects:
   - {fileID: 834744741}
   - {fileID: 700495378}
+--- !u!23 &1452133447 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 7018031289639929289, guid: 54f8be217e05f2142b1f5b6fd3833463, type: 3}
+  m_PrefabInstance: {fileID: 1310363888}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1453621892
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11241,6 +11332,11 @@ MonoBehaviour:
   uvw: {x: 0.5, y: 0.5, z: 0.5}
   hollowObjects:
   - {fileID: 1701869658}
+--- !u!23 &1510624448 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 7018031289639929289, guid: 54f8be217e05f2142b1f5b6fd3833463, type: 3}
+  m_PrefabInstance: {fileID: 1365849982}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1516798165
 GameObject:
   m_ObjectHideFlags: 0
@@ -13133,6 +13229,11 @@ MonoBehaviour:
   count: {x: 10, y: 1, z: 14}
   uvw: {x: 0.5, y: 0.5, z: 0.5}
   hollowObjects: []
+--- !u!23 &1765121981 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 7018031289639929289, guid: 54f8be217e05f2142b1f5b6fd3833463, type: 3}
+  m_PrefabInstance: {fileID: 1025461353}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1765338939
 GameObject:
   m_ObjectHideFlags: 0
@@ -14358,15 +14459,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3380539396451463770, guid: 54f8be217e05f2142b1f5b6fd3833463, type: 3}
       propertyPath: m_LocalScale.x
-      value: 2.4
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: 3380539396451463770, guid: 54f8be217e05f2142b1f5b6fd3833463, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.100000024
+      value: 0.02
       objectReference: {fileID: 0}
     - target: {fileID: 3380539396451463770, guid: 54f8be217e05f2142b1f5b6fd3833463, type: 3}
       propertyPath: m_LocalScale.z
-      value: 2.4
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: 3380539396451463770, guid: 54f8be217e05f2142b1f5b6fd3833463, type: 3}
       propertyPath: m_LocalPosition.x
@@ -14443,8 +14544,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   useDetachingEjection: 1
-  ejectionVelocity: {x: 0, y: -5, z: 0}
-  ejectionOrigin: {x: 0, y: 0.5, z: 0}
+  ejectionVelocity: {x: 0, y: -30, z: 0}
+  ejectionOrigin: {x: -0.5, y: 0, z: 0}
+  onDetached:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1906677011
 GameObject:
   m_ObjectHideFlags: 0
@@ -15593,6 +15697,11 @@ MonoBehaviour:
   count: {x: 14, y: 6, z: 1}
   uvw: {x: 0.5, y: 0, z: 0.5}
   hollowObjects: []
+--- !u!23 &2016667454 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 7018031289639929289, guid: 54f8be217e05f2142b1f5b6fd3833463, type: 3}
+  m_PrefabInstance: {fileID: 1411382099}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2017587868
 GameObject:
   m_ObjectHideFlags: 0
