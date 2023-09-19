@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 using System.Collections;
 using System.Collections.Generic;
 using NaughtyAttributes;
@@ -9,6 +10,7 @@ namespace NaniCore.Loopool {
 		[SerializeField] private bool useDetachingEjection;
 		[ShowIf("useDetachingEjection")][SerializeField] private Vector3 ejectionVelocity;
 		[ShowIf("useDetachingEjection")][SerializeField] private Vector3 ejectionOrigin;
+		[SerializeField] private UnityEvent onDetached;
 		#endregion
 
 		#region Fields
@@ -20,6 +22,10 @@ namespace NaniCore.Loopool {
 			if(!isActiveAndEnabled)
 				return;
 			Detach();
+		}
+
+		protected void OnDetached() {
+			onDetached?.Invoke();
 		}
 		#endregion
 
