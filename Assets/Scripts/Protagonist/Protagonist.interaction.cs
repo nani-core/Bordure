@@ -1,28 +1,17 @@
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using System;
 using System.Collections;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 
 namespace NaniCore.Loopool {
 	public partial class Protagonist : MonoBehaviour {
 		#region Serialized fields
 		[Header("Interaction")]
 		public new Camera camera;
-		[SerializeField][Min(0)] protected float maxInteractionDistance;
-		[SerializeField] protected Image focusUi;
-		[Serializable]
-		public struct FocusUiMap {
-			public Sprite normal;
-			public Sprite hovering;
-			public Sprite grabbing;
-		}
-		[SerializeField] protected FocusUiMap focusUiMap;
-		[SerializeField][Range(0, 1)] protected float grabbingTransitionDuration;
-		[SerializeField][Range(0, 1)] protected float grabbingEasingFactor;
+		[SerializeField][Min(0)] private float maxInteractionDistance;
+		[SerializeField] private FocusUi focus;
+		[SerializeField][UnityEngine.Range(0, 1)] private float grabbingTransitionDuration;
+		[SerializeField][UnityEngine.Range(0, 1)] private float grabbingEasingFactor;
 		#endregion
 
 		#region Fields
@@ -31,53 +20,10 @@ namespace NaniCore.Loopool {
 		private Coroutine grabbingCoroutine;
 		private bool grabbingOrienting;
 		private InputActionMap grabbingActionMap;
+		private LoopShape satisfiedLoopShape;
 		#endregion
 
-		#region Life cycle
-#if UNITY_EDITOR
-		private void ValidateInteraction() {
-			EditorApplication.delayCall += () => FocusUi = focusUiMap.hovering;
-		}
-#endif
-
-		private void StartInteraction() {
-			FocusingObject = null;
-			FocusUi = focusUiMap.normal;
-			grabbingActionMap = GetComponent<PlayerInput>().actions.FindActionMap("Grabbing");
-		}
-
-		private void UpdateInteraction() {
-			if(GrabbingObject == null) {
-				RaycastHit hitInfo;
-				bool isHit = Physics.Raycast(camera.ViewportPointToRay(Vector2.one * .5f), out hitInfo, maxInteractionDistance);
-				FocusingObject = isHit ? hitInfo.collider.GetComponent<Interactable>() : null;
-			}
-		}
-		#endregion
-
-		#region Functions
-		public Sprite FocusUi {
-			get => focusUi?.sprite;
-			set {
-				if(focusUi != null) {
-					focusUi.sprite = value;
-					if(value == null)
-						focusUi.rectTransform.sizeDelta = Vector2.zero;
-					else
-						focusUi.SetNativeSize();
-				}
-			}
-		}
-
-		private void UpdateFocusUi() {
-			if(GrabbingObject)
-				FocusUi = focusUiMap.grabbing;
-			else if(FocusingObject)
-				FocusUi = focusUiMap.hovering;
-			else
-				FocusUi = focusUiMap.normal;
-		}
-
+		#region Properties
 		public Interactable FocusingObject {
 			get => focusingObject;
 			set {
@@ -87,14 +33,15 @@ namespace NaniCore.Loopool {
 				if(focusingObject)
 					focusingObject.SendMessage("OnFocusLeave", SendMessageOptions.DontRequireReceiver);
 				focusingObject = value;
-				if(focusingObject)
+				if(focusingObject) {
 					focusingObject.SendMessage("OnFocusEnter", SendMessageOptions.DontRequireReceiver);
+					PlaySfx(onFocusSound);
+				}
 
 				UpdateFocusUi();
 			}
 		}
 
-		#region Grabbing
 		public Grabbable GrabbingObject {
 			get => grabbingObject;
 			set {
@@ -123,6 +70,97 @@ namespace NaniCore.Loopool {
 			set => grabbingOrienting = grabbingObject != null && value;
 		}
 
+		public LoopShape SatisfiedLoopShape {
+			get => satisfiedLoopShape;
+			set {
+				if(satisfiedLoopShape == value)
+					return;
+
+				if(satisfiedLoopShape)
+					satisfiedLoopShape.SendMessage("OnLoopShapeUnsatisfy");
+				satisfiedLoopShape = value;
+				if(satisfiedLoopShape)
+					satisfiedLoopShape.SendMessage("OnLoopShapeSatisfy");
+
+				UpdateFocusUi();
+			}
+		}
+		#endregion
+
+		#region Life cycle
+		private void StartInteraction() {
+			FocusingObject = null;
+			grabbingActionMap = GetComponent<PlayerInput>().actions.FindActionMap("Grabbing");
+		}
+
+		private void LateUpdateInteraction() {
+			// If not grabbing anything, check for focus.
+			if(GrabbingObject == null) {
+				bool isHit = Raycast(out RaycastHit hitInfo);
+				if(!isHit)
+					FocusingObject = null;
+				else {
+					// Don't focus on inactive targets.
+					bool set = false;
+					foreach(var interactable in hitInfo.transform.GetComponents<Interactable>()) {
+						if(!interactable.isActiveAndEnabled)
+							continue;
+						FocusingObject = interactable;
+						set = true;
+					}
+					if(!set)
+						FocusingObject = null;
+				}
+			}
+			// If grabbing blocked, drop.
+			else {
+				bool isHit = Raycast(out RaycastHit hitInfo);
+				// Don't drop if not hit, might be due to orienting too fast.
+				if(isHit) {
+					bool isHitPointIntertweening = Vector3.Distance(hitInfo.point, Eye.position) < Vector3.Distance(GrabbingObject.transform.position, Eye.position);
+					bool isNotDescendantOfGrabbingObject = !hitInfo.transform.IsChildOf(GrabbingObject.transform);
+					if(isHitPointIntertweening && isNotDescendantOfGrabbingObject)
+						GrabbingObject = null;
+				}
+			}
+			// If any loop shape is satisfied, check for invalidation.
+			if(SatisfiedLoopShape != null) {
+				if(!SatisfiedLoopShape.isActiveAndEnabled || !SatisfiedLoopShape.Satisfied(eye))
+					SatisfiedLoopShape = null;
+			}
+			// If no loop shape is satisfied, seek for activation.
+			else {
+				foreach(var loopshape in LoopShape.All) {
+					if(!loopshape.isActiveAndEnabled)
+						continue;
+					if(loopshape.Satisfied(eye)) {
+						SatisfiedLoopShape = loopshape;
+						break;
+					}
+				}
+			}
+		}
+		#endregion
+
+		#region Functions
+		private void UpdateFocusUi() {
+			if(focus == null)
+				return;
+			if(SatisfiedLoopShape)
+				focus.UpdateFocusAnimated(1);
+			else if(GrabbingObject)
+				focus.UpdateFocusAnimated(2);
+			else if(FocusingObject)
+				focus.UpdateFocusAnimated(1);
+			else
+				focus.UpdateFocusAnimated(0);
+		}
+
+		private bool Raycast(out RaycastHit hitInfo) {
+			return Physics.Raycast(camera.ViewportPointToRay(Vector2.one * .5f), out hitInfo, maxInteractionDistance);
+		}
+
+		#region Grabbing
 		public void GrabbingOrientDelta(float delta) {
 			delta *= orientingSpeed;
 			float grabbingAzimuth = grabbingObject.transform.localRotation.eulerAngles.y * Mathf.PI / 180;
@@ -142,6 +180,7 @@ namespace NaniCore.Loopool {
 
 		private IEnumerator BeginGrabbingCoroutine(Grabbable target) {
 			target.SendMessage("OnGrabBegin");
+			PlaySfx(onGrabSound);
 
 			target.transform.SetParent(eye.transform, true);
 
@@ -176,16 +215,24 @@ namespace NaniCore.Loopool {
 			target.transform.SetParent(null, true);
 
 			target.SendMessage("OnGrabEnd");
+			PlaySfx(onDropSound);
 
 			yield break;
 		}
 		#endregion
 
 		public void Interact() {
-			if(GrabbingObject == null)
-				FocusingObject?.SendMessage("OnInteract");
-			else
+			if(SatisfiedLoopShape != null) {
 				GrabbingObject = null;
+				SatisfiedLoopShape.SendMessage("OnLoopShapeOpen");
+				SatisfiedLoopShape = null;
+			}
+			else if(GrabbingObject != null) {
+				GrabbingObject = null;
+			}
+			else if(FocusingObject != null) {
+				FocusingObject.SendMessage("OnInteract");
+			}
 		}
 		#endregion
 	}

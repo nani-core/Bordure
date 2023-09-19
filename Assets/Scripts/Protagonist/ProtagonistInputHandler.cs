@@ -53,6 +53,8 @@ namespace NaniCore.Loopool {
 			Protagonist.Interact();
 		}
 
+		protected void OnCheat() => Protagonist?.Cheat();
+
 		protected void OnSetGrabbingOrienting(InputValue value) {
 			bool raw = value.Get<float>() > .5f;
 			Protagonist.GrabbingOrienting = raw;

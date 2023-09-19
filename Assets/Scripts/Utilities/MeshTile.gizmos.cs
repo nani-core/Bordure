@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEditor;
 
-namespace NaniCore.Loopool {
+namespace NaniCore {
 	public partial class MeshTile : MonoBehaviour {
 		#region Fields
 		private const string gizmosRootName = "$MeshTileGizmosRoot";
@@ -16,27 +16,34 @@ namespace NaniCore.Loopool {
 			instance.hideFlags = gizmosHideFlag;
 			return instance;
 		}
+
+		[ContextMenu("Regenerate in Edit Mode")]
+		private void RegenerateInEditMode() {
+			if(Application.isPlaying)
+				return;
+			if (this == null)
+				return;
+			if(gizmosRoot == null)
+				gizmosRoot = transform.Find(gizmosRootName);
+			if(gizmosRoot != null) {
+				DestroyImmediate(gizmosRoot.gameObject);
+				gizmosRoot = null;
+			}
+			gizmosRoot = new GameObject(gizmosRootName).transform;
+			gizmosRoot.SetParent(transform, false);
+			gizmosRoot.gameObject.hideFlags = gizmosHideFlag;
+			Construct(gizmosRoot, InstantiateGizmos);
+			gizmosRoot?.gameObject?.SetActive(enabled);
+		}
 		#endregion
 
 		#region Life cycle
 		private void OnValidate() {
 			if(Application.isPlaying)
 				return;
-			EditorApplication.delayCall += () => {
-				if(Application.isPlaying)
-					return;
-				if(gizmosRoot == null)
-					gizmosRoot = transform.Find(gizmosRootName);
-				if(gizmosRoot != null) {
-					DestroyImmediate(gizmosRoot.gameObject);
-					gizmosRoot = null;
-				}
-				gizmosRoot = new GameObject(gizmosRootName).transform;
-				gizmosRoot.SetParent(transform, false);
-				gizmosRoot.gameObject.hideFlags = gizmosHideFlag;
-				Construct(gizmosRoot, InstantiateGizmos);
-				gizmosRoot?.gameObject?.SetActive(enabled);
-			};
+			if(!(enabled && gameObject.activeInHierarchy))
+				return;
+			EditorApplication.delayCall += RegenerateInEditMode;
 		}
 
 		private void OnEnable() {

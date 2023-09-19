@@ -145,7 +145,7 @@ GameObject:
   - component: {fileID: 7837829696777529373}
   - component: {fileID: 6841504718901762238}
   - component: {fileID: 1682878014689758067}
-  - component: {fileID: 1284457185355640108}
+  - component: {fileID: 912739048946329841}
   m_Layer: 0
   m_Name: Cylinder
   m_TagString: Untagged
@@ -240,7 +240,7 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &1284457185355640108
+--- !u!114 &912739048946329841
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -249,21 +249,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 4477809666596004948}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a5abfc1aa8945da4c821b85f6f7295c8, type: 3}
+  m_Script: {fileID: 11500000, guid: 502d2518f3711f04cb25d73887ab726a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rigidbody: {fileID: 0}
-  onFocusEnter:
-    m_PersistentCalls:
-      m_Calls: []
-  onFocusLeave:
-    m_PersistentCalls:
-      m_Calls: []
-  onInteract:
+  onClick:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 4499470394133632376}
-        m_TargetAssemblyTypeName: NaniCore.UnityPlayground.Waterlet, Assembly-CSharp
+        m_TargetAssemblyTypeName: NaniCore.Loopool.Waterlet, Assembly-CSharp
         m_MethodName: ToggleActive
         m_Mode: 1
         m_Arguments:
