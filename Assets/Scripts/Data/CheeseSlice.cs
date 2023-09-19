@@ -11,16 +11,25 @@ namespace NaniCore.Loopool {
 		public abstract FloatRange Zenith { get; }
 		public abstract FloatRange DistanceRatio { get; }
 
-		public bool Check(Vector3 from, Quaternion rotation, Vector3 to, Vector3 targetPosition, Quaternion targetRotation) {
+		public bool Check(Vector3 from, Quaternion rotation, Vector3 to, Vector3 targetPosition, Quaternion targetRotation, bool validateRelativePlacement = false) {
+			// Validate distance range
 			float distance = Vector3.Distance(from, targetPosition) / Vector3.Distance(from, to);
 			if(!DistanceRatio.Contains(distance))
 				return false;
+			// Validate target orientation
 			float azimuth = (targetRotation * Quaternion.Inverse(rotation)).eulerAngles.y;
 			if(!MathUtility.DegreeInRange(azimuth, Azimuth.min, Azimuth.max))
 				return false;
 			float zenith = (targetRotation * Quaternion.Inverse(rotation)).eulerAngles.x;
 			if(!MathUtility.DegreeInRange(zenith, Zenith.min, Zenith.max))
 				return false;
+			// Validate target relative placement
+			if(validateRelativePlacement) {
+				Vector3 relativePos = Quaternion.Inverse(rotation) * (targetPosition - from);
+				float relativeAzimuth = Mathf.Atan2(relativePos.x, relativePos.z) * 180 / Mathf.PI;
+				if(!MathUtility.DegreeInRange(relativeAzimuth, Azimuth.min, Azimuth.max))
+					return false;
+			}
 			return true;
 		}
 

@@ -38,7 +38,7 @@ namespace NaniCore.Loopool {
 				return false;
 
 			// Validate placement
-			if(!placement.Check(eye.position, Quaternion.LookRotation(BlastoPos - OriginPos), BlastoPos, GastroPos, gastro.transform.rotation))
+			if(!placement.Check(eye.position, Quaternion.LookRotation(BlastoPos - OriginPos), BlastoPos, GastroPos, gastro.transform.rotation, true))
 				return false;
 
 			return true;
