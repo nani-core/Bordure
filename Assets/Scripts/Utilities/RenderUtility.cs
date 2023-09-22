@@ -78,14 +78,24 @@ namespace NaniCore {
 		}
 
 		public static void ReplaceByValue(this RenderTexture texture, Color value, RenderTexture replacement) {
+			var rt = RenderTexture.GetTemporary(texture.descriptor);
 			var mat = CreateIndependentMaterial("NaniCore/ReplaceByValue");
 			mat.SetColor("_Value", value);
 			mat.SetTexture("_ReplaceTex", replacement);
-			var rt = RenderTexture.GetTemporary(texture.descriptor);
 			Graphics.Blit(texture, rt, mat);
+			Object.Destroy(mat);
 			Graphics.Blit(rt, texture);
 			RenderTexture.ReleaseTemporary(rt);
+		}
+
+		public static void IndicateByValue(this RenderTexture texture, Color value) {
+			var temp = RenderTexture.GetTemporary(texture.descriptor);
+			var mat = CreateIndependentMaterial("NaniCore/IndicateByValue");
+			mat.SetColor("_Value", value);
+			Graphics.Blit(texture, temp, mat);
 			Object.Destroy(mat);
+			Graphics.Blit(temp, texture);
+			RenderTexture.ReleaseTemporary(temp);
 		}
 	}
 }

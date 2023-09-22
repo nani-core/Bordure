@@ -28,6 +28,8 @@ namespace NaniCore.Loopool {
 			blastoMrt.RenderToTexture(mrtTexture);
 			gastroMrt.RenderToTexture(mrtTexture);
 
+			RenderUtility.IndicateByValue(mrtTexture, blastoMrt.value);
+
 			RenderUtility.ReplaceByValue(mrtTexture, Color.black, cameraOutput);
 		}
 		#endregion
