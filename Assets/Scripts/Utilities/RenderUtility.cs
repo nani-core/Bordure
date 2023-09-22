@@ -243,7 +243,7 @@ namespace NaniCore {
 				sampleRate = 1;
 
 			var downsampleSize = (Vector2)texture.Size() * sampleRate;
-			var downsample = texture.DownSample(new Vector2Int((int)downsampleSize.x, (int)downsampleSize.y));
+			var downsample = texture.Resample(new Vector2Int((int)downsampleSize.x, (int)downsampleSize.y));
 			Vector2Int downsampledPosition;
 			if(!FindAnyPositionOfValueNoDownSample(downsample, value, 1, out downsampledPosition)) {
 				downsample.Destroy();
@@ -258,14 +258,13 @@ namespace NaniCore {
 		}
 
 		/// <remarks>Remember to release the temporary RT after use.</remarks>
-		public static RenderTexture DownSample(this RenderTexture texture, Vector2Int downsampleSize) {
+		public static RenderTexture Resample(this RenderTexture texture, Vector2Int size) {
 			if(texture == null)
 				return null;
-			downsampleSize = Vector2Int.Max(Vector2Int.one, downsampleSize);
-			downsampleSize = Vector2Int.Min(downsampleSize, texture.Size());
+			size = Vector2Int.Max(Vector2Int.one, size);
 			var desc = texture.descriptor;
-			desc.width = downsampleSize.x;
-			desc.height = downsampleSize.y;
+			desc.width = size.x;
+			desc.height = size.y;
 			var downsample = RenderTexture.GetTemporary(desc);
 			Graphics.Blit(texture, downsample);
 			return downsample;
@@ -277,6 +276,12 @@ namespace NaniCore {
 			mat.SetVector("_Offset", (Vector2)offset);
 			mat.SetColor("_Color", color);
 			mat.SetFloat("_Radius", radius);
+			texture.Apply(mat);
+		}
+
+		public static void Difference(this RenderTexture texture, RenderTexture difference) {
+			var mat = GetPooledMaterial("NaniCore/Difference");
+			mat.SetTexture("_DifferenceTex", difference);
 			texture.Apply(mat);
 		}
 	}

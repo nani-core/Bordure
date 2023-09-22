@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Rendering;
 
 namespace NaniCore.Loopool {
 	public class OpticalLoopShape : LoopShape {
@@ -8,6 +7,9 @@ namespace NaniCore.Loopool {
 		[SerializeField] private GameObject blasto;
 		/// µº
 		[SerializeField] private GameObject gastro;
+
+		[SerializeField] [UnityEngine.Range(0, 1)] private float thickness;
+		[SerializeField] [UnityEngine.Range(0, 1)] private float thicknessTolerance;
 		#endregion
 
 		#region Fields
@@ -28,12 +30,39 @@ namespace NaniCore.Loopool {
 			blastoMrt.RenderToTexture(mrtTexture);
 			gastroMrt.RenderToTexture(mrtTexture);
 
-			if(mrtTexture.FindAnyPositionOfValue(gastroMrt.value, 160f / mrtTexture.width, out Vector2Int pos)) {
-				mrtTexture.DrawCircle(pos, Color.green, 10);
-			}
-			else {
+			float standardHeight = 216f;
+			var downsampled = mrtTexture.Resample(((Vector2)mrtTexture.Size() * (standardHeight / mrtTexture.height)).Floor());
+
+			if(!downsampled.HasValue(gastroMrt.value)) {
 				mrtTexture.ReplaceValueByValue(blastoMrt.value, Color.red);
+				mrtTexture.ReplaceTextureByValue(Color.black, cameraOutput);
+				return;
 			}
+
+			var gastroMask = downsampled.Duplicate();
+			gastroMask.IndicateByValue(gastroMrt.value);
+
+			var wholeMask = downsampled.Duplicate();
+			wholeMask.ReplaceValueByValue(blastoMrt.value, Color.white);
+			wholeMask.ReplaceValueByValue(gastroMrt.value, Color.white);
+			wholeMask.IndicateByValue(Color.white);
+
+			downsampled.Destroy();
+
+			wholeMask.InfectByValue(Color.black, standardHeight * thickness);
+			wholeMask.Difference(gastroMask);
+			gastroMask.Destroy();
+
+			var validationMask = wholeMask.Duplicate();
+			validationMask.InfectByValue(Color.black, standardHeight * thicknessTolerance);
+			var validated = !validationMask.HasValue(Color.white);
+			validationMask.Destroy();
+
+			wholeMask.ReplaceValueByValue(Color.white, validated ? Color.green : Color.red);
+
+			wholeMask.filterMode = FilterMode.Point;
+			Graphics.Blit(wholeMask, mrtTexture);
+			wholeMask.Destroy();
 
 			mrtTexture.ReplaceTextureByValue(Color.black, cameraOutput);
 		}

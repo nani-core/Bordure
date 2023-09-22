@@ -35,7 +35,7 @@ Shader "NaniCore/IndicateByValue" {
 			structurePS pixel_shader(structureVS vs) {
 				structurePS ps;
 				float4 color = tex2D(_MainTex, vs.uv);
-				bool yes = distance(color, _Value) < 1.f / 256;
+				bool yes = distance(color.xyz, _Value.xyz) < 1.f / 256;
 				ps.target00 = float4(float3(1, 1, 1) * (yes ? 1 : 0), 1);
 				return ps;
 			}

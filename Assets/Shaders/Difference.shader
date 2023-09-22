@@ -1,9 +1,7 @@
-Shader "NaniCore/InfectByValue" {
+Shader "NaniCore/Difference" {
 	Properties {
 		_MainTex ("Main Texture", 2D) = "black" {}
-		_Size ("Size", Vector) = (1920, 1080, 0, 1)
-		_Value ("Value", Color) = (0, 0, 0, 1)
-		_Radius ("Radius", Vector) = (1, 1, 0, 1)
+		_DifferenceTex ("Difference Texture", 2D) = "black" {}
 	}
 	SubShader {
 		Pass {
@@ -25,9 +23,7 @@ Shader "NaniCore/InfectByValue" {
 			};
 
 			sampler2D _MainTex;
-			float4 _Size;
-			float4 _Value;
-			float4 _Radius;
+			sampler2D _DifferenceTex;
  
 			structureVS vertex_shader(float4 vertex: POSITION, float2 uv: TEXCOORD0) {
 				structureVS vs;
@@ -38,17 +34,8 @@ Shader "NaniCore/InfectByValue" {
  
 			structurePS pixel_shader(structureVS vs) {
 				structurePS ps;
-				float4 color = tex2D(_MainTex, vs.uv);
-				int2 radius = ceil(abs(_Radius.xy));
-				for(int dx = -radius.x; dx <= radius.x; ++dx) {
-					for(int dy = -radius.y; dy <= radius.y; ++dy) {
-						float2 uv = vs.uv + float2(dx, dy) / _Size.xy;
-						float4 thatColor = tex2D(_MainTex, uv);
-						if(distance(thatColor.xyz, _Value.xyz) < 1.f / 256)
-							color = _Value;
-					}
-				}
-				ps.target00 = color;
+				float2 uv = vs.uv;
+				ps.target00 = float4(abs(tex2D(_MainTex, uv).xyz - tex2D(_DifferenceTex, uv).xyz), 1);
 				return ps;
 			}
 			ENDCG
