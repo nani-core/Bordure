@@ -1,20 +1,44 @@
 using UnityEngine;
 using UnityEngine.Rendering;
+using System.Collections.Generic;
 
 namespace NaniCore {
 	public static class RenderUtility {
-		private const string setValueShaderName = "NaniCore/SetValue";
-		private static Shader setValueShader;
-		private static Shader SetValueShader {
-			get {
-				if(setValueShader == null)
-					setValueShader = Shader.Find(setValueShaderName);
-				return setValueShader;
-			}
+		private static Dictionary<string, Shader> shaderPool = new Dictionary<string, Shader>();
+		public static Shader GetPoolShader(string name) {
+			Shader shader = null;
+			if(shaderPool.ContainsKey(name))
+				shader = shaderPool[name];
+			if(!(shader != null && shader.name == name))
+				shader = Shader.Find(name);
+			return shader;
 		}
+
+		private static Dictionary<string, Material> materialPool = new Dictionary<string, Material>();
+		public static Material GetPooledMaterial(string shaderName) {
+			if(materialPool.ContainsKey(shaderName)) {
+				var pooledMat = materialPool[shaderName];
+				if(pooledMat != null && pooledMat.shader?.name == shaderName)
+					return pooledMat;
+			}
+			Shader shader = GetPoolShader(shaderName);
+			if(shader == null)
+				return null;
+			Material mat = new Material(shader);
+			materialPool.Add(shaderName, mat);
+			return mat;
+		}
+
+		public static Material CreateIndependentMaterial(string shaderName) {
+			var shader = GetPooledMaterial(shaderName);
+			if(shader == null)
+				return null;
+			return new Material(shader);
+		}
+
 		public static void SetValue(this RenderTexture texture, Color value) {
 			var temp = RenderTexture.GetTemporary(texture.descriptor);
-			var mat = new Material(SetValueShader);
+			var mat = CreateIndependentMaterial("NaniCore/SetValue");
 			mat.SetColor("_Value", value);
 			Graphics.Blit(texture, temp, mat);
 			Object.Destroy(mat);
@@ -53,17 +77,8 @@ namespace NaniCore {
 			cb.Dispose();
 		}
 
-		private const string replaceByValueShaderName = "NaniCore/ReplaceByValue";
-		private static Shader replaceByValueShader;
-		private static Shader ReplaceByValueShader {
-			get {
-				if(replaceByValueShader == null)
-					replaceByValueShader = Shader.Find(replaceByValueShaderName);
-				return replaceByValueShader;
-			}
-		}
 		public static void ReplaceByValue(this RenderTexture texture, Color value, RenderTexture replacement) {
-			var mat = new Material(ReplaceByValueShader);
+			var mat = CreateIndependentMaterial("NaniCore/ReplaceByValue");
 			mat.SetColor("_Value", value);
 			mat.SetTexture("_ReplaceTex", replacement);
 			var rt = RenderTexture.GetTemporary(texture.descriptor);
