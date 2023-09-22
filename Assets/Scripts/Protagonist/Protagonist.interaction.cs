@@ -125,7 +125,7 @@ namespace NaniCore.Loopool {
 			}
 			// If any loop shape is satisfied, check for invalidation.
 			if(SatisfiedLoopShape != null) {
-				if(!SatisfiedLoopShape.isActiveAndEnabled || !SatisfiedLoopShape.Satisfied(eye))
+				if(!SatisfiedLoopShape.isActiveAndEnabled || !SatisfiedLoopShape.Validate(eye))
 					SatisfiedLoopShape = null;
 			}
 			// If no loop shape is satisfied, seek for activation.
@@ -133,7 +133,7 @@ namespace NaniCore.Loopool {
 				foreach(var loopshape in LoopShape.All) {
 					if(!loopshape.isActiveAndEnabled)
 						continue;
-					if(loopshape.Satisfied(eye)) {
+					if(loopshape.Validate(eye)) {
 						SatisfiedLoopShape = loopshape;
 						break;
 					}

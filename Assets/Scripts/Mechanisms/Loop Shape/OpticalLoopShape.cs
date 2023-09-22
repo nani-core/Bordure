@@ -3,55 +3,77 @@ using UnityEngine.Rendering;
 
 namespace NaniCore.Loopool {
 	public class OpticalLoopShape : LoopShape {
-		private const string mrtShaderName = "NaniCore/MRT";
-		private static Shader mrtShader;
-
 		#region Serialized fields
-		[SerializeField] private Renderer displayRenderer;
-		[SerializeField] private Color mrtValue = Color.white;
+		/// »·
+		[SerializeField] private GameObject blasto;
+		/// µº
+		[SerializeField] private GameObject gastro;
 		#endregion
 
 		#region Fields
+		private Mrt blastoMrt, gastroMrt;
 		private RenderTexture mrtTexture;
-		private Material mrtMaterial;
+		private bool validated = false;
 		#endregion
 
 		#region Functions
-		public override bool Satisfied(Transform eye) => false;
+		public override bool Validate(Transform eye) => validated;
 
+		private void PerformValidation(RenderTexture cameraOutput) {
+			if(blastoMrt == null || gastroMrt == null)
+				return;
+
+			RenderUtility.SetValue(mrtTexture, Color.black);
+
+			blastoMrt.RenderToTexture(mrtTexture);
+			gastroMrt.RenderToTexture(mrtTexture);
+
+			RenderUtility.ReplaceByValue(mrtTexture, Color.black, cameraOutput);
+		}
+		#endregion
+
+		#region Message handlers
+		private void OnPostFrameRender(Camera camera, RenderTexture cameraOutput) {
+			PerformValidation(cameraOutput);
+			Graphics.Blit(mrtTexture, cameraOutput);
+		}
 		#endregion
 
 		#region Life cycle
-		protected void Awake() {
-			mrtShader = Shader.Find(mrtShaderName);
+		protected new void Start() {
+			base.Start();
+
+			blastoMrt = blasto.GetComponent<Mrt>() ?? blasto.AddComponent<Mrt>();
+			gastroMrt = gastro.GetComponent<Mrt>() ?? gastro.AddComponent<Mrt>();
+		}
+
+		protected new void OnDestroy() {
+			base.OnDestroy();
+
+			if(blastoMrt)
+				Destroy(blastoMrt);
+			if(gastroMrt)
+				Destroy(gastroMrt);
 		}
 
 		protected void OnEnable() {
-			mrtMaterial = new Material(mrtShader);
 			mrtTexture = RenderTexture.GetTemporary(Screen.width, Screen.height);
-			displayRenderer.material.mainTexture = mrtTexture;
-			if(MainCamera.Instance)
-				MainCamera.Instance.onPostFrameRender += RenderMrt;
 		}
 
 		protected void OnDisable() {
 			RenderTexture.ReleaseTemporary(mrtTexture);
 			mrtTexture = null;
-			if(MainCamera.Instance)
-				MainCamera.Instance.onPostFrameRender -= RenderMrt;
 		}
 
-		public void RenderMrt(Camera camera, RenderTexture cameraOutput) {
-			RenderUtility.SetValue(mrtTexture, Color.black);
+		protected void OnBecameVisible() {
+			if(MainCamera.Instance)
+				MainCamera.Instance.onPostFrameRender += OnPostFrameRender;
+		}
 
-			var cb = new CommandBuffer();
-			cb.CopyTexture(cameraOutput, mrtTexture);
-			Graphics.ExecuteCommandBuffer(cb);
-
-			mrtMaterial.SetColor("_Value", mrtValue);
-			RenderUtility.RenderObject(mrtTexture.colorBuffer, cameraOutput.depthBuffer, gameObject, camera, mrtMaterial);
-
-			Graphics.Blit(mrtTexture, cameraOutput);
+		protected void OnBecameInvisible() {
+			if(MainCamera.Instance)
+				MainCamera.Instance.onPostFrameRender -= OnPostFrameRender;
+			validated = false;
 		}
 		#endregion
 	}

@@ -27,7 +27,7 @@ namespace NaniCore.Loopool {
 			return Vector3.Lerp(OriginPos, BlastoPos, ratio);
 		}
 
-		public override bool Satisfied(Transform eye) {
+		public override bool Validate(Transform eye) {
 			if(blasto == null || gastro == null)
 				return false;
 

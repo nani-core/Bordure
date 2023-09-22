@@ -22,7 +22,7 @@ namespace NaniCore.Loopool {
 		#endregion
 
 		#region Functions
-		public abstract bool Satisfied(Transform eye);
+		public abstract bool Validate(Transform eye);
 		#endregion
 
 		#region Message handlers
