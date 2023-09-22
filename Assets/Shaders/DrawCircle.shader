@@ -1,7 +1,10 @@
-Shader "NaniCore/IndicateByValue" {
+Shader "NaniCore/DrawCircle" {
 	Properties {
 		_MainTex ("Main Texture", 2D) = "black" {}
-		_Value ("Value", Color) = (0, 0, 0, 1)
+		_Size ("Size", Vector) = (0, 0, 0, 1)
+		_Radius ("Radius", float) = 10
+		_Offset ("Offset", Vector) = (0, 0, 0, 1)
+		_Color ("Color", Color) = (1, 1, 1, 1)
 	}
 	SubShader {
 		Pass {
@@ -23,7 +26,10 @@ Shader "NaniCore/IndicateByValue" {
 			};
 
 			sampler2D _MainTex;
-			float4 _Value;
+			float4 _Size;
+			float4 _Offset;
+			float _Radius;
+			float4 _Color;
  
 			structureVS vertex_shader(float4 vertex: POSITION, float2 uv: TEXCOORD0) {
 				structureVS vs;
@@ -34,9 +40,10 @@ Shader "NaniCore/IndicateByValue" {
  
 			structurePS pixel_shader(structureVS vs) {
 				structurePS ps;
-				float4 color = tex2D(_MainTex, vs.uv);
-				bool yes = distance(color, _Value) < 1.f / 256;
-				ps.target00 = float4(float3(1, 1, 1) * (yes ? 1 : 0), 1);
+				float2 pos = vs.uv * _Size.xy;
+				float2 dPos = _Offset.xy - pos;
+				bool inRange = length(dPos) <= _Radius;
+				ps.target00 = inRange ? _Color : tex2D(_MainTex, vs.uv);
 				return ps;
 			}
 			ENDCG

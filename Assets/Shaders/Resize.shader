@@ -1,8 +1,8 @@
-Shader "NaniCore/ReplaceByValue" {
+Shader "NaniCore/Crop" {
 	Properties {
 		_MainTex ("Main Texture", 2D) = "black" {}
-		_Value ("Value", Color) = (0, 0, 0, 1)
-		_ReplaceTex ("Replace Texture", 2D) = "white" {}
+		_Size ("Size", Vector) = (1920, 1080, 0, 1)
+		_Range ("Range", Vector) = (1920, 1080, 0, 0)
 	}
 	SubShader {
 		Pass {
@@ -24,8 +24,8 @@ Shader "NaniCore/ReplaceByValue" {
 			};
 
 			sampler2D _MainTex;
-			float4 _Value;
-			sampler2D _ReplaceTex;
+			float4 _Size;
+			float4 _Range;
  
 			structureVS vertex_shader(float4 vertex: POSITION, float2 uv: TEXCOORD0) {
 				structureVS vs;
@@ -36,10 +36,8 @@ Shader "NaniCore/ReplaceByValue" {
  
 			structurePS pixel_shader(structureVS vs) {
 				structurePS ps;
-				float4 value = tex2D(_MainTex, vs.uv);
-				if(distance(value, _Value) < .001f)
-					value = tex2D(_ReplaceTex, vs.uv);
-				ps.target00 = value;
+				float2 uv = (vs.uv * _Range.xy + _Range.zw) / _Size.xy;
+				ps.target00 = tex2D(_MainTex, uv);
 				return ps;
 			}
 			ENDCG

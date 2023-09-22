@@ -29,7 +29,7 @@ namespace NaniCore.Loopool {
 		#region Functions
 		public void RenderToTexture(RenderTexture texture) {
 			MrtMaterial.SetColor("_Value", value);
-			RenderUtility.RenderObject(texture, gameObject, MrtMaterial);
+			texture.RenderObject(gameObject, MrtMaterial);
 		}
 		#endregion
 

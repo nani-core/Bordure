@@ -1,7 +1,8 @@
-Shader "NaniCore/IndicateByValue" {
+Shader "NaniCore/ReplaceValueByValue" {
 	Properties {
 		_MainTex ("Main Texture", 2D) = "black" {}
 		_Value ("Value", Color) = (0, 0, 0, 1)
+		_ReplaceValue ("Replace Texture", Color) = (1, 1, 1, 1)
 	}
 	SubShader {
 		Pass {
@@ -24,6 +25,7 @@ Shader "NaniCore/IndicateByValue" {
 
 			sampler2D _MainTex;
 			float4 _Value;
+			float4 _ReplaceValue;
  
 			structureVS vertex_shader(float4 vertex: POSITION, float2 uv: TEXCOORD0) {
 				structureVS vs;
@@ -34,9 +36,10 @@ Shader "NaniCore/IndicateByValue" {
  
 			structurePS pixel_shader(structureVS vs) {
 				structurePS ps;
-				float4 color = tex2D(_MainTex, vs.uv);
-				bool yes = distance(color, _Value) < 1.f / 256;
-				ps.target00 = float4(float3(1, 1, 1) * (yes ? 1 : 0), 1);
+				float4 value = tex2D(_MainTex, vs.uv);
+				if(distance(value, _Value) < 1.f / 256)
+					value = _ReplaceValue;
+				ps.target00 = value;
 				return ps;
 			}
 			ENDCG

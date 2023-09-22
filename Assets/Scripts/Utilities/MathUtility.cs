@@ -27,6 +27,10 @@ namespace NaniCore {
 			return c;
 		}
 
+		public static bool IsSameHex(Color a, Color b) {
+			return Vector4.Distance(a, b) < 1f / 256;
+		}
+
 		public static Matrix4x4 RelativeTransform(Matrix4x4 from, Matrix4x4 to)
 			=> to.inverse * from;
 
@@ -60,6 +64,14 @@ namespace NaniCore {
 			max += minRes;
 			x += x.Residue(360);
 			return x.InRange(min, max) || (x + 360).InRange(min, max) || (x - 360).InRange(min, max);
+		}
+
+		public static Vector2Int Floor(this Vector2 v) {
+			return new Vector2Int(Mathf.FloorToInt(v.x), Mathf.FloorToInt(v.y));
+		}
+
+		public static Vector2Int Ceil(this Vector2 v) {
+			return new Vector2Int(Mathf.CeilToInt(v.x), Mathf.CeilToInt(v.y));
 		}
 
 		[Serializable]

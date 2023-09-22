@@ -1,7 +1,9 @@
-Shader "NaniCore/IndicateByValue" {
+Shader "NaniCore/InfectByValue" {
 	Properties {
 		_MainTex ("Main Texture", 2D) = "black" {}
+		_Size ("Size", Vector) = (1920, 1080, 0, 1)
 		_Value ("Value", Color) = (0, 0, 0, 1)
+		_Radius ("Radius", Vector) = (1, 1, 0, 1)
 	}
 	SubShader {
 		Pass {
@@ -23,7 +25,9 @@ Shader "NaniCore/IndicateByValue" {
 			};
 
 			sampler2D _MainTex;
+			float4 _Size;
 			float4 _Value;
+			float4 _Radius;
  
 			structureVS vertex_shader(float4 vertex: POSITION, float2 uv: TEXCOORD0) {
 				structureVS vs;
@@ -35,8 +39,16 @@ Shader "NaniCore/IndicateByValue" {
 			structurePS pixel_shader(structureVS vs) {
 				structurePS ps;
 				float4 color = tex2D(_MainTex, vs.uv);
-				bool yes = distance(color, _Value) < 1.f / 256;
-				ps.target00 = float4(float3(1, 1, 1) * (yes ? 1 : 0), 1);
+				int2 radius = ceil(abs(_Radius.xy));
+				for(int dx = -radius.x; dx <= radius.x; ++dx) {
+					for(int dy = -radius.y; dy <= radius.y; ++dy) {
+						float2 uv = vs.uv + float2(dx, dy) / _Size.xy;
+						float4 thatColor = tex2D(_MainTex, uv);
+						if(distance(thatColor, _Value) < 1.f / 256)
+							color = _Value;
+					}
+				}
+				ps.target00 = color;
 				return ps;
 			}
 			ENDCG

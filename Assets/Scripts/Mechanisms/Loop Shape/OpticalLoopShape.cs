@@ -23,14 +23,19 @@ namespace NaniCore.Loopool {
 			if(blastoMrt == null || gastroMrt == null)
 				return;
 
-			RenderUtility.SetValue(mrtTexture, Color.black);
+			mrtTexture.SetValue(Color.black);
 
 			blastoMrt.RenderToTexture(mrtTexture);
 			gastroMrt.RenderToTexture(mrtTexture);
 
-			RenderUtility.IndicateByValue(mrtTexture, blastoMrt.value);
+			if(mrtTexture.FindAnyPositionOfValue(gastroMrt.value, 160f / mrtTexture.width, out Vector2Int pos)) {
+				mrtTexture.DrawCircle(pos, Color.green, 10);
+			}
+			else {
+				mrtTexture.ReplaceValueByValue(blastoMrt.value, Color.red);
+			}
 
-			RenderUtility.ReplaceByValue(mrtTexture, Color.black, cameraOutput);
+			mrtTexture.ReplaceTextureByValue(Color.black, cameraOutput);
 		}
 		#endregion
 
