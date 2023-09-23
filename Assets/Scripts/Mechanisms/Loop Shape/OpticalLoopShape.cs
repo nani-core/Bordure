@@ -11,6 +11,7 @@ namespace NaniCore.Loopool {
 		private Mrt blastoMrt, gastroMrt;
 		private RenderTexture mrtTexture;
 		private bool validated = false;
+		private bool visible = false;
 		#endregion
 
 		#region Functions
@@ -50,7 +51,7 @@ namespace NaniCore.Loopool {
 
 			var validationMask = wholeMask.Duplicate();
 			validationMask.InfectByValue(Color.black, standardHeight * thicknessTolerance);
-			var validated = !validationMask.HasValue(Color.white);
+			validated = !validationMask.HasValue(Color.white);
 			validationMask.Destroy();
 
 			wholeMask.ReplaceValueByValue(Color.white, validated ? Color.green : Color.red);
@@ -65,6 +66,8 @@ namespace NaniCore.Loopool {
 
 		#region Message handlers
 		private void OnPostFrameRender(Camera camera, RenderTexture cameraOutput) {
+			if(!visible)
+				return;
 			PerformValidation(cameraOutput);
 			Graphics.Blit(mrtTexture, cameraOutput);
 		}
@@ -89,21 +92,23 @@ namespace NaniCore.Loopool {
 
 		protected void OnEnable() {
 			mrtTexture = RenderTexture.GetTemporary(Screen.width, Screen.height);
+			if(MainCamera.Instance)
+				MainCamera.Instance.onPostFrameRender += OnPostFrameRender;
 		}
 
 		protected void OnDisable() {
+			if(MainCamera.Instance)
+				MainCamera.Instance.onPostFrameRender -= OnPostFrameRender;
 			RenderTexture.ReleaseTemporary(mrtTexture);
 			mrtTexture = null;
 		}
 
 		protected void OnBecameVisible() {
-			if(MainCamera.Instance)
-				MainCamera.Instance.onPostFrameRender += OnPostFrameRender;
+			visible = true;
 		}
 
 		protected void OnBecameInvisible() {
-			if(MainCamera.Instance)
-				MainCamera.Instance.onPostFrameRender -= OnPostFrameRender;
+			visible = false;
 			validated = false;
 		}
 		#endregion
