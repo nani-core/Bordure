@@ -22,6 +22,10 @@ namespace NaniCore.Loopool {
 		public Action<Camera, RenderTexture> onPostFrameRender;
 		#endregion
 
+		#region Fields
+		public Camera Camera => camera;
+		#endregion
+
 		#region Functions
 		private void OnBeginRenderCallback(ScriptableRenderContext content, Camera camera) {
 			if(camera != this.camera)

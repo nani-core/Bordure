@@ -27,9 +27,9 @@ namespace NaniCore.Loopool {
 		#endregion
 
 		#region Functions
-		public void RenderToTexture(RenderTexture texture) {
+		public void RenderToTexture(RenderTexture texture, Camera camera) {
 			MrtMaterial.SetColor("_Value", value);
-			texture.RenderObject(gameObject, MrtMaterial);
+			texture.RenderObject(gameObject, camera, MrtMaterial);
 		}
 		#endregion
 

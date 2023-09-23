@@ -28,6 +28,11 @@ namespace NaniCore.Loopool {
 		#region Functions
 		public override bool Validate(Transform eye) => validated;
 
+		protected override void OnLoopShapeOpen() {
+			validated = false;
+			onOpen?.Invoke();
+		}
+
 		private bool ValidateByMask(RenderTexture gastroMask, RenderTexture wholeMask) {
 			wholeMask.InfectByValue(Color.black, standardHeight * thickness);
 			var intersect = wholeMask.Duplicate();
@@ -46,14 +51,14 @@ namespace NaniCore.Loopool {
 			return perfectlyMatched;
 		}
 
-		private bool PerformValidation(RenderTexture cameraOutput) {
+		private bool PerformValidation(Camera camera, RenderTexture cameraOutput) {
 			if(!visible || blastoMrt == null || gastroMrt == null)
 				return false;
 
 			mrtTexture.SetValue(Color.black);
 
-			blastoMrt.RenderToTexture(mrtTexture);
-			gastroMrt.RenderToTexture(mrtTexture);
+			blastoMrt.RenderToTexture(mrtTexture, null);
+			gastroMrt.RenderToTexture(mrtTexture, null);
 
 			var downsampled = mrtTexture.Resample(((Vector2)mrtTexture.Size() * (standardHeight / mrtTexture.height)).Floor());
 
@@ -94,13 +99,17 @@ namespace NaniCore.Loopool {
 			gastro.gameObject.SetActive(false);
 			gastro = null;
 		}
+
+		public void ProjectGastro() {
+			OpticalUtility.Stamp(MainCamera.Instance?.Camera, gastro, blasto);
+		}
 		#endregion
 
 		#region Message handlers
 		private void OnPostFrameRender(Camera camera, RenderTexture cameraOutput) {
 			if(!visible)
 				return;
-			validated = PerformValidation(cameraOutput);
+			validated = PerformValidation(camera, cameraOutput);
 			if(showDebugLayer) {
 				Graphics.Blit(mrtTexture, cameraOutput);
 			}

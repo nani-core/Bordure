@@ -36,6 +36,10 @@ namespace NaniCore {
 			return new Material(shader);
 		}
 
+		public static RenderTexture CreateScreenSizedRT() {
+			return RenderTexture.GetTemporary(Screen.width, Screen.height);
+		}
+
 		public static Vector2Int Size(this RenderTexture texture) {
 			if(texture == null)
 				return Vector2Int.zero;
@@ -46,6 +50,17 @@ namespace NaniCore {
 			if(texture == null)
 				return null;
 			var copy = RenderTexture.GetTemporary(texture.descriptor);
+			if(material != null)
+				Graphics.Blit(texture, copy, material);
+			else
+				Graphics.Blit(texture, copy);
+			return copy;
+		}
+
+		public static RenderTexture Duplicate(this Texture texture, Material material = null) {
+			if(texture == null)
+				return null;
+			var copy = RenderTexture.GetTemporary(texture.width, texture.height);
 			if(material != null)
 				Graphics.Blit(texture, copy, material);
 			else
@@ -73,18 +88,20 @@ namespace NaniCore {
 			texture.Apply(mat);
 		}
 
-		public static void RenderObject(this RenderTexture texture, GameObject gameObject, Material material, int pass = 0) {
+		public static void RenderObject(this RenderTexture texture, GameObject gameObject, Camera camera, Material material, int pass = 0) {
 			if(material == null || texture == null)
 				return;
-			RenderObject(texture.colorBuffer, texture.depthBuffer, gameObject, material, pass);
+			RenderObject(texture.colorBuffer, texture.depthBuffer, gameObject, camera, material, pass);
 		}
 
-		public static void RenderObject(RenderBuffer colorBuffer, RenderBuffer depthBuffer, GameObject gameObject, Material material, int pass = 0) {
+		public static void RenderObject(RenderBuffer colorBuffer, RenderBuffer depthBuffer, GameObject gameObject, Camera camera, Material material, int pass = 0) {
 			if(material == null)
 				return;
 
 			Graphics.SetRenderTarget(colorBuffer, depthBuffer);
 			material.SetPass(pass);
+
+			var camMatrix = camera?.transform?.worldToLocalMatrix ?? Matrix4x4.identity;
 
 			foreach(MeshFilter filter in gameObject.transform.GetComponentsInChildren<MeshFilter>()) {
 				if(!(filter.GetComponent<MeshRenderer>()?.enabled ?? false))
@@ -93,8 +110,32 @@ namespace NaniCore {
 				if(mesh == null)
 					continue;
 
-				Graphics.DrawMeshNow(mesh, filter.transform.localToWorldMatrix);
+				var mat = camMatrix * filter.transform.localToWorldMatrix;
+
+				Graphics.DrawMeshNow(mesh, mat);
+				//RenderMeshManually(mesh, mat);
 			}
+		}
+
+		public static void RenderMeshManually(Mesh mesh, Matrix4x4 matrix) {
+			GL.PushMatrix();
+			GL.LoadIdentity();
+			GL.MultMatrix(matrix);
+
+			var triangles = mesh.triangles;
+			var vertices = mesh.vertices;
+			Vector2[] uvs = null;
+			if(mesh.isReadable)
+				uvs = mesh.uv;
+			GL.Begin(GL.TRIANGLES);
+			foreach(int i in triangles) {
+				GL.Vertex(vertices[i]);
+				if(uvs != null)
+					GL.TexCoord(uvs[i]);
+			}
+			GL.End();
+
+			GL.PopMatrix();
 		}
 
 		public static void CopyFrom(this RenderTexture texture, RenderTexture source) {
