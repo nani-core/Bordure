@@ -3,11 +3,6 @@ using UnityEngine;
 namespace NaniCore.Loopool {
 	public partial class PositionalLoopShape : LoopShape {
 		#region Serialized fields
-		/// »·
-		[SerializeField][Tooltip("»·")] private GameObject blasto;
-		/// µº
-		[SerializeField][Tooltip("µº")] private GameObject gastro;
-
 		[Header("Geometry")]
 		[SerializeField] public Transform origin;
 		[SerializeField] public NoPivotCheeseSlice positioning;
@@ -42,13 +37,6 @@ namespace NaniCore.Loopool {
 				return false;
 
 			return true;
-		}
-
-		public void DestroyGastro() {
-			if(gastro == null)
-				return;
-			gastro.gameObject.SetActive(false);
-			gastro = null;
 		}
 		#endregion
 	}

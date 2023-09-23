@@ -16,22 +16,33 @@ namespace NaniCore.Loopool {
 		#endregion
 
 		#region Serialized fields
-		[SerializeField] private UnityEvent onSatisfy;
-		[SerializeField] private UnityEvent onUnsatisfy;
+		[SerializeField] protected GameObject blasto;
+		[SerializeField] protected GameObject gastro;
+
+		[Header("Events")]
+		[SerializeField] private UnityEvent onValidated;
+		[SerializeField] private UnityEvent onInvalidated;
 		[SerializeField] private UnityEvent onOpen;
 		#endregion
 
 		#region Functions
 		public abstract bool Validate(Transform eye);
+
+		public void DestroyGastro() {
+			if(gastro == null)
+				return;
+			gastro.gameObject.SetActive(false);
+			gastro = null;
+		}
 		#endregion
 
 		#region Message handlers
 		protected void OnLoopShapeSatisfy() {
-			onSatisfy?.Invoke();
+			onValidated?.Invoke();
 		}
 
 		protected void OnLoopShapeUnsatisfy() {
-			onUnsatisfy?.Invoke();
+			onInvalidated?.Invoke();
 		}
 
 		protected void OnLoopShapeOpen() {

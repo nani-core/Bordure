@@ -3,11 +3,6 @@ using UnityEngine;
 namespace NaniCore.Loopool {
 	public class OpticalLoopShape : LoopShape {
 		#region Serialized fields
-		/// »·
-		[SerializeField] private GameObject blasto;
-		/// µº
-		[SerializeField] private GameObject gastro;
-
 		[SerializeField] [UnityEngine.Range(0, 1)] private float thickness;
 		[SerializeField] [UnityEngine.Range(0, 1)] private float thicknessTolerance;
 		#endregion
