@@ -4,18 +4,18 @@ using System.Collections;
 namespace NaniCore {
 	public static class AudioUtility {
 		public struct AudioPlayConfig {
-			public FloatRange range;
+			public Vector2 range;
 
 			public void ApplyOn(AudioSource source) {
 				if(source == null)
 					return;
-				source.minDistance = range.min;
-				source.maxDistance = range.max;
+				source.minDistance = range.x;
+				source.maxDistance = range.y;
 			}
 		}
 
 		public static AudioPlayConfig defaultAudioPlayConfig = new AudioPlayConfig {
-			range = new FloatRange(0, 1),
+			range = new Vector2(0, 1),
 		};
 
 		public static IEnumerator PlayOneShotAtCoroutine(AudioClip clip, Vector3 worldPosition, Transform under)
