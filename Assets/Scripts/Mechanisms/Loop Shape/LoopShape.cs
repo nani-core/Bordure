@@ -16,22 +16,23 @@ namespace NaniCore.Loopool {
 		#endregion
 
 		#region Serialized fields
-		[SerializeField] private UnityEvent onSatisfy;
-		[SerializeField] private UnityEvent onUnsatisfy;
+		[Header("Events")]
+		[SerializeField] private UnityEvent onValidated;
+		[SerializeField] private UnityEvent onInvalidated;
 		[SerializeField] private UnityEvent onOpen;
 		#endregion
 
 		#region Functions
-		public abstract bool Satisfied(Transform eye);
+		public abstract bool Validate(Transform eye);
 		#endregion
 
 		#region Message handlers
 		protected void OnLoopShapeSatisfy() {
-			onSatisfy?.Invoke();
+			onValidated?.Invoke();
 		}
 
 		protected void OnLoopShapeUnsatisfy() {
-			onUnsatisfy?.Invoke();
+			onInvalidated?.Invoke();
 		}
 
 		protected void OnLoopShapeOpen() {
