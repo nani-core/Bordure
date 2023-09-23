@@ -12,6 +12,9 @@ namespace NaniCore.Loopool {
 		[SerializeField] protected GameObject gastro;
 		[SerializeField] [Range(0, 1)] private float thickness;
 		[SerializeField] [Range(0, 1)] private float thicknessTolerance;
+#if UNITY_EDITOR
+		[SerializeField] private bool showDebugLayer = false;
+#endif
 		#endregion
 
 		#region Fields
@@ -74,12 +77,14 @@ namespace NaniCore.Loopool {
 
 			wholeMask.ReplaceValueByValue(Color.white, validated ? Color.green : Color.red);
 			wholeMask.filterMode = FilterMode.Point;
-			Graphics.Blit(wholeMask, mrtTexture);
+
+			if(showDebugLayer) {
+				Graphics.Blit(wholeMask, mrtTexture);
+				mrtTexture.ReplaceTextureByValue(Color.black, cameraOutput);
+			}
 
 			wholeMask.Destroy();
 			gastroMask.Destroy();
-
-			mrtTexture.ReplaceTextureByValue(Color.black, cameraOutput);
 			return validated;
 		}
 
@@ -96,7 +101,9 @@ namespace NaniCore.Loopool {
 			if(!visible)
 				return;
 			validated = PerformValidation(cameraOutput);
-			Graphics.Blit(mrtTexture, cameraOutput);
+			if(showDebugLayer) {
+				Graphics.Blit(mrtTexture, cameraOutput);
+			}
 		}
 		#endregion
 

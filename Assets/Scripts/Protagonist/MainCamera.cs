@@ -34,7 +34,12 @@ namespace NaniCore.Loopool {
 			if(camera != this.camera)
 				return;
 
-			onPostFrameRender?.Invoke(camera, outputTexture);
+			try {
+				onPostFrameRender?.Invoke(camera, outputTexture);
+			}
+			catch(System.Exception e) {
+				Debug.LogError(e, this);
+			}
 
 			Graphics.Blit(outputTexture, null as RenderTexture);
 			camera.targetTexture = null;
