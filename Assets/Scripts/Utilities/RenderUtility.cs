@@ -173,18 +173,18 @@ namespace NaniCore {
 		public static void InfectByValue(this RenderTexture texture, Color value, float radius)
 			=> InfectByValue(texture, value, Vector2.one * radius);
 
-		public static bool HasValue(this RenderTexture texture, Color value) {
+		public static bool HasValue(this RenderTexture texture, Color value, int stepRadius = 4) {
 			if(texture == null)
 				return false;
-			Vector2 size = texture.Size();
-			float maxSize = Mathf.Max(size.x, size.y);
-			int stepCount = Mathf.CeilToInt(Mathf.Sqrt(maxSize));
-			Vector2 stepSize = size / stepCount;
-			var copy = texture.Duplicate();
-			for(int i = 0; i < stepCount; ++i)
-				copy.InfectByValue(value, stepSize);
-			copy.ReadValueAt(new Vector2Int(0, 0), out Color oneValue);
-			copy.Destroy();
+			RenderTexture a = texture.Duplicate(), b;
+			while(a.Size().magnitude > stepRadius * 1.414f) {
+				a.InfectByValue(value, stepRadius);
+				b = a.Resample(((Vector2)a.Size() / stepRadius).Ceil());
+				a.Destroy();
+				a = b;
+			}
+			a.ReadValueAt(new Vector2Int(0, 0), out Color oneValue);
+			a.Destroy();
 			float distance = Vector4.Distance(value, oneValue);
 			return distance < 1f / 256;
 		}
