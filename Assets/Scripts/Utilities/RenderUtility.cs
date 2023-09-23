@@ -284,5 +284,11 @@ namespace NaniCore {
 			mat.SetTexture("_DifferenceTex", difference);
 			texture.Apply(mat);
 		}
+
+		public static void Intersect(this RenderTexture texture, RenderTexture difference) {
+			var mat = GetPooledMaterial("NaniCore/Intersect");
+			mat.SetTexture("_DifferenceTex", difference);
+			texture.Apply(mat);
+		}
 	}
 }

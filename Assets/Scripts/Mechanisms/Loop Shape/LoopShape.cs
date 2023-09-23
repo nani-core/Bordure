@@ -16,9 +16,6 @@ namespace NaniCore.Loopool {
 		#endregion
 
 		#region Serialized fields
-		[SerializeField] protected GameObject blasto;
-		[SerializeField] protected GameObject gastro;
-
 		[Header("Events")]
 		[SerializeField] private UnityEvent onValidated;
 		[SerializeField] private UnityEvent onInvalidated;
@@ -27,13 +24,6 @@ namespace NaniCore.Loopool {
 
 		#region Functions
 		public abstract bool Validate(Transform eye);
-
-		public void DestroyGastro() {
-			if(gastro == null)
-				return;
-			gastro.gameObject.SetActive(false);
-			gastro = null;
-		}
 		#endregion
 
 		#region Message handlers

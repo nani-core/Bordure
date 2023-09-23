@@ -1,10 +1,17 @@
 using UnityEngine;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace NaniCore.Loopool {
 	public class OpticalLoopShape : LoopShape {
+		const float standardHeight = 216f;
+
 		#region Serialized fields
-		[SerializeField] [UnityEngine.Range(0, 1)] private float thickness;
-		[SerializeField] [UnityEngine.Range(0, 1)] private float thicknessTolerance;
+		[Header("Optical")]
+		[SerializeField] protected GameObject blasto;
+		[SerializeField] protected GameObject gastro;
+		[SerializeField] [Range(0, 1)] private float thickness;
+		[SerializeField] [Range(0, 1)] private float thicknessTolerance;
 		#endregion
 
 		#region Fields
@@ -12,27 +19,45 @@ namespace NaniCore.Loopool {
 		private RenderTexture mrtTexture;
 		private bool validated = false;
 		private bool visible = false;
+		private IEnumerable<Renderer> childRenderers;
 		#endregion
 
 		#region Functions
 		public override bool Validate(Transform eye) => validated;
 
-		private void PerformValidation(RenderTexture cameraOutput) {
-			if(blastoMrt == null || gastroMrt == null)
-				return;
+		private bool ValidateByMask(RenderTexture gastroMask, RenderTexture wholeMask) {
+			wholeMask.InfectByValue(Color.black, standardHeight * thickness);
+			var intersect = wholeMask.Duplicate();
+			intersect.Intersect(gastroMask);
+			bool hasIntersection = intersect.HasValue(Color.white);
+			intersect.Destroy();
+			if(!hasIntersection)
+				return false;
+
+			wholeMask.Difference(gastroMask);
+
+			var validationMask = wholeMask.Duplicate();
+			validationMask.InfectByValue(Color.black, standardHeight * thicknessTolerance);
+			var perfectlyMatched = !validationMask.HasValue(Color.white);
+			validationMask.Destroy();
+			return perfectlyMatched;
+		}
+
+		private bool PerformValidation(RenderTexture cameraOutput) {
+			if(!visible || blastoMrt == null || gastroMrt == null)
+				return false;
 
 			mrtTexture.SetValue(Color.black);
 
 			blastoMrt.RenderToTexture(mrtTexture);
 			gastroMrt.RenderToTexture(mrtTexture);
 
-			float standardHeight = 216f;
 			var downsampled = mrtTexture.Resample(((Vector2)mrtTexture.Size() * (standardHeight / mrtTexture.height)).Floor());
 
 			if(!downsampled.HasValue(gastroMrt.value)) {
 				mrtTexture.ReplaceValueByValue(blastoMrt.value, Color.red);
 				mrtTexture.ReplaceTextureByValue(Color.black, cameraOutput);
-				return;
+				return false;
 			}
 
 			var gastroMask = downsampled.Duplicate();
@@ -45,22 +70,24 @@ namespace NaniCore.Loopool {
 
 			downsampled.Destroy();
 
-			wholeMask.InfectByValue(Color.black, standardHeight * thickness);
-			wholeMask.Difference(gastroMask);
-			gastroMask.Destroy();
-
-			var validationMask = wholeMask.Duplicate();
-			validationMask.InfectByValue(Color.black, standardHeight * thicknessTolerance);
-			validated = !validationMask.HasValue(Color.white);
-			validationMask.Destroy();
+			var validated = ValidateByMask(gastroMask, wholeMask);
 
 			wholeMask.ReplaceValueByValue(Color.white, validated ? Color.green : Color.red);
-
 			wholeMask.filterMode = FilterMode.Point;
 			Graphics.Blit(wholeMask, mrtTexture);
+
 			wholeMask.Destroy();
+			gastroMask.Destroy();
 
 			mrtTexture.ReplaceTextureByValue(Color.black, cameraOutput);
+			return validated;
+		}
+
+		public void DestroyGastro() {
+			if(gastro == null)
+				return;
+			gastro.gameObject.SetActive(false);
+			gastro = null;
 		}
 		#endregion
 
@@ -68,7 +95,7 @@ namespace NaniCore.Loopool {
 		private void OnPostFrameRender(Camera camera, RenderTexture cameraOutput) {
 			if(!visible)
 				return;
-			PerformValidation(cameraOutput);
+			validated = PerformValidation(cameraOutput);
 			Graphics.Blit(mrtTexture, cameraOutput);
 		}
 		#endregion
@@ -79,6 +106,8 @@ namespace NaniCore.Loopool {
 
 			blastoMrt = blasto.GetComponent<Mrt>() ?? blasto.AddComponent<Mrt>();
 			gastroMrt = gastro.GetComponent<Mrt>() ?? gastro.AddComponent<Mrt>();
+
+			childRenderers = GetComponentsInChildren<Renderer>();
 		}
 
 		protected new void OnDestroy() {
@@ -103,13 +132,8 @@ namespace NaniCore.Loopool {
 			mrtTexture = null;
 		}
 
-		protected void OnBecameVisible() {
-			visible = true;
-		}
-
-		protected void OnBecameInvisible() {
-			visible = false;
-			validated = false;
+		protected void Update() {
+			visible = childRenderers.Any(r => r.isVisible);
 		}
 		#endregion
 	}
