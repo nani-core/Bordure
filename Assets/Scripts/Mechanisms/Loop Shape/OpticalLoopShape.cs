@@ -34,7 +34,7 @@ namespace NaniCore.Loopool {
 		}
 
 		private bool ValidateByMask(RenderTexture gastroMask, RenderTexture wholeMask) {
-			wholeMask.InfectByValue(Color.black, standardHeight * thickness);
+			wholeMask.InfectByValue(Color.clear, standardHeight * thickness);
 			var intersect = wholeMask.Duplicate();
 			intersect.Intersect(gastroMask);
 			bool hasIntersection = intersect.HasValue(Color.white);
@@ -42,12 +42,12 @@ namespace NaniCore.Loopool {
 			if(!hasIntersection)
 				return false;
 
-			wholeMask.Difference(gastroMask);
-
 			var validationMask = wholeMask.Duplicate();
-			validationMask.InfectByValue(Color.black, standardHeight * thicknessTolerance);
-			var perfectlyMatched = !validationMask.HasValue(Color.white);
+			validationMask.Difference(gastroMask);
+			validationMask.InfectByValue(Color.clear, standardHeight * thicknessTolerance);
+			var perfectlyMatched = !validationMask.HasValue(Color.white, 4);
 			validationMask.Destroy();
+
 			return perfectlyMatched;
 		}
 
@@ -55,7 +55,7 @@ namespace NaniCore.Loopool {
 			if(!visible || blastoMrt == null || gastroMrt == null)
 				return false;
 
-			mrtTexture.SetValue(Color.black);
+			mrtTexture.SetValue(Color.clear);
 
 			blastoMrt.RenderToTexture(mrtTexture, null);
 			gastroMrt.RenderToTexture(mrtTexture, null);
@@ -64,7 +64,7 @@ namespace NaniCore.Loopool {
 
 			if(!downsampled.HasValue(gastroMrt.value)) {
 				mrtTexture.ReplaceValueByValue(blastoMrt.value, Color.red);
-				mrtTexture.ReplaceTextureByValue(Color.black, cameraOutput);
+				mrtTexture.ReplaceTextureByValue(Color.clear, cameraOutput);
 				return false;
 			}
 
@@ -85,11 +85,12 @@ namespace NaniCore.Loopool {
 
 			if(showDebugLayer) {
 				Graphics.Blit(wholeMask, mrtTexture);
-				mrtTexture.ReplaceTextureByValue(Color.black, cameraOutput);
+				mrtTexture.ReplaceTextureByValue(Color.clear, cameraOutput);
 			}
 
 			wholeMask.Destroy();
 			gastroMask.Destroy();
+
 			return validated;
 		}
 

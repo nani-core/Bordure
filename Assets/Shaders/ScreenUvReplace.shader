@@ -49,8 +49,6 @@ Shader "NaniCore/ScreenUvReplace" {
 				structurePS ps;
 				float2 screenUv = WorldToScreen(vs.worldPos);
 				float4 whatScreenSample = tex2D(_ReplaceScreenTex, screenUv);
-				// ps.target00 = float4(screenUv, 0, 1);
-				// return ps;
 				if(length(whatScreenSample) >= 1.f / 256) {
 					// If is in stamp area; that is, sampled what UV != (0, 0).
 					ps.target00 = whatScreenSample;

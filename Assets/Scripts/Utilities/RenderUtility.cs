@@ -217,6 +217,7 @@ namespace NaniCore {
 		public static bool HasValue(this RenderTexture texture, Color value, int stepRadius = 4) {
 			if(texture == null)
 				return false;
+			stepRadius = Mathf.Max(stepRadius, 2);
 			RenderTexture a = texture.Duplicate(), b;
 			while(a.Size().magnitude > stepRadius * 1.414f) {
 				a.InfectByValue(value, stepRadius);
@@ -224,6 +225,7 @@ namespace NaniCore {
 				a.Destroy();
 				a = b;
 			}
+			a.InfectByValue(value, stepRadius);
 			a.ReadValueAt(new Vector2Int(0, 0), out Color oneValue);
 			a.Destroy();
 			float distance = Vector4.Distance(value, oneValue);

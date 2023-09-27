@@ -35,7 +35,7 @@ Shader "NaniCore/Difference" {
 			structurePS pixel_shader(structureVS vs) {
 				structurePS ps;
 				float2 uv = vs.uv;
-				ps.target00 = float4(abs(tex2D(_MainTex, uv).xyz - tex2D(_DifferenceTex, uv).xyz), 1);
+				ps.target00 = abs(tex2D(_MainTex, uv) - tex2D(_DifferenceTex, uv));
 				return ps;
 			}
 			ENDCG

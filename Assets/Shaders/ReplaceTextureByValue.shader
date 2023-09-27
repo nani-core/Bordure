@@ -37,7 +37,7 @@ Shader "NaniCore/ReplaceTextureByValue" {
 			structurePS pixel_shader(structureVS vs) {
 				structurePS ps;
 				float4 value = tex2D(_MainTex, vs.uv);
-				if(distance(value.xyz, _Value.xyz) < 100.f / 256)
+				if(distance(value, _Value) < 100.f / 256)
 					value = tex2D(_ReplaceTex, vs.uv);
 				ps.target00 = value;
 				return ps;
