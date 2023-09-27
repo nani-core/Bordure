@@ -1,7 +1,6 @@
 using UnityEngine;
 
 namespace NaniCore.Loopool {
-	[RequireComponent(typeof(CharacterController))]
 	public partial class Protagonist : MonoBehaviour {
 		#region Serialized fields
 		[Header("Geometry")]
@@ -9,9 +8,6 @@ namespace NaniCore.Loopool {
 		[SerializeField][Min(0)] private float radius;
 		[SerializeField] private Transform eye;
 		[SerializeField][Min(0)] private float eyeHanging;
-
-		[Header("Physics")]
-		[SerializeField] private CharacterController characterController;
 
 		[Header("Control")]
 		[SerializeField][Min(0)] private float walkingSpeed;
@@ -21,9 +17,11 @@ namespace NaniCore.Loopool {
 		#endregion
 
 		#region Fields
+		private CapsuleCollider capsuleCollider;
+		private new Rigidbody rigidbody;
 		private bool isRunning = false;
 		private float steppedDistance = 0;
-		private Vector3 accumulatedMovementVelocity;
+		private Vector3 bufferedMovementVelocity;
 		#endregion
 
 		#region Properties
@@ -89,28 +87,35 @@ namespace NaniCore.Loopool {
 				eye.localRotation = Quaternion.Euler(-degree, 0, 0);
 			}
 		}
-		#endregion
 
-		#region Life cycle
-#if UNITY_EDITOR
-		private void ValidateControl() {
-			characterController = GetComponent<CharacterController>();
-			if(characterController != null) {
-				characterController.height = height;
-				characterController.center = Vector3.up * (height * .5f);
-				characterController.radius = radius;
-			}
+		private void InitializeControl() {
+			capsuleCollider = gameObject.EnsureComponent<CapsuleCollider>();
+			capsuleCollider.height = height;
+			capsuleCollider.center = Vector3.up * (height * .5f);
+			capsuleCollider.radius = radius;
+
+			rigidbody = gameObject.EnsureComponent<Rigidbody>();
+			rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
 
 			if(eye != null) {
 				eye.localPosition = Vector3.up * (height - eyeHanging);
 			}
 		}
+		#endregion
+
+		#region Life cycle
+#if UNITY_EDITOR
+		private void ValidateControl() {
+			InitializeControl();
+		}
 #endif
 
+		protected void StartControl() {
+			InitializeControl();
+		}
+
 		protected void FixedUpdate() {
-			if(characterController.SimpleMove(accumulatedMovementVelocity)) {
-				SteppedDistance += accumulatedMovementVelocity.magnitude * Time.fixedDeltaTime;
-			}
+			MoveDelta(bufferedMovementVelocity * Time.fixedDeltaTime);
 		}
 		#endregion
 
@@ -123,11 +128,11 @@ namespace NaniCore.Loopool {
 
 		public void MoveVelocity(Vector2 vXy) {
 			vXy *= MovingSpeed;
-			accumulatedMovementVelocity = eye.transform.right * vXy.x + transform.forward * vXy.y;
+			bufferedMovementVelocity = eye.transform.right * vXy.x + transform.forward * vXy.y;
 		}
 
 		public void MoveDelta(Vector3 delta) {
-			characterController.SimpleMove(delta);
+			rigidbody.MovePosition(rigidbody.position + delta);
 			SteppedDistance += delta.magnitude;
 		}
 		#endregion

@@ -53,6 +53,7 @@ namespace NaniCore.Loopool {
 		}
 
 		protected void Start() {
+			StartControl();
 			StartInteraction();
 		}
 
