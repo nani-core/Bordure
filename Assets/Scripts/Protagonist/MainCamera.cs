@@ -19,7 +19,7 @@ namespace NaniCore.Loopool {
 		#region Fields
 		private new Camera camera;
 		private RenderTexture outputTexture;
-		public Action<Camera, RenderTexture> onPostFrameRender;
+		public Action<Camera, RenderTexture> onRendered;
 		#endregion
 
 		#region Fields
@@ -39,7 +39,7 @@ namespace NaniCore.Loopool {
 				return;
 
 			try {
-				onPostFrameRender?.Invoke(camera, outputTexture);
+				onRendered?.Invoke(camera, outputTexture);
 			}
 			catch(System.Exception e) {
 				Debug.LogError(e, this);

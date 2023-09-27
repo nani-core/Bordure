@@ -333,5 +333,11 @@ namespace NaniCore {
 			mat.SetTexture("_DifferenceTex", difference);
 			texture.Apply(mat);
 		}
+
+		public static void Overlay(this RenderTexture texture, RenderTexture overlay) {
+			var mat = GetPooledMaterial("NaniCore/Overlay");
+			mat.SetTexture("_OverlayTex", overlay);
+			texture.Apply(mat);
+		}
 	}
 }

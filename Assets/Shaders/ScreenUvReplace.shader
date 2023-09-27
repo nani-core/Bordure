@@ -1,3 +1,5 @@
+// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
 Shader "NaniCore/ScreenUvReplace" {
 	Properties {
 		_OriginalTex ("Original Texture", 2D) = "white" {}
@@ -25,9 +27,9 @@ Shader "NaniCore/ScreenUvReplace" {
 
 			sampler2D _OriginalTex;
 			sampler2D _ReplaceScreenTex;
-			float4x4 _Projection;
+			float4x4 _WorldToCam;
+			float4x4 _CameraProjection;
 			float4x4 _WhereToWorld;
-			float _ScreenRatio;
  
 			structureVS vertex_shader(float4 vertex: POSITION, float2 uv: TEXCOORD0) {
 				structureVS vs;
@@ -38,11 +40,12 @@ Shader "NaniCore/ScreenUvReplace" {
 			}
 
 			float2 WorldToScreen(float3 worldPos) {
-				float4 projection = mul(_Projection, float4(worldPos, 1.f));
-				float2 screen = projection.xy / (-projection.w * projection.z);
-				screen.x /= _ScreenRatio;
+				float4 camera = mul(_WorldToCam, float4(worldPos, 1.f));
+				float4 screen = mul(_CameraProjection, camera);
+				screen /= -screen.z;
+				screen *= .5f;
 				screen += .5f;
-				return screen;
+				return screen.xy;
 			}
  
 			structurePS pixel_shader(structureVS vs) {

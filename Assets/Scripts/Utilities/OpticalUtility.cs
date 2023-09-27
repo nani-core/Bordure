@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace NaniCore {
+namespace NaniCore.Loopool {
 	public static class OpticalUtility {
 		public static RenderTexture VisualizeUv(this MeshRenderer what, Camera camera) {
 			if(what == null || camera == null)
@@ -12,18 +12,11 @@ namespace NaniCore {
 			return whatUv;
 		}
 
-		public static void Stamp(Camera camera, MeshRenderer what, MeshRenderer where) {
-			if(camera == null)
+		public static void Stamp(Camera camera, Mrt what, MeshRenderer where) {
+			if(camera == null || what == null || where == null)
 				return;
-			if(what == null)
-				return;
-			if(where == null)
-				return;
-			Debug.Log($"{what} => {where}", where);
 
-			var whatAppearance = RenderUtility.CreateScreenSizedRT();
-			whatAppearance.SetValue(Color.clear);
-			whatAppearance.RenderObject(what.gameObject, camera, what.sharedMaterial);
+			var whatAppearance = what.MaskedTexture.Duplicate();
 
 			var targetMat = where.material;
 			RenderTexture resultTexture;
@@ -36,10 +29,9 @@ namespace NaniCore {
 			var mat = RenderUtility.GetPooledMaterial("NaniCore/ScreenUvReplace");
 			mat.SetTexture("_OriginalTex", targetMat.mainTexture);
 			mat.SetTexture("_ReplaceScreenTex", whatAppearance);
-			//camera.worldToCameraMatrix;
-			mat.SetMatrix("_Projection", camera.transform.worldToLocalMatrix);
+			mat.SetMatrix("_WorldToCam", camera.worldToCameraMatrix);
+			mat.SetMatrix("_CameraProjection", camera.projectionMatrix);
 			mat.SetMatrix("_WhereToWorld", where.transform.localToWorldMatrix);
-			mat.SetFloat("_ScreenRatio", (float)whatAppearance.width / whatAppearance.height);
 			resultTexture.Apply(mat);
 			if(targetMat.mainTexture is RenderTexture) {
 				// Might be repeated stamping.
@@ -51,13 +43,12 @@ namespace NaniCore {
 			whatAppearance.Destroy();
 		}
 
-		public static void Stamp(Camera camera, GameObject what, GameObject where) {
-			var whatArr = what.GetComponentsInChildren<MeshRenderer>();
+		public static void Stamp(Camera camera, Mrt what, GameObject where) {
+			if(what == null || where == null)
+				return;
 			var whereArr = where.GetComponentsInChildren<MeshRenderer>();
-			foreach(var whatRenderer in whatArr) {
-				foreach(var whereRenderer in whereArr) {
-					Stamp(camera, whatRenderer, whereRenderer);
-				}
+			foreach(var whereRenderer in whereArr) {
+				Stamp(camera, what, whereRenderer);
 			}
 		}
 	}

@@ -10,8 +10,8 @@ namespace NaniCore.Loopool {
 		[Header("Optical")]
 		[SerializeField] protected GameObject blasto;
 		[SerializeField] protected GameObject gastro;
-		[SerializeField] [Range(0, 1)] private float thickness;
-		[SerializeField] [Range(0, 1)] private float thicknessTolerance;
+		[SerializeField][Range(0, 1)] private float thickness;
+		[SerializeField][Range(0, 1)] private float thicknessTolerance;
 #if UNITY_EDITOR
 		[SerializeField] private bool showDebugLayer = false;
 #endif
@@ -56,24 +56,23 @@ namespace NaniCore.Loopool {
 				return false;
 
 			mrtTexture.SetValue(Color.clear);
-
-			blastoMrt.RenderToTexture(mrtTexture, null);
-			gastroMrt.RenderToTexture(mrtTexture, null);
+			mrtTexture.Overlay(blastoMrt.MrtTexture);
+			mrtTexture.Overlay(gastroMrt.MrtTexture);
 
 			var downsampled = mrtTexture.Resample(((Vector2)mrtTexture.Size() * (standardHeight / mrtTexture.height)).Floor());
 
-			if(!downsampled.HasValue(gastroMrt.value)) {
-				mrtTexture.ReplaceValueByValue(blastoMrt.value, Color.red);
+			if(!downsampled.HasValue(gastroMrt.mrtValue)) {
+				mrtTexture.ReplaceValueByValue(blastoMrt.mrtValue, Color.red);
 				mrtTexture.ReplaceTextureByValue(Color.clear, cameraOutput);
 				return false;
 			}
 
 			var gastroMask = downsampled.Duplicate();
-			gastroMask.IndicateByValue(gastroMrt.value);
+			gastroMask.IndicateByValue(gastroMrt.mrtValue);
 
 			var wholeMask = downsampled.Duplicate();
-			wholeMask.ReplaceValueByValue(blastoMrt.value, Color.white);
-			wholeMask.ReplaceValueByValue(gastroMrt.value, Color.white);
+			wholeMask.ReplaceValueByValue(blastoMrt.mrtValue, Color.white);
+			wholeMask.ReplaceValueByValue(gastroMrt.mrtValue, Color.white);
 			wholeMask.IndicateByValue(Color.white);
 
 			downsampled.Destroy();
@@ -102,12 +101,12 @@ namespace NaniCore.Loopool {
 		}
 
 		public void ProjectGastro() {
-			OpticalUtility.Stamp(MainCamera.Instance?.Camera, gastro, blasto);
+			OpticalUtility.Stamp(MainCamera.Instance?.Camera, gastroMrt, blasto);
 		}
 		#endregion
 
 		#region Message handlers
-		private void OnPostFrameRender(Camera camera, RenderTexture cameraOutput) {
+		private void OnRendered(Camera camera, RenderTexture cameraOutput) {
 			if(!visible)
 				return;
 			validated = PerformValidation(camera, cameraOutput);
@@ -139,12 +138,12 @@ namespace NaniCore.Loopool {
 		protected void OnEnable() {
 			mrtTexture = RenderTexture.GetTemporary(Screen.width, Screen.height);
 			if(MainCamera.Instance)
-				MainCamera.Instance.onPostFrameRender += OnPostFrameRender;
+				MainCamera.Instance.onRendered += OnRendered;
 		}
 
 		protected void OnDisable() {
 			if(MainCamera.Instance)
-				MainCamera.Instance.onPostFrameRender -= OnPostFrameRender;
+				MainCamera.Instance.onRendered -= OnRendered;
 			RenderTexture.ReleaseTemporary(mrtTexture);
 			mrtTexture = null;
 		}

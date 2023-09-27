@@ -11,12 +11,12 @@ namespace NaniCore.Loopool {
 		#region Life cycle
 		protected void OnEnable() {
 			if(MainCamera.Instance)
-				MainCamera.Instance.onPostFrameRender += OnPostFrameRender;
+				MainCamera.Instance.onRendered += OnPostFrameRender;
 		}
 
 		protected void OnDisable() {
 			if(MainCamera.Instance)
-				MainCamera.Instance.onPostFrameRender -= OnPostFrameRender;
+				MainCamera.Instance.onRendered -= OnPostFrameRender;
 		}
 		#endregion
 	}
