@@ -74,42 +74,19 @@ namespace NaniCore {
 			return new Vector2Int(Mathf.CeilToInt(v.x), Mathf.CeilToInt(v.y));
 		}
 
-		[Serializable]
-		public struct SphericalCoordinate {
-			public float radius;
-			public float azimuth;
-			public float zenith;
+		public static Vector3 ProjectOntoAxis(this Vector3 from, Vector3 to) {
+			var norm = to.normalized;
+			return Vector3.Dot(from, norm) * norm;
+		}
 
-			public SphericalCoordinate(float radius, float azimuth, float zenith) {
-				this.radius = radius;
-				this.azimuth = azimuth;
-				this.zenith = zenith;
-			}
+		public static Vector3 ProjectOntoPlane(this Vector3 from, Vector3 to) {
+			return from - from.ProjectOntoAxis(to);
+		}
 
-			public static SphericalCoordinate FromCartesian(Vector3 cartesian) {
-				float azimuth = Mathf.Atan2(cartesian.x, cartesian.z);
-				float radius = cartesian.magnitude;
-				float y = cartesian.y;
-				cartesian.y = 0;
-				float zenith = Mathf.Atan2(y, cartesian.magnitude);
-				return new SphericalCoordinate(radius, azimuth, zenith);
-			}
-
-			public static Vector3 ToCartesian(SphericalCoordinate cylindrical) {
-				Vector3 result = Vector3.zero;
-				result.z = Mathf.Cos(cylindrical.azimuth);
-				result.x = Mathf.Sin(cylindrical.azimuth);
-				result *= Mathf.Cos(cylindrical.zenith);
-				result.y = Mathf.Sin(cylindrical.zenith);
-				result *= cylindrical.radius;
-				return result;
-			}
-
-			public static explicit operator SphericalCoordinate(Vector3 cartesian)
-				=> FromCartesian(cartesian);
-
-			public static explicit operator Vector3(SphericalCoordinate spherical)
-				=> ToCartesian(spherical);
+		public static float SnapToZero(this float value, float tolerance = .01f) {
+			if(Mathf.Abs(value) <= Mathf.Abs(tolerance))
+				return 0f;
+			return value;
 		}
 	}
 }

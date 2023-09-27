@@ -4,29 +4,32 @@ namespace NaniCore.Loopool {
 	public partial class Protagonist : MonoBehaviour {
 		#region Serialized fields
 		[Header("Geometry")]
-		[SerializeField][Min(0)] private float height;
-		[SerializeField][Min(0)] private float radius;
+		[SerializeField][Min(0)] private float height = 1.6f;
+		[SerializeField][Min(0)] private float radius = .3f;
 		[SerializeField] private Transform eye;
-		[SerializeField][Min(0)] private float eyeHanging;
+		[SerializeField][Min(0)] private float eyeHanging = .1f;
 
 		[Header("Control")]
-		[SerializeField][Min(0)] private float walkingSpeed;
-		[SerializeField][Min(0)] private float sprintingSpeed;
-		[SerializeField][Min(0)] private float stepDistance;
-		[SerializeField][Min(0)] private float orientingSpeed;
+		[SerializeField][Min(0)] private float skinDepth = .08f;
+		[SerializeField][Min(0)] private float walkingSpeed = 3f;
+		[SerializeField][Min(0)] private float sprintingSpeed = 5f;
+		[SerializeField][Min(0)] private float stepDistance = 1.3f;
+		[SerializeField][Min(0)] private float orientingSpeed = 1f;
+		[SerializeField][Min(0)] private float jumpingHeight = 1f;
 		#endregion
 
 		#region Fields
 		private CapsuleCollider capsuleCollider;
 		private new Rigidbody rigidbody;
+		private bool isOnGround = false;
 		private bool isRunning = false;
 		private float steppedDistance = 0;
-		private Vector3 bufferedMovementVelocity;
 		#endregion
 
 		#region Properties
-		public Transform Eye => eye;
-		public Vector3 EyeOffset => transform.localToWorldMatrix.MultiplyVector(eye.localPosition);
+		public Vector3 Upward => transform.up;
+
+		public bool IsOnGround => isOnGround;
 
 		public bool IsSprinting {
 			get => isRunning;
@@ -114,12 +117,21 @@ namespace NaniCore.Loopool {
 			InitializeControl();
 		}
 
-		protected void FixedUpdate() {
-			MoveDelta(bufferedMovementVelocity * Time.fixedDeltaTime);
+		protected void UpdateControl() {
+			isOnGround = SweepTest(Physics.gravity, out _, skinDepth, .5f);
 		}
 		#endregion
 
 		#region Functions
+		private bool SweepTest(Vector3 direction, out RaycastHit hitInfo, float distance, float backupRatio = 0) {
+			direction = direction.normalized;
+			var originalPos = rigidbody.position;
+			rigidbody.position -= direction * distance * backupRatio;
+			bool result = rigidbody.SweepTest(direction, out hitInfo, distance);
+			rigidbody.position = originalPos;
+			return result;
+		}
+
 		public void OrientDelta(Vector2 delta) {
 			delta *= orientingSpeed;
 			Azimuth += delta.x;
@@ -127,13 +139,27 @@ namespace NaniCore.Loopool {
 		}
 
 		public void MoveVelocity(Vector2 vXy) {
+			if(!IsOnGround)
+				return;
 			vXy *= MovingSpeed;
-			bufferedMovementVelocity = eye.transform.right * vXy.x + transform.forward * vXy.y;
+			var horizontalVelocity = (eye.transform.right * vXy.x + transform.forward * vXy.y).ProjectOntoPlane(Upward);
+			var verticalVelocity = rigidbody.velocity.ProjectOntoAxis(Upward);
+			rigidbody.velocity = horizontalVelocity + verticalVelocity;
 		}
 
 		public void MoveDelta(Vector3 delta) {
+			if(!IsOnGround)
+				return;
 			rigidbody.MovePosition(rigidbody.position + delta);
 			SteppedDistance += delta.magnitude;
+		}
+
+		public void Jump() {
+			if(!IsOnGround)
+				return;
+			var gravity = -Vector3.Dot(Physics.gravity, Upward);
+			float speed = Mathf.Sqrt(2f * gravity * jumpingHeight);
+			rigidbody.AddForce(Upward * speed, ForceMode.VelocityChange);
 		}
 		#endregion
 	}

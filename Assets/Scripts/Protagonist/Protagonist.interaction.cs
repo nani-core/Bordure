@@ -117,7 +117,7 @@ namespace NaniCore.Loopool {
 				bool isHit = Raycast(out RaycastHit hitInfo);
 				// Don't drop if not hit, might be due to orienting too fast.
 				if(isHit) {
-					bool isHitPointIntertweening = Vector3.Distance(hitInfo.point, Eye.position) < Vector3.Distance(GrabbingObject.transform.position, Eye.position);
+					bool isHitPointIntertweening = Vector3.Distance(hitInfo.point, eye.position) < Vector3.Distance(GrabbingObject.transform.position, eye.position);
 					bool isNotDescendantOfGrabbingObject = !hitInfo.transform.IsChildOf(GrabbingObject.transform);
 					if(isHitPointIntertweening && isNotDescendantOfGrabbingObject)
 						GrabbingObject = null;

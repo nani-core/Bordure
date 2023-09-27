@@ -49,6 +49,10 @@ namespace NaniCore.Loopool {
 			Protagonist.IsSprinting = value.Get<float>() > .5f;
 		}
 
+		protected void OnJump() {
+			Protagonist.Jump();
+		}
+
 		protected void OnInteract() {
 			Protagonist.Interact();
 		}

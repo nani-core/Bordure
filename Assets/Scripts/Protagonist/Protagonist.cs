@@ -57,6 +57,10 @@ namespace NaniCore.Loopool {
 			StartInteraction();
 		}
 
+		protected void Update() {
+			UpdateControl();
+		}
+
 		protected void LateUpdate() {
 			LateUpdateInteraction();
 		}
