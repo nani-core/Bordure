@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using NaughtyAttributes;
 
 namespace NaniCore.Loopool {
 	public class OpticalLoopShape : LoopShape {
@@ -14,6 +15,7 @@ namespace NaniCore.Loopool {
 		[SerializeField][Range(0, 1)] private float thicknessTolerance;
 #if UNITY_EDITOR
 		[SerializeField] private bool showDebugLayer = false;
+		[SerializeField][ShowIf("showDebugLayer")][Range(0, 1)] private float debugLayerOpacity = 1f;
 #endif
 		#endregion
 
@@ -110,9 +112,8 @@ namespace NaniCore.Loopool {
 			if(!visible)
 				return;
 			validated = PerformValidation(camera, cameraOutput);
-			if(showDebugLayer) {
-				Graphics.Blit(mrtTexture, cameraOutput);
-			}
+			if(showDebugLayer)
+				cameraOutput.Overlay(mrtTexture, debugLayerOpacity);
 		}
 		#endregion
 

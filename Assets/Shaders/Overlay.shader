@@ -2,6 +2,7 @@ Shader "NaniCore/Overlay" {
 	Properties {
 		_MainTex ("Main Texture", 2D) = "black" {}
 		_OverlayTex ("Overlay Texture", 2D) = "black" {}
+		_Opacity ("Opacity", float) = 1
 	}
 	SubShader {
 		Pass {
@@ -24,6 +25,7 @@ Shader "NaniCore/Overlay" {
 
 			sampler2D _MainTex;
 			sampler2D _OverlayTex;
+			float _Opacity;
  
 			structureVS vertex_shader(float4 vertex: POSITION, float2 uv: TEXCOORD0) {
 				structureVS vs;
@@ -36,7 +38,7 @@ Shader "NaniCore/Overlay" {
 				structurePS ps;
 				float2 uv = vs.uv;
 				float4 a = tex2D(_MainTex, uv), b = tex2D(_OverlayTex, uv);
-				ps.target00 = lerp(a, b, b.a);
+				ps.target00 = lerp(a, b, _Opacity * b.a);
 				return ps;
 			}
 			ENDCG

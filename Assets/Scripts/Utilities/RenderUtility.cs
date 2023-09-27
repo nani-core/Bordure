@@ -334,9 +334,10 @@ namespace NaniCore {
 			texture.Apply(mat);
 		}
 
-		public static void Overlay(this RenderTexture texture, RenderTexture overlay) {
+		public static void Overlay(this RenderTexture texture, RenderTexture overlay, float opacity = 1f) {
 			var mat = GetPooledMaterial("NaniCore/Overlay");
 			mat.SetTexture("_OverlayTex", overlay);
+			mat.SetFloat("_Opacity", opacity);
 			texture.Apply(mat);
 		}
 	}
