@@ -2,7 +2,6 @@ using UnityEngine;
 using NaughtyAttributes;
 
 namespace NaniCore.Loopool {
-	[RequireComponent(typeof(ProtagonistInputHandler))]
 	public partial class Protagonist : MonoBehaviour {
 		#region Singleton
 		public static Protagonist instance;
@@ -15,6 +14,7 @@ namespace NaniCore.Loopool {
 
 		#region Fields
 		private bool profileDuplicated = false;
+		private ProtagonistInputHandler inputHandler;
 		#endregion
 
 		#region Properties
@@ -77,6 +77,7 @@ namespace NaniCore.Loopool {
 		}
 
 		protected void Start() {
+			inputHandler = gameObject.EnsureComponent<ProtagonistInputHandler>();
 			StartControl();
 			StartInteraction();
 		}

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 using System.Collections.Generic;
 
 namespace NaniCore.Loopool {
@@ -10,6 +11,7 @@ namespace NaniCore.Loopool {
 		[Min(0)] public float eyeHanging = .1f;
 
 		[Header("Control")]
+		public InputActionAsset inputActions;
 		[Min(0)] public float skinDepth = .08f;
 		[Min(0)] public float walkingSpeed = 3f;
 		[Min(0)] public float sprintingSpeed = 5f;

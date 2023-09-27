@@ -7,7 +7,7 @@ namespace NaniCore.Loopool {
 	public partial class Protagonist : MonoBehaviour {
 		#region Serialized fields
 		[Header("Interaction")]
-		public new Camera camera;
+		[SerializeField] private new Camera camera;
 		[SerializeField] private FocusUi focus;
 		#endregion
 
@@ -16,7 +16,6 @@ namespace NaniCore.Loopool {
 		private Grabbable grabbingObject;
 		private Coroutine grabbingCoroutine;
 		private bool grabbingOrienting;
-		private InputActionMap grabbingActionMap;
 		private LoopShape satisfiedLoopShape;
 		#endregion
 
@@ -55,10 +54,7 @@ namespace NaniCore.Loopool {
 					grabbingCoroutine = StartCoroutine(GrabCoroutine(grabbingObject));
 
 				UpdateFocusUi();
-				if(grabbingObject)
-					grabbingActionMap.Enable();
-				else
-					grabbingActionMap.Disable();
+				inputHandler.SetGrabbingActionEnabled(grabbingObject != null);
 			}
 		}
 
@@ -87,7 +83,6 @@ namespace NaniCore.Loopool {
 		#region Life cycle
 		private void StartInteraction() {
 			FocusingObject = null;
-			grabbingActionMap = GetComponent<PlayerInput>().actions.FindActionMap("Grabbing");
 		}
 
 		private void LateUpdateInteraction() {

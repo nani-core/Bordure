@@ -10,8 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3707002940583597620}
   - component: {fileID: 2688747823450298031}
-  - component: {fileID: 5620409332827535504}
-  - component: {fileID: 9062844156706547170}
   - component: {fileID: 6022575187056927592}
   - component: {fileID: 7872440418422959296}
   m_Layer: 0
@@ -52,64 +50,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sfxAudioSource: {fileID: 2729817443539501503}
-  onFocusSound: {fileID: 0}
-  onGrabSound: {fileID: 8300000, guid: e3fdd399d297bf54db52fbc9cfa3fc37, type: 3}
-  onDropSound: {fileID: 0}
   footAudioSource: {fileID: 6531797279824110369}
-  stepAudioClips:
-  - {fileID: 8300000, guid: 33ff0753bafb1854ebc8ad310d2a4e7f, type: 3}
-  - {fileID: 8300000, guid: 87cd2b0354c1174469269306bb1c6cba, type: 3}
-  - {fileID: 8300000, guid: a9d5885db0364fa4a85929cbb6777396, type: 3}
-  - {fileID: 8300000, guid: c0fb6f8f870d0394e927bb212d17b934, type: 3}
   eye: {fileID: 8503994737887199560}
   profile: {fileID: 11400000, guid: f74d118808779e947aeb882e8da958d7, type: 2}
   camera: {fileID: 3908503544560685184}
-  maxInteractionDistance: 20
   focus: {fileID: 8847861629105319259}
-  grabbingTransitionDuration: 0.2
-  grabbingEasingFactor: 0.3
---- !u!114 &5620409332827535504
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4058287826626517768}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 232d59ecd51f3634e84ccb599f90fd5e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &9062844156706547170
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4058287826626517768}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Actions: {fileID: -944628639613478452, guid: 68259945e04f9064b84cf5bc7c792365, type: 3}
-  m_NotificationBehavior: 0
-  m_UIInputModule: {fileID: 0}
-  m_DeviceLostEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_DeviceRegainedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ControlsChangedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ActionEvents: []
-  m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
-  m_DefaultActionMap: Normal
-  m_SplitScreenIndex: -1
-  m_Camera: {fileID: 0}
 --- !u!136 &6022575187056927592
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -117,7 +62,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4058287826626517768}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 1ec5b1e566d1a064ca91eaf07c7604eb, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
