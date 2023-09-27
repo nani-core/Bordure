@@ -3,19 +3,8 @@ using UnityEngine;
 namespace NaniCore.Loopool {
 	public partial class Protagonist : MonoBehaviour {
 		#region Serialized fields
-		[Header("Geometry")]
-		[SerializeField][Min(0)] private float height = 1.6f;
-		[SerializeField][Min(0)] private float radius = .3f;
-		[SerializeField] private Transform eye;
-		[SerializeField][Min(0)] private float eyeHanging = .1f;
-
 		[Header("Control")]
-		[SerializeField][Min(0)] private float skinDepth = .08f;
-		[SerializeField][Min(0)] private float walkingSpeed = 3f;
-		[SerializeField][Min(0)] private float sprintingSpeed = 5f;
-		[SerializeField][Min(0)] private float stepDistance = 1.3f;
-		[SerializeField][Min(0)] private float orientingSpeed = 1f;
-		[SerializeField][Min(0)] private float jumpingHeight = 1f;
+		[SerializeField] private Transform eye;
 		#endregion
 
 		#region Fields
@@ -36,17 +25,17 @@ namespace NaniCore.Loopool {
 			set => isRunning = value;
 		}
 
-		private float MovingSpeed => IsSprinting ? sprintingSpeed : walkingSpeed;
+		private float MovingSpeed => IsSprinting ? profile.sprintingSpeed : profile.walkingSpeed;
 
 #pragma warning disable IDE0052 // Remove unread private members
 		private float SteppedDistance {
 			get => steppedDistance;
 			set {
 				steppedDistance = value;
-				if(stepDistance <= 0)
+				if(profile.stepDistance <= 0)
 					return;
-				if(steppedDistance < 0 || steppedDistance > stepDistance) {
-					steppedDistance = steppedDistance.Mod(stepDistance);
+				if(steppedDistance < 0 || steppedDistance > profile.stepDistance) {
+					steppedDistance = steppedDistance.Mod(profile.stepDistance);
 					PlayFootstepSound();
 				}
 			}
@@ -92,16 +81,19 @@ namespace NaniCore.Loopool {
 		}
 
 		private void InitializeControl() {
+			if(Profile == null)
+				return;
+
 			capsuleCollider = gameObject.EnsureComponent<CapsuleCollider>();
-			capsuleCollider.height = height;
-			capsuleCollider.center = Vector3.up * (height * .5f);
-			capsuleCollider.radius = radius;
+			capsuleCollider.height = profile.height;
+			capsuleCollider.center = Vector3.up * (profile.height * .5f);
+			capsuleCollider.radius = profile.radius;
 
 			rigidbody = gameObject.EnsureComponent<Rigidbody>();
 			rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
 
 			if(eye != null) {
-				eye.localPosition = Vector3.up * (height - eyeHanging);
+				eye.localPosition = Vector3.up * (profile.height - profile.eyeHanging);
 			}
 		}
 		#endregion
@@ -118,7 +110,7 @@ namespace NaniCore.Loopool {
 		}
 
 		protected void UpdateControl() {
-			isOnGround = SweepTest(Physics.gravity, out _, skinDepth, .5f);
+			isOnGround = SweepTest(Physics.gravity, out _, profile.skinDepth, .5f);
 		}
 		#endregion
 
@@ -133,7 +125,7 @@ namespace NaniCore.Loopool {
 		}
 
 		public void OrientDelta(Vector2 delta) {
-			delta *= orientingSpeed;
+			delta *= profile.orientingSpeed;
 			Azimuth += delta.x;
 			Zenith += delta.y;
 		}
@@ -158,7 +150,7 @@ namespace NaniCore.Loopool {
 			if(!IsOnGround)
 				return;
 			var gravity = -Vector3.Dot(Physics.gravity, Upward);
-			float speed = Mathf.Sqrt(2f * gravity * jumpingHeight);
+			float speed = Mathf.Sqrt(2f * gravity * profile.jumpingHeight);
 			rigidbody.AddForce(Upward * speed, ForceMode.VelocityChange);
 		}
 		#endregion

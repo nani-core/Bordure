@@ -8,10 +8,7 @@ namespace NaniCore.Loopool {
 		#region Serialized fields
 		[Header("Interaction")]
 		public new Camera camera;
-		[SerializeField][Min(0)] private float maxInteractionDistance;
 		[SerializeField] private FocusUi focus;
-		[SerializeField][Range(0, 1)] private float grabbingTransitionDuration;
-		[SerializeField][Range(0, 1)] private float grabbingEasingFactor;
 		#endregion
 
 		#region Fields
@@ -35,7 +32,7 @@ namespace NaniCore.Loopool {
 				focusingObject = value;
 				if(focusingObject) {
 					focusingObject.SendMessage("OnFocusEnter", SendMessageOptions.DontRequireReceiver);
-					PlaySfx(onFocusSound);
+					PlaySfx(profile.onFocusSound);
 				}
 
 				UpdateFocusUi();
@@ -157,12 +154,12 @@ namespace NaniCore.Loopool {
 		}
 
 		private bool Raycast(out RaycastHit hitInfo) {
-			return Physics.Raycast(camera.ViewportPointToRay(Vector2.one * .5f), out hitInfo, maxInteractionDistance);
+			return Physics.Raycast(camera.ViewportPointToRay(Vector2.one * .5f), out hitInfo, profile.maxInteractionDistance);
 		}
 
 		#region Grabbing
 		public void GrabbingOrientDelta(float delta) {
-			delta *= orientingSpeed;
+			delta *= profile.orientingSpeed;
 			float grabbingAzimuth = grabbingObject.transform.localRotation.eulerAngles.y * Mathf.PI / 180;
 			grabbingAzimuth += delta;
 			grabbingObject.transform.localRotation = Quaternion.Euler(0, grabbingAzimuth * 180 / Mathf.PI, 0);
@@ -180,7 +177,7 @@ namespace NaniCore.Loopool {
 
 		private IEnumerator BeginGrabbingCoroutine(Grabbable target) {
 			target.SendMessage("OnGrabBegin");
-			PlaySfx(onGrabSound);
+			PlaySfx(profile.onGrabSound);
 
 			target.transform.SetParent(eye.transform, true);
 
@@ -195,8 +192,8 @@ namespace NaniCore.Loopool {
 				endRotation = Quaternion.Euler(0, grabbingAzimuth * 180 / Mathf.PI, 0);
 
 			float startTime = Time.time;
-			for(float t; (t = (Time.time - startTime) / grabbingTransitionDuration) < 1;) {
-				t = MathUtility.Ease(t, grabbingEasingFactor);
+			for(float t; (t = (Time.time - startTime) / profile.grabbingTransitionDuration) < 1;) {
+				t = MathUtility.Ease(t, profile.grabbingEasingFactor);
 				target.transform.localPosition = Vector3.Lerp(startPosition, endPosition, t);
 				target.transform.localRotation = Quaternion.Slerp(startRotation, endRotation, t);
 				yield return new WaitForFixedUpdate();
@@ -215,7 +212,7 @@ namespace NaniCore.Loopool {
 			target.transform.SetParent(null, true);
 
 			target.SendMessage("OnGrabEnd");
-			PlaySfx(onDropSound);
+			PlaySfx(profile.onDropSound);
 
 			yield break;
 		}

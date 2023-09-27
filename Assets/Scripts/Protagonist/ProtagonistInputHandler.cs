@@ -3,16 +3,18 @@ using UnityEngine.InputSystem;
 
 namespace NaniCore.Loopool {
 	[RequireComponent(typeof(Protagonist))]
-	[RequireComponent(typeof(PlayerInput))]
 	public class ProtagonistInputHandler : MonoBehaviour {
 		#region Fields
 		protected Protagonist protagonist;
+		protected PlayerInput playerInput;
 		protected Vector2 moveVelocity;
 		#endregion
 
 		#region Life cycle
 		protected void Start() {
 			protagonist = GetComponent<Protagonist>();
+			playerInput = gameObject.EnsureComponent<PlayerInput>();
+			playerInput.notificationBehavior = PlayerNotifications.SendMessages;
 		}
 
 		protected void OnEnable() {

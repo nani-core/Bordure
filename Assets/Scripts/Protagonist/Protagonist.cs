@@ -1,10 +1,34 @@
 using UnityEngine;
+using NaughtyAttributes;
 
 namespace NaniCore.Loopool {
 	[RequireComponent(typeof(ProtagonistInputHandler))]
 	public partial class Protagonist : MonoBehaviour {
 		#region Singleton
 		public static Protagonist instance;
+		#endregion
+
+		#region Serialized fields
+		[Header("Default")]
+		[SerializeField][Expandable] private ProtagonistProfile profile;
+		#endregion
+
+		#region Fields
+		private bool profileDuplicated = false;
+		#endregion
+
+		#region Properties
+		public ProtagonistProfile Profile {
+			get {
+				if(!Application.isPlaying)
+					return profile;
+				if(!profileDuplicated) {
+					profile = Instantiate(profile);
+					profileDuplicated = true;
+				}
+				return profile;
+			}
+		}
 		#endregion
 
 		#region Functions
