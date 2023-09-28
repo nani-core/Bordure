@@ -82,11 +82,12 @@ namespace NaniCore.Loopool {
 			StartInteraction();
 		}
 
-		protected void Update() {
-			UpdateControl();
+		protected void FixedUpdate() {
+			FixedUpdateControl();
 		}
 
 		protected void LateUpdate() {
+			LateUpdateControl();
 			LateUpdateInteraction();
 		}
 		#endregion

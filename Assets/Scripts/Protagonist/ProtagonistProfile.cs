@@ -15,9 +15,11 @@ namespace NaniCore.Loopool {
 		[Min(0)] public float skinDepth = .08f;
 		[Min(0)] public float walkingSpeed = 3f;
 		[Min(0)] public float sprintingSpeed = 5f;
+		[Range(0, 1)] public float acceleration = .5f;
 		[Min(0)] public float stepDistance = 1.3f;
 		[Min(0)] public float orientingSpeed = 1f;
 		[Min(0)] public float jumpingHeight = 1f;
+		[Min(0)] public float stepHeight = .3f;
 
 		[Header("Interaction")]
 		[Min(0)] public float maxInteractionDistance = 20f;
