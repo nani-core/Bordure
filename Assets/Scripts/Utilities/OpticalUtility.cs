@@ -8,7 +8,7 @@ namespace NaniCore.Loopool {
 
 			var whatUv = RenderUtility.CreateScreenSizedRT();
 			whatUv.SetValue(Color.clear);
-			whatUv.RenderObject(what.gameObject, camera, RenderUtility.GetPooledMaterial("ManiCore/VisualizeUv"));
+			whatUv.RenderObject(what.gameObject, camera, RenderUtility.GetPooledMaterial("NaniCore/VisualizeUv"));
 			return whatUv;
 		}
 
