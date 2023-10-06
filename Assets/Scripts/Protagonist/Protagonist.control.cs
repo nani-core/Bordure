@@ -114,7 +114,7 @@ namespace NaniCore.Loopool {
 		}
 
 		protected void FixedUpdateControl() {
-			isOnGround = SweepTest(Physics.gravity, out _, profile.skinDepth, .5f);
+			ValidateGround();
 			UpdateDesiredMovementVelocity(Time.fixedDeltaTime);
 			DealBufferedMovement(Time.fixedDeltaTime);
 		}
@@ -161,6 +161,16 @@ namespace NaniCore.Loopool {
 			float speed = Mathf.Sqrt(2f * gravity * profile.jumpingHeight);
 			rigidbody.AddForce(Upward * speed, ForceMode.VelocityChange);
 			StartCoroutine(JumpCoroutine());
+		}
+
+		private void ValidateGround() {
+			bool result = SweepTest(Physics.gravity, out RaycastHit hitInfo, profile.skinDepth, .5f);
+			var hitRb = hitInfo.rigidbody;
+			if(hitRb != null) {
+				if(hitRb.velocity.magnitude > .01f)
+					result = false;
+			}
+			isOnGround = result;
 		}
 
 		private IEnumerator JumpCoroutine() {
