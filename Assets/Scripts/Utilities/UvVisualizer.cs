@@ -4,7 +4,7 @@ namespace NaniCore.Loopool {
 	public class UvVisualizer : MonoBehaviour {
 		#region Functions
 		private void OnPostFrameRender(Camera camera, RenderTexture cameraOutput) {
-			cameraOutput.RenderObject(gameObject, null, RenderUtility.GetPooledMaterial("NaniCore/VisualizeUv"));
+			cameraOutput.RenderObject(gameObject, camera, RenderUtility.GetPooledMaterial("NaniCore/VisualizeUv"));
 		}
 		#endregion
 

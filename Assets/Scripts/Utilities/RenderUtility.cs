@@ -101,7 +101,10 @@ namespace NaniCore {
 			Graphics.SetRenderTarget(colorBuffer, depthBuffer);
 			material.SetPass(pass);
 
-			var camMatrix = camera?.transform?.worldToLocalMatrix ?? Matrix4x4.identity;
+			var camMatrix = camera.worldToCameraMatrix;
+			var premultipliedCamera = Camera.main;
+			if(premultipliedCamera != null)
+				camMatrix *= premultipliedCamera.cameraToWorldMatrix;
 
 			foreach(MeshFilter filter in gameObject.transform.GetComponentsInChildren<MeshFilter>()) {
 				if(!(filter.GetComponent<MeshRenderer>()?.enabled ?? false))
@@ -110,10 +113,10 @@ namespace NaniCore {
 				if(mesh == null)
 					continue;
 
-				var mat = camMatrix * filter.transform.localToWorldMatrix;
+				var matrix = camMatrix * filter.transform.localToWorldMatrix;
 
-				Graphics.DrawMeshNow(mesh, mat);
-				//RenderMeshManually(mesh, mat);
+				Graphics.DrawMeshNow(mesh, matrix);
+				//RenderMeshManually(mesh, matrix);
 			}
 		}
 

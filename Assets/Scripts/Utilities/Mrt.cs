@@ -36,7 +36,7 @@ namespace NaniCore.Loopool {
 				return;
 			mrtTexture.SetValue(Color.clear);
 			MrtMaterial.SetColor("_Value", mrtValue);
-			mrtTexture.RenderObject(gameObject, null, MrtMaterial);
+			mrtTexture.RenderObject(gameObject, camera, MrtMaterial);
 			Graphics.Blit(mrtTexture, maskedTexture);
 			maskedTexture.ReplaceTextureByValue(mrtValue, cameraOutput);
 		}
