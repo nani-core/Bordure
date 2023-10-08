@@ -29,9 +29,9 @@ namespace NaniCore.Loopool {
 			var mat = RenderUtility.GetPooledMaterial("NaniCore/ScreenUvReplace");
 			mat.SetTexture("_OriginalTex", targetMat.mainTexture);
 			mat.SetTexture("_ReplaceScreenTex", whatAppearance);
-			mat.SetMatrix("_WorldToCam", camera.worldToCameraMatrix);
+			mat.SetMatrix("_WorldToCam", camera.transform.worldToLocalMatrix.ToGlMatrix());
 			mat.SetMatrix("_CameraProjection", camera.projectionMatrix);
-			mat.SetMatrix("_WhereToWorld", where.transform.localToWorldMatrix);
+			mat.SetMatrix("_WhereToWorld", where.transform.localToWorldMatrix.ToGlMatrix());
 			resultTexture.Apply(mat);
 			if(targetMat.mainTexture is RenderTexture) {
 				// Might be repeated stamping.

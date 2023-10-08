@@ -38,12 +38,15 @@ Shader "NaniCore/ScreenUvReplace" {
 				return vs;
 			}
 
-			float2 WorldToScreen(float3 worldPos) {
+			float3 WorldToCamera(float3 worldPos) {
 				float4 camera = mul(_WorldToCam, float4(worldPos, 1.f));
-				camera /= camera.w;
-				float4 screen = mul(_CameraProjection, camera);
-				screen /= -screen.z;
-				screen.x *= -1;
+				return camera.xyz / camera.w;
+			}
+
+			float2 WorldToScreen(float3 worldPos) {
+				float3 camera = WorldToCamera(worldPos);
+				float4 screen = mul(_CameraProjection, float4(camera, 1.f));
+				screen /= screen.z;
 				// screen = screen * .5f + .5f;
 				return screen.xy;
 			}
@@ -52,7 +55,8 @@ Shader "NaniCore/ScreenUvReplace" {
 				structurePS ps;
 				float2 screenUv = WorldToScreen(vs.worldPos);
 				if(true) {
-					ps.target00 = float4(screenUv, 0, 1);
+					float4 camera = mul(_WorldToCam, float4(vs.worldPos, 1.f));
+					ps.target00 = float4(screenUv.xy, abs(camera.z) / 10, 1);
 					return ps;
 				}
 				float4 whatScreenSample = tex2D(_ReplaceScreenTex, screenUv);
