@@ -1,5 +1,3 @@
-// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
-
 Shader "NaniCore/ScreenUvReplace" {
 	Properties {
 		_OriginalTex ("Original Texture", 2D) = "white" {}
@@ -12,6 +10,7 @@ Shader "NaniCore/ScreenUvReplace" {
 			ZWrite Off
 
 			CGPROGRAM
+			#include "UnityCG.cginc"
 			#pragma vertex vertex_shader
 			#pragma fragment pixel_shader
 			
@@ -41,16 +40,21 @@ Shader "NaniCore/ScreenUvReplace" {
 
 			float2 WorldToScreen(float3 worldPos) {
 				float4 camera = mul(_WorldToCam, float4(worldPos, 1.f));
+				camera /= camera.w;
 				float4 screen = mul(_CameraProjection, camera);
 				screen /= -screen.z;
-				screen *= .5f;
-				screen += .5f;
+				screen.x *= -1;
+				// screen = screen * .5f + .5f;
 				return screen.xy;
 			}
  
 			structurePS pixel_shader(structureVS vs) {
 				structurePS ps;
 				float2 screenUv = WorldToScreen(vs.worldPos);
+				if(true) {
+					ps.target00 = float4(screenUv, 0, 1);
+					return ps;
+				}
 				float4 whatScreenSample = tex2D(_ReplaceScreenTex, screenUv);
 				if(length(whatScreenSample) >= 1.f / 256) {
 					// If is in stamp area; that is, sampled what UV != (0, 0).

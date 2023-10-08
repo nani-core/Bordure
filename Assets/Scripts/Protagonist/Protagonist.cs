@@ -46,6 +46,9 @@ namespace NaniCore.Loopool {
 								plate.Pressed = !plate.Pressed;
 								acted = true;
 								break;
+							case OpticalLoopShape opticalLoopShape:
+								opticalLoopShape.SendMessage("OnLoopShapeOpen", SendMessageOptions.DontRequireReceiver);
+								break;
 							case Interactable interactable:
 								interactable.SendMessage("OnInteract", SendMessageOptions.DontRequireReceiver);
 								acted = true;
