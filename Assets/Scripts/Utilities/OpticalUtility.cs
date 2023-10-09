@@ -15,13 +15,16 @@ namespace NaniCore.Loopool {
 		public static void Stamp(Camera camera, Mrt what, MeshRenderer where) {
 			if(camera == null || what == null || where == null)
 				return;
+			Debug.Log($"Stamping {what} on {where} under {camera}", where);
 
 			var whatAppearance = what.MaskedTexture.Duplicate();
 
 			var targetMat = where.material;
 			RenderTexture resultTexture;
-			if(targetMat.mainTexture)
+			if(targetMat.mainTexture != null) {
+				// This would be leaked on game end.
 				resultTexture = targetMat.mainTexture.Duplicate();
+			}
 			else {
 				resultTexture = RenderUtility.CreateScreenSizedRT();
 				resultTexture.SetValue(Color.clear);
@@ -29,9 +32,9 @@ namespace NaniCore.Loopool {
 			var mat = RenderUtility.GetPooledMaterial("NaniCore/ScreenUvReplace");
 			mat.SetTexture("_OriginalTex", targetMat.mainTexture);
 			mat.SetTexture("_ReplaceScreenTex", whatAppearance);
-			mat.SetMatrix("_WorldToCam", camera.transform.worldToLocalMatrix.ToGlMatrix());
+			mat.SetMatrix("_WorldToCam", camera.worldToCameraMatrix);
 			mat.SetMatrix("_CameraProjection", camera.projectionMatrix);
-			mat.SetMatrix("_WhereToWorld", where.transform.localToWorldMatrix.ToGlMatrix());
+			mat.SetMatrix("_WhereToWorld", where.transform.localToWorldMatrix);
 			resultTexture.Apply(mat);
 			if(targetMat.mainTexture is RenderTexture) {
 				// Might be repeated stamping.

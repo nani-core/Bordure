@@ -88,13 +88,5 @@ namespace NaniCore {
 				return 0f;
 			return value;
 		}
-
-		public static Matrix4x4 ToGlMatrix(this Matrix4x4 matrix) {
-			for(int i = 0; i < 4; ++i) {
-				matrix[1, i] = -matrix[1, i];
-				matrix[i, 1] = -matrix[i, 1];
-			}
-			return matrix;
-		}
 	}
 }

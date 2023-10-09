@@ -17,7 +17,8 @@ Shader "NaniCore/ScreenUvReplace" {
 			struct structureVS {
 				float4 vertex : SV_POSITION;
 				float2 uv : TEXCOORD0;
-				float3 worldPos : TEXCOORD1;
+				float3 localPos : TEXCOORD1;
+				float3 worldPos : TEXCOORD2;
 			};
  
 			struct structurePS {
@@ -34,7 +35,9 @@ Shader "NaniCore/ScreenUvReplace" {
 				structureVS vs;
 				vs.vertex = UnityObjectToClipPos(vertex);
 				vs.uv = uv;
-				vs.worldPos = mul(_WhereToWorld, vs.vertex);
+				vs.localPos = vertex;
+				// vs.localPos.z = -vs.localPos.z;
+				vs.worldPos = mul(_WhereToWorld, float4(vs.localPos, 1));
 				return vs;
 			}
 
@@ -55,8 +58,9 @@ Shader "NaniCore/ScreenUvReplace" {
 				structurePS ps;
 				float2 screenUv = WorldToScreen(vs.worldPos);
 				if(true) {
-					float4 camera = mul(_WorldToCam, float4(vs.worldPos, 1.f));
-					ps.target00 = float4(screenUv.xy, abs(camera.z) / 10, 1);
+					float3 camera = WorldToCamera(vs.worldPos);
+					ps.target00 = float4(-camera.z, 0, 0, 1);
+					ps.target00 = float4(vs.localPos, 1);
 					return ps;
 				}
 				float4 whatScreenSample = tex2D(_ReplaceScreenTex, screenUv);
