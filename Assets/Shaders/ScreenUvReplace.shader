@@ -1,8 +1,4 @@
 Shader "NaniCore/ScreenUvReplace" {
-	Properties {
-		_OriginalTex ("Original Texture", 2D) = "white" {}
-		_ReplaceScreenTex ("Replace Texture", 2D) = "black" {}
-	}
 	SubShader {
 		Pass {
 			Cull Off
@@ -17,8 +13,6 @@ Shader "NaniCore/ScreenUvReplace" {
 			struct structureVS {
 				float4 vertex : SV_POSITION;
 				float2 uv : TEXCOORD0;
-				float3 localPos : TEXCOORD1;
-				float3 worldPos : TEXCOORD2;
 			};
  
 			struct structurePS {
@@ -27,40 +21,20 @@ Shader "NaniCore/ScreenUvReplace" {
 
 			sampler2D _OriginalTex;
 			sampler2D _ReplaceScreenTex;
-			float4x4 _WorldToCam;
-			float4x4 _CameraProjection;
-			float4x4 _WhereToWorld;
+			sampler2D _ScreenUvTex;
  
 			structureVS vertex_shader(float4 vertex: POSITION, float2 uv: TEXCOORD0) {
 				structureVS vs;
 				vs.vertex = UnityObjectToClipPos(vertex);
 				vs.uv = uv;
-				vs.localPos = vertex;
-				// vs.localPos.z = -vs.localPos.z;
-				vs.worldPos = mul(_WhereToWorld, float4(vs.localPos, 1));
 				return vs;
-			}
-
-			float3 WorldToCamera(float3 worldPos) {
-				float4 camera = mul(_WorldToCam, float4(worldPos, 1.f));
-				return camera.xyz / camera.w;
-			}
-
-			float2 WorldToScreen(float3 worldPos) {
-				float3 camera = WorldToCamera(worldPos);
-				float4 screen = mul(_CameraProjection, float4(camera, 1.f));
-				screen /= screen.z;
-				// screen = screen * .5f + .5f;
-				return screen.xy;
 			}
  
 			structurePS pixel_shader(structureVS vs) {
 				structurePS ps;
-				float2 screenUv = WorldToScreen(vs.worldPos);
-				if(true) {
-					float3 camera = WorldToCamera(vs.worldPos);
-					ps.target00 = float4(-camera.z, 0, 0, 1);
-					ps.target00 = float4(vs.localPos, 1);
+				float2 screenUv = tex2D(_ScreenUvTex, vs.uv);
+				if(false) {
+					ps.target00 = float4(screenUv, 0, 1);
 					return ps;
 				}
 				float4 whatScreenSample = tex2D(_ReplaceScreenTex, screenUv);

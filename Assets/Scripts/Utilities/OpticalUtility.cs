@@ -12,7 +12,7 @@ namespace NaniCore.Loopool {
 			return whatUv;
 		}
 
-		public static void Stamp(Camera camera, Mrt what, MeshRenderer where) {
+		public static void Stamp(Camera camera, Mrt what, MeshRenderer where, RenderTexture whereScreenUvTex) {
 			if(camera == null || what == null || where == null)
 				return;
 			Debug.Log($"Stamping {what} on {where} under {camera}", where);
@@ -32,27 +32,32 @@ namespace NaniCore.Loopool {
 			var mat = RenderUtility.GetPooledMaterial("NaniCore/ScreenUvReplace");
 			mat.SetTexture("_OriginalTex", targetMat.mainTexture);
 			mat.SetTexture("_ReplaceScreenTex", whatAppearance);
-			mat.SetMatrix("_WorldToCam", camera.worldToCameraMatrix);
-			mat.SetMatrix("_CameraProjection", camera.projectionMatrix);
-			mat.SetMatrix("_WhereToWorld", where.transform.localToWorldMatrix);
+			mat.SetTexture("_ScreenUvTex", whereScreenUvTex);
 			resultTexture.Apply(mat);
 			if(targetMat.mainTexture is RenderTexture) {
 				// Might be repeated stamping.
 				(targetMat.mainTexture as RenderTexture).Destroy();
 			}
-			//Graphics.Blit(whatAppearance, resultTexture);
 			targetMat.mainTexture = resultTexture;
 
 			whatAppearance.Destroy();
 		}
 
 		public static void Stamp(Camera camera, Mrt what, GameObject where) {
+			if(camera == null)
+				return;
 			if(what == null || where == null)
 				return;
+			var whereScreenUvTex = RenderUtility.CreateScreenSizedRT();
+			Material meshToScreenMat = RenderUtility.GetPooledMaterial("NaniCore/MeshUvToScreenUv");
+			meshToScreenMat.SetFloat("_Fov", camera.fieldOfView);
+			whereScreenUvTex.RenderObject(where.gameObject, camera, meshToScreenMat);
+			whereScreenUvTex.filterMode = FilterMode.Bilinear;
 			var whereArr = where.GetComponentsInChildren<MeshRenderer>();
 			foreach(var whereRenderer in whereArr) {
-				Stamp(camera, what, whereRenderer);
+				Stamp(camera, what, whereRenderer, whereScreenUvTex);
 			}
+			whereScreenUvTex.Destroy();
 		}
 	}
 }

@@ -101,7 +101,7 @@ namespace NaniCore {
 			Graphics.SetRenderTarget(colorBuffer, depthBuffer);
 			material.SetPass(pass);
 
-			var camMatrix = camera.worldToCameraMatrix;
+			var camMatrix = camera?.worldToCameraMatrix ?? Matrix4x4.identity;
 			var premultipliedCamera = Camera.main;
 			if(premultipliedCamera != null)
 				camMatrix *= premultipliedCamera.cameraToWorldMatrix;
