@@ -36,8 +36,8 @@ namespace NaniCore {
 			return new Material(shader);
 		}
 
-		public static RenderTexture CreateScreenSizedRT() {
-			return RenderTexture.GetTemporary(Screen.width, Screen.height);
+		public static RenderTexture CreateScreenSizedRT(RenderTextureFormat format = RenderTextureFormat.Default) {
+			return RenderTexture.GetTemporary(Screen.width, Screen.height, 0, format);
 		}
 
 		public static Vector2Int Size(this RenderTexture texture) {

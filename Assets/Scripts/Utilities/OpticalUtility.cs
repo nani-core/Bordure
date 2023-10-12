@@ -48,11 +48,10 @@ namespace NaniCore.Loopool {
 				return;
 			if(what == null || where == null)
 				return;
-			var whereScreenUvTex = RenderUtility.CreateScreenSizedRT();
+			var whereScreenUvTex = RenderUtility.CreateScreenSizedRT(RenderTextureFormat.ARGBFloat);
 			Material meshToScreenMat = RenderUtility.GetPooledMaterial("NaniCore/MeshUvToScreenUv");
 			meshToScreenMat.SetFloat("_Fov", camera.fieldOfView);
 			whereScreenUvTex.RenderObject(where.gameObject, camera, meshToScreenMat);
-			whereScreenUvTex.filterMode = FilterMode.Bilinear;
 			var whereArr = where.GetComponentsInChildren<MeshRenderer>();
 			foreach(var whereRenderer in whereArr) {
 				Stamp(camera, what, whereRenderer, whereScreenUvTex);
