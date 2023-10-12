@@ -2,9 +2,15 @@ using UnityEngine;
 
 namespace NaniCore.Loopool {
 	public class UvVisualizer : MonoBehaviour {
+		#region Serialzied fields
+		public bool onScreenSpace = false;
+		#endregion
+
 		#region Functions
 		private void OnPostFrameRender(Camera camera, RenderTexture cameraOutput) {
-			cameraOutput.RenderObject(gameObject, camera, RenderUtility.GetPooledMaterial("NaniCore/VisualizeUv"));
+			string shaderName = !onScreenSpace ? "NaniCore/VisualizeUv" : "NaniCore/MeshUvToScreenUv" +
+				"";
+			cameraOutput.RenderObject(gameObject, camera, RenderUtility.GetPooledMaterial(shaderName));
 		}
 		#endregion
 
