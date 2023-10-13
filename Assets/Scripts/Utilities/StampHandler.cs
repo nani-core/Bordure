@@ -59,7 +59,11 @@ namespace NaniCore.Loopool {
 			if(hasStamped)
 				return;
 			originalMaterial = Material;
-			Material = RenderUtility.CreateIndependentMaterial("Unlit/Texture");
+
+			Material = RenderUtility.CreateIndependentMaterial("HDRP/Unlit");
+			Material.SetFloat("_AlphaCutoffEnable", 1f);
+			Material.SetFloat("_AlphaCutoff", 1f);
+
 			hasStamped = true;
 		}
 
