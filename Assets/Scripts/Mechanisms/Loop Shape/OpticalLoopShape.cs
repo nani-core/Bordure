@@ -104,8 +104,8 @@ namespace NaniCore.Loopool {
 			gastro = null;
 		}
 
-		public void ProjectGastro() {
-			OpticalUtility.Stamp(MainCamera.Instance?.Camera, gastroMrt, blasto);
+		public void Stamp() {
+			blastoMrt?.Stamp(MainCamera.Instance?.Camera);
 		}
 		#endregion
 
@@ -123,8 +123,8 @@ namespace NaniCore.Loopool {
 		protected new void Start() {
 			base.Start();
 
-			blastoMrt = blasto.GetComponent<Mrt>() ?? blasto.AddComponent<Mrt>();
-			gastroMrt = gastro.GetComponent<Mrt>() ?? gastro.AddComponent<Mrt>();
+			blastoMrt = blasto.EnsureComponent<Mrt>();
+			gastroMrt = gastro.EnsureComponent<Mrt>();
 
 			childRenderers = GetComponentsInChildren<Renderer>();
 		}

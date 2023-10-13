@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace NaniCore.Loopool {
@@ -8,12 +9,15 @@ namespace NaniCore.Loopool {
 		#endregion
 
 		#region Fields
+		private IEnumerable<Renderer> renderers;
 		private Material mrtMaterial;
-		private RenderTexture mrtTexture;
-		public RenderTexture maskedTexture;
+		[SerializeField] private RenderTexture mrtTexture;
+		[SerializeField] private RenderTexture maskedTexture;
 		#endregion
 
 		#region Properties
+		public Renderer Renderer => Renderer;
+
 		private Material MrtMaterial {
 			get {
 				if(mrtMaterial != null)
@@ -26,7 +30,7 @@ namespace NaniCore.Loopool {
 		public RenderTexture MaskedTexture => maskedTexture;
 
 		public bool IsVisible {
-			get => GetComponentsInChildren<Renderer>().Any(r => r.enabled && r.isVisible);
+			get => renderers.Any(renderer => renderer.enabled && renderer.isVisible);
 		}
 		#endregion
 
@@ -40,10 +44,32 @@ namespace NaniCore.Loopool {
 			Graphics.Blit(mrtTexture, maskedTexture);
 			maskedTexture.ReplaceTextureByValue(mrtValue, cameraOutput);
 		}
+
+		public void Stamp(Camera camera) {
+			if(camera == null)
+				return;
+
+			var uvTex = RenderUtility.CreateScreenSizedRT(RenderTextureFormat.ARGBFloat);
+			Material uvMat = RenderUtility.GetPooledMaterial("NaniCore/MeshUvToScreenUv");
+			uvMat.SetFloat("_Fov", camera.fieldOfView);
+			uvTex.RenderObject(gameObject, camera, uvMat);
+
+			var handler = gameObject.EnsureComponent<StampHandler>();
+			handler.Initialize();
+
+			RenderTexture stampingTexture = MaskedTexture.Duplicate();
+			stampingTexture.UvMap(uvTex);
+			// stampingTexture will be released properly by the handler on next
+			// texture set or application quit.
+			handler.SetStampingTexture(stampingTexture);
+
+			uvTex.Destroy();
+		}
 		#endregion
 
 		#region Life cycle
 		protected void Start() {
+			renderers = GetComponentsInChildren<Renderer>();
 			mrtValue = Random.ColorHSV(0f, 1f, .4f, .6f, .2f, .8f);
 		}
 

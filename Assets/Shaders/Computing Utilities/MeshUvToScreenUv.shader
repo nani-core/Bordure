@@ -21,8 +21,10 @@ Shader "NaniCore/MeshUvToScreenUv" {
 			#pragma target 3.0
  
 			struct structureVS {
-				float4 vertex : SV_POSITION;	// Vertex position.
-				float2 uv : TEXCOORD0;			// UV on the mesh, which in this case is the actual rendered position.
+				// Vertex position.
+				float4 vertex : SV_POSITION;
+				// UV on the mesh, which in this case is the actual rendered position.
+				float2 uv : TEXCOORD0;
 				float4 clipPos : TEXCOORD1;
 			};
  
@@ -35,18 +37,16 @@ Shader "NaniCore/MeshUvToScreenUv" {
 			structureVS vertex_shader(float4 vertex: POSITION, float2 uv: TEXCOORD0) {
 				structureVS vs;
 
-				vs.clipPos = TransformObjectToHClip(vertex.xyz);	// Clip-space coordinate.
+				// Clip-space coordinate.
+				vs.clipPos = TransformObjectToHClip(vertex.xyz);
 
 				vs.uv = uv;
 
-				float2 meshUvAsScreenPos = (uv - .5f) / .5f;	// Mesh UV normalized for screen.
+				// Mesh UV normalized for screen.
+				float2 meshUvAsScreenPos = (uv - .5f) / .5f;
 				meshUvAsScreenPos.y = -meshUvAsScreenPos.y;
 
 				vs.vertex = float4(meshUvAsScreenPos, 1, 1);
-				// Debug
-				if(false) {
-					vs.vertex = TransformObjectToHClip(vertex.xyz);
-				}
 				return vs;
 			}
  
@@ -57,7 +57,9 @@ Shader "NaniCore/MeshUvToScreenUv" {
 
 				float2 uv = vs.clipPos.xy / (vs.clipPos.z * vs.clipPos.w);
 
-				uv = uv / 5;	// Where does this 5 come?
+				// Where does this 5 come from?
+				// It seems like Unity treats screen UV as [-5,5]^2.
+				uv = uv / 5;
 				uv.y *= -1;
 				uv = uv * .5f + .5f;
 				ps.target00 = float4(uv, 0, 1);

@@ -64,25 +64,11 @@ namespace NaniCore {
 			return new Vector2Int(texture.width, texture.height);
 		}
 
-		public static RenderTexture Duplicate(this RenderTexture texture, Material material = null) {
+		public static RenderTexture Duplicate(this RenderTexture texture) {
 			if(texture == null)
 				return null;
 			var copy = RenderTexture.GetTemporary(texture.descriptor);
-			if(material != null)
-				Graphics.Blit(texture, copy, material);
-			else
-				Graphics.Blit(texture, copy);
-			return copy;
-		}
-
-		public static RenderTexture Duplicate(this Texture texture, Material material = null) {
-			if(texture == null)
-				return null;
-			var copy = RenderTexture.GetTemporary(texture.width, texture.height);
-			if(material != null)
-				Graphics.Blit(texture, copy, material);
-			else
-				Graphics.Blit(texture, copy);
+			Graphics.Blit(texture, copy);
 			return copy;
 		}
 
@@ -95,8 +81,8 @@ namespace NaniCore {
 		public static void Apply(this RenderTexture texture, Material material) {
 			if(texture == null)
 				return;
-			var copy = texture.Duplicate(material);
-			Graphics.Blit(copy, texture);
+			var copy = texture.Duplicate();
+			Graphics.Blit(copy, texture, material);
 			copy.Destroy();
 		}
 
@@ -359,6 +345,12 @@ namespace NaniCore {
 			var mat = GetPooledMaterial("NaniCore/Overlay");
 			mat.SetTexture("_OverlayTex", overlay);
 			mat.SetFloat("_Opacity", opacity);
+			texture.Apply(mat);
+		}
+
+		public static void UvMap(this RenderTexture texture, RenderTexture uv) {
+			var mat = GetPooledMaterial("NaniCore/UvMap");
+			mat.SetTexture("_UvTex", uv);
 			texture.Apply(mat);
 		}
 	}

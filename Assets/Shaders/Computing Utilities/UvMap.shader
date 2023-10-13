@@ -1,4 +1,7 @@
-Shader "NaniCore/ScreenUvReplace" {
+Shader "NaniCore/UvMap" {
+	Properties {
+		_MainTex ("Main Texture", 2D) = "black" {}
+	}
 	SubShader {
 		Pass {
 			Cull Off
@@ -19,9 +22,8 @@ Shader "NaniCore/ScreenUvReplace" {
 				float4 target00 : SV_Target0;
 			};
 
-			sampler2D _OriginalTex;
-			sampler2D _ReplaceScreenTex;
-			sampler2D _ScreenUvTex;
+			sampler2D _MainTex;
+			sampler2D _UvTex;
  
 			structureVS vertex_shader(float4 vertex: POSITION, float2 uv: TEXCOORD0) {
 				structureVS vs;
@@ -32,18 +34,7 @@ Shader "NaniCore/ScreenUvReplace" {
  
 			structurePS pixel_shader(structureVS vs) {
 				structurePS ps;
-				float2 screenUv = tex2D(_ScreenUvTex, vs.uv);
-				if(false) {
-					ps.target00 = float4(screenUv, 0, 1);
-					return ps;
-				}
-				float4 whatScreenSample = tex2D(_ReplaceScreenTex, screenUv);
-				if(length(whatScreenSample) >= 1.f / 256) {
-					// If is in stamp area; that is, sampled what UV != (0, 0).
-					ps.target00 = whatScreenSample;
-					return ps;
-				}
-				ps.target00 = tex2D(_OriginalTex, vs.uv);
+				ps.target00 = tex2D(_MainTex, tex2D(_UvTex, vs.uv));
 				return ps;
 			}
 			ENDCG
