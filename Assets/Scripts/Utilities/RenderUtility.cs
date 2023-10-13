@@ -29,6 +29,24 @@ namespace NaniCore {
 			return mat;
 		}
 
+		/// <summary>
+		/// Call this to release all pooled resources on application quit,
+		/// otherwise memory leak might occur.
+		/// </summary>
+		public static void ReleasePooledResources() {
+			var objects = new List<Object>();
+
+			objects.AddRange(shaderPool.Values);
+			shaderPool.Clear();
+
+			objects.AddRange(materialPool.Values);
+			materialPool.Clear();
+
+			foreach(var objectToBeDestroyed in objects) {
+				Object.Destroy(objectToBeDestroyed);
+			}
+		}
+
 		public static Material CreateIndependentMaterial(string shaderName) {
 			var shader = GetPooledMaterial(shaderName);
 			if(shader == null)

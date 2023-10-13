@@ -19,26 +19,18 @@ namespace NaniCore.Loopool {
 
 			var whatAppearance = what.MaskedTexture.Duplicate();
 
-			var targetMat = where.material;
-			RenderTexture resultTexture;
-			if(targetMat.mainTexture != null) {
-				// This would be leaked on game end.
-				resultTexture = targetMat.mainTexture.Duplicate();
-			}
-			else {
-				resultTexture = RenderUtility.CreateScreenSizedRT();
-				resultTexture.SetValue(Color.clear);
-			}
+			var handler = where.gameObject.EnsureComponent<StampHandler>();
+			handler.Initialize();
+
+			RenderTexture stampingTexture = RenderUtility.CreateScreenSizedRT();
+			stampingTexture.SetValue(Color.clear);
 			var mat = RenderUtility.GetPooledMaterial("NaniCore/ScreenUvReplace");
-			mat.SetTexture("_OriginalTex", targetMat.mainTexture);
+			mat.SetTexture("_OriginalTex", handler.Material.mainTexture);
 			mat.SetTexture("_ReplaceScreenTex", whatAppearance);
 			mat.SetTexture("_ScreenUvTex", whereScreenUvTex);
-			resultTexture.Apply(mat);
-			if(targetMat.mainTexture is RenderTexture) {
-				// Might be repeated stamping.
-				(targetMat.mainTexture as RenderTexture).Destroy();
-			}
-			targetMat.mainTexture = resultTexture;
+			stampingTexture.Apply(mat);
+
+			handler.SetStampingTexture(stampingTexture);
 
 			whatAppearance.Destroy();
 		}

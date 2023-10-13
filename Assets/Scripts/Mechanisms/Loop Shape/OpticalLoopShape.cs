@@ -66,6 +66,8 @@ namespace NaniCore.Loopool {
 			if(!downsampled.HasValue(gastroMrt.mrtValue)) {
 				mrtTexture.ReplaceValueByValue(blastoMrt.mrtValue, Color.red);
 				mrtTexture.ReplaceTextureByValue(Color.clear, cameraOutput);
+				// Don't forget to release temporary RT on early returns!
+				downsampled.Destroy();
 				return false;
 			}
 
@@ -79,7 +81,7 @@ namespace NaniCore.Loopool {
 
 			downsampled.Destroy();
 
-			var validated = ValidateByMask(gastroMask, wholeMask);
+			bool validated = ValidateByMask(gastroMask, wholeMask);
 
 			wholeMask.ReplaceValueByValue(Color.white, validated ? Color.green : Color.red);
 			wholeMask.filterMode = FilterMode.Point;
