@@ -17,9 +17,9 @@ namespace NaniCore.Loopool {
 
 		#region Serialized fields
 		[Header("Events")]
-		[SerializeField] private UnityEvent onValidated;
-		[SerializeField] private UnityEvent onInvalidated;
-		[SerializeField] private UnityEvent onOpen;
+		[SerializeField] protected UnityEvent onValidated;
+		[SerializeField] protected UnityEvent onInvalidated;
+		[SerializeField] protected UnityEvent onOpen;
 		#endregion
 
 		#region Functions
@@ -27,15 +27,15 @@ namespace NaniCore.Loopool {
 		#endregion
 
 		#region Message handlers
-		protected void OnLoopShapeSatisfy() {
+		protected virtual void OnLoopShapeSatisfy() {
 			onValidated?.Invoke();
 		}
 
-		protected void OnLoopShapeUnsatisfy() {
+		protected virtual void OnLoopShapeUnsatisfy() {
 			onInvalidated?.Invoke();
 		}
 
-		protected void OnLoopShapeOpen() {
+		protected virtual void OnLoopShapeOpen() {
 			onOpen?.Invoke();
 			enabled = false;
 		}

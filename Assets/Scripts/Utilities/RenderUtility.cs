@@ -29,11 +29,33 @@ namespace NaniCore {
 			return mat;
 		}
 
+		/// <summary>
+		/// Call this to release all pooled resources on application quit,
+		/// otherwise memory leak might occur.
+		/// </summary>
+		public static void ReleasePooledResources() {
+			var objects = new List<Object>();
+
+			objects.AddRange(shaderPool.Values);
+			shaderPool.Clear();
+
+			objects.AddRange(materialPool.Values);
+			materialPool.Clear();
+
+			foreach(var objectToBeDestroyed in objects) {
+				Object.Destroy(objectToBeDestroyed);
+			}
+		}
+
 		public static Material CreateIndependentMaterial(string shaderName) {
 			var shader = GetPooledMaterial(shaderName);
 			if(shader == null)
 				return null;
 			return new Material(shader);
+		}
+
+		public static RenderTexture CreateScreenSizedRT(RenderTextureFormat format = RenderTextureFormat.Default) {
+			return RenderTexture.GetTemporary(Screen.width, Screen.height, 0, format);
 		}
 
 		public static Vector2Int Size(this RenderTexture texture) {
@@ -42,14 +64,11 @@ namespace NaniCore {
 			return new Vector2Int(texture.width, texture.height);
 		}
 
-		public static RenderTexture Duplicate(this RenderTexture texture, Material material = null) {
+		public static RenderTexture Duplicate(this RenderTexture texture) {
 			if(texture == null)
 				return null;
 			var copy = RenderTexture.GetTemporary(texture.descriptor);
-			if(material != null)
-				Graphics.Blit(texture, copy, material);
-			else
-				Graphics.Blit(texture, copy);
+			Graphics.Blit(texture, copy);
 			return copy;
 		}
 
@@ -62,8 +81,8 @@ namespace NaniCore {
 		public static void Apply(this RenderTexture texture, Material material) {
 			if(texture == null)
 				return;
-			var copy = texture.Duplicate(material);
-			Graphics.Blit(copy, texture);
+			var copy = texture.Duplicate();
+			Graphics.Blit(copy, texture, material);
 			copy.Destroy();
 		}
 
@@ -73,18 +92,23 @@ namespace NaniCore {
 			texture.Apply(mat);
 		}
 
-		public static void RenderObject(this RenderTexture texture, GameObject gameObject, Material material, int pass = 0) {
+		public static void RenderObject(this RenderTexture texture, GameObject gameObject, Camera camera, Material material, int pass = 0) {
 			if(material == null || texture == null)
 				return;
-			RenderObject(texture.colorBuffer, texture.depthBuffer, gameObject, material, pass);
+			RenderObject(texture.colorBuffer, texture.depthBuffer, gameObject, camera, material, pass);
 		}
 
-		public static void RenderObject(RenderBuffer colorBuffer, RenderBuffer depthBuffer, GameObject gameObject, Material material, int pass = 0) {
+		public static void RenderObject(RenderBuffer colorBuffer, RenderBuffer depthBuffer, GameObject gameObject, Camera camera, Material material, int pass = 0) {
 			if(material == null)
 				return;
 
 			Graphics.SetRenderTarget(colorBuffer, depthBuffer);
 			material.SetPass(pass);
+
+			var camMatrix = camera?.worldToCameraMatrix ?? Matrix4x4.identity;
+			var premultipliedCamera = Camera.main;
+			if(premultipliedCamera != null)
+				camMatrix *= premultipliedCamera.cameraToWorldMatrix;
 
 			foreach(MeshFilter filter in gameObject.transform.GetComponentsInChildren<MeshFilter>()) {
 				if(!(filter.GetComponent<MeshRenderer>()?.enabled ?? false))
@@ -93,8 +117,32 @@ namespace NaniCore {
 				if(mesh == null)
 					continue;
 
-				Graphics.DrawMeshNow(mesh, filter.transform.localToWorldMatrix);
+				var matrix = camMatrix * filter.transform.localToWorldMatrix;
+
+				Graphics.DrawMeshNow(mesh, matrix);
+				//RenderMeshManually(mesh, matrix);
 			}
+		}
+
+		public static void RenderMeshManually(Mesh mesh, Matrix4x4 matrix) {
+			GL.PushMatrix();
+			GL.LoadIdentity();
+			GL.MultMatrix(matrix);
+
+			var triangles = mesh.triangles;
+			var vertices = mesh.vertices;
+			Vector2[] uvs = null;
+			if(mesh.isReadable)
+				uvs = mesh.uv;
+			GL.Begin(GL.TRIANGLES);
+			foreach(int i in triangles) {
+				GL.Vertex(vertices[i]);
+				if(uvs != null)
+					GL.TexCoord(uvs[i]);
+			}
+			GL.End();
+
+			GL.PopMatrix();
 		}
 
 		public static void CopyFrom(this RenderTexture texture, RenderTexture source) {
@@ -176,6 +224,7 @@ namespace NaniCore {
 		public static bool HasValue(this RenderTexture texture, Color value, int stepRadius = 4) {
 			if(texture == null)
 				return false;
+			stepRadius = Mathf.Max(stepRadius, 2);
 			RenderTexture a = texture.Duplicate(), b;
 			while(a.Size().magnitude > stepRadius * 1.414f) {
 				a.InfectByValue(value, stepRadius);
@@ -183,6 +232,7 @@ namespace NaniCore {
 				a.Destroy();
 				a = b;
 			}
+			a.InfectByValue(value, stepRadius);
 			a.ReadValueAt(new Vector2Int(0, 0), out Color oneValue);
 			a.Destroy();
 			float distance = Vector4.Distance(value, oneValue);
@@ -288,6 +338,19 @@ namespace NaniCore {
 		public static void Intersect(this RenderTexture texture, RenderTexture difference) {
 			var mat = GetPooledMaterial("NaniCore/Intersect");
 			mat.SetTexture("_DifferenceTex", difference);
+			texture.Apply(mat);
+		}
+
+		public static void Overlay(this RenderTexture texture, RenderTexture overlay, float opacity = 1f) {
+			var mat = GetPooledMaterial("NaniCore/Overlay");
+			mat.SetTexture("_OverlayTex", overlay);
+			mat.SetFloat("_Opacity", opacity);
+			texture.Apply(mat);
+		}
+
+		public static void UvMap(this RenderTexture texture, RenderTexture uv) {
+			var mat = GetPooledMaterial("NaniCore/UvMap");
+			mat.SetTexture("_UvTex", uv);
 			texture.Apply(mat);
 		}
 	}

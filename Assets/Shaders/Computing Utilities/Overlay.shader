@@ -1,7 +1,8 @@
-Shader "NaniCore/Difference" {
+Shader "NaniCore/Overlay" {
 	Properties {
 		_MainTex ("Main Texture", 2D) = "black" {}
-		_DifferenceTex ("Difference Texture", 2D) = "black" {}
+		_OverlayTex ("Overlay Texture", 2D) = "black" {}
+		_Opacity ("Opacity", float) = 1
 	}
 	SubShader {
 		Pass {
@@ -23,7 +24,8 @@ Shader "NaniCore/Difference" {
 			};
 
 			sampler2D _MainTex;
-			sampler2D _DifferenceTex;
+			sampler2D _OverlayTex;
+			float _Opacity;
  
 			structureVS vertex_shader(float4 vertex: POSITION, float2 uv: TEXCOORD0) {
 				structureVS vs;
@@ -35,7 +37,8 @@ Shader "NaniCore/Difference" {
 			structurePS pixel_shader(structureVS vs) {
 				structurePS ps;
 				float2 uv = vs.uv;
-				ps.target00 = float4(abs(tex2D(_MainTex, uv).xyz - tex2D(_DifferenceTex, uv).xyz), 1);
+				float4 a = tex2D(_MainTex, uv), b = tex2D(_OverlayTex, uv);
+				ps.target00 = lerp(a, b, _Opacity * b.a);
 				return ps;
 			}
 			ENDCG

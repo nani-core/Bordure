@@ -1,51 +1,45 @@
+using System.Collections;
 using UnityEngine;
 
 namespace NaniCore.Loopool {
-	[RequireComponent(typeof(CharacterController))]
 	public partial class Protagonist : MonoBehaviour {
 		#region Serialized fields
-		[Header("Geometry")]
-		[SerializeField][Min(0)] private float height;
-		[SerializeField][Min(0)] private float radius;
-		[SerializeField] private Transform eye;
-		[SerializeField][Min(0)] private float eyeHanging;
-
-		[Header("Physics")]
-		[SerializeField] private CharacterController characterController;
-
 		[Header("Control")]
-		[SerializeField][Min(0)] private float walkingSpeed;
-		[SerializeField][Min(0)] private float sprintingSpeed;
-		[SerializeField][Min(0)] private float stepDistance;
-		[SerializeField][Min(0)] private float orientingSpeed;
+		[SerializeField] private Transform eye;
 		#endregion
 
 		#region Fields
+		private CapsuleCollider capsuleCollider;
+		private new Rigidbody rigidbody;
+		private bool isOnGround = false;
 		private bool isRunning = false;
+		private bool wasJustJumping = false;
 		private float steppedDistance = 0;
-		private Vector3 accumulatedMovementVelocity;
+		private Vector2 bufferedMovementDelta, bufferedMovementVelocity;
+		private Vector3 desiredMovementVelocity;
 		#endregion
 
 		#region Properties
-		public Transform Eye => eye;
-		public Vector3 EyeOffset => transform.localToWorldMatrix.MultiplyVector(eye.localPosition);
+		public Vector3 Upward => transform.up;
+
+		public bool IsOnGround => isOnGround;
 
 		public bool IsSprinting {
 			get => isRunning;
 			set => isRunning = value;
 		}
 
-		private float MovingSpeed => IsSprinting ? sprintingSpeed : walkingSpeed;
+		private float MovingSpeed => IsSprinting ? profile.sprintingSpeed : profile.walkingSpeed;
 
 #pragma warning disable IDE0052 // Remove unread private members
 		private float SteppedDistance {
 			get => steppedDistance;
 			set {
 				steppedDistance = value;
-				if(stepDistance <= 0)
+				if(profile.stepDistance <= 0)
 					return;
-				if(steppedDistance < 0 || steppedDistance > stepDistance) {
-					steppedDistance = steppedDistance.Mod(stepDistance);
+				if(steppedDistance < 0 || steppedDistance > profile.stepDistance) {
+					steppedDistance = steppedDistance.Mod(profile.stepDistance);
 					PlayFootstepSound();
 				}
 			}
@@ -89,46 +83,151 @@ namespace NaniCore.Loopool {
 				eye.localRotation = Quaternion.Euler(-degree, 0, 0);
 			}
 		}
+
+		private void InitializeControl() {
+			if(Profile == null)
+				return;
+
+			capsuleCollider = gameObject.EnsureComponent<CapsuleCollider>();
+			capsuleCollider.height = profile.height;
+			capsuleCollider.center = Vector3.up * (profile.height * .5f);
+			capsuleCollider.radius = profile.radius;
+
+			rigidbody = gameObject.EnsureComponent<Rigidbody>();
+			rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
+
+			if(eye != null) {
+				eye.localPosition = Vector3.up * (profile.height - profile.eyeHanging);
+			}
+		}
 		#endregion
 
 		#region Life cycle
 #if UNITY_EDITOR
 		private void ValidateControl() {
-			characterController = GetComponent<CharacterController>();
-			if(characterController != null) {
-				characterController.height = height;
-				characterController.center = Vector3.up * (height * .5f);
-				characterController.radius = radius;
-			}
-
-			if(eye != null) {
-				eye.localPosition = Vector3.up * (height - eyeHanging);
-			}
+			InitializeControl();
 		}
 #endif
 
-		protected void FixedUpdate() {
-			if(characterController.SimpleMove(accumulatedMovementVelocity)) {
-				SteppedDistance += accumulatedMovementVelocity.magnitude * Time.fixedDeltaTime;
-			}
+		protected void StartControl() {
+			InitializeControl();
+		}
+
+		protected void FixedUpdateControl() {
+			ValidateGround();
+			UpdateDesiredMovementVelocity(Time.fixedDeltaTime);
+			DealBufferedMovement(Time.fixedDeltaTime);
+		}
+
+		protected void LateUpdateControl() {
+			DealStepping();
 		}
 		#endregion
 
 		#region Functions
+		private bool SweepTest(Vector3 direction, out RaycastHit hitInfo, float distance, float backupRatio = 0) {
+			direction.Normalize();
+			var originalPos = rigidbody.position;
+			rigidbody.position -= direction * distance * backupRatio;
+			bool result = rigidbody.SweepTest(direction, out hitInfo, distance);
+			if(result) {
+				int shouldExclude = hitInfo.collider.gameObject.layer & rigidbody.excludeLayers;
+				if(shouldExclude != 0)
+					result = false;
+			}
+			rigidbody.position = originalPos;
+			return result;
+		}
+
 		public void OrientDelta(Vector2 delta) {
-			delta *= orientingSpeed;
+			delta *= profile.orientingSpeed;
 			Azimuth += delta.x;
 			Zenith += delta.y;
 		}
 
 		public void MoveVelocity(Vector2 vXy) {
-			vXy *= MovingSpeed;
-			accumulatedMovementVelocity = eye.transform.right * vXy.x + transform.forward * vXy.y;
+			bufferedMovementVelocity += vXy;
 		}
 
-		public void MoveDelta(Vector3 delta) {
-			characterController.SimpleMove(delta);
-			SteppedDistance += delta.magnitude;
+		public void MoveDelta(Vector2 dXy) {
+			bufferedMovementDelta += dXy;
+		}
+
+		public void Jump() {
+			if(!IsOnGround)
+				return;
+
+			var gravity = -Vector3.Dot(Physics.gravity, Upward);
+			float speed = Mathf.Sqrt(2f * gravity * profile.jumpingHeight);
+			rigidbody.AddForce(Upward * speed, ForceMode.VelocityChange);
+			StartCoroutine(JumpCoroutine());
+		}
+
+		private void ValidateGround() {
+			bool result = SweepTest(Physics.gravity, out RaycastHit hitInfo, profile.skinDepth, .5f);
+			var hitRb = hitInfo.rigidbody;
+			if(hitRb != null) {
+				if(hitRb.velocity.magnitude > .01f)
+					result = false;
+			}
+			isOnGround = result;
+		}
+
+		private IEnumerator JumpCoroutine() {
+			wasJustJumping = true;
+			yield return new WaitForSeconds(.1f);
+			wasJustJumping = false;
+		}
+
+		private void UpdateDesiredMovementVelocity(float deltaTime) {
+			var bufferedDelta = bufferedMovementDelta + bufferedMovementVelocity * deltaTime;
+			bufferedMovementDelta = Vector3.zero;
+			bufferedMovementVelocity = Vector3.zero;
+			desiredMovementVelocity = eye.transform.right * bufferedDelta.x + transform.forward * bufferedDelta.y;
+			desiredMovementVelocity *= MovingSpeed / deltaTime;
+			if(!IsOnGround)
+				desiredMovementVelocity = Vector3.zero;
+		}
+
+		private void DealBufferedMovement(float deltaTime) {
+			if(!IsOnGround)
+				return;
+
+			var targetVelocity = desiredMovementVelocity;
+
+			var desiredPositionChange = desiredMovementVelocity * deltaTime;
+			if(SweepTest(desiredMovementVelocity, out RaycastHit hitInfo, desiredPositionChange.magnitude, 0)) {
+				targetVelocity = targetVelocity.normalized * Vector3.Dot(hitInfo.point - rigidbody.position, desiredMovementVelocity.normalized);
+			}
+
+			var velocityDifference = targetVelocity - rigidbody.velocity;
+			rigidbody.AddForce(velocityDifference.ProjectOntoPlane(Upward) * profile.acceleration, ForceMode.VelocityChange);
+		}
+
+		private void DealStepping() {
+			if(wasJustJumping || desiredMovementVelocity.magnitude == 0f)
+				return;
+
+			var originalPosition = rigidbody.position;
+			var offset = desiredMovementVelocity.normalized * profile.skinDepth;
+			rigidbody.position += offset;
+			var isHit = SweepTest(-Upward, out RaycastHit stepHitInfo, profile.stepHeight * 2f, .5f);
+			rigidbody.position = originalPosition;
+			if(!isHit)
+				return;
+			var deltaY = Vector3.Dot(stepHitInfo.point - rigidbody.position, Upward);
+			if(Mathf.Abs(deltaY) < .1f)
+				return;
+			// Teleport to desired position.
+			var desiredPosition = originalPosition + (stepHitInfo.point - offset - originalPosition).ProjectOntoAxis(Upward);
+			rigidbody.MovePosition(desiredPosition);
+			// Grant helper velocity.
+			var minimumHelperVelocity = desiredMovementVelocity.normalized * (MovingSpeed * .5f);
+			var helperSpeed = Vector3.Dot(minimumHelperVelocity, desiredMovementVelocity.normalized);
+			helperSpeed = Mathf.Max(0, helperSpeed);
+			var trimmedHelperVelocity = desiredMovementVelocity.normalized * helperSpeed;
+			rigidbody.AddForce(trimmedHelperVelocity, ForceMode.VelocityChange);
+			rigidbody.velocity = rigidbody.velocity.ProjectOntoPlane(Upward);
 		}
 		#endregion
 	}

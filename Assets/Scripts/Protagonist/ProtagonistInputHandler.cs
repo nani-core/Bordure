@@ -3,16 +3,24 @@ using UnityEngine.InputSystem;
 
 namespace NaniCore.Loopool {
 	[RequireComponent(typeof(Protagonist))]
-	[RequireComponent(typeof(PlayerInput))]
 	public class ProtagonistInputHandler : MonoBehaviour {
 		#region Fields
 		protected Protagonist protagonist;
+		protected PlayerInput playerInput;
 		protected Vector2 moveVelocity;
+		private InputActionMap grabbingActionMap;
 		#endregion
 
 		#region Life cycle
 		protected void Start() {
 			protagonist = GetComponent<Protagonist>();
+
+			playerInput = gameObject.EnsureComponent<PlayerInput>();
+			playerInput.actions = protagonist.Profile.inputActions;
+			playerInput.notificationBehavior = PlayerNotifications.SendMessages;
+			playerInput.actions.FindActionMap("Normal").Enable();
+
+			grabbingActionMap = playerInput.actions.FindActionMap("Grabbing");
 		}
 
 		protected void OnEnable() {
@@ -24,12 +32,17 @@ namespace NaniCore.Loopool {
 		}
 
 		protected void FixedUpdate() {
-			Protagonist.MoveVelocity(moveVelocity);
+			protagonist.MoveVelocity(moveVelocity);
 		}
 		#endregion
 
-		#region Internal accessors
-		protected Protagonist Protagonist => protagonist;
+		#region Functions
+		public void SetGrabbingActionEnabled(bool enabled) {
+			if(enabled)
+				grabbingActionMap.Enable();
+			else
+				grabbingActionMap.Disable();
+		}
 		#endregion
 
 		#region Handlers
@@ -39,25 +52,29 @@ namespace NaniCore.Loopool {
 
 		protected void OnOrientDelta(InputValue value) {
 			Vector2 raw = value.Get<Vector2>();
-			if(!Protagonist.GrabbingOrienting)
-				Protagonist.OrientDelta(raw);
+			if(!protagonist.GrabbingOrienting)
+				protagonist.OrientDelta(raw);
 			else
-				Protagonist.GrabbingOrientDelta(-raw.x);
+				protagonist.GrabbingOrientDelta(-raw.x);
 		}
 
 		protected void OnSetSprinting(InputValue value) {
-			Protagonist.IsSprinting = value.Get<float>() > .5f;
+			protagonist.IsSprinting = value.Get<float>() > .5f;
+		}
+
+		protected void OnJump() {
+			protagonist.Jump();
 		}
 
 		protected void OnInteract() {
-			Protagonist.Interact();
+			protagonist.Interact();
 		}
 
-		protected void OnCheat() => Protagonist?.Cheat();
+		protected void OnCheat() => protagonist?.Cheat();
 
 		protected void OnSetGrabbingOrienting(InputValue value) {
 			bool raw = value.Get<float>() > .5f;
-			Protagonist.GrabbingOrienting = raw;
+			protagonist.GrabbingOrienting = raw;
 		}
 		#endregion
 	}

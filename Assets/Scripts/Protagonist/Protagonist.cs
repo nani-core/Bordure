@@ -1,10 +1,34 @@
 using UnityEngine;
+using NaughtyAttributes;
 
 namespace NaniCore.Loopool {
-	[RequireComponent(typeof(ProtagonistInputHandler))]
 	public partial class Protagonist : MonoBehaviour {
 		#region Singleton
 		public static Protagonist instance;
+		#endregion
+
+		#region Serialized fields
+		[Header("Default")]
+		[SerializeField][Expandable] private ProtagonistProfile profile;
+		#endregion
+
+		#region Fields
+		private bool profileDuplicated = false;
+		private ProtagonistInputHandler inputHandler;
+		#endregion
+
+		#region Properties
+		public ProtagonistProfile Profile {
+			get {
+				if(!Application.isPlaying)
+					return profile;
+				if(!profileDuplicated) {
+					profile = Instantiate(profile);
+					profileDuplicated = true;
+				}
+				return profile;
+			}
+		}
 		#endregion
 
 		#region Functions
@@ -21,6 +45,9 @@ namespace NaniCore.Loopool {
 							case PressurePlate plate:
 								plate.Pressed = !plate.Pressed;
 								acted = true;
+								break;
+							case OpticalLoopShape opticalLoopShape:
+								opticalLoopShape.SendMessage("OnLoopShapeOpen", SendMessageOptions.DontRequireReceiver);
 								break;
 							case Interactable interactable:
 								interactable.SendMessage("OnInteract", SendMessageOptions.DontRequireReceiver);
@@ -53,10 +80,17 @@ namespace NaniCore.Loopool {
 		}
 
 		protected void Start() {
+			inputHandler = gameObject.EnsureComponent<ProtagonistInputHandler>();
+			StartControl();
 			StartInteraction();
 		}
 
+		protected void FixedUpdate() {
+			FixedUpdateControl();
+		}
+
 		protected void LateUpdate() {
+			LateUpdateControl();
 			LateUpdateInteraction();
 		}
 		#endregion

@@ -1,7 +1,7 @@
-Shader "NaniCore/IndicateByValue" {
+Shader "NaniCore/Difference" {
 	Properties {
 		_MainTex ("Main Texture", 2D) = "black" {}
-		_Value ("Value", Color) = (0, 0, 0, 1)
+		_DifferenceTex ("Difference Texture", 2D) = "black" {}
 	}
 	SubShader {
 		Pass {
@@ -23,7 +23,7 @@ Shader "NaniCore/IndicateByValue" {
 			};
 
 			sampler2D _MainTex;
-			float4 _Value;
+			sampler2D _DifferenceTex;
  
 			structureVS vertex_shader(float4 vertex: POSITION, float2 uv: TEXCOORD0) {
 				structureVS vs;
@@ -34,9 +34,8 @@ Shader "NaniCore/IndicateByValue" {
  
 			structurePS pixel_shader(structureVS vs) {
 				structurePS ps;
-				float4 color = tex2D(_MainTex, vs.uv);
-				bool yes = distance(color.xyz, _Value.xyz) < 1.f / 256;
-				ps.target00 = float4(float3(1, 1, 1) * (yes ? 1 : 0), 1);
+				float2 uv = vs.uv;
+				ps.target00 = abs(tex2D(_MainTex, uv) - tex2D(_DifferenceTex, uv));
 				return ps;
 			}
 			ENDCG
