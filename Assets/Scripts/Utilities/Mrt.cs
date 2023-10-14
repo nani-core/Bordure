@@ -13,6 +13,7 @@ namespace NaniCore.Loopool {
 		private Material mrtMaterial;
 		[SerializeField] private RenderTexture mrtTexture;
 		[SerializeField] private RenderTexture maskedTexture;
+		private float tolerance = 2f;
 		#endregion
 
 		#region Properties
@@ -42,7 +43,7 @@ namespace NaniCore.Loopool {
 			MrtMaterial.SetColor("_Value", mrtValue);
 			mrtTexture.RenderObject(gameObject, camera, MrtMaterial);
 			Graphics.Blit(mrtTexture, maskedTexture);
-			maskedTexture.ReplaceTextureByValue(mrtValue, cameraOutput);
+			maskedTexture.ReplaceTextureByValue(mrtValue, cameraOutput, tolerance);
 		}
 
 		public void Stamp(Camera camera) {

@@ -28,6 +28,7 @@ Shader "NaniCore/InfectByValue" {
 			float4 _Size;
 			float4 _Value;
 			float4 _Radius;
+			float _Tolerance;
  
 			structureVS vertex_shader(float4 vertex: POSITION, float2 uv: TEXCOORD0) {
 				structureVS vs;
@@ -44,7 +45,7 @@ Shader "NaniCore/InfectByValue" {
 					for(int dy = -radius.y; dy <= radius.y; ++dy) {
 						float2 uv = vs.uv + float2(dx, dy) / _Size.xy;
 						float4 thatColor = tex2D(_MainTex, uv);
-						if(distance(thatColor.xyz, _Value.xyz) < 1.f / 256)
+						if(distance(thatColor.xyz, _Value.xyz) < _Tolerance / 256)
 							color = _Value;
 					}
 				}

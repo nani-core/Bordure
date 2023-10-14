@@ -152,23 +152,26 @@ namespace NaniCore {
 			cb.Dispose();
 		}
 
-		public static void ReplaceTextureByValue(this RenderTexture texture, Color value, RenderTexture replacement) {
+		public static void ReplaceTextureByValue(this RenderTexture texture, Color value, RenderTexture replacement, float tolerance = 1f) {
 			var mat = GetPooledMaterial("NaniCore/ReplaceTextureByValue");
 			mat.SetColor("_Value", value);
 			mat.SetTexture("_ReplaceTex", replacement);
+			mat.SetFloat("_Tolerance", tolerance);
 			texture.Apply(mat);
 		}
 
-		public static void ReplaceValueByValue(this RenderTexture texture, Color value, Color replacement) {
+		public static void ReplaceValueByValue(this RenderTexture texture, Color value, Color replacement, float tolerance = 1f) {
 			var mat = GetPooledMaterial("NaniCore/ReplaceValueByValue");
 			mat.SetColor("_Value", value);
 			mat.SetColor("_ReplaceValue", replacement);
+			mat.SetFloat("_Tolerance", tolerance);
 			texture.Apply(mat);
 		}
 
-		public static void IndicateByValue(this RenderTexture texture, Color value) {
+		public static void IndicateByValue(this RenderTexture texture, Color value, float tolerance = 1f) {
 			var mat = GetPooledMaterial("NaniCore/IndicateByValue");
 			mat.SetColor("_Value", value);
+			mat.SetFloat("_Tolerance", tolerance);
 			texture.Apply(mat);
 		}
 
@@ -211,17 +214,18 @@ namespace NaniCore {
 			return cropped;
 		}
 
-		public static void InfectByValue(this RenderTexture texture, Color value, Vector2 radius) {
+		public static void InfectByValue(this RenderTexture texture, Color value, Vector2 radius, float tolerance = 1f) {
 			var mat = GetPooledMaterial("NaniCore/InfectByValue");
 			mat.SetVector("_Size", new Vector4(texture.width, texture.height, 0, 1));
 			mat.SetColor("_Value", value);
 			mat.SetVector("_Radius", new Vector4(radius.x, radius.y, 0, 1));
+			mat.SetFloat("_Tolerance", tolerance);
 			texture.Apply(mat);
 		}
-		public static void InfectByValue(this RenderTexture texture, Color value, float radius)
-			=> InfectByValue(texture, value, Vector2.one * radius);
+		public static void InfectByValue(this RenderTexture texture, Color value, float radius, float tolerance = 1f)
+			=> InfectByValue(texture, value, Vector2.one * radius, tolerance);
 
-		public static bool HasValue(this RenderTexture texture, Color value, int stepRadius = 4) {
+		public static bool HasValue(this RenderTexture texture, Color value, int stepRadius = 4, float tolerance = 1f) {
 			if(texture == null)
 				return false;
 			stepRadius = Mathf.Max(stepRadius, 2);
@@ -236,7 +240,7 @@ namespace NaniCore {
 			a.ReadValueAt(new Vector2Int(0, 0), out Color oneValue);
 			a.Destroy();
 			float distance = Vector4.Distance(value, oneValue);
-			return distance < 1f / 256;
+			return distance < tolerance / 256;
 		}
 
 		private static bool ChunkTexture(RenderTexture texture, int chunkSize, out List<RectInt> chunks) {

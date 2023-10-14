@@ -25,6 +25,7 @@ namespace NaniCore.Loopool {
 		private bool validated = false;
 		private bool visible = false;
 		private IEnumerable<Renderer> childRenderers;
+		private float tolerance = 2f;
 		#endregion
 
 		#region Functions
@@ -36,10 +37,10 @@ namespace NaniCore.Loopool {
 		}
 
 		private bool ValidateByMask(RenderTexture gastroMask, RenderTexture wholeMask) {
-			wholeMask.InfectByValue(Color.clear, standardHeight * thickness);
+			wholeMask.InfectByValue(Color.clear, standardHeight * thickness, tolerance);
 			var intersect = wholeMask.Duplicate();
 			intersect.Intersect(gastroMask);
-			bool hasIntersection = intersect.HasValue(Color.white);
+			bool hasIntersection = intersect.HasValue(Color.white, 4, tolerance);
 			intersect.Destroy();
 			if(!hasIntersection)
 				return false;
@@ -47,7 +48,7 @@ namespace NaniCore.Loopool {
 			var validationMask = wholeMask.Duplicate();
 			validationMask.Difference(gastroMask);
 			validationMask.InfectByValue(Color.clear, standardHeight * thicknessTolerance);
-			var perfectlyMatched = !validationMask.HasValue(Color.white, 4);
+			var perfectlyMatched = !validationMask.HasValue(Color.white, 4, tolerance);
 			validationMask.Destroy();
 
 			return perfectlyMatched;
@@ -64,31 +65,31 @@ namespace NaniCore.Loopool {
 			var downsampled = mrtTexture.Resample(((Vector2)mrtTexture.Size() * (standardHeight / mrtTexture.height)).Floor());
 
 			if(!downsampled.HasValue(gastroMrt.mrtValue)) {
-				mrtTexture.ReplaceValueByValue(blastoMrt.mrtValue, Color.red);
-				mrtTexture.ReplaceTextureByValue(Color.clear, cameraOutput);
+				mrtTexture.ReplaceValueByValue(blastoMrt.mrtValue, Color.red, tolerance);
+				mrtTexture.ReplaceTextureByValue(Color.clear, cameraOutput, tolerance);
 				// Don't forget to release temporary RT on early returns!
 				downsampled.Destroy();
 				return false;
 			}
 
 			var gastroMask = downsampled.Duplicate();
-			gastroMask.IndicateByValue(gastroMrt.mrtValue);
+			gastroMask.IndicateByValue(gastroMrt.mrtValue, tolerance);
 
 			var wholeMask = downsampled.Duplicate();
-			wholeMask.ReplaceValueByValue(blastoMrt.mrtValue, Color.white);
-			wholeMask.ReplaceValueByValue(gastroMrt.mrtValue, Color.white);
-			wholeMask.IndicateByValue(Color.white);
+			wholeMask.ReplaceValueByValue(blastoMrt.mrtValue, Color.white, tolerance);
+			wholeMask.ReplaceValueByValue(gastroMrt.mrtValue, Color.white, tolerance);
+			wholeMask.IndicateByValue(Color.white, tolerance);
 
 			downsampled.Destroy();
 
 			bool validated = ValidateByMask(gastroMask, wholeMask);
 
-			wholeMask.ReplaceValueByValue(Color.white, validated ? Color.green : Color.red);
+			wholeMask.ReplaceValueByValue(Color.white, validated ? Color.green : Color.red, tolerance);
 			wholeMask.filterMode = FilterMode.Point;
 
 			if(showDebugLayer) {
 				Graphics.Blit(wholeMask, mrtTexture);
-				mrtTexture.ReplaceTextureByValue(Color.clear, cameraOutput);
+				mrtTexture.ReplaceTextureByValue(Color.clear, cameraOutput, tolerance);
 			}
 
 			wholeMask.Destroy();
