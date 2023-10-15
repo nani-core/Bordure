@@ -70,19 +70,32 @@ namespace NaniCore.Loopool {
 			}
 		}
 #endif
-
-		protected void OnEnable() {
-			instance = this;
-		}
-
-		protected void OnDisable() {
-			instance = null;
-		}
-
 		protected void Start() {
+			if(GameManager.Instance == null) {
+				string[] messages = {
+					"There is no instance of GameManager in the scene!",
+					"Please always make sure that there is one."
+				};
+				Debug.LogWarning(string.Join(" ", messages));
+				Destroy(gameObject);
+				return;
+			}
+			if(GameManager.Instance.Protagonist != null) {
+				Destroy(gameObject);
+				return;
+			}
+			GameManager.Instance.SendMessage("OnProtagonistCreated", this, SendMessageOptions.DontRequireReceiver);
 			inputHandler = gameObject.EnsureComponent<ProtagonistInputHandler>();
 			StartControl();
 			StartInteraction();
+		}
+
+		protected void OnDestroy() {
+			if(GameManager.Instance == null)
+				return;
+			if(GameManager.Instance.Protagonist != this)
+				return;
+			GameManager.Instance.SendMessage("OnProtagonistDestroyed", this, SendMessageOptions.DontRequireReceiver);
 		}
 
 		protected void FixedUpdate() {

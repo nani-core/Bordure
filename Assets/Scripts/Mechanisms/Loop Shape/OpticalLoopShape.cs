@@ -133,7 +133,9 @@ namespace NaniCore.Loopool {
 
 		protected void Update() {
 			visible = childRenderers.Any(r => r.isVisible);
-			validated = PerformValidation();
+			if(GameManager.Instance?.Protagonist != null) {
+				validated = PerformValidation();
+			}
 		}
 		#endregion
 	}

@@ -7,7 +7,6 @@ namespace NaniCore.Loopool {
 	public partial class Protagonist : MonoBehaviour {
 		#region Serialized fields
 		[Header("Interaction")]
-		[SerializeField] private new Camera camera;
 		[SerializeField] private FocusUi focus;
 		#endregion
 
@@ -149,7 +148,7 @@ namespace NaniCore.Loopool {
 		}
 
 		private bool Raycast(out RaycastHit hitInfo) {
-			return Physics.Raycast(camera.ViewportPointToRay(Vector2.one * .5f), out hitInfo, profile.maxInteractionDistance);
+			return Physics.Raycast(GameManager.Instance.mainCamera.ViewportPointToRay(Vector2.one * .5f), out hitInfo, profile.maxInteractionDistance);
 		}
 
 		#region Grabbing

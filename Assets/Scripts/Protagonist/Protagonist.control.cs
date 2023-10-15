@@ -20,6 +20,7 @@ namespace NaniCore.Loopool {
 		#endregion
 
 		#region Properties
+		public Transform Eye => eye;
 		public Vector3 Upward => transform.up;
 
 		public bool IsOnGround => isOnGround;
