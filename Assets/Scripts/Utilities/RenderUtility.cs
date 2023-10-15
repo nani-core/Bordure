@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Rendering;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace NaniCore {
 	public static class RenderUtility {
@@ -86,6 +87,13 @@ namespace NaniCore {
 			copy.Destroy();
 		}
 
+		public static void Capture(this RenderTexture texture, Camera camera) {
+			var previousActiveRt = camera.targetTexture;
+			camera.targetTexture = texture;
+			camera.Render();
+			camera.targetTexture = previousActiveRt;
+		}
+
 		public static void SetValue(this RenderTexture texture, Color value) {
 			var mat = GetPooledMaterial("NaniCore/SetValue");
 			mat.SetColor("_Value", value);
@@ -105,11 +113,6 @@ namespace NaniCore {
 			Graphics.SetRenderTarget(colorBuffer, depthBuffer);
 			material.SetPass(pass);
 
-			var camMatrix = camera?.worldToCameraMatrix ?? Matrix4x4.identity;
-			var premultipliedCamera = Camera.main;
-			if(premultipliedCamera != null)
-				camMatrix *= premultipliedCamera.cameraToWorldMatrix;
-
 			foreach(MeshFilter filter in gameObject.transform.GetComponentsInChildren<MeshFilter>()) {
 				if(!(filter.GetComponent<MeshRenderer>()?.enabled ?? false))
 					continue;
@@ -117,33 +120,13 @@ namespace NaniCore {
 				if(mesh == null)
 					continue;
 
-				var matrix = camMatrix * filter.transform.localToWorldMatrix;
-
+				var matrix = filter.transform.localToWorldMatrix;
 				Graphics.DrawMeshNow(mesh, matrix);
-				//RenderMeshManually(mesh, matrix);
 			}
 		}
 
-		public static void RenderMeshManually(Mesh mesh, Matrix4x4 matrix) {
-			GL.PushMatrix();
-			GL.LoadIdentity();
-			GL.MultMatrix(matrix);
-
-			var triangles = mesh.triangles;
-			var vertices = mesh.vertices;
-			Vector2[] uvs = null;
-			if(mesh.isReadable)
-				uvs = mesh.uv;
-			GL.Begin(GL.TRIANGLES);
-			foreach(int i in triangles) {
-				GL.Vertex(vertices[i]);
-				if(uvs != null)
-					GL.TexCoord(uvs[i]);
-			}
-			GL.End();
-
-			GL.PopMatrix();
-		}
+		public static void RenderMask(this RenderTexture texture, GameObject gameObject, Camera camera)
+			=> RenderObject(texture, gameObject, camera, GetPooledMaterial("NaniCore/ObjectMask"));
 
 		public static void CopyFrom(this RenderTexture texture, RenderTexture source) {
 			var cb = new CommandBuffer();

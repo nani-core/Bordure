@@ -7,6 +7,14 @@ namespace NaniCore.Loopool {
 		public static GameManager Instance => instance;
 		#endregion
 
+		#region Fields
+		private RenderTexture worldView;
+		#endregion
+
+		#region Properties
+		public RenderTexture WorldView => worldView;
+		#endregion
+
 		#region Life cycle
 		protected void Awake() {
 			if(Instance != null) {
@@ -20,7 +28,18 @@ namespace NaniCore.Loopool {
 			DontDestroyOnLoad(gameObject);
 		}
 
+		protected void Start() {
+			worldView = RenderUtility.CreateScreenSizedRT();
+		}
+
+		protected void Update() {
+			if(Camera.main != null) {
+				worldView.Capture(Camera.main);
+			}
+		}
+
 		protected void OnApplicationQuit() {
+			worldView.Destroy();
 			RenderUtility.ReleasePooledResources();
 		}
 		#endregion

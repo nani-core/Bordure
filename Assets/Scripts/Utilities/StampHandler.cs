@@ -104,6 +104,29 @@ namespace NaniCore.Loopool {
 					break;
 			}
 		}
+
+		public static void Stamp(GameObject target, Camera camera) {
+			if(camera == null)
+				return;
+
+			var uvTex = RenderUtility.CreateScreenSizedRT(RenderTextureFormat.ARGBFloat);
+			Material uvMat = RenderUtility.GetPooledMaterial("NaniCore/MeshUvToScreenUv");
+			uvMat.SetFloat("_Fov", camera.fieldOfView);
+			uvTex.RenderObject(target, camera, uvMat);
+
+			var handler = target.EnsureComponent<StampHandler>();
+			handler.Initialize();
+			
+			var maskedTexture = RenderUtility.CreateScreenSizedRT();
+			maskedTexture.RenderMask(target, camera);
+			maskedTexture.ReplaceTextureByValue(Color.white, GameManager.Instance.WorldView);
+			maskedTexture.UvMap(uvTex);
+			// stampingTexture will be released properly by the handler on next
+			// texture set or application quit.
+			handler.SetStampingTexture(maskedTexture);
+
+			uvTex.Destroy();
+		}
 		#endregion
 
 		#region Life cycle
