@@ -24,9 +24,7 @@ namespace NaniCore.Loopool {
 		#region Functions
 		private bool EnsureSingleton() {
 			if(Instance != null && Instance != this) {
-				// Not Destroy(gameObject) as other managers might be in the
-				// children hierarchy, we don't want them to be destroyed.
-				Destroy(this);
+				Destroy(gameObject);
 				return false;
 			}
 
@@ -70,8 +68,11 @@ namespace NaniCore.Loopool {
 			worldView = RenderUtility.CreateScreenSizedRT();
 		}
 
-		protected void Update() {
+		protected void LateUpdate() {
 			if(Camera.main != null) {
+				// Do not capture the scene in Update(), or when addtively
+				// loading a new scene HDRP might complain that there is more
+				// than one directional light that casts shadows.
 				worldView.Capture(Camera.main);
 			}
 		}
