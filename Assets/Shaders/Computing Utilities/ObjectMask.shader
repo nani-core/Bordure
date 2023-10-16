@@ -1,7 +1,4 @@
-Shader "NaniCore/MRT" {
-	Properties {
-		_Value ("Value", Color) = (1, 1, 1, 1)
-	}
+Shader "NaniCore/ObjectMask" {
 	SubShader {
 		Tags {
 			"RenderType" = "Opaque"
@@ -15,8 +12,6 @@ Shader "NaniCore/MRT" {
 
 			HLSLINCLUDE
 			#include "Packages/com.unity.render-pipelines.high-definition/Runtime/RenderPipeline/RenderPass/CustomPass/CustomPassRenderers.hlsl"
-
-			float4 _Value;
 			ENDHLSL
 
 			HLSLPROGRAM
@@ -43,7 +38,7 @@ Shader "NaniCore/MRT" {
  
 			structurePS pixel_shader(structureVS vs) {
 				structurePS ps;
-				ps.target00 = _Value;
+				ps.target00 = float4(1, 1, 1, 1);
 				return ps;
 			}
 			ENDHLSL

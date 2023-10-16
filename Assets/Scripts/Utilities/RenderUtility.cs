@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Rendering;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace NaniCore {
 	public static class RenderUtility {
@@ -86,6 +87,13 @@ namespace NaniCore {
 			copy.Destroy();
 		}
 
+		public static void Capture(this RenderTexture texture, Camera camera) {
+			var previousActiveRt = camera.targetTexture;
+			camera.targetTexture = texture;
+			camera.Render();
+			camera.targetTexture = previousActiveRt;
+		}
+
 		public static void SetValue(this RenderTexture texture, Color value) {
 			var mat = GetPooledMaterial("NaniCore/SetValue");
 			mat.SetColor("_Value", value);
@@ -105,11 +113,6 @@ namespace NaniCore {
 			Graphics.SetRenderTarget(colorBuffer, depthBuffer);
 			material.SetPass(pass);
 
-			var camMatrix = camera?.worldToCameraMatrix ?? Matrix4x4.identity;
-			var premultipliedCamera = Camera.main;
-			if(premultipliedCamera != null)
-				camMatrix *= premultipliedCamera.cameraToWorldMatrix;
-
 			foreach(MeshFilter filter in gameObject.transform.GetComponentsInChildren<MeshFilter>()) {
 				if(!(filter.GetComponent<MeshRenderer>()?.enabled ?? false))
 					continue;
@@ -117,33 +120,13 @@ namespace NaniCore {
 				if(mesh == null)
 					continue;
 
-				var matrix = camMatrix * filter.transform.localToWorldMatrix;
-
+				var matrix = filter.transform.localToWorldMatrix;
 				Graphics.DrawMeshNow(mesh, matrix);
-				//RenderMeshManually(mesh, matrix);
 			}
 		}
 
-		public static void RenderMeshManually(Mesh mesh, Matrix4x4 matrix) {
-			GL.PushMatrix();
-			GL.LoadIdentity();
-			GL.MultMatrix(matrix);
-
-			var triangles = mesh.triangles;
-			var vertices = mesh.vertices;
-			Vector2[] uvs = null;
-			if(mesh.isReadable)
-				uvs = mesh.uv;
-			GL.Begin(GL.TRIANGLES);
-			foreach(int i in triangles) {
-				GL.Vertex(vertices[i]);
-				if(uvs != null)
-					GL.TexCoord(uvs[i]);
-			}
-			GL.End();
-
-			GL.PopMatrix();
-		}
+		public static void RenderMask(this RenderTexture texture, GameObject gameObject, Camera camera)
+			=> RenderObject(texture, gameObject, camera, GetPooledMaterial("NaniCore/ObjectMask"));
 
 		public static void CopyFrom(this RenderTexture texture, RenderTexture source) {
 			var cb = new CommandBuffer();
@@ -152,23 +135,26 @@ namespace NaniCore {
 			cb.Dispose();
 		}
 
-		public static void ReplaceTextureByValue(this RenderTexture texture, Color value, RenderTexture replacement) {
+		public static void ReplaceTextureByValue(this RenderTexture texture, Color value, RenderTexture replacement, float tolerance = 1f) {
 			var mat = GetPooledMaterial("NaniCore/ReplaceTextureByValue");
 			mat.SetColor("_Value", value);
 			mat.SetTexture("_ReplaceTex", replacement);
+			mat.SetFloat("_Tolerance", tolerance);
 			texture.Apply(mat);
 		}
 
-		public static void ReplaceValueByValue(this RenderTexture texture, Color value, Color replacement) {
+		public static void ReplaceValueByValue(this RenderTexture texture, Color value, Color replacement, float tolerance = 1f) {
 			var mat = GetPooledMaterial("NaniCore/ReplaceValueByValue");
 			mat.SetColor("_Value", value);
 			mat.SetColor("_ReplaceValue", replacement);
+			mat.SetFloat("_Tolerance", tolerance);
 			texture.Apply(mat);
 		}
 
-		public static void IndicateByValue(this RenderTexture texture, Color value) {
+		public static void IndicateByValue(this RenderTexture texture, Color value, float tolerance = 1f) {
 			var mat = GetPooledMaterial("NaniCore/IndicateByValue");
 			mat.SetColor("_Value", value);
+			mat.SetFloat("_Tolerance", tolerance);
 			texture.Apply(mat);
 		}
 
@@ -211,17 +197,18 @@ namespace NaniCore {
 			return cropped;
 		}
 
-		public static void InfectByValue(this RenderTexture texture, Color value, Vector2 radius) {
+		public static void InfectByValue(this RenderTexture texture, Color value, Vector2 radius, float tolerance = 1f) {
 			var mat = GetPooledMaterial("NaniCore/InfectByValue");
 			mat.SetVector("_Size", new Vector4(texture.width, texture.height, 0, 1));
 			mat.SetColor("_Value", value);
 			mat.SetVector("_Radius", new Vector4(radius.x, radius.y, 0, 1));
+			mat.SetFloat("_Tolerance", tolerance);
 			texture.Apply(mat);
 		}
-		public static void InfectByValue(this RenderTexture texture, Color value, float radius)
-			=> InfectByValue(texture, value, Vector2.one * radius);
+		public static void InfectByValue(this RenderTexture texture, Color value, float radius, float tolerance = 1f)
+			=> InfectByValue(texture, value, Vector2.one * radius, tolerance);
 
-		public static bool HasValue(this RenderTexture texture, Color value, int stepRadius = 4) {
+		public static bool HasValue(this RenderTexture texture, Color value, int stepRadius = 4, float tolerance = 1f) {
 			if(texture == null)
 				return false;
 			stepRadius = Mathf.Max(stepRadius, 2);
@@ -236,7 +223,7 @@ namespace NaniCore {
 			a.ReadValueAt(new Vector2Int(0, 0), out Color oneValue);
 			a.Destroy();
 			float distance = Vector4.Distance(value, oneValue);
-			return distance < 1f / 256;
+			return distance < tolerance / 256;
 		}
 
 		private static bool ChunkTexture(RenderTexture texture, int chunkSize, out List<RectInt> chunks) {

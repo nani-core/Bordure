@@ -26,6 +26,7 @@ Shader "NaniCore/ReplaceTextureByValue" {
 			sampler2D _MainTex;
 			float4 _Value;
 			sampler2D _ReplaceTex;
+			float _Tolerance;
  
 			structureVS vertex_shader(float4 vertex: POSITION, float2 uv: TEXCOORD0) {
 				structureVS vs;
@@ -37,7 +38,7 @@ Shader "NaniCore/ReplaceTextureByValue" {
 			structurePS pixel_shader(structureVS vs) {
 				structurePS ps;
 				float4 value = tex2D(_MainTex, vs.uv);
-				if(distance(value, _Value) < 100.f / 256)
+				if(distance(value.rgb, _Value.rgb) < _Tolerance / 256)
 					value = tex2D(_ReplaceTex, vs.uv);
 				ps.target00 = value;
 				return ps;

@@ -20,11 +20,10 @@ namespace NaniCore.Loopool {
 		#endregion
 
 		#region Fields
-		private Mrt blastoMrt, gastroMrt;
-		private RenderTexture mrtTexture;
 		private bool validated = false;
 		private bool visible = false;
 		private IEnumerable<Renderer> childRenderers;
+		private float tolerance = 2f;
 		#endregion
 
 		#region Functions
@@ -36,10 +35,10 @@ namespace NaniCore.Loopool {
 		}
 
 		private bool ValidateByMask(RenderTexture gastroMask, RenderTexture wholeMask) {
-			wholeMask.InfectByValue(Color.clear, standardHeight * thickness);
+			wholeMask.InfectByValue(Color.clear, standardHeight * thickness, tolerance);
 			var intersect = wholeMask.Duplicate();
 			intersect.Intersect(gastroMask);
-			bool hasIntersection = intersect.HasValue(Color.white);
+			bool hasIntersection = intersect.HasValue(Color.white, 4, tolerance);
 			intersect.Destroy();
 			if(!hasIntersection)
 				return false;
@@ -47,49 +46,65 @@ namespace NaniCore.Loopool {
 			var validationMask = wholeMask.Duplicate();
 			validationMask.Difference(gastroMask);
 			validationMask.InfectByValue(Color.clear, standardHeight * thicknessTolerance);
-			var perfectlyMatched = !validationMask.HasValue(Color.white, 4);
+			var perfectlyMatched = !validationMask.HasValue(Color.white, 4, tolerance);
 			validationMask.Destroy();
 
 			return perfectlyMatched;
 		}
 
-		private bool PerformValidation(Camera camera, RenderTexture cameraOutput) {
-			if(!visible || blastoMrt == null || gastroMrt == null)
+		private bool PerformValidation() {
+			if(!visible || blasto == null || gastro == null)
 				return false;
 
+			var mrtTexture = RenderTexture.GetTemporary(Mathf.FloorToInt(standardHeight * Screen.width / Screen.height), Mathf.FloorToInt(standardHeight));
 			mrtTexture.SetValue(Color.clear);
-			mrtTexture.Overlay(blastoMrt.MrtTexture);
-			mrtTexture.Overlay(gastroMrt.MrtTexture);
 
-			var downsampled = mrtTexture.Resample(((Vector2)mrtTexture.Size() * (standardHeight / mrtTexture.height)).Floor());
+			// Render masks
+			Color blastoColor = Color.red, gastroColor = Color.green;
+			{
+				var maskTexture = RenderUtility.CreateScreenSizedRT();
 
-			if(!downsampled.HasValue(gastroMrt.mrtValue)) {
-				mrtTexture.ReplaceValueByValue(blastoMrt.mrtValue, Color.red);
-				mrtTexture.ReplaceTextureByValue(Color.clear, cameraOutput);
+				maskTexture.SetValue(Color.clear);
+				maskTexture.RenderMask(blasto, Camera.main);
+				maskTexture.ReplaceValueByValue(Color.white, blastoColor);
+				mrtTexture.Overlay(maskTexture);
+
+				maskTexture.SetValue(Color.clear);
+				maskTexture.RenderMask(gastro, Camera.main);
+				maskTexture.ReplaceValueByValue(Color.white, gastroColor);
+				mrtTexture.Overlay(maskTexture);
+
+				maskTexture.Destroy();
+			}
+
+			if(!mrtTexture.HasValue(gastroColor)) {
+				mrtTexture.ReplaceValueByValue(blastoColor, Color.red, tolerance);
+				mrtTexture.ReplaceTextureByValue(Color.clear, GameManager.Instance.WorldView, tolerance);
 				// Don't forget to release temporary RT on early returns!
-				downsampled.Destroy();
+				mrtTexture.Destroy();
 				return false;
 			}
 
-			var gastroMask = downsampled.Duplicate();
-			gastroMask.IndicateByValue(gastroMrt.mrtValue);
+			var gastroMask = mrtTexture.Duplicate();
+			gastroMask.IndicateByValue(gastroColor, tolerance);
 
-			var wholeMask = downsampled.Duplicate();
-			wholeMask.ReplaceValueByValue(blastoMrt.mrtValue, Color.white);
-			wholeMask.ReplaceValueByValue(gastroMrt.mrtValue, Color.white);
-			wholeMask.IndicateByValue(Color.white);
-
-			downsampled.Destroy();
+			var wholeMask = mrtTexture.Duplicate();
+			wholeMask.ReplaceValueByValue(blastoColor, Color.white, tolerance);
+			wholeMask.ReplaceValueByValue(gastroColor, Color.white, tolerance);
+			wholeMask.IndicateByValue(Color.white, tolerance);
 
 			bool validated = ValidateByMask(gastroMask, wholeMask);
 
-			wholeMask.ReplaceValueByValue(Color.white, validated ? Color.green : Color.red);
+			wholeMask.ReplaceValueByValue(Color.white, validated ? Color.green : Color.red, tolerance);
 			wholeMask.filterMode = FilterMode.Point;
 
 			if(showDebugLayer) {
-				Graphics.Blit(wholeMask, mrtTexture);
-				mrtTexture.ReplaceTextureByValue(Color.clear, cameraOutput);
+				var resample = mrtTexture.Resample(new Vector2(Screen.width, Screen.height).Floor());
+				resample.Overlay(GameManager.Instance.WorldView, debugLayerOpacity);
+				Graphics.Blit(resample, null as RenderTexture);
+				resample.Destroy();
 			}
+			mrtTexture.Destroy();
 
 			wholeMask.Destroy();
 			gastroMask.Destroy();
@@ -105,17 +120,7 @@ namespace NaniCore.Loopool {
 		}
 
 		public void Stamp() {
-			blastoMrt?.Stamp(MainCamera.Instance?.Camera);
-		}
-		#endregion
-
-		#region Message handlers
-		private void OnRendered(Camera camera, RenderTexture cameraOutput) {
-			if(!visible)
-				return;
-			validated = PerformValidation(camera, cameraOutput);
-			if(showDebugLayer)
-				cameraOutput.Overlay(mrtTexture, debugLayerOpacity);
+			StampHandler.Stamp(blasto, Camera.main);
 		}
 		#endregion
 
@@ -123,36 +128,12 @@ namespace NaniCore.Loopool {
 		protected new void Start() {
 			base.Start();
 
-			blastoMrt = blasto.EnsureComponent<Mrt>();
-			gastroMrt = gastro.EnsureComponent<Mrt>();
-
 			childRenderers = GetComponentsInChildren<Renderer>();
-		}
-
-		protected new void OnDestroy() {
-			base.OnDestroy();
-
-			if(blastoMrt)
-				Destroy(blastoMrt);
-			if(gastroMrt)
-				Destroy(gastroMrt);
-		}
-
-		protected void OnEnable() {
-			mrtTexture = RenderTexture.GetTemporary(Screen.width, Screen.height);
-			if(MainCamera.Instance)
-				MainCamera.Instance.onRendered += OnRendered;
-		}
-
-		protected void OnDisable() {
-			if(MainCamera.Instance)
-				MainCamera.Instance.onRendered -= OnRendered;
-			RenderTexture.ReleaseTemporary(mrtTexture);
-			mrtTexture = null;
 		}
 
 		protected void Update() {
 			visible = childRenderers.Any(r => r.isVisible);
+			validated = PerformValidation();
 		}
 		#endregion
 	}
