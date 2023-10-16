@@ -3,12 +3,8 @@ using UnityEngine;
 
 namespace NaniCore.Loopool {
 	public partial class Protagonist : MonoBehaviour {
-		#region Serialized fields
-		[Header("Control")]
-		[SerializeField] private Transform eye;
-		#endregion
-
 		#region Fields
+		private Transform eye;
 		private CapsuleCollider capsuleCollider;
 		private new Rigidbody rigidbody;
 		private bool isOnGround = false;
@@ -84,35 +80,29 @@ namespace NaniCore.Loopool {
 				eye.localRotation = Quaternion.Euler(-degree, 0, 0);
 			}
 		}
-
-		private void InitializeControl() {
-			if(Profile == null)
-				return;
-
-			capsuleCollider = gameObject.EnsureComponent<CapsuleCollider>();
-			capsuleCollider.height = profile.height;
-			capsuleCollider.center = Vector3.up * (profile.height * .5f);
-			capsuleCollider.radius = profile.radius;
-
-			rigidbody = gameObject.EnsureComponent<Rigidbody>();
-			rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
-
-			if(eye != null) {
-				eye.localPosition = Vector3.up * (profile.height - profile.eyeHanging);
-			}
-		}
 		#endregion
 
 		#region Life cycle
+		protected void StartControl() {
+			if(Profile == null)
+				return;
+
+			ApplyGeometry();
+
+			if(eye == null) {
+				eye = new GameObject("Eye").transform;
+				eye.SetParent(transform, false);
+			}
+			eye.localPosition = Vector3.up * (profile.height - profile.eyeHanging);
+			eye.localRotation = Quaternion.identity;
+			eye.localScale = Vector3.one;
+		}
+
 #if UNITY_EDITOR
-		private void ValidateControl() {
-			InitializeControl();
+		protected void ValidateControl() {
+			ApplyGeometry();
 		}
 #endif
-
-		protected void StartControl() {
-			InitializeControl();
-		}
 
 		protected void FixedUpdateControl() {
 			ValidateGround();
@@ -126,6 +116,19 @@ namespace NaniCore.Loopool {
 		#endregion
 
 		#region Functions
+		private void ApplyGeometry() {
+			if(Profile == null)
+				return;
+
+			capsuleCollider = gameObject.EnsureComponent<CapsuleCollider>();
+			capsuleCollider.height = profile.height;
+			capsuleCollider.center = Vector3.up * (profile.height * .5f);
+			capsuleCollider.radius = profile.radius;
+
+			rigidbody = gameObject.EnsureComponent<Rigidbody>();
+			rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
+		}
+
 		private bool SweepTest(Vector3 direction, out RaycastHit hitInfo, float distance, float backupRatio = 0) {
 			direction.Normalize();
 			var originalPos = rigidbody.position;

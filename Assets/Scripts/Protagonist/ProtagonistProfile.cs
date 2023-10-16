@@ -22,6 +22,7 @@ namespace NaniCore.Loopool {
 		[Min(0)] public float stepHeight = .3f;
 
 		[Header("Interaction")]
+		public Canvas interactionUiPrefab;
 		[Min(0)] public float maxInteractionDistance = 20f;
 		[Range(0, 1)] public float grabbingTransitionDuration = .2f;
 		[Range(0, 1)] public float grabbingEasingFactor = .3f;
