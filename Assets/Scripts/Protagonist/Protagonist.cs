@@ -4,10 +4,6 @@ using NaughtyAttributes;
 namespace NaniCore.Loopool {
 	[ExecuteInEditMode]
 	public partial class Protagonist : MonoBehaviour {
-		#region Singleton
-		public static Protagonist instance;
-		#endregion
-
 		#region Serialized fields
 		[SerializeField][Expandable] private ProtagonistProfile profile;
 		#endregion
@@ -64,19 +60,12 @@ namespace NaniCore.Loopool {
 
 		#region Life cycle
 		protected void OnEnable() {
-			instance = this;
-		}
-
-		protected void OnDisable() {
-			instance = null;
-		}
-
-		protected void Start() {
 #if UNITY_EDITOR
 			if(!Application.isPlaying) {
 				return;
 			}
 #endif
+
 			if(GameManager.Instance == null) {
 				string[] messages = {
 					"There is no instance of GameManager in the scene!",
@@ -90,6 +79,15 @@ namespace NaniCore.Loopool {
 				Destroy(gameObject);
 				return;
 			}
+		}
+
+		protected void Start() {
+#if UNITY_EDITOR
+			if(!Application.isPlaying) {
+				return;
+			}
+#endif
+
 			if(Profile == null) {
 				Debug.LogWarning("No profile is configured for the protagonist.", this);
 				return;
@@ -98,6 +96,8 @@ namespace NaniCore.Loopool {
 			StartControl();
 			StartInteraction();
 			StartAudio();
+
+			DontDestroyOnLoad(gameObject);
 
 			GameManager.Instance.SendMessage("OnProtagonistCreated", this, SendMessageOptions.DontRequireReceiver);
 		}

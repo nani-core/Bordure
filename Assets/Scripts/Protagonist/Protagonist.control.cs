@@ -1,5 +1,5 @@
-using System.Collections;
 using UnityEngine;
+using System.Collections;
 
 namespace NaniCore.Loopool {
 	public partial class Protagonist : MonoBehaviour {
