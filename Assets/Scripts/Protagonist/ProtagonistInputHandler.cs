@@ -76,6 +76,18 @@ namespace NaniCore.Loopool {
 			bool raw = value.Get<float>() > .5f;
 			protagonist.GrabbingOrienting = raw;
 		}
+
+		/// <summary>Generate a hollow shape instantly in the world.</summary>
+		/// <remarks>For test only.</remarks>
+#if UNITY_EDITOR
+		protected void OnGenerateHollowShape() {
+			if(protagonist.GrabbingObject == null) {
+				Debug.LogWarning("Warning: Cannot generate hollow shape, not grabbing anything.", protagonist);
+				return;
+			}
+			LoopoolUtility.GenerateHollowShape(protagonist.GrabbingObject.gameObject, GameManager.Instance.mainCamera);
+		}
+#endif
 		#endregion
 	}
 }

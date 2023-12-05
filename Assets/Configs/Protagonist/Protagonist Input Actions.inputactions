@@ -6,7 +6,7 @@
             "id": "836effa2-4650-4bf8-b92f-02ee47a5b648",
             "actions": [
                 {
-                    "name": "MoveVelocity",
+                    "name": "Move Velocity",
                     "type": "Value",
                     "id": "1fb07ab1-2e47-443b-9b4f-c45e64e350ce",
                     "expectedControlType": "Vector2",
@@ -15,7 +15,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "OrientDelta",
+                    "name": "Orient Delta",
                     "type": "Value",
                     "id": "6979c56e-1a1e-41ba-ba4b-dd9f2ffbed92",
                     "expectedControlType": "Vector2",
@@ -24,7 +24,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "SetSprinting",
+                    "name": "Set Sprinting",
                     "type": "Button",
                     "id": "33a43011-a3c7-4907-8472-8f0dc8fe6ab0",
                     "expectedControlType": "Button",
@@ -58,6 +58,15 @@
                     "processors": "",
                     "interactions": "Press",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Generate Hollow Shape",
+                    "type": "Button",
+                    "id": "5b7426c2-cf98-412e-b574-545961421fc7",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -68,7 +77,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "MoveVelocity",
+                    "action": "Move Velocity",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -79,7 +88,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "PC",
-                    "action": "MoveVelocity",
+                    "action": "Move Velocity",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -90,7 +99,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "PC",
-                    "action": "MoveVelocity",
+                    "action": "Move Velocity",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -101,7 +110,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "PC",
-                    "action": "MoveVelocity",
+                    "action": "Move Velocity",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -112,7 +121,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "PC",
-                    "action": "MoveVelocity",
+                    "action": "Move Velocity",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -123,7 +132,7 @@
                     "interactions": "",
                     "processors": "InvertVector2(invertX=false,invertY=false),ScaleVector2(x=0.004,y=0.004)",
                     "groups": "PC",
-                    "action": "OrientDelta",
+                    "action": "Orient Delta",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -134,7 +143,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "PC",
-                    "action": "SetSprinting",
+                    "action": "Set Sprinting",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -170,6 +179,17 @@
                     "action": "Jump",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "05efd916-4343-4596-b7a6-3615e67c0bee",
+                    "path": "<Keyboard>/h",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PC",
+                    "action": "Generate Hollow Shape",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
@@ -178,7 +198,7 @@
             "id": "e34f51e8-a057-4165-b140-a53d0a12a58f",
             "actions": [
                 {
-                    "name": "SetGrabbingOrienting",
+                    "name": "Set Grabbing Orienting",
                     "type": "Button",
                     "id": "c994d009-9813-47d5-a76e-42857e971bae",
                     "expectedControlType": "Button",
@@ -195,7 +215,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "PC",
-                    "action": "SetGrabbingOrienting",
+                    "action": "Set Grabbing Orienting",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
