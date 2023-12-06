@@ -1,5 +1,4 @@
 using UnityEngine;
-using Parabox.CSG;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -93,9 +92,9 @@ namespace NaniCore.Loopool {
 			return point * (desiredMag / actualMag);
 		}
 
-		public static void GenerateHollowShape(GameObject go, Camera camera) {
+		public static GameObject GenerateHollowShape(GameObject go, Camera camera) {
 			if(go == null || camera == null)
-				return;
+				return null;
 
 			#region
 			Mesh merged = MergeMesh(go);
@@ -136,6 +135,8 @@ namespace NaniCore.Loopool {
 			var filter = obj.AddComponent<MeshFilter>();
 			filter.sharedMesh = merged;
 			var renderer = obj.AddComponent<MeshRenderer>();
+
+			return obj;
 		}
 	}
 }
