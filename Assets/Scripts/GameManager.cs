@@ -9,6 +9,8 @@ namespace NaniCore.Loopool {
 
 		#region Serialized fields
 		public Camera mainCamera;
+		// Debug only.
+		public Material hollowShapeMaterial;
 		#endregion
 
 		#region Fields

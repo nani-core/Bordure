@@ -1,8 +1,9 @@
 using UnityEngine;
-using System.Collections.Generic;
-using System.Linq;
 using NaughtyAttributes;
 using MeshMakerNamespace;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace NaniCore.Loopool {
 	public class OpticalLoopShape : LoopShape {
@@ -124,11 +125,13 @@ namespace NaniCore.Loopool {
 			StampHandler.Stamp(blasto, Camera.main);
 		}
 
-		/// <remarks>
-		/// Needs to be refined to avoid memory leak.
-		/// </remarks>
-		public void Hollow() {
-			GameObject hollowShape = LoopoolUtility.GenerateHollowShape(gastro, Camera.main);
+		/// <summary>
+		/// For debug purposes only.
+		/// </summary>
+		private IEnumerator HollowCoroutine() {
+			GameObject hollowShape = MeshUtility.GenerateHollowShape(gastro, Camera.main);
+
+			//yield return new WaitForSeconds(1);
 
 			CSG csg = new CSG();
 			csg.OperationType = CSG.Operation.Subtract;
@@ -137,6 +140,15 @@ namespace NaniCore.Loopool {
 			GameObject result = csg.PerformCSG();
 
 			Destroy(hollowShape);
+
+			yield break;
+		}
+
+		/// <remarks>
+		/// Needs to be refined to avoid memory leak.
+		/// </remarks>
+		public void Hollow() {
+			StartCoroutine(HollowCoroutine());
 		}
 		#endregion
 

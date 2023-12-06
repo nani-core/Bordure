@@ -63,10 +63,10 @@ namespace NaniCore.Loopool {
 					return;
 
 				if(satisfiedLoopShape)
-					satisfiedLoopShape.SendMessage("OnLoopShapeUnsatisfy");
+					satisfiedLoopShape.SendMessage("OnLoopShapeUnsatisfy", SendMessageOptions.DontRequireReceiver);
 				satisfiedLoopShape = value;
 				if(satisfiedLoopShape)
-					satisfiedLoopShape.SendMessage("OnLoopShapeSatisfy");
+					satisfiedLoopShape.SendMessage("OnLoopShapeSatisfy", SendMessageOptions.DontRequireReceiver);
 
 				UpdateFocusUi();
 			}
