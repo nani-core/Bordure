@@ -100,21 +100,29 @@ namespace NaniCore {
 			texture.Apply(mat);
 		}
 
-		public static void RenderObject(this RenderTexture texture, GameObject gameObject, Camera camera, Material material, int pass = 0) {
+		public static void RenderObject(this RenderTexture texture, GameObject gameObject, Camera camera, Material material, int pass = 0, bool regardDepth = false) {
 			if(material == null || texture == null)
 				return;
+			// `texture` is the target texture to be rendered on.
+			// The camera's depth texture should be taken care and passed into the below call.
 			RenderObject(texture.colorBuffer, texture.depthBuffer, gameObject, camera, material, pass);
 		}
 
 		public static void RenderObject(RenderBuffer colorBuffer, RenderBuffer depthBuffer, GameObject gameObject, Camera camera, Material material, int pass = 0) {
+			// This is definitely incorrect and could be problematic.
+			// The `camera` argument is totally ignored.
+			// If it is needed to render from other camera's pespective
+			// then this will absolutely not work as intended.
+			
 			if(material == null)
 				return;
 
-			Graphics.SetRenderTarget(colorBuffer, depthBuffer);
+			Graphics.SetRenderTarget(colorBuffer, Graphics.activeDepthBuffer);
 			material.SetPass(pass);
 
 			foreach(MeshFilter filter in gameObject.transform.GetComponentsInChildren<MeshFilter>()) {
-				if(!(filter.GetComponent<MeshRenderer>()?.enabled ?? false))
+				var renderer = filter.GetComponent<MeshRenderer>();
+				if(renderer == null || !renderer.enabled)
 					continue;
 				var mesh = filter.sharedMesh;
 				if(mesh == null)
@@ -125,8 +133,10 @@ namespace NaniCore {
 			}
 		}
 
-		public static void RenderMask(this RenderTexture texture, GameObject gameObject, Camera camera)
-			=> RenderObject(texture, gameObject, camera, GetPooledMaterial("NaniCore/ObjectMask"));
+		public static void RenderMask(this RenderTexture texture, GameObject gameObject, Camera camera) {
+			// TODO: Needs to be regarding depth.
+			RenderObject(texture, gameObject, camera, GetPooledMaterial("NaniCore/ObjectMask"), 0, true);
+		}
 
 		public static void CopyFrom(this RenderTexture texture, RenderTexture source) {
 			var cb = new CommandBuffer();
