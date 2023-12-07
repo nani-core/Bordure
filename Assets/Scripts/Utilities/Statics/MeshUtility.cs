@@ -1,5 +1,4 @@
 using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using MeshMakerNamespace;
@@ -220,7 +219,10 @@ namespace NaniCore {
 			return result;
 		}
 
-		public static IEnumerable<(MeshFilter, MeshFilter, Mesh)> OperateMesh(this GameObject target, GameObject shape, CSG.Operation type, float epsilon = 1e-5f) {
+		public static IEnumerable<(MeshFilter, MeshFilter)> OperateMesh(
+			this GameObject target, GameObject shape, CSG.Operation type, float epsilon = 1e-5f,
+			Material sectionMaterial = null
+			) {
 			float oldEpsilon = CSG.EPSILON;
 			CSG csg = new CSG();
 			CSG.EPSILON = epsilon;
@@ -245,24 +247,22 @@ namespace NaniCore {
 				}
 				var resultFilter = resultObject.GetComponent<MeshFilter>();
 				var resultMesh = resultFilter?.sharedMesh;
-				if(resultMesh != null) {
-					resultMesh.name = $"{filter.sharedMesh.name} (operated)";
-					yield return (filter, resultFilter, resultMesh);
+				if(resultMesh == null)
+					continue;
+				resultMesh.name = $"{filter.sharedMesh.name} (operated)";
+
+				// Apply materials for the fresh-cut section faces.
+				var resultRenderer = resultObject.GetComponent<Renderer>();
+				if(resultRenderer != null) {
+					var materialList = resultRenderer.sharedMaterials.ToList();
+					materialList[materialList.Count - 1] = sectionMaterial;
+					resultRenderer.sharedMaterials = materialList.ToArray();
 				}
+
+				yield return (filter, resultFilter);
 			}
 
 			CSG.EPSILON = oldEpsilon;
-		}
-
-		public static void OperateMeshInPlace(this GameObject target, GameObject shape, CSG.Operation type, float epsilon = 1e-5f) {
-			foreach(var (filter, resultFilter, resultMesh) in OperateMesh(target, shape, type, epsilon)) {
-				filter.sharedMesh = resultMesh;
-				Object.Destroy(resultFilter.gameObject);
-			}
-		}
-
-		public static void OperateMeshOutPlace(this GameObject target, GameObject shape, CSG.Operation type, float epsilon = 1e-5f) {
-			foreach(var _ in OperateMesh(target, shape, type, epsilon)) ;
 		}
 		#endregion
 	}

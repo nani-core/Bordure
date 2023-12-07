@@ -17,6 +17,11 @@ namespace NaniCore.Loopool {
 		[SerializeField] private bool showDebugLayer = false;
 		[SerializeField][ShowIf("showDebugLayer")][Range(0, 1)] private float debugLayerOpacity = 1f;
 #endif
+		[Header("Hollow")]
+		[SerializeField] protected Material sectionMaterial;
+		[SerializeField] private bool useDetachingEjection;
+		[ShowIf("useDetachingEjection")][SerializeField] private Vector3 ejectionVelocity;
+		[ShowIf("useDetachingEjection")][SerializeField] private Vector3 ejectionOrigin;
 		#endregion
 
 		#region Fields
@@ -24,9 +29,12 @@ namespace NaniCore.Loopool {
 		private bool visible = false;
 		private IEnumerable<Renderer> childRenderers;
 		private float tolerance = 2f;
+		private GameObject neogastro;
 		#endregion
 
 		#region Functions
+		public GameObject Neogastro => neogastro;
+
 		public override bool Validate(Transform eye) => validated;
 
 		protected override void OnLoopShapeOpen() {
@@ -121,6 +129,12 @@ namespace NaniCore.Loopool {
 
 		public void Stamp() {
 			StampHandler.Stamp(blasto, Camera.main);
+		}
+
+		public void DoDefault() {
+			Stamp();
+			Hollow();
+			DestroyGastro();
 		}
 		#endregion
 

@@ -253,31 +253,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 75952513}
         m_TargetAssemblyTypeName: NaniCore.Loopool.OpticalLoopShape, Assembly-CSharp
-        m_MethodName: Stamp
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 75952513}
-        m_TargetAssemblyTypeName: NaniCore.Loopool.OpticalLoopShape, Assembly-CSharp
-        m_MethodName: Hollow
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 75952513}
-        m_TargetAssemblyTypeName: NaniCore.Loopool.OpticalLoopShape, Assembly-CSharp
-        m_MethodName: DestroyGastro
+        m_MethodName: DoDefault
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -293,6 +269,10 @@ MonoBehaviour:
   thicknessTolerance: 0.01
   showDebugLayer: 1
   debugLayerOpacity: 0.4
+  sectionMaterial: {fileID: 2100000, guid: 003b28f8bc7ab0c4daf6467e1f375fbb, type: 2}
+  useDetachingEjection: 1
+  ejectionVelocity: {x: 0, y: -0.5, z: 5}
+  ejectionOrigin: {x: 0, y: 0.5, z: 0}
 --- !u!1 &253501696
 GameObject:
   m_ObjectHideFlags: 0

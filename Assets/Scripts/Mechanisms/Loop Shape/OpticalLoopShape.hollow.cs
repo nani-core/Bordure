@@ -1,7 +1,7 @@
 using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using MeshMakerNamespace;
 
 namespace NaniCore.Loopool {
 	public partial class OpticalLoopShape : LoopShape {
@@ -111,12 +111,18 @@ namespace NaniCore.Loopool {
 			var filter = obj.AddComponent<MeshFilter>();
 			filter.sharedMesh = mergedPrisms;
 			var renderer = obj.AddComponent<MeshRenderer>();
-			var materials = new Material[mergedPrisms.subMeshCount];
-			for(int i = 0; i < mergedPrisms.subMeshCount; ++i)
-				materials[i] = GameManager.Instance.hollowShapeMaterial;
-			renderer.sharedMaterials = materials;
+			renderer.sharedMaterials = new Material[mergedPrisms.subMeshCount];
 
 			return obj;
+		}
+
+		private IEnumerator EjectNeogastroCoroutine(MeshFilter filter, MeshFilter resultFilter) {
+			var detachable = neogastro.AddComponent<Detachable>();
+			detachable.useDetachingEjection = useDetachingEjection;
+			detachable.ejectionVelocity = ejectionVelocity;
+			detachable.ejectionOrigin = ejectionOrigin;
+			yield return new WaitForEndOfFrame();
+			detachable.Detach();
 		}
 
 		/// <summary>
@@ -129,8 +135,43 @@ namespace NaniCore.Loopool {
 			GameObject hollowShape = GenerateHollowShape(gastro, Camera.main);
 
 			float epsilon = 1e-3f;
-			blasto.OperateMeshOutPlace(hollowShape, MeshMakerNamespace.CSG.Operation.Intersection, epsilon);
-			blasto.OperateMeshInPlace(hollowShape, MeshMakerNamespace.CSG.Operation.Subtract, epsilon);
+			// Neogastro.
+			// There should only be one `resultFilter` and is assigned to `neoGastro`.
+			foreach(var (filter, resultFilter) in blasto.OperateMesh(hollowShape, MeshMakerNamespace.CSG.Operation.Intersection, epsilon, sectionMaterial)) {
+				neogastro = resultFilter.gameObject;
+				neogastro.name = $"{filter.gameObject.name} (neogastro)";
+
+				// Generate physics
+				var resultCollider = neogastro.GetComponent<MeshCollider>();
+				if(resultCollider == null)
+					resultCollider = neogastro.AddComponent<MeshCollider>();
+				resultCollider.sharedMesh = resultFilter.sharedMesh;
+				if(resultCollider != null) {
+					resultCollider.convex = true;
+					var rigidbody = neogastro.GetComponent<Rigidbody>();
+					if(useDetachingEjection) {
+						if(rigidbody == null)
+							rigidbody = neogastro.AddComponent<Rigidbody>();
+						StartCoroutine(EjectNeogastroCoroutine(filter, resultFilter));
+					}
+					if(rigidbody != null) {
+						rigidbody.constraints = RigidbodyConstraints.None;
+						try {
+							rigidbody.isKinematic = false;
+						}
+						catch(System.Exception e) {
+							Debug.Log("Warning: Cannot set hollowed-out rigidbody to be non-kinematic. Probably due to non-convexity.", rigidbody);
+							Debug.LogException(e);
+						}
+					}
+				}
+			}
+			foreach(var (filter, resultFilter) in blasto.OperateMesh(hollowShape, MeshMakerNamespace.CSG.Operation.Subtract, epsilon, sectionMaterial)) {
+				filter.sharedMesh = resultFilter.sharedMesh;
+				filter.GetComponent<MeshCollider>().sharedMesh = resultFilter.sharedMesh;
+				filter.GetComponent<Renderer>().sharedMaterials = resultFilter.GetComponent<Renderer>().sharedMaterials;
+				Destroy(resultFilter.gameObject);
+			}
 
 			Destroy(hollowShape);
 		}
