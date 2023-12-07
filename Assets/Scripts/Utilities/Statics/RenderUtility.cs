@@ -117,7 +117,7 @@ namespace NaniCore {
 			if(material == null)
 				return;
 
-			Graphics.SetRenderTarget(colorBuffer, Graphics.activeDepthBuffer);
+			Graphics.SetRenderTarget(colorBuffer, depthBuffer);
 			material.SetPass(pass);
 
 			foreach(MeshFilter filter in gameObject.transform.GetComponentsInChildren<MeshFilter>()) {

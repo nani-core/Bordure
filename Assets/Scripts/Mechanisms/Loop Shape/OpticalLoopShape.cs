@@ -29,6 +29,9 @@ namespace NaniCore.Loopool {
 		private bool visible = false;
 		private IEnumerable<Renderer> childRenderers;
 		private float tolerance = 2f;
+		private List<(MeshFilter, Mesh)> startMesh;
+		private List<(Renderer, Material[])> startMaterials;
+		private List<(MeshCollider, Mesh)> startCollisionMesh;
 		private GameObject neogastro;
 		#endregion
 
@@ -123,8 +126,7 @@ namespace NaniCore.Loopool {
 		public void DestroyGastro() {
 			if(gastro == null)
 				return;
-			gastro.gameObject.SetActive(false);
-			gastro = null;
+			gastro.SetActive(false);
 		}
 
 		public void Stamp() {
@@ -136,6 +138,26 @@ namespace NaniCore.Loopool {
 			Hollow();
 			DestroyGastro();
 		}
+
+		/// <remarks>
+		/// The symbol `MonoBehaviour.Reset()` is occupied by Unity so we're
+		/// not using that.
+		/// Buggy, don't use.
+		/// </remarks>
+		public void ResetToStart() {
+			if(Neogastro != null) {
+				Destroy(Neogastro);
+				neogastro = null;
+			}
+			foreach(var (filter, mesh) in startMesh)
+				filter.sharedMesh = mesh;
+			foreach(var (renderer, materials) in startMaterials)
+				renderer.sharedMaterials = materials;
+			foreach(var (collider, mesh) in startCollisionMesh)
+				collider.sharedMesh = mesh;
+			gastro.SetActive(true);
+			enabled = true;
+		}
 		#endregion
 
 		#region Life cycle
@@ -143,6 +165,15 @@ namespace NaniCore.Loopool {
 			base.Start();
 
 			childRenderers = GetComponentsInChildren<Renderer>();
+			startMesh = new List<(MeshFilter, Mesh)>(
+				GetComponentsInChildren<MeshFilter>().Select(filter => (filter, filter.sharedMesh))
+			);
+			startMaterials = new List<(Renderer, Material[])>(
+				GetComponentsInChildren<Renderer>().Select(renderer => (renderer, renderer.sharedMaterials))
+			);
+			startCollisionMesh = new List<(MeshCollider, Mesh)>(
+				GetComponentsInChildren<MeshCollider>().Select(collider => (collider, collider.sharedMesh))
+			);
 		}
 
 		protected void Update() {
