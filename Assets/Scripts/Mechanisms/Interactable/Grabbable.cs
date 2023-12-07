@@ -12,7 +12,7 @@ namespace NaniCore.Loopool {
 		protected override void OnInteract() {
 			if(!isActiveAndEnabled)
 				return;
-			Protagonist.instance.GrabbingObject = this;
+			GameManager.Instance.Protagonist.GrabbingObject = this;
 		}
 		#endregion
 
@@ -61,7 +61,9 @@ namespace NaniCore.Loopool {
 
 		#region Life cycle
 		protected void OnCollisionEnter(Collision _) {
-			var protagonist = Protagonist.instance;
+			var protagonist = GameManager.Instance?.Protagonist;
+			if(protagonist == null)
+				return;
 			if(protagonist.GrabbingObject == this)
 				protagonist.GrabbingObject = null;
 		}

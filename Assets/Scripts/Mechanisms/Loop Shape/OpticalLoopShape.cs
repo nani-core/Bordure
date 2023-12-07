@@ -1,10 +1,10 @@
 using UnityEngine;
+using NaughtyAttributes;
 using System.Collections.Generic;
 using System.Linq;
-using NaughtyAttributes;
 
 namespace NaniCore.Loopool {
-	public class OpticalLoopShape : LoopShape {
+	public partial class OpticalLoopShape : LoopShape {
 		const float standardHeight = 216f;
 
 		#region Serialized fields
@@ -30,8 +30,8 @@ namespace NaniCore.Loopool {
 		public override bool Validate(Transform eye) => validated;
 
 		protected override void OnLoopShapeOpen() {
+			base.OnLoopShapeOpen();
 			validated = false;
-			onOpen?.Invoke();
 		}
 
 		private bool ValidateByMask(RenderTexture gastroMask, RenderTexture wholeMask) {
@@ -133,7 +133,9 @@ namespace NaniCore.Loopool {
 
 		protected void Update() {
 			visible = childRenderers.Any(r => r.isVisible);
-			validated = PerformValidation();
+			if(GameManager.Instance?.Protagonist != null) {
+				validated = PerformValidation();
+			}
 		}
 		#endregion
 	}

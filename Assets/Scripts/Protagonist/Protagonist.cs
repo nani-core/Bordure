@@ -2,13 +2,9 @@ using UnityEngine;
 using NaughtyAttributes;
 
 namespace NaniCore.Loopool {
+	[ExecuteInEditMode]
 	public partial class Protagonist : MonoBehaviour {
-		#region Singleton
-		public static Protagonist instance;
-		#endregion
-
 		#region Serialized fields
-		[Header("Default")]
 		[SerializeField][Expandable] private ProtagonistProfile profile;
 		#endregion
 
@@ -63,26 +59,70 @@ namespace NaniCore.Loopool {
 		#endregion
 
 		#region Life cycle
+		protected void OnEnable() {
 #if UNITY_EDITOR
-		protected void OnValidate() {
 			if(!Application.isPlaying) {
-				ValidateControl();
+				return;
 			}
-		}
 #endif
 
-		protected void OnEnable() {
-			instance = this;
-		}
-
-		protected void OnDisable() {
-			instance = null;
+			if(GameManager.Instance == null) {
+				string[] messages = {
+					"There is no instance of GameManager in the scene!",
+					"Please always make sure that there is one."
+				};
+				Debug.LogWarning(string.Join(" ", messages));
+				Destroy(gameObject);
+				return;
+			}
+			if(GameManager.Instance.Protagonist != null) {
+				Destroy(gameObject);
+				return;
+			}
 		}
 
 		protected void Start() {
-			inputHandler = gameObject.EnsureComponent<ProtagonistInputHandler>();
+#if UNITY_EDITOR
+			if(!Application.isPlaying) {
+				return;
+			}
+#endif
+
+			if(Profile == null) {
+				Debug.LogWarning("No profile is configured for the protagonist.", this);
+				return;
+			}
+
 			StartControl();
 			StartInteraction();
+			StartAudio();
+
+			DontDestroyOnLoad(gameObject);
+
+			GameManager.Instance.SendMessage("OnProtagonistCreated", this, SendMessageOptions.DontRequireReceiver);
+		}
+
+		protected void Update() {
+#if UNITY_EDITOR
+			if(!Application.isPlaying) {
+				OnValidate();
+				return;
+			}
+#endif
+		}
+
+#if UNITY_EDITOR
+		protected void OnValidate() {
+			ValidateControl();
+		}
+#endif
+
+		protected void OnDestroy() {
+			if(GameManager.Instance == null)
+				return;
+			if(GameManager.Instance.Protagonist != this)
+				return;
+			GameManager.Instance.SendMessage("OnProtagonistDestroyed", this, SendMessageOptions.DontRequireReceiver);
 		}
 
 		protected void FixedUpdate() {
@@ -90,6 +130,11 @@ namespace NaniCore.Loopool {
 		}
 
 		protected void LateUpdate() {
+#if UNITY_EDITOR
+			if(!Application.isPlaying) {
+				return;
+			}
+#endif
 			LateUpdateControl();
 			LateUpdateInteraction();
 		}

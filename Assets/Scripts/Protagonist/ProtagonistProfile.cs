@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 using System.Collections.Generic;
 
 namespace NaniCore.Loopool {
-	[CreateAssetMenu(menuName = "Nani Core/Protagonist Profile")]
+	[CreateAssetMenu(menuName = "Nani Core/Loopool/Protagonist Profile")]
 	public class ProtagonistProfile : ScriptableObject {
 		[Header("Geometry")]
 		[Min(0)] public float height = 1.6f;
@@ -22,6 +22,7 @@ namespace NaniCore.Loopool {
 		[Min(0)] public float stepHeight = .3f;
 
 		[Header("Interaction")]
+		public Canvas interactionUiPrefab;
 		[Min(0)] public float maxInteractionDistance = 20f;
 		[Range(0, 1)] public float grabbingTransitionDuration = .2f;
 		[Range(0, 1)] public float grabbingEasingFactor = .3f;
