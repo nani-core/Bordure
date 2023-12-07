@@ -1,12 +1,10 @@
 using UnityEngine;
 using NaughtyAttributes;
-using MeshMakerNamespace;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace NaniCore.Loopool {
-	public class OpticalLoopShape : LoopShape {
+	public partial class OpticalLoopShape : LoopShape {
 		const float standardHeight = 216f;
 
 		#region Serialized fields
@@ -32,8 +30,8 @@ namespace NaniCore.Loopool {
 		public override bool Validate(Transform eye) => validated;
 
 		protected override void OnLoopShapeOpen() {
+			base.OnLoopShapeOpen();
 			validated = false;
-			onOpen?.Invoke();
 		}
 
 		private bool ValidateByMask(RenderTexture gastroMask, RenderTexture wholeMask) {
@@ -123,32 +121,6 @@ namespace NaniCore.Loopool {
 
 		public void Stamp() {
 			StampHandler.Stamp(blasto, Camera.main);
-		}
-
-		/// <summary>
-		/// For debug purposes only.
-		/// </summary>
-		private IEnumerator HollowCoroutine() {
-			GameObject hollowShape = MeshUtility.GenerateHollowShape(gastro, Camera.main);
-
-			//yield return new WaitForSeconds(1);
-
-			CSG csg = new CSG();
-			csg.OperationType = CSG.Operation.Subtract;
-			csg.Brush = hollowShape;
-			csg.Target = blasto;
-			GameObject result = csg.PerformCSG();
-
-			Destroy(hollowShape);
-
-			yield break;
-		}
-
-		/// <remarks>
-		/// Needs to be refined to avoid memory leak.
-		/// </remarks>
-		public void Hollow() {
-			StartCoroutine(HollowCoroutine());
 		}
 		#endregion
 
