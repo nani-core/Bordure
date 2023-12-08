@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 using MeshMakerNamespace;
+using UnityEngine.UIElements;
 
 
 namespace NaniCore {
@@ -85,6 +86,18 @@ namespace NaniCore {
 				submeshIndices.AddRange(all[submesh]);
 				mesh.SetIndices(submeshIndices, topology, submesh);
 			}
+		}
+
+		public static void SetSeparateSubmeshes(this Mesh mesh, List<(List<Vertex>, List<int>)> submeshes) {
+			var allVertices = new List<Vertex>();
+			var allIndices = new List<List<int>>();
+			foreach(var (vertices, indices) in submeshes) {
+				int offset = allIndices.Count;
+				allVertices.AddRange(vertices);
+				allIndices.Add(indices.Select(i => i + offset).ToList());
+			}
+			mesh.SetVertices(allVertices);
+			mesh.SetSubmeshIndices(allIndices);
 		}
 		#endregion
 
@@ -185,6 +198,109 @@ namespace NaniCore {
 				indices.AddRange(submeshIndices);
 			mesh.subMeshCount = 1;
 			mesh.SetSubmeshIndices(new List<List<int>> { indices });
+		}
+		#endregion
+
+		#region Silhouette operations
+		private static Texture2D ConvertToTexture2d(this Texture texture, out bool shouldRelease) {
+			if(texture is Texture2D) {
+				shouldRelease = false;
+				return texture as Texture2D;
+			}
+			Texture2D result;
+			{
+				RenderTexture rt = RenderTexture.GetTemporary(texture.width, texture.height);
+				Graphics.Blit(texture, rt);
+				var oldActiveRt = RenderTexture.active;
+				RenderTexture.active = rt;
+				result = new Texture2D(rt.width, rt.height);
+				result.ReadPixels(new Rect(0, 0, rt.width, rt.height), 0, 0);
+				RenderTexture.active = oldActiveRt;
+				RenderTexture.ReleaseTemporary(rt);
+			}
+			shouldRelease = true;
+			return result;
+		}
+
+		public static List<List<Vector2>> CalculateSilhouetteBoundaries(this Texture texture) {
+			if(texture == null)
+				return null;
+
+			var regionBoundaries = new List<List<Vector2>>();
+
+			Texture2D t2d = texture.ConvertToTexture2d(out bool shouldReleaseT2d);
+			var sprite = Sprite.Create(t2d, new Rect(0, 0, t2d.width, t2d.height), new Vector2(0, 0), 1, 0, SpriteMeshType.Tight);
+			var go = new GameObject("Silhouette Generating Object");
+			var spriteRenderer = go.AddComponent<SpriteRenderer>();
+			spriteRenderer.sprite = sprite;
+			var polygonCollider = go.AddComponent<PolygonCollider2D>();
+			polygonCollider.CreateMesh(false, false);   // This call might be unnecessary.
+			for(int i = 0; i < polygonCollider.pathCount; ++i) {
+				regionBoundaries.Add(polygonCollider.GetPath(i).ToList());
+			}
+			Object.Destroy(go);
+			Object.Destroy(sprite);
+			if(shouldReleaseT2d)
+				Object.Destroy(t2d);
+
+			return regionBoundaries;
+		}
+
+		public static Mesh ConvertToSilhouetteMesh(this List<List<Vector2>> regionBoundaries) {
+			var mesh = new Mesh();
+			mesh.name = "Silhouette";
+
+			var submeshes = new List<(List<Vertex>, List<int>)>();
+			if(regionBoundaries != null) {
+				foreach(var boundary in regionBoundaries) {
+					if(boundary == null)
+						continue;
+					int rawVertexCount = boundary.Count;
+					if(rawVertexCount <= 2)
+						continue;
+
+					// Vertices.
+					var vertices = new List<Vertex>(rawVertexCount * 2);
+					for(int i = 0; i < rawVertexCount; ++i) {
+						var template = new Vertex {
+							position = (Vector3)boundary[i],
+							normal = Vector3.forward,
+							uv = boundary[i],
+						};
+
+						Vertex prev = template;
+						prev.tangent = boundary[i] - boundary[(i - 1 + rawVertexCount) % rawVertexCount];
+						vertices.Add(prev);
+
+						Vertex next = template;
+						next.tangent = boundary[i] - boundary[(i + 1) % rawVertexCount];
+						vertices.Add(next);
+					}
+
+					// Indices.
+					var indices = new List<int>((rawVertexCount - 2) * 3 * 2);
+					for(int startI = 1; startI < rawVertexCount - 2; ++startI) {
+						int endI = startI + 1;
+						int tipI = startI < rawVertexCount / 2 ? 0 : 1;
+						startI *= 2;
+						endI *= 2;
+						indices.Add(tipI);
+						indices.Add(startI);
+						indices.Add(endI);
+					}
+
+					submeshes.Add((vertices, indices));
+				}
+			}
+
+			mesh.SetSeparateSubmeshes(submeshes);
+			return mesh;
+		}
+
+		public static Mesh SilhouetteToFrustum(this Texture texture, Matrix4x4 from, Matrix4x4 to) {
+			var boundaries = CalculateSilhouetteBoundaries(texture);
+			// TODO
+			return null;
 		}
 		#endregion
 
