@@ -2,8 +2,6 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 using MeshMakerNamespace;
-using UnityEngine.UIElements;
-
 
 namespace NaniCore {
 	public static class MeshUtility {
@@ -180,7 +178,8 @@ namespace NaniCore {
 		/// A newly created mesh merged from the inputs.
 		/// </returns>
 		/// <remarks>
-		/// Remember to destroy the result mesh to avoid memory leakage.
+		/// Will not destroy the input meshes.
+		/// Remember to destroy the input meshes and the result mesh to avoid memory leakage.
 		/// </remarks>
 		public static Mesh MergeMesh(IList<Mesh> meshes) {
 			return MergeMeshInternal(meshes.Select(Object.Instantiate).ToList());
@@ -222,85 +221,124 @@ namespace NaniCore {
 			return result;
 		}
 
-		public static List<List<Vector2>> CalculateSilhouetteBoundaries(this Texture texture) {
+		public static Mesh SilhouetteToMesh(this Texture texture) {
 			if(texture == null)
 				return null;
 
-			var regionBoundaries = new List<List<Vector2>>();
-
 			Texture2D t2d = texture.ConvertToTexture2d(out bool shouldReleaseT2d);
-			var sprite = Sprite.Create(t2d, new Rect(0, 0, t2d.width, t2d.height), new Vector2(0, 0), 1, 0, SpriteMeshType.Tight);
-			var go = new GameObject("Silhouette Generating Object");
-			var spriteRenderer = go.AddComponent<SpriteRenderer>();
-			spriteRenderer.sprite = sprite;
-			var polygonCollider = go.AddComponent<PolygonCollider2D>();
-			polygonCollider.CreateMesh(false, false);   // This call might be unnecessary.
-			for(int i = 0; i < polygonCollider.pathCount; ++i) {
-				regionBoundaries.Add(polygonCollider.GetPath(i).ToList());
-			}
-			Object.Destroy(go);
+			var sprite = Sprite.Create(
+				t2d,
+				new Rect(Vector2.zero, new Vector2(t2d.width, t2d.height)),
+				Vector2.one * .5f, 1,
+				0,
+				SpriteMeshType.Tight
+			);
+
+			Mesh mesh = new Mesh();
+			mesh.name = $"{texture.name} (silhouette mesh)";
+			mesh.vertices = sprite.vertices
+				.Select(v => (Vector3)v)
+				.ToArray();
+			mesh.subMeshCount = 1;
+			mesh.SetIndices(sprite.triangles, MeshTopology.Triangles, 0);
+			mesh.uv = sprite.uv;
+
 			Object.Destroy(sprite);
 			if(shouldReleaseT2d)
 				Object.Destroy(t2d);
 
-			return regionBoundaries;
-		}
-
-		public static Mesh ConvertToSilhouetteMesh(this List<List<Vector2>> regionBoundaries) {
-			var mesh = new Mesh();
-			mesh.name = "Silhouette";
-
-			var submeshes = new List<(List<Vertex>, List<int>)>();
-			if(regionBoundaries != null) {
-				foreach(var boundary in regionBoundaries) {
-					if(boundary == null)
-						continue;
-					int rawVertexCount = boundary.Count;
-					if(rawVertexCount <= 2)
-						continue;
-
-					// Vertices.
-					var vertices = new List<Vertex>(rawVertexCount * 2);
-					for(int i = 0; i < rawVertexCount; ++i) {
-						var template = new Vertex {
-							position = (Vector3)boundary[i],
-							normal = Vector3.forward,
-							uv = boundary[i],
-						};
-
-						Vertex prev = template;
-						prev.tangent = boundary[i] - boundary[(i - 1 + rawVertexCount) % rawVertexCount];
-						vertices.Add(prev);
-
-						Vertex next = template;
-						next.tangent = boundary[i] - boundary[(i + 1) % rawVertexCount];
-						vertices.Add(next);
-					}
-
-					// Indices.
-					var indices = new List<int>((rawVertexCount - 2) * 3 * 2);
-					for(int startI = 1; startI < rawVertexCount - 2; ++startI) {
-						int endI = startI + 1;
-						int tipI = startI < rawVertexCount / 2 ? 0 : 1;
-						startI *= 2;
-						endI *= 2;
-						indices.Add(tipI);
-						indices.Add(startI);
-						indices.Add(endI);
-					}
-
-					submeshes.Add((vertices, indices));
-				}
-			}
-
-			mesh.SetSeparateSubmeshes(submeshes);
 			return mesh;
 		}
 
-		public static Mesh SilhouetteToFrustum(this Texture texture, Matrix4x4 from, Matrix4x4 to) {
-			var boundaries = CalculateSilhouetteBoundaries(texture);
-			// TODO
-			return null;
+		/// <summary>Is facing camera in camera space.</summary>
+		private static bool IsFacingCamera(Vector3 a, Vector3 b, Vector3 c) {
+			Vector3 normal = Vector3.Cross(b - a, b - c);
+			return Vector3.Dot(normal, b) < 0f;
+		}
+
+		private static readonly List<int> singleFrustumIndices = new List<int> {
+			/**
+			 * 0 --- 1    0 1 2
+			 * |\   /|    0 0'1'
+			 * | \ / |    1'1 0
+			 * |  2  |    1 1'2'
+			 * |  |  |    2'2 1
+			 * 0'-|--1'   2 2'0
+			 *  \ | /     0'0 2
+			 *   \|/      
+			 *    2'      2'1'0'
+			 */
+			// Near face
+			0, 1, 2,
+			// 0 to 1'
+			0, 3, 4,
+			4, 1, 0,
+			// 1 to 2'
+			1, 4, 5,
+			5, 2, 1,
+			// 2 to 0'
+			2, 5, 0,
+			3, 0, 2,
+			// Far face
+			2, 1, 0,
+		};
+
+		private static Vector3 ClipFrustum(Vector2 point, float z) {
+			Vector3 result = point;
+			result.z = 1;
+			result *= z;
+			return result;
+		}
+
+		public static Mesh SilhouetteToFrustum(this Texture texture, float from, float to) {
+			Mesh baseMesh = SilhouetteToMesh(texture);
+
+			List<Mesh> singleFrustums = new List<Mesh>();
+			#region Generate frustums
+
+			/* Preparation */
+
+			var originalVertices = baseMesh.GetVertices();
+			var nearVertices = originalVertices.Select(v => {
+				v.position = ClipFrustum(v.position, from);
+				return v;
+			}).ToList();
+			var farVertices = originalVertices.Select(v => {
+				v.position = ClipFrustum(v.position, to);
+				return v;
+			}).ToList();
+
+			var indices = new List<int>();
+			foreach(var submeshIndices in baseMesh.GetSubmeshIndices())
+				indices.AddRange(submeshIndices);
+
+			/* Generation */
+			for(int i = 0; i < indices.Count; i += 3) {
+				int a = indices[i + 0], b = indices[i + 1], c = indices[i + 2];
+
+				// Back face culling.
+				if(!IsFacingCamera(originalVertices[a].position, originalVertices[c].position, originalVertices[b].position))
+					continue;
+
+				Mesh frustum = new Mesh();
+
+				List<Vertex> vertices = new List<Vertex> {
+					nearVertices[a], nearVertices[b], nearVertices[c],
+					farVertices[a], farVertices[b], farVertices[c],
+				};
+
+				frustum.SetVertices(vertices);
+				frustum.SetSubmeshIndices(new List<List<int>> { singleFrustumIndices });
+
+				singleFrustums.Add(frustum);
+			}
+			#endregion
+			Mesh mergedFrustums = MergeMeshInternal(singleFrustums);
+			mergedFrustums.name = $"{texture.name} (silhouette frustum)";
+
+			singleFrustums.Clear();
+			Object.Destroy(baseMesh);
+			return mergedFrustums;
 		}
 		#endregion
 
