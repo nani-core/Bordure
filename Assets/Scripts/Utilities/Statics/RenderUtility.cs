@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Rendering;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 namespace NaniCore {
 	public static class RenderUtility {
@@ -99,43 +100,65 @@ namespace NaniCore {
 			texture.Apply(mat);
 		}
 
-		public static void RenderObject(this RenderTexture texture, GameObject gameObject, Camera camera, Material material, int pass = 0, bool regardDepth = false) {
+		public static void RenderObject(this RenderTexture texture, GameObject gameObject, Camera camera, Material material) {
 			if(material == null || texture == null)
 				return;
-			// `texture` is the target texture to be rendered on.
-			// The camera's depth texture should be taken care and passed into the below call.
-			RenderObject(texture.colorBuffer, texture.depthBuffer, gameObject, camera, material, pass);
-		}
 
-		public static void RenderObject(RenderBuffer colorBuffer, RenderBuffer depthBuffer, GameObject gameObject, Camera camera, Material material, int pass = 0) {
-			// This is definitely incorrect and could be problematic.
-			// The `camera` argument is totally ignored.
-			// If it is needed to render from other camera's pespective
-			// then this will absolutely not work as intended.
-			
-			if(material == null)
-				return;
+			List<(Renderer, Material[])> map = new();
+			foreach(var renderer in gameObject.transform.GetComponentsInChildren<Renderer>()) {
+				map.Add((renderer, renderer.sharedMaterials));
+				var newMatArr = new Material[renderer.sharedMaterials?.Length ?? 0];
+				for(int i = 0; i < newMatArr.Length; ++i)
+					newMatArr[i] = material;
+				renderer.sharedMaterials = newMatArr;
+			}
 
-			Graphics.SetRenderTarget(colorBuffer, depthBuffer);
-			material.SetPass(pass);
+			var capture = CreateScreenSizedRT();
+			capture.Capture(camera);
+			var mask = CreateScreenSizedRT();
+			mask.SetValue(Color.clear);
+			mask.RenderMask(gameObject, camera);
+			mask.ReplaceTextureByValue(Color.white, capture);
+			Graphics.Blit(capture, texture);
+			capture.Destroy();
+			mask.Destroy();
 
-			foreach(MeshFilter filter in gameObject.transform.GetComponentsInChildren<MeshFilter>()) {
-				var renderer = filter.GetComponent<MeshRenderer>();
-				if(renderer == null || !renderer.enabled)
-					continue;
-				var mesh = filter.sharedMesh;
-				if(mesh == null)
-					continue;
-
-				var matrix = filter.transform.localToWorldMatrix;
-				Graphics.DrawMeshNow(mesh, matrix);
+			foreach(var (renderer, mats) in map) {
+				renderer.sharedMaterials = mats;
 			}
 		}
 
-		public static void RenderMask(this RenderTexture texture, GameObject gameObject, Camera camera) {
-			// TODO: Needs to be regarding depth.
-			texture.RenderObject(gameObject, camera, GetPooledMaterial("NaniCore/ObjectMask"), 0, true);
-			texture.IndicateByValue(Color.white);
+		public static void RenderMask(this RenderTexture texture, GameObject gameObject, Camera camera, bool disregardDepth = false) {
+			var maskMaterial = GetPooledMaterial("NaniCore/ObjectMask");
+			List<(Renderer, Material[], int)> map = new();
+			foreach(var renderer in gameObject.transform.GetComponentsInChildren<Renderer>()) {
+				map.Add((renderer, renderer.sharedMaterials, renderer.gameObject.layer));
+				var newMatArr = new Material[renderer.sharedMaterials?.Length ?? 0];
+				for(int i = 0; i < newMatArr.Length; ++i)
+					newMatArr[i] = maskMaterial;
+				renderer.sharedMaterials = newMatArr;
+				if(disregardDepth) {
+					renderer.gameObject.layer = 31;
+				}
+			}
+
+			int oldCamMask = camera.cullingMask;
+			if(disregardDepth) {
+				camera.cullingMask = 1 << 31;
+			}
+
+			var mask = CreateScreenSizedRT();
+			mask.SetValue(Color.clear);
+			mask.Capture(camera);
+			mask.IndicateByValue(Color.white);
+			Graphics.Blit(mask, texture);
+			mask.Destroy();
+
+			foreach(var (renderer, mats, layer) in map) {
+				renderer.sharedMaterials = mats;
+				renderer.gameObject.layer = layer;
+			}
+			camera.cullingMask = oldCamMask;
 		}
 
 		public static void CopyFrom(this RenderTexture texture, RenderTexture source) {
