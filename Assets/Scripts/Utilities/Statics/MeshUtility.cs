@@ -33,11 +33,15 @@ namespace NaniCore {
 
 			var result = new List<Vertex>();
 			for(int i = 0; i < mesh.vertexCount; ++i) {
-				Vertex vertex;
-				vertex.position = positions[i];
-				vertex.normal = normals[i];
-				vertex.tangent = tangents[i];
-				vertex.uv = uvs[i];
+				Vertex vertex = new Vertex {
+					position = positions[i],
+				};
+				if(i < normals.Length)
+					vertex.normal = normals[i];
+				if(i < tangents.Length)
+					vertex.tangent = tangents[i];
+				if(i < uvs.Length)
+					vertex.uv = uvs[i];
 				result.Add(vertex);
 			}
 			return result;
@@ -75,7 +79,7 @@ namespace NaniCore {
 			return result;
 		}
 
-		public static void SetSubmeshIndices(this Mesh mesh, List<List<int>> all, MeshTopology topology = MeshTopology.Triangles) {
+		public static void SetSubmeshIndices(this Mesh mesh, IList<List<int>> all, MeshTopology topology = MeshTopology.Triangles) {
 			mesh.subMeshCount = all.Count;
 			for(int submesh = 0; submesh < all.Count; ++submesh) {
 				var submeshIndices = new List<int>();
@@ -86,7 +90,7 @@ namespace NaniCore {
 			}
 		}
 
-		public static void SetSeparateSubmeshes(this Mesh mesh, List<(List<Vertex>, List<int>)> submeshes) {
+		public static void SetSeparateSubmeshes(this Mesh mesh, IList<(List<Vertex>, List<int>)> submeshes) {
 			var allVertices = new List<Vertex>();
 			var allIndices = new List<List<int>>();
 			foreach(var (vertices, indices) in submeshes) {
@@ -132,7 +136,7 @@ namespace NaniCore {
 		}
 
 		/// <param name="meshes">A list of temporary mesh. All meshes inside will be destroyed after call.</param>
-		private static Mesh MergeMeshInternal(IList<Mesh> meshes) {
+		private static Mesh MergeMeshesInternal(IList<Mesh> meshes) {
 			switch(meshes.Count) {
 				case 0:
 					return null;
@@ -158,10 +162,10 @@ namespace NaniCore {
 				default: {
 						int prevCount = meshes.Count / 2;
 
-						Mesh a = MergeMeshInternal(meshes.Take(prevCount).ToList());
-						Mesh b = MergeMeshInternal(meshes.Take(prevCount).ToList());
+						Mesh a = MergeMeshesInternal(meshes.Take(prevCount).ToArray());
+						Mesh b = MergeMeshesInternal(meshes.TakeLast(meshes.Count - prevCount).ToArray());
 
-						Mesh result = MergeMeshInternal(new Mesh[] { a, b });
+						Mesh result = MergeMeshesInternal(new Mesh[] { a, b });
 
 						Object.Destroy(a);
 						Object.Destroy(b);
@@ -181,8 +185,32 @@ namespace NaniCore {
 		/// Will not destroy the input meshes.
 		/// Remember to destroy the input meshes and the result mesh to avoid memory leakage.
 		/// </remarks>
-		public static Mesh MergeMesh(IList<Mesh> meshes) {
-			return MergeMeshInternal(meshes.Select(Object.Instantiate).ToList());
+		public static Mesh MergeMeshes(IList<Mesh> meshes, float epsilon = 1e-5f) {
+			float oldEpsilon = CSG.EPSILON;
+			CSG.EPSILON = epsilon;
+			Mesh result = MergeMeshesInternal(meshes.Select(Object.Instantiate).ToList());
+			CSG.EPSILON = oldEpsilon;
+			return result;
+		}
+
+		public static Mesh MergeMeshesBySubmesh(IList<Mesh> meshes) {
+			Mesh result = new();
+
+			List<Vertex> vertices = new();
+			List<List<int>> indices = new();
+			foreach(Mesh mesh in meshes) {
+				int offset = vertices.Count;
+				vertices.AddRange(mesh.GetVertices());
+				indices.AddRange(mesh.GetSubmeshIndices()
+					.Select(
+						indices => indices.Select(i => i + offset).ToList()
+					)
+				);
+			}
+			result.SetVertices(vertices);
+			result.SetSubmeshIndices(indices);
+
+			return result;
 		}
 
 		/// <summary>
@@ -229,23 +257,19 @@ namespace NaniCore {
 			var sprite = Sprite.Create(
 				t2d,
 				new Rect(Vector2.zero, new Vector2(t2d.width, t2d.height)),
-				Vector2.one * .5f, referenceSize,
+				Vector2.one * .5f, referenceSize / 2,
 				0,
 				SpriteMeshType.Tight
 			);
 
-			Mesh mesh = new Mesh();
-			mesh.name = $"{texture.name} (silhouette mesh)";
-			mesh.vertices = sprite.vertices
-				.Select(v => (Vector3)v)
-				.ToArray();
-			int vertexCount = mesh.vertexCount;
-			mesh.subMeshCount = 1;
-			mesh.SetIndices(sprite.triangles, MeshTopology.Triangles, 0);
-			mesh.normals = new Vector3[vertexCount];
-			mesh.tangents = new Vector4[vertexCount];
-			mesh.uv = sprite.uv;
+			var spriteObj = new GameObject();
+			spriteObj.AddComponent<SpriteRenderer>().sprite = sprite;
+			var collider = spriteObj.AddComponent<PolygonCollider2D>();
+			Mesh mesh = collider.CreateMesh(false, false);
 
+			mesh.name = $"{texture.name} (silhouette mesh)";
+
+			Object.Destroy(spriteObj);
 			Object.Destroy(sprite);
 			if(shouldReleaseT2d)
 				Object.Destroy(t2d);
@@ -288,13 +312,13 @@ namespace NaniCore {
 		}
 
 		public static Mesh SilhouetteToFrustum(this Texture texture, float from, float to, float referenceSize = 1) {
-			Mesh baseMesh = SilhouetteToMesh(texture, referenceSize);
 
 			List<Mesh> singleFrustums = new List<Mesh>();
-			// Generate single frustums
+			// Generate single frustums.
 			{
-				/* Preparation */
+				// Preparation.
 
+				Mesh baseMesh = SilhouetteToMesh(texture, referenceSize);
 				var originalVertices = baseMesh.GetVertices();
 				var nearVertices = originalVertices.Select(v => {
 					v.position = ClipFrustum(v.position, from);
@@ -305,35 +329,39 @@ namespace NaniCore {
 					return v;
 				}).ToList();
 
-				var indices = new List<int>();
+				var originalVertexIndices = new List<int>();
 				foreach(var submeshIndices in baseMesh.GetSubmeshIndices())
-					indices.AddRange(submeshIndices);
+					originalVertexIndices.AddRange(submeshIndices);
 
-				/* Generation */
-				for(int i = 0; i < indices.Count; i += 3) {
-					int a = indices[i + 0], b = indices[i + 1], c = indices[i + 2];
+				// Generate a frumstum for each triangle face.
+				for(int i = 0; i < originalVertexIndices.Count; i += 3) {
+					int
+						a = originalVertexIndices[i + 0],
+						b = originalVertexIndices[i + 1],
+						c = originalVertexIndices[i + 2];
 
 					Mesh frustum = new Mesh();
 
 					List<Vertex> vertices = new List<Vertex> {
-					nearVertices[a], nearVertices[b], nearVertices[c],
-					farVertices[a], farVertices[b], farVertices[c],
-				};
+						nearVertices[a], nearVertices[b], nearVertices[c],
+						farVertices[a], farVertices[b], farVertices[c],
+					};
 
 					frustum.SetVertices(vertices);
-					frustum.SetSubmeshIndices(new List<List<int>> { singleFrustumIndices });
+					frustum.SetSubmeshIndices(new List<int>[] { singleFrustumIndices });
 
 					singleFrustums.Add(frustum);
 				}
+
+				Object.Destroy(baseMesh);
 			}
-			Mesh mergedFrustums = MergeMesh(singleFrustums);
+			Mesh mergedFrustums = MergeMeshes(singleFrustums, 1e-4f);
 			foreach(var frustum in singleFrustums)
 				Object.Destroy(frustum);
 			singleFrustums.Clear();
 			mergedFrustums.name = $"{texture.name} (silhouette frustum)";
 
 			singleFrustums.Clear();
-			Object.Destroy(baseMesh);
 			return mergedFrustums;
 		}
 		#endregion

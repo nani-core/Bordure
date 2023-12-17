@@ -87,7 +87,9 @@ namespace NaniCore.Loopool {
 				Destroy(resultFilter.gameObject);
 			}
 
-			//Destroy(hollowShape);
+			Destroy(hollowShape);
+
+			// TODO: Restore original blasto materials.
 		}
 		#endregion
 	}
