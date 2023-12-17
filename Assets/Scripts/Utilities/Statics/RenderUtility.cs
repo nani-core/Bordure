@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.Rendering;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace NaniCore {
 	public static class RenderUtility {
@@ -55,7 +54,7 @@ namespace NaniCore {
 			return new Material(shader);
 		}
 
-		public static RenderTexture CreateScreenSizedRT(RenderTextureFormat format = RenderTextureFormat.Default) {
+		public static RenderTexture CreateScreenSizedRT(RenderTextureFormat format = RenderTextureFormat.ARGBFloat) {
 			return RenderTexture.GetTemporary(Screen.width, Screen.height, 0, format);
 		}
 
@@ -135,7 +134,8 @@ namespace NaniCore {
 
 		public static void RenderMask(this RenderTexture texture, GameObject gameObject, Camera camera) {
 			// TODO: Needs to be regarding depth.
-			RenderObject(texture, gameObject, camera, GetPooledMaterial("NaniCore/ObjectMask"), 0, true);
+			texture.RenderObject(gameObject, camera, GetPooledMaterial("NaniCore/ObjectMask"), 0, true);
+			texture.IndicateByValue(Color.white);
 		}
 
 		public static void CopyFrom(this RenderTexture texture, RenderTexture source) {

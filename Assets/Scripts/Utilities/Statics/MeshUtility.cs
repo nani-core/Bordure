@@ -208,7 +208,7 @@ namespace NaniCore {
 			}
 			Texture2D result;
 			{
-				RenderTexture rt = RenderTexture.GetTemporary(texture.width, texture.height);
+				RenderTexture rt = RenderTexture.GetTemporary(texture.width, texture.height, 0, RenderTextureFormat.ARGBFloat);
 				Graphics.Blit(texture, rt);
 				var oldActiveRt = RenderTexture.active;
 				RenderTexture.active = rt;
@@ -221,7 +221,7 @@ namespace NaniCore {
 			return result;
 		}
 
-		public static Mesh SilhouetteToMesh(this Texture texture) {
+		public static Mesh SilhouetteToMesh(this Texture texture, float referenceSize = 1) {
 			if(texture == null)
 				return null;
 
@@ -229,7 +229,7 @@ namespace NaniCore {
 			var sprite = Sprite.Create(
 				t2d,
 				new Rect(Vector2.zero, new Vector2(t2d.width, t2d.height)),
-				Vector2.one * .5f, 1,
+				Vector2.one * .5f, referenceSize,
 				0,
 				SpriteMeshType.Tight
 			);
@@ -239,8 +239,11 @@ namespace NaniCore {
 			mesh.vertices = sprite.vertices
 				.Select(v => (Vector3)v)
 				.ToArray();
+			int vertexCount = mesh.vertexCount;
 			mesh.subMeshCount = 1;
 			mesh.SetIndices(sprite.triangles, MeshTopology.Triangles, 0);
+			mesh.normals = new Vector3[vertexCount];
+			mesh.tangents = new Vector4[vertexCount];
 			mesh.uv = sprite.uv;
 
 			Object.Destroy(sprite);
@@ -250,12 +253,6 @@ namespace NaniCore {
 			return mesh;
 		}
 
-		/// <summary>Is facing camera in camera space.</summary>
-		private static bool IsFacingCamera(Vector3 a, Vector3 b, Vector3 c) {
-			Vector3 normal = Vector3.Cross(b - a, b - c);
-			return Vector3.Dot(normal, b) < 0f;
-		}
-
 		private static readonly List<int> singleFrustumIndices = new List<int> {
 			/**
 			 * 0 --- 1    0 1 2
@@ -263,7 +260,7 @@ namespace NaniCore {
 			 * | \ / |    1'1 0
 			 * |  2  |    1 1'2'
 			 * |  |  |    2'2 1
-			 * 0'-|--1'   2 2'0
+			 * 0'-|--1'   2 2'0'
 			 *  \ | /     0'0 2
 			 *   \|/      
 			 *    2'      2'1'0'
@@ -277,10 +274,10 @@ namespace NaniCore {
 			1, 4, 5,
 			5, 2, 1,
 			// 2 to 0'
-			2, 5, 0,
+			2, 5, 3,
 			3, 0, 2,
 			// Far face
-			2, 1, 0,
+			5, 4, 3,
 		};
 
 		private static Vector3 ClipFrustum(Vector2 point, float z) {
@@ -290,50 +287,49 @@ namespace NaniCore {
 			return result;
 		}
 
-		public static Mesh SilhouetteToFrustum(this Texture texture, float from, float to) {
-			Mesh baseMesh = SilhouetteToMesh(texture);
+		public static Mesh SilhouetteToFrustum(this Texture texture, float from, float to, float referenceSize = 1) {
+			Mesh baseMesh = SilhouetteToMesh(texture, referenceSize);
 
 			List<Mesh> singleFrustums = new List<Mesh>();
-			#region Generate frustums
+			// Generate single frustums
+			{
+				/* Preparation */
 
-			/* Preparation */
+				var originalVertices = baseMesh.GetVertices();
+				var nearVertices = originalVertices.Select(v => {
+					v.position = ClipFrustum(v.position, from);
+					return v;
+				}).ToList();
+				var farVertices = originalVertices.Select(v => {
+					v.position = ClipFrustum(v.position, to);
+					return v;
+				}).ToList();
 
-			var originalVertices = baseMesh.GetVertices();
-			var nearVertices = originalVertices.Select(v => {
-				v.position = ClipFrustum(v.position, from);
-				return v;
-			}).ToList();
-			var farVertices = originalVertices.Select(v => {
-				v.position = ClipFrustum(v.position, to);
-				return v;
-			}).ToList();
+				var indices = new List<int>();
+				foreach(var submeshIndices in baseMesh.GetSubmeshIndices())
+					indices.AddRange(submeshIndices);
 
-			var indices = new List<int>();
-			foreach(var submeshIndices in baseMesh.GetSubmeshIndices())
-				indices.AddRange(submeshIndices);
+				/* Generation */
+				for(int i = 0; i < indices.Count; i += 3) {
+					int a = indices[i + 0], b = indices[i + 1], c = indices[i + 2];
 
-			/* Generation */
-			for(int i = 0; i < indices.Count; i += 3) {
-				int a = indices[i + 0], b = indices[i + 1], c = indices[i + 2];
+					Mesh frustum = new Mesh();
 
-				// Back face culling.
-				if(!IsFacingCamera(originalVertices[a].position, originalVertices[c].position, originalVertices[b].position))
-					continue;
-
-				Mesh frustum = new Mesh();
-
-				List<Vertex> vertices = new List<Vertex> {
+					List<Vertex> vertices = new List<Vertex> {
 					nearVertices[a], nearVertices[b], nearVertices[c],
 					farVertices[a], farVertices[b], farVertices[c],
 				};
 
-				frustum.SetVertices(vertices);
-				frustum.SetSubmeshIndices(new List<List<int>> { singleFrustumIndices });
+					frustum.SetVertices(vertices);
+					frustum.SetSubmeshIndices(new List<List<int>> { singleFrustumIndices });
 
-				singleFrustums.Add(frustum);
+					singleFrustums.Add(frustum);
+				}
 			}
-			#endregion
-			Mesh mergedFrustums = MergeMeshInternal(singleFrustums);
+			Mesh mergedFrustums = MergeMesh(singleFrustums);
+			foreach(var frustum in singleFrustums)
+				Object.Destroy(frustum);
+			singleFrustums.Clear();
 			mergedFrustums.name = $"{texture.name} (silhouette frustum)";
 
 			singleFrustums.Clear();
