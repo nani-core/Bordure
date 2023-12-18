@@ -3,19 +3,30 @@ using System.Collections;
 
 namespace NaniCore.Loopool {
 	public partial class OpticalLoopShape : LoopShape {
+		private static bool generateFrustumWithSilhouette = false;
+
 		#region Functions
 		private static GameObject GenerateHollowShape(GameObject go, Camera camera) {
 			if(go == null || camera == null)
 				return null;
-
+			
 			// Generate the frustum mesh.
 			Mesh frustum;
-			{
+			float
+				from = camera.nearClipPlane,
+				to = Mathf.Min(20f, camera.farClipPlane);	// This clipping is important to keep CSG behaving normal.
+			if(generateFrustumWithSilhouette) {
 				var mask = RenderUtility.CreateScreenSizedRT();
 				float referenceSize = mask.width;
 				mask.RenderMask(go, camera);
-				frustum = mask.SilhouetteToFrustum(camera.nearClipPlane, 20f, referenceSize);
+				frustum = mask.SilhouetteToFrustum(from, to, referenceSize);
 				mask.Destroy();
+			}
+			else {
+				Mesh whole = go.MergeGameObjectIntoMesh();
+				whole.ApplyTransform(camera.transform.worldToLocalMatrix * go.transform.localToWorldMatrix);
+				frustum = whole.BaseMeshToFrustum(from, to);
+				Destroy(whole);
 			}
 
 			var obj = new GameObject("Hollow Shape");

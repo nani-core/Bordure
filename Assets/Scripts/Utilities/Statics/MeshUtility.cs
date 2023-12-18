@@ -149,7 +149,14 @@ namespace NaniCore {
 						ao.AddComponent<MeshFilter>().sharedMesh = a;
 						bo.AddComponent<MeshFilter>().sharedMesh = b;
 
-						Mesh result = CSG.Union(ao, bo, false, false);
+						Mesh result;
+						try {
+							result = CSG.Union(ao, bo, false, false);
+						}
+						catch(System.Exception e) {
+							Debug.LogError(e);
+							throw new UnityException($"Error merging meshes {a} and {b}.");
+						}
 
 						Object.Destroy(ao);
 						Object.Destroy(bo);
@@ -163,7 +170,7 @@ namespace NaniCore {
 						int prevCount = meshes.Count / 2;
 
 						Mesh a = MergeMeshesInternal(meshes.Take(prevCount).ToArray());
-						Mesh b = MergeMeshesInternal(meshes.TakeLast(meshes.Count - prevCount).ToArray());
+						Mesh b = MergeMeshesInternal(meshes.Skip(prevCount).ToArray());
 
 						Mesh result = MergeMeshesInternal(new Mesh[] { a, b });
 
@@ -188,7 +195,12 @@ namespace NaniCore {
 		public static Mesh MergeMeshes(IList<Mesh> meshes, float epsilon = 1e-5f) {
 			float oldEpsilon = CSG.EPSILON;
 			CSG.EPSILON = epsilon;
-			Mesh result = MergeMeshesInternal(meshes.Select(Object.Instantiate).ToList());
+			var copies = meshes.Select((mesh, i) => {
+				var copy = Object.Instantiate(mesh);
+				copy.name = $"{mesh.name} (copy #{i})";
+				return copy;
+			}).ToList();
+			Mesh result = MergeMeshesInternal(copies);
 			CSG.EPSILON = oldEpsilon;
 			return result;
 		}
@@ -277,6 +289,16 @@ namespace NaniCore {
 			return mesh;
 		}
 
+		public static Mesh SilhouetteToFrustum(this Texture texture, float from, float to, float referenceSize = 1, float epsilon = 1e-4f) {
+			Mesh baseMesh = SilhouetteToMesh(texture, referenceSize);
+			Mesh result = baseMesh.BaseMeshToFrustum(from, to, epsilon);
+			result.name = $"{texture.name} (silhouette frustum)";
+			Object.Destroy(baseMesh);
+			return result;
+		}
+		#endregion
+
+		#region Frustum operations
 		private static readonly List<int> singleFrustumIndices = new List<int> {
 			/**
 			 * 0 --- 1    0 1 2
@@ -304,21 +326,15 @@ namespace NaniCore {
 			5, 4, 3,
 		};
 
-		private static Vector3 ClipFrustum(Vector2 point, float z) {
-			Vector3 result = point;
-			result.z = 1;
-			result *= z;
-			return result;
+		private static Vector3 ClipFrustum(Vector3 point, float z) {
+			return point * (z / point.z);
 		}
 
-		public static Mesh SilhouetteToFrustum(this Texture texture, float from, float to, float referenceSize = 1) {
-
+		public static Mesh BaseMeshToFrustum(this Mesh baseMesh, float from, float to, float epsilon = 1e-4f) {
 			List<Mesh> singleFrustums = new List<Mesh>();
 			// Generate single frustums.
 			{
 				// Preparation.
-
-				Mesh baseMesh = SilhouetteToMesh(texture, referenceSize);
 				var originalVertices = baseMesh.GetVertices();
 				var nearVertices = originalVertices.Select(v => {
 					v.position = ClipFrustum(v.position, from);
@@ -340,13 +356,23 @@ namespace NaniCore {
 						b = originalVertexIndices[i + 1],
 						c = originalVertexIndices[i + 2];
 
-					Mesh frustum = new Mesh();
+					// Cull back faces.
+					{
+						Vector3
+							pa = originalVertices[a].position,
+							pb = originalVertices[b].position,
+							pc = originalVertices[c].position;
+						Vector3 normal = Vector3.Cross(pb - pa, pc - pb);
+						if(Vector3.Dot(pa, normal) > 0)
+							continue;
+					}
 
 					List<Vertex> vertices = new List<Vertex> {
 						nearVertices[a], nearVertices[b], nearVertices[c],
 						farVertices[a], farVertices[b], farVertices[c],
 					};
 
+					Mesh frustum = new Mesh();
 					frustum.SetVertices(vertices);
 					frustum.SetSubmeshIndices(new List<int>[] { singleFrustumIndices });
 
@@ -355,13 +381,11 @@ namespace NaniCore {
 
 				Object.Destroy(baseMesh);
 			}
-			Mesh mergedFrustums = MergeMeshes(singleFrustums, 1e-4f);
+			Mesh mergedFrustums = MergeMeshes(singleFrustums, epsilon);
 			foreach(var frustum in singleFrustums)
 				Object.Destroy(frustum);
 			singleFrustums.Clear();
-			mergedFrustums.name = $"{texture.name} (silhouette frustum)";
 
-			singleFrustums.Clear();
 			return mergedFrustums;
 		}
 		#endregion
@@ -370,7 +394,7 @@ namespace NaniCore {
 		/// <remarks>
 		/// Not using CSG algorithms. Result may be ill-formed.
 		/// </remarks>
-		public static Mesh MergeGameObjectIntoMesh(GameObject go) {
+		public static Mesh MergeGameObjectIntoMesh(this GameObject go) {
 			if(go == null)
 				return null;
 
