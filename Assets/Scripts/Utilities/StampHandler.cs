@@ -109,17 +109,29 @@ namespace NaniCore.Loopool {
 			if(camera == null)
 				return;
 
-			var uvTex = RenderUtility.CreateScreenSizedRT(RenderTextureFormat.ARGBFloat);
+			var uvTex = RenderUtility.CreateScreenSizedRT();
 			Material uvMat = RenderUtility.GetPooledMaterial("NaniCore/MeshUvToScreenUv");
 			uvMat.SetFloat("_Fov", camera.fieldOfView);
 			uvTex.RenderObject(target, camera, uvMat);
 
 			var handler = target.EnsureComponent<StampHandler>();
 			handler.Initialize();
-			
+
 			var maskedTexture = RenderUtility.CreateScreenSizedRT();
-			maskedTexture.RenderMask(target, camera);
-			maskedTexture.ReplaceTextureByValue(Color.white, GameManager.Instance.WorldView);
+			maskedTexture.RenderMask(target, camera, true); // Disregarding depth.
+			if(false) {
+				// Debug codes.
+				handler.SetStampingTexture(uvTex);
+
+				maskedTexture.Destroy();
+				return;
+			}
+			{
+				var capture = RenderUtility.CreateScreenSizedRT(RenderTextureFormat.Default);
+				capture.Capture(camera);
+				maskedTexture.ReplaceTextureByValue(Color.white, capture);
+				capture.Destroy();
+			}
 			maskedTexture.UvMap(uvTex);
 			// stampingTexture will be released properly by the handler on next
 			// texture set or application quit.

@@ -1,14 +1,14 @@
 Shader "NaniCore/ObjectMask" {
 	SubShader {
 		Tags {
-			"RenderType" = "Opaque"
+			"RenderType" = "Transparent"
 			"RenderPipeline" = "HighDefinitionRenderPipeline"
 		}
 
 		Pass {
 			Cull Off
 			ZTest LEqual
-			ZWrite Off
+			ZWrite On
 
 			HLSLINCLUDE
 			#include "Packages/com.unity.render-pipelines.high-definition/Runtime/RenderPipeline/RenderPass/CustomPass/CustomPassRenderers.hlsl"
@@ -38,7 +38,7 @@ Shader "NaniCore/ObjectMask" {
  
 			structurePS pixel_shader(structureVS vs) {
 				structurePS ps;
-				ps.target00 = float4(1, 1, 1, 1);
+				ps.target00 = float4(256, 256, 256, 1);
 				return ps;
 			}
 			ENDHLSL

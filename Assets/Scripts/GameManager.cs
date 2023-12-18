@@ -9,17 +9,15 @@ namespace NaniCore.Loopool {
 
 		#region Serialized fields
 		public Camera mainCamera;
-		// Debug only.
-		public Material hollowShapeMaterial;
+		public UnityEngine.UI.RawImage debugLayer;
 		#endregion
 
 		#region Fields
-		private RenderTexture worldView;
 		private Protagonist protagonist;
+		private RenderTexture debugFrame;
 		#endregion
 
 		#region Properties
-		public RenderTexture WorldView => worldView;
 		public Protagonist Protagonist => protagonist;
 		#endregion
 
@@ -33,6 +31,12 @@ namespace NaniCore.Loopool {
 			instance = this;
 			DontDestroyOnLoad(gameObject);
 			return true;
+		}
+
+		public void DrawDebugFrame(Texture texture, float opacity = 1f) {
+			if(debugFrame == null)
+				return;
+			debugFrame.Overlay(texture, opacity);
 		}
 		#endregion
 
@@ -66,21 +70,19 @@ namespace NaniCore.Loopool {
 		protected void OnEnable() {
 			if(!EnsureSingleton())
 				return;
-
-			worldView = RenderUtility.CreateScreenSizedRT();
-		}
-
-		protected void LateUpdate() {
-			if(Camera.main != null) {
-				// Do not capture the scene in Update(), or when addtively
-				// loading a new scene HDRP might complain that there is more
-				// than one directional light that casts shadows.
-				worldView.Capture(Camera.main);
+			if(debugLayer != null) {
+				debugLayer.enabled = true;
+				debugLayer.texture = debugFrame = RenderUtility.CreateScreenSizedRT();
+				debugFrame.SetValue(Color.clear);
 			}
 		}
 
+		protected void Update() {
+			debugFrame?.SetValue(Color.clear);
+		}
+
 		protected void OnDisable() {
-			worldView.Destroy();
+			debugFrame?.Destroy();
 			RenderUtility.ReleasePooledResources();
 		}
 		#endregion
