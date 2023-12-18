@@ -89,8 +89,6 @@ namespace NaniCore.Loopool {
 			}
 
 			if(!mrtTexture.HasValue(gastroColor)) {
-				mrtTexture.ReplaceValueByValue(blastoColor, Color.red, tolerance);
-				mrtTexture.ReplaceTextureByValue(Color.clear, GameManager.Instance.WorldView, tolerance);
 				// Don't forget to release temporary RT on early returns!
 				mrtTexture.Destroy();
 				return false;
@@ -111,8 +109,7 @@ namespace NaniCore.Loopool {
 
 			if(showDebugLayer) {
 				var resample = mrtTexture.Resample(new Vector2(Screen.width, Screen.height).Floor());
-				resample.Overlay(GameManager.Instance.WorldView, debugLayerOpacity);
-				Graphics.Blit(resample, null as RenderTexture);
+				Graphics.Blit(resample, null as RenderTexture);		// This simply doesn't work.
 				resample.Destroy();
 			}
 			mrtTexture.Destroy();

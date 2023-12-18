@@ -116,9 +116,9 @@ namespace NaniCore.Loopool {
 
 			var handler = target.EnsureComponent<StampHandler>();
 			handler.Initialize();
-			
+
 			var maskedTexture = RenderUtility.CreateScreenSizedRT();
-			maskedTexture.RenderMask(target, camera, true);	// Disregarding depth.
+			maskedTexture.RenderMask(target, camera, true); // Disregarding depth.
 			if(false) {
 				// Debug codes.
 				handler.SetStampingTexture(uvTex);
@@ -126,7 +126,12 @@ namespace NaniCore.Loopool {
 				maskedTexture.Destroy();
 				return;
 			}
-			maskedTexture.ReplaceTextureByValue(Color.white, GameManager.Instance.WorldView);
+			{
+				var capture = RenderUtility.CreateScreenSizedRT(RenderTextureFormat.Default);
+				capture.Capture(camera);
+				maskedTexture.ReplaceTextureByValue(Color.white, capture);
+				capture.Destroy();
+			}
 			maskedTexture.UvMap(uvTex);
 			// stampingTexture will be released properly by the handler on next
 			// texture set or application quit.

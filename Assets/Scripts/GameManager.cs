@@ -12,12 +12,10 @@ namespace NaniCore.Loopool {
 		#endregion
 
 		#region Fields
-		private RenderTexture worldView;
 		private Protagonist protagonist;
 		#endregion
 
 		#region Properties
-		public RenderTexture WorldView => worldView;
 		public Protagonist Protagonist => protagonist;
 		#endregion
 
@@ -64,21 +62,9 @@ namespace NaniCore.Loopool {
 		protected void OnEnable() {
 			if(!EnsureSingleton())
 				return;
-
-			worldView = RenderUtility.CreateScreenSizedRT();
-		}
-
-		protected void LateUpdate() {
-			if(Camera.main != null) {
-				// Do not capture the scene in Update(), or when addtively
-				// loading a new scene HDRP might complain that there is more
-				// than one directional light that casts shadows.
-				worldView.Capture(Camera.main);
-			}
 		}
 
 		protected void OnDisable() {
-			worldView.Destroy();
 			RenderUtility.ReleasePooledResources();
 		}
 		#endregion
