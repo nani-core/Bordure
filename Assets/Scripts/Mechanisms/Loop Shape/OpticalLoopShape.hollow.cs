@@ -46,7 +46,7 @@ namespace NaniCore.Loopool {
 		/// Needs to be refined to avoid memory leak.
 		/// </remarks>
 		public void Hollow() {
-			GameObject hollowShape = GenerateHollowShape(gastro, Camera.main);
+			GameObject hollowShape = GenerateHollowShape(gastro, GameManager.Instance?.mainCamera);
 
 			float epsilon = 1e-3f;
 			// Neogastro.

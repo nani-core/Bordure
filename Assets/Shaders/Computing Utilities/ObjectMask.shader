@@ -38,7 +38,7 @@ Shader "NaniCore/ObjectMask" {
  
 			structurePS pixel_shader(structureVS vs) {
 				structurePS ps;
-				ps.target00 = float4(100, 100, 100, 1);
+				ps.target00 = float4(256, 256, 256, 1);
 				return ps;
 			}
 			ENDHLSL

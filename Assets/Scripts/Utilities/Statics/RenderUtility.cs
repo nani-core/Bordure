@@ -100,17 +100,19 @@ namespace NaniCore {
 			texture.Apply(mat);
 		}
 
-		public static void RenderObject(this RenderTexture texture, GameObject gameObject, Camera camera, Material material) {
+		public static void RenderObject(this RenderTexture texture, GameObject gameObject, Camera camera, Material material = null) {
 			if(material == null || texture == null)
 				return;
 
 			List<(Renderer, Material[])> map = new();
 			foreach(var renderer in gameObject.transform.GetComponentsInChildren<Renderer>()) {
 				map.Add((renderer, renderer.sharedMaterials));
-				var newMatArr = new Material[renderer.sharedMaterials?.Length ?? 0];
-				for(int i = 0; i < newMatArr.Length; ++i)
-					newMatArr[i] = material;
-				renderer.sharedMaterials = newMatArr;
+				if(material != null) {
+					var newMatArr = new Material[renderer.sharedMaterials?.Length ?? 0];
+					for(int i = 0; i < newMatArr.Length; ++i)
+						newMatArr[i] = material;
+					renderer.sharedMaterials = newMatArr;
+				}
 			}
 
 			var capture = CreateScreenSizedRT();
@@ -119,7 +121,7 @@ namespace NaniCore {
 			mask.SetValue(Color.clear);
 			mask.RenderMask(gameObject, camera);
 			mask.ReplaceTextureByValue(Color.white, capture);
-			Graphics.Blit(capture, texture);
+			texture.Overlay(capture);
 			capture.Destroy();
 			mask.Destroy();
 
@@ -151,7 +153,7 @@ namespace NaniCore {
 			mask.SetValue(Color.clear);
 			mask.Capture(camera);
 			mask.IndicateByValue(Color.white);
-			Graphics.Blit(mask, texture);
+			texture.Overlay(mask);
 			mask.Destroy();
 
 			foreach(var (renderer, mats, layer) in map) {
@@ -349,26 +351,26 @@ namespace NaniCore {
 			texture.Apply(mat);
 		}
 
-		public static void Difference(this RenderTexture texture, RenderTexture difference) {
+		public static void Difference(this RenderTexture texture, Texture difference) {
 			var mat = GetPooledMaterial("NaniCore/Difference");
 			mat.SetTexture("_DifferenceTex", difference);
 			texture.Apply(mat);
 		}
 
-		public static void Intersect(this RenderTexture texture, RenderTexture difference) {
+		public static void Intersect(this RenderTexture texture, Texture difference) {
 			var mat = GetPooledMaterial("NaniCore/Intersect");
 			mat.SetTexture("_DifferenceTex", difference);
 			texture.Apply(mat);
 		}
 
-		public static void Overlay(this RenderTexture texture, RenderTexture overlay, float opacity = 1f) {
+		public static void Overlay(this RenderTexture texture, Texture overlay, float opacity = 1f) {
 			var mat = GetPooledMaterial("NaniCore/Overlay");
 			mat.SetTexture("_OverlayTex", overlay);
 			mat.SetFloat("_Opacity", opacity);
 			texture.Apply(mat);
 		}
 
-		public static void UvMap(this RenderTexture texture, RenderTexture uv) {
+		public static void UvMap(this RenderTexture texture, Texture uv) {
 			var mat = GetPooledMaterial("NaniCore/UvMap");
 			mat.SetTexture("_UvTex", uv);
 			texture.Apply(mat);

@@ -64,6 +64,8 @@ namespace NaniCore.Loopool {
 		}
 
 		private bool PerformValidation() {
+			if(GameManager.Instance?.Protagonist == null)
+				return false;
 			if(!visible || blasto == null || gastro == null)
 				return false;
 
@@ -74,19 +76,20 @@ namespace NaniCore.Loopool {
 			Color blastoColor = Color.red, gastroColor = Color.green;
 			{
 				var maskTexture = RenderUtility.CreateScreenSizedRT();
-
 				maskTexture.SetValue(Color.clear);
-				maskTexture.RenderMask(blasto, Camera.main);
+
+				maskTexture.RenderMask(blasto, GameManager.Instance?.mainCamera);
 				maskTexture.ReplaceValueByValue(Color.white, blastoColor);
-				mrtTexture.Overlay(maskTexture);
 
-				maskTexture.SetValue(Color.clear);
-				maskTexture.RenderMask(gastro, Camera.main);
+				maskTexture.RenderMask(gastro, GameManager.Instance?.mainCamera);
 				maskTexture.ReplaceValueByValue(Color.white, gastroColor);
-				mrtTexture.Overlay(maskTexture);
 
+				mrtTexture.Overlay(maskTexture);
 				maskTexture.Destroy();
 			}
+
+			if(showDebugLayer)
+				GameManager.Instance.DrawDebugFrame(mrtTexture, debugLayerOpacity);
 
 			if(!mrtTexture.HasValue(gastroColor)) {
 				// Don't forget to release temporary RT on early returns!
@@ -104,14 +107,6 @@ namespace NaniCore.Loopool {
 
 			bool validated = ValidateByMask(gastroMask, wholeMask);
 
-			wholeMask.ReplaceValueByValue(Color.white, validated ? Color.green : Color.red, tolerance);
-			wholeMask.filterMode = FilterMode.Point;
-
-			if(showDebugLayer) {
-				var resample = mrtTexture.Resample(new Vector2(Screen.width, Screen.height).Floor());
-				Graphics.Blit(resample, null as RenderTexture);		// This simply doesn't work.
-				resample.Destroy();
-			}
 			mrtTexture.Destroy();
 
 			wholeMask.Destroy();
@@ -127,7 +122,7 @@ namespace NaniCore.Loopool {
 		}
 
 		public void Stamp() {
-			StampHandler.Stamp(blasto, Camera.main);
+			StampHandler.Stamp(blasto, GameManager.Instance?.mainCamera);
 		}
 
 		public void DoDefault() {
@@ -175,9 +170,7 @@ namespace NaniCore.Loopool {
 
 		protected void Update() {
 			visible = childRenderers.Any(r => r.isVisible);
-			if(GameManager.Instance?.Protagonist != null) {
-				validated = PerformValidation();
-			}
+			validated = PerformValidation();
 		}
 		#endregion
 	}

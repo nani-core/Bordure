@@ -9,10 +9,12 @@ namespace NaniCore.Loopool {
 
 		#region Serialized fields
 		public Camera mainCamera;
+		public UnityEngine.UI.RawImage debugLayer;
 		#endregion
 
 		#region Fields
 		private Protagonist protagonist;
+		private RenderTexture debugFrame;
 		#endregion
 
 		#region Properties
@@ -29,6 +31,12 @@ namespace NaniCore.Loopool {
 			instance = this;
 			DontDestroyOnLoad(gameObject);
 			return true;
+		}
+
+		public void DrawDebugFrame(Texture texture, float opacity = 1f) {
+			if(debugFrame == null)
+				return;
+			debugFrame.Overlay(texture, opacity);
 		}
 		#endregion
 
@@ -62,9 +70,19 @@ namespace NaniCore.Loopool {
 		protected void OnEnable() {
 			if(!EnsureSingleton())
 				return;
+			if(debugLayer != null) {
+				debugLayer.enabled = true;
+				debugLayer.texture = debugFrame = RenderUtility.CreateScreenSizedRT();
+				debugFrame.SetValue(Color.clear);
+			}
+		}
+
+		protected void Update() {
+			debugFrame?.SetValue(Color.clear);
 		}
 
 		protected void OnDisable() {
+			debugFrame?.Destroy();
 			RenderUtility.ReleasePooledResources();
 		}
 		#endregion
