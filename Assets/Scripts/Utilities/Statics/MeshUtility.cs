@@ -5,7 +5,7 @@ using MeshMakerNamespace;
 
 namespace NaniCore {
 	public static class MeshUtility {
-		#region Mesh data accessing
+		#region Mesh data
 		public struct Vertex {
 			public Vector3 position;
 			public Vector3 normal;
@@ -103,7 +103,7 @@ namespace NaniCore {
 		}
 		#endregion
 
-		#region Mesh operations
+		#region Mesh
 		public static void ApplyTransform(this Mesh mesh, Matrix4x4 transform) {
 			if(mesh == null)
 				return;
@@ -240,7 +240,7 @@ namespace NaniCore {
 		}
 		#endregion
 
-		#region Silhouette operations
+		#region Silhouette
 		private static Texture2D ConvertToTexture2d(this Texture texture, out bool shouldRelease) {
 			if(texture is Texture2D) {
 				shouldRelease = false;
@@ -298,7 +298,7 @@ namespace NaniCore {
 		}
 		#endregion
 
-		#region Frustum operations
+		#region Frustum
 		private static readonly List<int> singleFrustumIndices = new List<int> {
 			/**
 			 * 0 --- 1    0 1 2
@@ -390,7 +390,23 @@ namespace NaniCore {
 		}
 		#endregion
 
-		#region GameObject related operations
+		#region Stamp
+		public static void AlignUvToViewportPosition(this GameObject go, Camera camera) {
+			foreach(var filter in go.GetComponentsInChildren<MeshFilter>()) {
+				var mesh = filter.sharedMesh;
+				if(mesh == null)
+					continue;
+				var uv = new Vector2[mesh.vertexCount];
+				var localToWorld = filter.transform.localToWorldMatrix;
+				for(int i = 0; i < mesh.vertexCount; ++i) {
+					uv[i] = camera.WorldToViewportPoint(localToWorld.MultiplyPoint(mesh.vertices[i]));
+				}
+				mesh.uv = uv;
+			}
+		}
+		#endregion
+
+		#region GameObject
 		/// <remarks>
 		/// Not using CSG algorithms. Result may be ill-formed.
 		/// </remarks>

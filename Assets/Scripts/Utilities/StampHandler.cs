@@ -105,39 +105,21 @@ namespace NaniCore.Loopool {
 			}
 		}
 
+		/// <summary>
+		/// Stamp the view of a camera onto a game object.
+		/// </summary>
+		/// <remarks>
+		/// The material of that game object will become unlit.
+		/// </remarks>
 		public static void Stamp(GameObject target, Camera camera) {
 			if(camera == null)
 				return;
 
-			var uvTex = RenderUtility.CreateScreenSizedRT();
-			Material uvMat = RenderUtility.GetPooledMaterial("NaniCore/MeshUvToScreenUv");
-			uvMat.SetFloat("_Fov", camera.fieldOfView);
-			uvTex.RenderObject(target, camera, uvMat);
+			target.AlignUvToViewportPosition(camera);
 
 			var handler = target.EnsureComponent<StampHandler>();
 			handler.Initialize();
-
-			var maskedTexture = RenderUtility.CreateScreenSizedRT();
-			maskedTexture.RenderMask(target, camera, true); // Disregarding depth.
-			if(false) {
-				// Debug codes.
-				handler.SetStampingTexture(uvTex);
-
-				maskedTexture.Destroy();
-				return;
-			}
-			{
-				var capture = RenderUtility.CreateScreenSizedRT(RenderTextureFormat.Default);
-				capture.Capture(camera);
-				maskedTexture.ReplaceTextureByValue(Color.white, capture);
-				capture.Destroy();
-			}
-			maskedTexture.UvMap(uvTex);
-			// stampingTexture will be released properly by the handler on next
-			// texture set or application quit.
-			handler.SetStampingTexture(maskedTexture);
-
-			uvTex.Destroy();
+			handler.SetStampingTexture(camera.Capture());
 		}
 		#endregion
 

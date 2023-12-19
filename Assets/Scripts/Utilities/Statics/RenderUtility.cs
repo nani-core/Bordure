@@ -93,6 +93,11 @@ namespace NaniCore {
 			camera.Render();
 			camera.targetTexture = previousActiveRt;
 		}
+		public static RenderTexture Capture(this Camera camera) {
+			var capture = CreateScreenSizedRT();
+			capture.Capture(camera);
+			return capture;
+		}
 
 		public static void SetValue(this RenderTexture texture, Color value) {
 			var mat = GetPooledMaterial("NaniCore/SetValue");
@@ -100,8 +105,8 @@ namespace NaniCore {
 			texture.Apply(mat);
 		}
 
-		public static void RenderObject(this RenderTexture texture, GameObject gameObject, Camera camera, Material material = null) {
-			if(material == null || texture == null)
+		public static void RenderObject(this RenderTexture texture, GameObject gameObject, Camera camera, Material material = null, bool disregardDepth = false) {
+			if(texture == null)
 				return;
 
 			List<(Renderer, Material[])> map = new();
@@ -117,21 +122,26 @@ namespace NaniCore {
 
 			var capture = CreateScreenSizedRT();
 			capture.Capture(camera);
-			var mask = CreateScreenSizedRT();
-			mask.SetValue(Color.clear);
-			mask.RenderMask(gameObject, camera);
-			mask.ReplaceTextureByValue(Color.white, capture);
+			{
+				// Apply mask.
+				var mask = CreateScreenSizedRT();
+				mask.SetValue(Color.clear);
+				mask.RenderMask(gameObject, camera, disregardDepth, material);
+				mask.ReplaceTextureByValue(Color.white, capture);
+				Graphics.Blit(mask, capture);
+				mask.Destroy();
+			}
 			texture.Overlay(capture);
 			capture.Destroy();
-			mask.Destroy();
 
 			foreach(var (renderer, mats) in map) {
 				renderer.sharedMaterials = mats;
 			}
 		}
 
-		public static void RenderMask(this RenderTexture texture, GameObject gameObject, Camera camera, bool disregardDepth = false) {
-			var maskMaterial = GetPooledMaterial("NaniCore/ObjectMask");
+		public static void RenderMask(this RenderTexture texture, GameObject gameObject, Camera camera, bool disregardDepth = false, Material overrideMaterial = null) {
+			disregardDepth = disregardDepth || overrideMaterial != null;
+			var maskMaterial = overrideMaterial ?? GetPooledMaterial("NaniCore/ObjectMask");
 			List<(Renderer, Material[], int)> map = new();
 			foreach(var renderer in gameObject.transform.GetComponentsInChildren<Renderer>()) {
 				map.Add((renderer, renderer.sharedMaterials, renderer.gameObject.layer));
@@ -152,7 +162,13 @@ namespace NaniCore {
 			var mask = CreateScreenSizedRT();
 			mask.SetValue(Color.clear);
 			mask.Capture(camera);
-			mask.IndicateByValue(Color.white);
+			if(overrideMaterial != null) {
+				mask.IndicateByValue(Color.clear);
+				mask.IndicateByValue(Color.clear);  // Invert.
+			}
+			else {
+				mask.IndicateByValue(Color.white);
+			}
 			texture.Overlay(mask);
 			mask.Destroy();
 
@@ -367,12 +383,6 @@ namespace NaniCore {
 			var mat = GetPooledMaterial("NaniCore/Overlay");
 			mat.SetTexture("_OverlayTex", overlay);
 			mat.SetFloat("_Opacity", opacity);
-			texture.Apply(mat);
-		}
-
-		public static void UvMap(this RenderTexture texture, Texture uv) {
-			var mat = GetPooledMaterial("NaniCore/UvMap");
-			mat.SetTexture("_UvTex", uv);
 			texture.Apply(mat);
 		}
 	}
