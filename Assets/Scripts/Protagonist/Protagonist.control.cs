@@ -129,10 +129,10 @@ namespace NaniCore.Loopool {
 			rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
 		}
 
-		private bool SweepTest(Vector3 direction, out RaycastHit hitInfo, float distance, float backupRatio = 0) {
+		private bool SweepTest(Vector3 direction, out RaycastHit hitInfo, float distance, float backupRatio = 0, Vector3 offset = default) {
 			direction.Normalize();
 			var originalPos = rigidbody.position;
-			rigidbody.position -= direction * distance * backupRatio;
+			rigidbody.position += direction * (distance * backupRatio * -1) + offset;
 			bool result = rigidbody.SweepTest(direction, out hitInfo, distance);
 			if(result) {
 				int shouldExclude = hitInfo.collider.gameObject.layer & rigidbody.excludeLayers;
@@ -199,13 +199,9 @@ namespace NaniCore.Loopool {
 
 			var targetVelocity = desiredMovementVelocity;
 
-			var desiredPositionChange = desiredMovementVelocity * deltaTime;
-			if(SweepTest(desiredMovementVelocity, out RaycastHit hitInfo, desiredPositionChange.magnitude, 0)) {
-				targetVelocity = targetVelocity.normalized * Vector3.Dot(hitInfo.point - rigidbody.position, desiredMovementVelocity.normalized);
-			}
-
 			var velocityDifference = targetVelocity - rigidbody.velocity;
-			rigidbody.AddForce(velocityDifference.ProjectOntoPlane(Upward) * profile.acceleration, ForceMode.VelocityChange);
+			var force = velocityDifference.ProjectOntoPlane(Upward) * profile.acceleration;
+			rigidbody.AddForce(force, ForceMode.VelocityChange);
 		}
 
 		private void DealStepping() {
