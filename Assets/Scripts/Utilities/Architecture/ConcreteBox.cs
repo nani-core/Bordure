@@ -126,9 +126,9 @@ namespace NaniCore {
 
 					concreteTransform.localPosition = Vector3.forward * (concreteThickness * .5f + concreteDepth);
 
-					int offset = inward ? 2 : -2;
-					var hSize = Vector3.Scale(count + Vector3.one * offset, spacing);
 					var size = Vector3.one * concreteThickness;
+					var hSize = Vector3.Scale(count, spacing);
+					hSize += Vector3.one * ((inward ? 1 : -1) * concreteDepth * 2);
 					size[0] = hSize[face.countDim.Item1];
 					size[1] = hSize[face.countDim.Item2];
 					concreteTransform.localScale = size;
