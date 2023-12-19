@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace NaniCore {
-	public partial class MeshTile : MonoBehaviour {
+	public class MeshTile : ArchitectureGenerator {
 		#region Serialized fields
 		public GameObject tile;
 		public Vector3 i = Vector3.right, j = Vector3.up, k = Vector3.forward;
@@ -13,15 +13,18 @@ namespace NaniCore {
 		#endregion
 
 		#region Functions
-		private delegate GameObject Instantiator(GameObject template, Transform under);
-		private void Construct(Transform under, Instantiator instantiator) {
+		protected override void Construct(Transform under, Instantiator instantiator) {
 			if(tile == null)
 				return;
+			if(under == null) {
+				Debug.LogWarning("Base transform is null.");
+			}
 			for(int ix = 0; ix < count.x; ++ix) {
 				for(int iy = 0; iy < count.y; ++iy) {
 					for(int iz = 0; iz < count.z; ++iz) {
 						var selfOffset = i * ix + j * iy + k * iz;
-						Vector3 localPosition = selfOffset - Vector3.Scale(count - Vector3.one, uvw);
+						var scale = i * uvw.x + j * uvw.y + k * uvw.z;
+						Vector3 localPosition = selfOffset - Vector3.Scale(count - Vector3.one, scale);
 						Vector3 worldPosition = under.localToWorldMatrix.MultiplyPoint(localPosition);
 						if(hollowObjects.Any(o => CheckIfPointIsIn(worldPosition, o)))
 							continue;
@@ -31,8 +34,6 @@ namespace NaniCore {
 				}
 			}
 		}
-		protected void Construct(Transform under) => Construct(under, Instantiate);
-		protected void Construct() => Construct(transform);
 
 		private static bool CheckIfPointIsIn(Vector3 worldPosition, GameObject gameObject) {
 			if(gameObject == null)
@@ -67,11 +68,8 @@ namespace NaniCore {
 		}
 		#endregion
 
-		#region Life cycle
-		protected void Start() {
-			Construct();
-			Destroy(this);
-		}
-		#endregion
+#if UNITY_EDITOR
+		protected override string GizmozRootName => "$MeshTileGizmosRoot";
+#endif
 	}
 }
