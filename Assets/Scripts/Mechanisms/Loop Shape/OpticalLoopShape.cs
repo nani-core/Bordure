@@ -17,6 +17,11 @@ namespace NaniCore.Loopool {
 		[SerializeField] private bool showDebugLayer = false;
 		[SerializeField][ShowIf("showDebugLayer")][Range(0, 1)] private float debugLayerOpacity = 1f;
 #endif
+		[Header("Hollow")]
+		[SerializeField] protected Material sectionMaterial;
+		[SerializeField] private bool useDetachingEjection;
+		[ShowIf("useDetachingEjection")][SerializeField] private Vector3 ejectionVelocity;
+		[ShowIf("useDetachingEjection")][SerializeField] private Vector3 ejectionOrigin;
 		#endregion
 
 		#region Fields
@@ -24,9 +29,15 @@ namespace NaniCore.Loopool {
 		private bool visible = false;
 		private IEnumerable<Renderer> childRenderers;
 		private float tolerance = 2f;
+		private List<(MeshFilter, Mesh)> startMesh;
+		private List<(Renderer, Material[])> startMaterials;
+		private List<(MeshCollider, Mesh)> startCollisionMesh;
+		private GameObject neogastro;
 		#endregion
 
 		#region Functions
+		public GameObject Neogastro => neogastro;
+
 		public override bool Validate(Transform eye) => validated;
 
 		protected override void OnLoopShapeOpen() {
@@ -53,6 +64,8 @@ namespace NaniCore.Loopool {
 		}
 
 		private bool PerformValidation() {
+			if(GameManager.Instance?.Protagonist == null)
+				return false;
 			if(!visible || blasto == null || gastro == null)
 				return false;
 
@@ -63,23 +76,22 @@ namespace NaniCore.Loopool {
 			Color blastoColor = Color.red, gastroColor = Color.green;
 			{
 				var maskTexture = RenderUtility.CreateScreenSizedRT();
-
 				maskTexture.SetValue(Color.clear);
-				maskTexture.RenderMask(blasto, Camera.main);
+
+				maskTexture.RenderMask(blasto, GameManager.Instance?.mainCamera);
 				maskTexture.ReplaceValueByValue(Color.white, blastoColor);
-				mrtTexture.Overlay(maskTexture);
 
-				maskTexture.SetValue(Color.clear);
-				maskTexture.RenderMask(gastro, Camera.main);
+				maskTexture.RenderMask(gastro, GameManager.Instance?.mainCamera);
 				maskTexture.ReplaceValueByValue(Color.white, gastroColor);
-				mrtTexture.Overlay(maskTexture);
 
+				mrtTexture.Overlay(maskTexture);
 				maskTexture.Destroy();
 			}
 
+			if(showDebugLayer)
+				GameManager.Instance.DrawDebugFrame(mrtTexture, debugLayerOpacity);
+
 			if(!mrtTexture.HasValue(gastroColor)) {
-				mrtTexture.ReplaceValueByValue(blastoColor, Color.red, tolerance);
-				mrtTexture.ReplaceTextureByValue(Color.clear, GameManager.Instance.WorldView, tolerance);
 				// Don't forget to release temporary RT on early returns!
 				mrtTexture.Destroy();
 				return false;
@@ -95,15 +107,6 @@ namespace NaniCore.Loopool {
 
 			bool validated = ValidateByMask(gastroMask, wholeMask);
 
-			wholeMask.ReplaceValueByValue(Color.white, validated ? Color.green : Color.red, tolerance);
-			wholeMask.filterMode = FilterMode.Point;
-
-			if(showDebugLayer) {
-				var resample = mrtTexture.Resample(new Vector2(Screen.width, Screen.height).Floor());
-				resample.Overlay(GameManager.Instance.WorldView, debugLayerOpacity);
-				Graphics.Blit(resample, null as RenderTexture);
-				resample.Destroy();
-			}
 			mrtTexture.Destroy();
 
 			wholeMask.Destroy();
@@ -115,12 +118,37 @@ namespace NaniCore.Loopool {
 		public void DestroyGastro() {
 			if(gastro == null)
 				return;
-			gastro.gameObject.SetActive(false);
-			gastro = null;
+			gastro.SetActive(false);
 		}
 
 		public void Stamp() {
-			StampHandler.Stamp(blasto, Camera.main);
+			StampHandler.Stamp(blasto, GameManager.Instance?.mainCamera);
+		}
+
+		public void DoDefault() {
+			Stamp();
+			Hollow();
+			DestroyGastro();
+		}
+
+		/// <remarks>
+		/// The symbol `MonoBehaviour.Reset()` is occupied by Unity so we're
+		/// not using that.
+		/// Buggy, don't use.
+		/// </remarks>
+		public void ResetToStart() {
+			if(Neogastro != null) {
+				Destroy(Neogastro);
+				neogastro = null;
+			}
+			foreach(var (filter, mesh) in startMesh)
+				filter.sharedMesh = mesh;
+			foreach(var (renderer, materials) in startMaterials)
+				renderer.sharedMaterials = materials;
+			foreach(var (collider, mesh) in startCollisionMesh)
+				collider.sharedMesh = mesh;
+			gastro.SetActive(true);
+			enabled = true;
 		}
 		#endregion
 
@@ -129,13 +157,20 @@ namespace NaniCore.Loopool {
 			base.Start();
 
 			childRenderers = GetComponentsInChildren<Renderer>();
+			startMesh = new List<(MeshFilter, Mesh)>(
+				GetComponentsInChildren<MeshFilter>().Select(filter => (filter, filter.sharedMesh))
+			);
+			startMaterials = new List<(Renderer, Material[])>(
+				GetComponentsInChildren<Renderer>().Select(renderer => (renderer, renderer.sharedMaterials))
+			);
+			startCollisionMesh = new List<(MeshCollider, Mesh)>(
+				GetComponentsInChildren<MeshCollider>().Select(collider => (collider, collider.sharedMesh))
+			);
 		}
 
 		protected void Update() {
 			visible = childRenderers.Any(r => r.isVisible);
-			if(GameManager.Instance?.Protagonist != null) {
-				validated = PerformValidation();
-			}
+			validated = PerformValidation();
 		}
 		#endregion
 	}

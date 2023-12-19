@@ -1,4 +1,4 @@
-Shader "NaniCore/UvMap" {
+Shader "NaniCore/MakeMaskBackgroundTransparent" {
 	Properties {
 		_MainTex ("Main Texture", 2D) = "black" {}
 	}
@@ -9,7 +9,6 @@ Shader "NaniCore/UvMap" {
 			ZWrite Off
 
 			CGPROGRAM
-			#include "UnityCG.cginc"
 			#pragma vertex vertex_shader
 			#pragma fragment pixel_shader
 			
@@ -23,7 +22,6 @@ Shader "NaniCore/UvMap" {
 			};
 
 			sampler2D _MainTex;
-			sampler2D _UvTex;
  
 			structureVS vertex_shader(float4 vertex: POSITION, float2 uv: TEXCOORD0) {
 				structureVS vs;
@@ -34,7 +32,10 @@ Shader "NaniCore/UvMap" {
  
 			structurePS pixel_shader(structureVS vs) {
 				structurePS ps;
-				ps.target00 = tex2D(_MainTex, tex2D(_UvTex, vs.uv));
+				float4 color = tex2D(_MainTex, vs.uv);
+				if(length(color.rgb) < .5f * sqrt(3))
+					color = float4(0, 0, 0, 0);
+				ps.target00 = color;
 				return ps;
 			}
 			ENDCG
