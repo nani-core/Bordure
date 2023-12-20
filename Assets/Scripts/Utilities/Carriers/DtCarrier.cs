@@ -2,7 +2,11 @@ using UnityEngine;
 using System.Collections;
 
 namespace NaniCore.Loopool {
-	public partial class AutomaticDoor : MonoBehaviour {
+	/// <summary>
+	/// Double-throw carrier.
+	/// Used to toggle and transit a scene object between two anchors.
+	/// </summary>
+	public partial class DtCarrier : MonoBehaviour {
 		#region Serialized fields
 		[SerializeField] private Transform door;
 		/// Not yet to be implemented.
