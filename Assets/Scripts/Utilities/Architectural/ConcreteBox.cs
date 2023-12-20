@@ -16,9 +16,10 @@ namespace NaniCore {
 		[Min(0)] public float concreteThickness = 1;
 		[Min(0)] public float concreteDepth = .01f;
 		public List<GameObject> hollowObjects = new List<GameObject>();
+		public bool inward = false;
+		[ShowIf("inward")] public bool preventOverlapping = false;
 
 		[Header("Generation")]
-		public bool inward = false;
 		[Label("X+ (right)")] public bool xp = true;
 		[Label("X- (left)")] public bool xm = false;
 		[Label("Y+ (up)")] public bool yp = true;
@@ -128,7 +129,7 @@ namespace NaniCore {
 
 					var size = Vector3.one * concreteThickness;
 					var hSize = Vector3.Scale(count, spacing);
-					hSize += Vector3.one * ((inward ? 1 : -1) * concreteDepth * 2);
+					hSize += Vector3.one * ((inward && !preventOverlapping ? 1 : -1) * concreteDepth * 2);
 					size[0] = hSize[face.countDim.Item1];
 					size[1] = hSize[face.countDim.Item2];
 					concreteTransform.localScale = size;
