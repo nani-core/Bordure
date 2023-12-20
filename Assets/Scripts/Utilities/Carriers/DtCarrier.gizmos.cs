@@ -2,7 +2,7 @@
 using UnityEngine;
 
 namespace NaniCore.Loopool {
-	public partial class AutomaticDoor : MonoBehaviour {
+	public partial class DtCarrier : MonoBehaviour {
 		#region Life cycle
 		protected void OnDrawGizmos() {
 			if(door != null) {

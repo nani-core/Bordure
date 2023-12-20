@@ -34,7 +34,7 @@ namespace NaniCore.Loopool {
 					bool acted = false;
 					foreach(var component in target.GetComponents<Component>()) {
 						switch(component) {
-							case AutomaticDoor door:
+							case DtCarrier door:
 								door.ToggleOpeningState();
 								acted = true;
 								break;
