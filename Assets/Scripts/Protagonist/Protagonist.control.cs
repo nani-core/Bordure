@@ -29,21 +29,6 @@ namespace NaniCore.Loopool {
 
 		private float MovingSpeed => IsSprinting ? profile.sprintingSpeed : profile.walkingSpeed;
 
-#pragma warning disable IDE0052 // Remove unread private members
-		private float SteppedDistance {
-			get => steppedDistance;
-			set {
-				steppedDistance = value;
-				if(profile.stepDistance <= 0)
-					return;
-				if(steppedDistance < 0 || steppedDistance > profile.stepDistance) {
-					steppedDistance = steppedDistance.Mod(profile.stepDistance);
-					PlayFootstepSound();
-				}
-			}
-		}
-#pragma warning restore IDE0052 // Remove unread private members
-
 		/// <summary>
 		/// What direction is the protagonist looking at, in rad.
 		/// </summary>
@@ -183,6 +168,7 @@ namespace NaniCore.Loopool {
 			yield return new WaitForSeconds(.1f);
 			yield return new WaitUntil(() => IsOnGround);
 			isJumping = false;
+			ResetSteppedDistance();
 		}
 
 		private void UpdateDesiredMovementVelocity(float deltaTime) {
@@ -196,12 +182,35 @@ namespace NaniCore.Loopool {
 			}
 		}
 
+		public void ResetSteppedDistance() {
+			steppedDistance = 0;
+		}
+
+		private void AccumulateSteppedDistance(float distance) {
+			if(steppedDistance == 0) {
+				PlayFootstepSound();
+				steppedDistance += distance;
+				return;
+			}
+			steppedDistance += distance;
+			if(profile.stepDistance <= 0)
+				return;
+			if(steppedDistance < 0 || steppedDistance > profile.stepDistance) {
+				steppedDistance = steppedDistance.Mod(profile.stepDistance);
+				PlayFootstepSound();
+			}
+		}
+
 		private void DealBufferedMovement(float deltaTime) {
 			var targetVelocity = desiredMovementVelocity;
 
 			var velocityDifference = targetVelocity - rigidbody.velocity;
+			// Only taking horizontal movement into account.
 			var force = velocityDifference.ProjectOntoPlane(Upward) * profile.acceleration;
 			rigidbody.AddForce(force, ForceMode.VelocityChange);
+
+			if(IsOnGround)
+				AccumulateSteppedDistance(rigidbody.velocity.ProjectOntoPlane(Upward).magnitude * deltaTime);
 		}
 
 		private void DealStepping() {
