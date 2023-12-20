@@ -393,7 +393,8 @@ namespace NaniCore {
 		#region Stamp
 		public static void AlignUvToViewportPosition(this GameObject go, Camera camera) {
 			foreach(var filter in go.GetComponentsInChildren<MeshFilter>()) {
-				var mesh = filter.sharedMesh;
+				// Do not use sharedMesh, otherwise shared assets may be altered.
+				var mesh = filter.mesh;
 				if(mesh == null)
 					continue;
 				var uv = new Vector2[mesh.vertexCount];

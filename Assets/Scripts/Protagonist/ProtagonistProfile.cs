@@ -20,6 +20,8 @@ namespace NaniCore.Loopool {
 		[Min(0)] public float orientingSpeed = 1f;
 		[Min(0)] public float jumpingHeight = 1f;
 		[Min(0)] public float stepHeight = .3f;
+		[Tooltip("How will the control ability decrease when midair.")]
+		[Range(0, 1)] public float midAirAttenuation = .5f;
 
 		[Header("Interaction")]
 		public Canvas interactionUiPrefab;
