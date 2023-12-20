@@ -8,8 +8,8 @@ namespace NaniCore.Loopool {
 		private CapsuleCollider capsuleCollider;
 		private new Rigidbody rigidbody;
 		private bool isOnGround = false;
-		private bool isRunning = false;
-		private bool wasJustJumping = false;
+		private bool isSprinting = false;
+		private bool isJumping = false;
 		private float steppedDistance = 0;
 		private Vector2 bufferedMovementDelta, bufferedMovementVelocity;
 		private Vector3 desiredMovementVelocity;
@@ -22,9 +22,10 @@ namespace NaniCore.Loopool {
 		public bool IsOnGround => isOnGround;
 
 		public bool IsSprinting {
-			get => isRunning;
-			set => isRunning = value;
+			get => isSprinting;
+			set => isSprinting = value;
 		}
+		public bool IsJumping => isJumping;
 
 		private float MovingSpeed => IsSprinting ? profile.sprintingSpeed : profile.walkingSpeed;
 
@@ -178,9 +179,10 @@ namespace NaniCore.Loopool {
 		}
 
 		private IEnumerator JumpCoroutine() {
-			wasJustJumping = true;
+			isJumping = true;
 			yield return new WaitForSeconds(.1f);
-			wasJustJumping = false;
+			yield return new WaitUntil(() => IsOnGround);
+			isJumping = false;
 		}
 
 		private void UpdateDesiredMovementVelocity(float deltaTime) {
@@ -203,7 +205,7 @@ namespace NaniCore.Loopool {
 		}
 
 		private void DealStepping() {
-			if(wasJustJumping || desiredMovementVelocity.magnitude == 0f)
+			if(isJumping || desiredMovementVelocity.magnitude == 0f)
 				return;
 
 			var originalPosition = rigidbody.position;
