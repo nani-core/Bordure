@@ -78,10 +78,10 @@ namespace NaniCore.Loopool {
 				var maskTexture = RenderUtility.CreateScreenSizedRT();
 				maskTexture.SetValue(Color.clear);
 
-				maskTexture.RenderMask(blasto, GameManager.Instance?.mainCamera);
+				maskTexture.RenderMask(blasto, GameManager.Instance?.MainCamera);
 				maskTexture.ReplaceValueByValue(Color.white, blastoColor);
 
-				maskTexture.RenderMask(gastro, GameManager.Instance?.mainCamera);
+				maskTexture.RenderMask(gastro, GameManager.Instance?.MainCamera);
 				maskTexture.ReplaceValueByValue(Color.white, gastroColor);
 
 				mrtTexture.Overlay(maskTexture);
@@ -122,7 +122,7 @@ namespace NaniCore.Loopool {
 		}
 
 		public void Stamp() {
-			StampHandler.Stamp(blasto, GameManager.Instance?.mainCamera);
+			StampHandler.Stamp(blasto, GameManager.Instance?.MainCamera);
 		}
 
 		public void DoDefault() {

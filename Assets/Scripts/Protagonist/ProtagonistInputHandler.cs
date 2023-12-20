@@ -8,7 +8,6 @@ namespace NaniCore.Loopool {
 		protected Protagonist protagonist;
 		protected PlayerInput playerInput;
 		protected Vector2 moveVelocity;
-		private Vector2 previousMoveVelocity;
 		private InputActionMap grabbingActionMap;
 		#endregion
 
@@ -49,9 +48,6 @@ namespace NaniCore.Loopool {
 		#region Handlers
 		protected void OnMoveVelocity(InputValue value) {
 			moveVelocity = value.Get<Vector2>();
-			if(previousMoveVelocity == Vector2.zero)
-				protagonist.ResetSteppedDistance();
-			previousMoveVelocity = moveVelocity;
 		}
 
 		protected void OnOrientDelta(InputValue value) {
