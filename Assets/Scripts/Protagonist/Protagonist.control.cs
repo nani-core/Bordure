@@ -189,14 +189,12 @@ namespace NaniCore.Loopool {
 			bufferedMovementVelocity = Vector3.zero;
 			desiredMovementVelocity = eye.transform.right * bufferedDelta.x + transform.forward * bufferedDelta.y;
 			desiredMovementVelocity *= MovingSpeed / deltaTime;
-			if(!IsOnGround)
-				desiredMovementVelocity = Vector3.zero;
+			if(!IsOnGround) {
+				desiredMovementVelocity *= profile.midAirAttenuation;
+			}
 		}
 
 		private void DealBufferedMovement(float deltaTime) {
-			if(!IsOnGround)
-				return;
-
 			var targetVelocity = desiredMovementVelocity;
 
 			var velocityDifference = targetVelocity - rigidbody.velocity;
