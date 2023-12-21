@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 1754578503}
-  m_IndirectSpecularColor: {r: 2098.6956, g: 2600.3987, b: 3441.7544, a: 1}
+  m_IndirectSpecularColor: {r: 2097.4827, g: 2598.8655, b: 3439.7349, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2492,6 +2492,11 @@ Transform:
   - {fileID: 1445923467}
   m_Father: {fileID: 965350369}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1516537839 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7339460749496765930, guid: e3b9ca6e91d35204c869b17e8cd02663, type: 3}
+  m_PrefabInstance: {fileID: 1865700742}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1566202978
 GameObject:
   m_ObjectHideFlags: 0
@@ -3039,6 +3044,34 @@ PrefabInstance:
       propertyPath: isOpened
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7218266969205244214, guid: e3b9ca6e91d35204c869b17e8cd02663, type: 3}
+      propertyPath: onOpened.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7218266969205244214, guid: e3b9ca6e91d35204c869b17e8cd02663, type: 3}
+      propertyPath: onOpened.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7218266969205244214, guid: e3b9ca6e91d35204c869b17e8cd02663, type: 3}
+      propertyPath: onOpened.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1865700745}
+    - target: {fileID: 7218266969205244214, guid: e3b9ca6e91d35204c869b17e8cd02663, type: 3}
+      propertyPath: onOpened.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7218266969205244214, guid: e3b9ca6e91d35204c869b17e8cd02663, type: 3}
+      propertyPath: onOpened.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Invoke
+      objectReference: {fileID: 0}
+    - target: {fileID: 7218266969205244214, guid: e3b9ca6e91d35204c869b17e8cd02663, type: 3}
+      propertyPath: onOpened.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: NaniCore.DelayedLogic, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 7218266969205244214, guid: e3b9ca6e91d35204c869b17e8cd02663, type: 3}
+      propertyPath: onOpened.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 7339460749496765930, guid: e3b9ca6e91d35204c869b17e8cd02663, type: 3}
       propertyPath: m_Name
       value: Automatic Door
@@ -3046,7 +3079,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7339460749496765930, guid: e3b9ca6e91d35204c869b17e8cd02663, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1865700745}
   m_SourcePrefab: {fileID: 100100000, guid: e3b9ca6e91d35204c869b17e8cd02663, type: 3}
 --- !u!4 &1865700743 stripped
 Transform:
@@ -3058,12 +3094,40 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7218266969205244214, guid: e3b9ca6e91d35204c869b17e8cd02663, type: 3}
   m_PrefabInstance: {fileID: 1865700742}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1516537839}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ccbeed49de33f86429e414eca8c05d61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1865700745
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1516537839}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3b6f7a58290b7a46a87a43915a05b72, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  delayTime: 0.5
+  callback:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1865700744}
+        m_TargetAssemblyTypeName: NaniCore.Loopool.DtCarrier, Assembly-CSharp
+        m_MethodName: set_IsOpened
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1900936776
 GameObject:
   m_ObjectHideFlags: 0

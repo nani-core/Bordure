@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 using System.Collections;
 
 namespace NaniCore.Loopool {
@@ -17,6 +18,10 @@ namespace NaniCore.Loopool {
 		[SerializeField] private Transform openedTransform;
 		[SerializeField] private bool isOpened = false;
 		[SerializeField][Min(0)] private float openingDuration = 1f;
+
+		[SerializeField] private UnityEvent onOpened;
+		[SerializeField] private UnityEvent onClosed;
+		[SerializeField] private UnityEvent onToggled;
 		#endregion
 
 		#region Fields
@@ -48,6 +53,7 @@ namespace NaniCore.Loopool {
 
 		public void ToggleOpeningState() {
 			IsOpened = !IsOpened;
+			onToggled.Invoke();
 		}
 
 		private IEnumerator SetOpeningStateCoroutine(bool targetOpened, float duration) {
@@ -57,6 +63,10 @@ namespace NaniCore.Loopool {
 			if(targetOpened == false && isOpened == true)
 				StartCoroutine(AudioUtility.PlayOneShotAtCoroutine(onClosedSound, transform.position, transform));
 			isOpened = targetOpened;
+			if(isOpened)
+				onOpened.Invoke();
+			else
+				onClosed.Invoke();
 		}
 
 		private IEnumerator EaseProgressCoroutine(float targetProgress, float duration) {
