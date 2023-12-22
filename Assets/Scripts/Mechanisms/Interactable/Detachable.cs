@@ -37,6 +37,10 @@ namespace NaniCore.Loopool {
 		private IEnumerator DetachCoroutine() {
 			transform.SetParent(null, true);
 			if(Rigidbody) {
+				var meshCollider = Rigidbody.GetComponent<MeshCollider>();
+				if(meshCollider != null) {
+					meshCollider.convex = true;
+				}
 				Rigidbody.isKinematic = false;
 				if(useDetachingEjection) {
 					Rigidbody.AddForceAtPosition(
