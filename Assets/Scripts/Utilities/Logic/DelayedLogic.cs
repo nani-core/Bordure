@@ -3,7 +3,7 @@ using UnityEngine.Events;
 using System.Collections;
 
 namespace NaniCore {
-	public class DelayedLogic : MonoBehaviour {
+	public class DelayedLogic : Logic {
 		[Min(0)] public float delayTime;
 		public UnityEvent callback;
 
@@ -12,7 +12,7 @@ namespace NaniCore {
 			callback.Invoke();
 		}
 
-		public void Invoke() {
+		public override void Invoke() {
 			StartCoroutine(InvokingCoroutine());
 		}
 	}

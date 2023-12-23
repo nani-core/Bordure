@@ -2,14 +2,13 @@ using UnityEngine;
 using UnityEngine.Events;
 using System.Collections;
 
-namespace NaniCore.Loopool {
+namespace NaniCore {
 	/// <summary>
 	/// Double-throw carrier.
 	/// Used to toggle and transit a scene object between two anchors.
 	/// </summary>
-	public partial class DtCarrier : MonoBehaviour {
+	public partial class DtCarrier : Carrier {
 		#region Serialized fields
-		[SerializeField] private Transform door;
 		/// Not yet to be implemented.
 		[SerializeField] private AudioClip movingSound;
 		[SerializeField] private AudioClip onClosedSound;
@@ -46,8 +45,8 @@ namespace NaniCore.Loopool {
 		private void SetProgress(float progress) {
 			if(openedTransform == null || closedTransform == null)
 				return;
-			door.transform.position = Vector3.Lerp(closedTransform.position, openedTransform.position, progress);
-			door.transform.rotation = Quaternion.Slerp(closedTransform.rotation, openedTransform.rotation, progress);
+			target.transform.position = Vector3.Lerp(closedTransform.position, openedTransform.position, progress);
+			target.transform.rotation = Quaternion.Slerp(closedTransform.rotation, openedTransform.rotation, progress);
 			this.progress = progress;
 		}
 

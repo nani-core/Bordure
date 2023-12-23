@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 2003401837967121441}
   - component: {fileID: 7218266969205244214}
   m_Layer: 0
-  m_Name: Dt Carrier
+  m_Name: Automatic Door
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -78,7 +78,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccbeed49de33f86429e414eca8c05d61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  door: {fileID: 2333202212841269695}
+  target: {fileID: 2333202212841269695}
   movingSound: {fileID: 0}
   onClosedSound: {fileID: 8300000, guid: ac04cd0b5396c0b42b5c8ad301a6106d, type: 3}
   closedTransform: {fileID: 8641172071095634965}
@@ -86,6 +86,15 @@ MonoBehaviour:
   openedTransform: {fileID: 7168967520737913995}
   isOpened: 0
   openingDuration: 1
+  onOpened:
+    m_PersistentCalls:
+      m_Calls: []
+  onClosed:
+    m_PersistentCalls:
+      m_Calls: []
+  onToggled:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &8018384609884158802
 GameObject:
   m_ObjectHideFlags: 0

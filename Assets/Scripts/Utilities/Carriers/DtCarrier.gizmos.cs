@@ -1,37 +1,37 @@
 #if UNITY_EDITOR
 using UnityEngine;
 
-namespace NaniCore.Loopool {
-	public partial class DtCarrier : MonoBehaviour {
+namespace NaniCore {
+	public partial class DtCarrier : Carrier {
 		#region Life cycle
 		protected void OnDrawGizmos() {
-			if(door != null) {
+			if(target != null) {
 				if(closedTransform != null) {
 					GizmosUtility.SetColor(Color.red, .2f);
-					GizmosUtility.DrawPhantom(door.gameObject, closedTransform);
+					GizmosUtility.DrawPhantom(target.gameObject, closedTransform);
 				}
 				if(openedTransform != null) {
 					GizmosUtility.SetColor(Color.green, .2f);
-					GizmosUtility.DrawPhantom(door.gameObject, openedTransform);
+					GizmosUtility.DrawPhantom(target.gameObject, openedTransform);
 				}
 			}
 		}
 
 		protected void OnValidate() {
-			if(openedTransform.IsChildOf(door.transform))
+			if(openedTransform.IsChildOf(target.transform))
 				openedTransform = null;
-			if(closedTransform.IsChildOf(door.transform))
+			if(closedTransform.IsChildOf(target.transform))
 				closedTransform = null;
 			if(isOpened) {
 				if(openedTransform) {
-					door.transform.position = openedTransform.position;
-					door.transform.rotation = openedTransform.rotation;
+					target.transform.position = openedTransform.position;
+					target.transform.rotation = openedTransform.rotation;
 				}
 			}
 			else {
 				if(closedTransform) {
-					door.transform.position = closedTransform.position;
-					door.transform.rotation = closedTransform.rotation;
+					target.transform.position = closedTransform.position;
+					target.transform.rotation = closedTransform.rotation;
 				}
 			}
 		}
