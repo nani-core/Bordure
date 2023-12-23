@@ -8,7 +8,6 @@ namespace NaniCore.Loopool {
 		#endregion
 
 		#region Serialized fields
-		public Camera mainCamera;
 		public UnityEngine.UI.RawImage debugLayer;
 		#endregion
 
@@ -19,6 +18,7 @@ namespace NaniCore.Loopool {
 
 		#region Properties
 		public Protagonist Protagonist => protagonist;
+		public Camera MainCamera => Protagonist?.Camera;
 		#endregion
 
 		#region Functions
@@ -47,16 +47,11 @@ namespace NaniCore.Loopool {
 				return;
 			}
 			this.protagonist = protagonist;
-			mainCamera.transform.SetParent(protagonist.Eye, false);
-			mainCamera.transform.localPosition = Vector3.zero;
-			mainCamera.transform.localRotation = Quaternion.identity;
-			mainCamera.transform.localScale = Vector3.one;
 		}
 
 		protected void OnProtagonistDestroyed(Protagonist protagonist) {
 			if(protagonist != this.protagonist)
 				return;
-			mainCamera.transform.SetParent(transform, true);
 			this.protagonist = null;
 		}
 		#endregion

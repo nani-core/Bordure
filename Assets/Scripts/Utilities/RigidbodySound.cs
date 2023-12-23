@@ -26,21 +26,25 @@ namespace NaniCore.Loopool {
 
 		#region Life cycle
 		protected void OnCollisionEnter(Collision collision) {
-			if(collision.relativeVelocity.magnitude >= minCollideSpeed) {
-				if(!inWater)
-					PlaySound(onCollide.PickRandom(), collision.contacts[0].point);
+			var rv = collision.relativeVelocity;
+			foreach(var contact in collision.contacts) {
+				var collidingSpeed = Vector3.Dot(rv, contact.normal);
+				if(collidingSpeed >= minCollideSpeed) {
+					if(!inWater)
+						PlaySound(onCollide.PickRandom(), contact.point);
+				}
 			}
 		}
 
 		protected void OnTriggerEnter(Collider other) {
-			if(other.GetComponent<Water>()) {
+			if(other.gameObject.layer == LayerMask.NameToLayer("Water")) {
 				inWater = true;
 				PlaySound(onEnterWater.PickRandom());
 			}
 		}
 
 		protected void OnTriggerExit(Collider other) {
-			if(other.GetComponent<Water>()) {
+			if(other.gameObject.layer == LayerMask.NameToLayer("Water")) {
 				inWater = false;
 				PlaySound(onLeaveWater.PickRandom());
 			}

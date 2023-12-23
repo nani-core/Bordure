@@ -9,7 +9,7 @@ namespace NaniCore.Loopool {
 		#endregion
 
 		#region Fields
-		private bool profileDuplicated = false;
+		private bool isProfileDuplicated = false;
 		private ProtagonistInputHandler inputHandler;
 		#endregion
 
@@ -18,9 +18,9 @@ namespace NaniCore.Loopool {
 			get {
 				if(!Application.isPlaying)
 					return profile;
-				if(!profileDuplicated) {
+				if(!isProfileDuplicated) {
 					profile = Instantiate(profile);
-					profileDuplicated = true;
+					isProfileDuplicated = true;
 				}
 				return profile;
 			}
@@ -34,7 +34,7 @@ namespace NaniCore.Loopool {
 					bool acted = false;
 					foreach(var component in target.GetComponents<Component>()) {
 						switch(component) {
-							case AutomaticDoor door:
+							case DtCarrier door:
 								door.ToggleOpeningState();
 								acted = true;
 								break;
