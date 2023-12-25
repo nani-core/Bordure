@@ -4370,6 +4370,26 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: 2.4000022
       objectReference: {fileID: 0}
+    - target: {fileID: 6017962186688002386, guid: f0288144a59b09b4eb63d1f901f69323, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 6017962186688002386, guid: f0288144a59b09b4eb63d1f901f69323, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.35555556
+      objectReference: {fileID: 0}
+    - target: {fileID: 6017962186688002386, guid: f0288144a59b09b4eb63d1f901f69323, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 6017962186688002386, guid: f0288144a59b09b4eb63d1f901f69323, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6017962186688002386, guid: f0288144a59b09b4eb63d1f901f69323, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6068323441139167320, guid: f0288144a59b09b4eb63d1f901f69323, type: 3}
       propertyPath: m_Size.z
       value: 1.05
@@ -4427,7 +4447,8 @@ PrefabInstance:
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 5374050308339260928, guid: f0288144a59b09b4eb63d1f901f69323, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 9146757865314657878, guid: f0288144a59b09b4eb63d1f901f69323, type: 3}
@@ -14086,7 +14107,7 @@ Transform:
   m_GameObject: {fileID: 2018221695}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -14.499998, y: 4, z: 0}
+  m_LocalPosition: {x: -14.499998, y: 3.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -14106,7 +14127,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tile: {fileID: 1701213973966381414, guid: eccf19d6fc057a843ab42f936c399daa, type: 3}
   concreteMaterial: {fileID: 0}
-  count: {x: 1, y: 2, z: 14}
+  count: {x: 1, y: 1, z: 14}
   spacing: {x: 1, y: 1, z: 1}
   concreteThickness: 0.25
   concreteDepth: 0.01
