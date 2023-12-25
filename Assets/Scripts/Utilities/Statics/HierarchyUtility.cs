@@ -24,10 +24,23 @@ namespace NaniCore {
 		/// </summary>
 		public static GameObject InstantiatePrefab(this GameObject template, Transform under = null) {
 #if UNITY_EDITOR
-			if(!Application.isPlaying)
-				return PrefabUtility.InstantiatePrefab(template, under) as GameObject;
+			if(!Application.isPlaying) {
+				if(PrefabUtility.IsPartOfPrefabAsset(template))
+					return PrefabUtility.InstantiatePrefab(template, under) as GameObject;
+			}
 #endif
 			return Object.Instantiate(template, under);
+		}
+
+		/// <remarks>Will not throw exceptions when the target is not a prefab instance.</remarks>
+		public static void RestorePrefabInstance(this GameObject target) {
+#if UNITY_EDITOR
+			if(Application.isPlaying)
+				return;
+			if(!PrefabUtility.IsPartOfPrefabInstance(target))
+				return;
+			PrefabUtility.RevertPrefabInstance(target, InteractionMode.AutomatedAction);
+#endif
 		}
 		#endregion
 
@@ -35,7 +48,7 @@ namespace NaniCore {
 		/// <summary>
 		/// Make something not selectable nor savable nor visible in hierarchy.
 		/// </summary>
-		public static void MakeUntouchable(this Object target, bool invisible = true) {
+		public static void MakeUntouchable(this Object target, bool hideInEditor = true, bool hideInScene = false) {
 			GameObject realTarget;
 			switch(target) {
 				case GameObject go:
@@ -50,7 +63,7 @@ namespace NaniCore {
 #if UNITY_EDITOR
 			if(!Application.isPlaying) {
 				var svm = SceneVisibilityManager.instance;
-				if(invisible)
+				if(hideInScene)
 					svm.Hide(realTarget, true);
 				else
 					svm.Show(realTarget, false);
@@ -59,7 +72,7 @@ namespace NaniCore {
 #endif
 			var hideFlags = realTarget.hideFlags;
 			hideFlags |= HideFlags.DontSaveInEditor | HideFlags.DontSaveInBuild;
-			if(invisible)
+			if(hideInEditor)
 				hideFlags |= HideFlags.HideInInspector | HideFlags.HideInHierarchy;
 			realTarget.hideFlags = hideFlags;
 		}

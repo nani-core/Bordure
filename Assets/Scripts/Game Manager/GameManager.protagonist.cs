@@ -43,21 +43,20 @@ namespace NaniCore.Loopool {
 						foreach(var abundant in existingProtagonists.Skip(1))
 							DestroyImmediate(abundant.gameObject);
 					}
-					if(existingProtagonists.Count > 0)
+					if(existingProtagonists.Count > 0) {
 						target = existingProtagonists[0];
-					else
-						target = null;
-					// If none is suitable, create one.
-					if(target == null) {
-						if(Settings.protagonist != null) {
-							var newInstance = Settings.protagonist.gameObject.InstantiatePrefab();
-							target = newInstance.GetComponent<Protagonist>();
-							if(target == null) {
-								Debug.LogWarning("Warning: There is no component of type Protagonist on the protagonist prefab.", Settings.protagonist);
-								DestroyImmediate(newInstance);
-							}
+						target.gameObject.RestorePrefabInstance();
+					}
+					else if(Settings.protagonist != null) {
+						var newInstance = Settings.protagonist.gameObject.InstantiatePrefab();
+						target = newInstance.GetComponent<Protagonist>();
+						if(target == null) {
+							Debug.LogWarning("Warning: There is no component of type Protagonist on the protagonist prefab.", Settings.protagonist);
+							DestroyImmediate(newInstance);
 						}
 					}
+					else
+						target = null;
 					// Could not locate or create a target by any means, aborting.
 					if(target == null) {
 						Debug.LogWarning("Warning: Could not instantiate protagonist in edit mode.", this);
