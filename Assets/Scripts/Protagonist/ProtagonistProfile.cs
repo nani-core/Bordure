@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 using System.Collections.Generic;
 
 namespace NaniCore.Loopool {
@@ -11,7 +10,6 @@ namespace NaniCore.Loopool {
 		[Min(0)] public float eyeHanging = .1f;
 
 		[Header("Control")]
-		public InputActionAsset inputActions;
 		[Min(0)] public float skinDepth = .08f;
 		[Min(0)] public float walkingSpeed = 3f;
 		[Min(0)] public float sprintingSpeed = 5f;
@@ -24,7 +22,6 @@ namespace NaniCore.Loopool {
 		[Range(0, 1)] public float midAirAttenuation = .5f;
 
 		[Header("Interaction")]
-		public Canvas interactionUiPrefab;
 		[Min(0)] public float maxInteractionDistance = 20f;
 		[Range(0, 1)] public float grabbingTransitionDuration = .2f;
 		[Range(0, 1)] public float grabbingEasingFactor = .3f;

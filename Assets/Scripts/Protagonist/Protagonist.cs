@@ -59,28 +59,6 @@ namespace NaniCore.Loopool {
 		#endregion
 
 		#region Life cycle
-		protected void OnEnable() {
-#if UNITY_EDITOR
-			if(!Application.isPlaying) {
-				return;
-			}
-#endif
-
-			if(GameManager.Instance == null) {
-				string[] messages = {
-					"There is no instance of GameManager in the scene!",
-					"Please always make sure that there is one."
-				};
-				Debug.LogWarning(string.Join(" ", messages));
-				Destroy(gameObject);
-				return;
-			}
-			if(GameManager.Instance.Protagonist != null) {
-				Destroy(gameObject);
-				return;
-			}
-		}
-
 		protected void Start() {
 #if UNITY_EDITOR
 			if(!Application.isPlaying) {
@@ -96,10 +74,6 @@ namespace NaniCore.Loopool {
 			StartControl();
 			StartInteraction();
 			StartAudio();
-
-			DontDestroyOnLoad(gameObject);
-
-			GameManager.Instance.SendMessage("OnProtagonistCreated", this, SendMessageOptions.DontRequireReceiver);
 		}
 
 		protected void Update() {
@@ -116,14 +90,6 @@ namespace NaniCore.Loopool {
 			ValidateControl();
 		}
 #endif
-
-		protected void OnDestroy() {
-			if(GameManager.Instance == null)
-				return;
-			if(GameManager.Instance.Protagonist != this)
-				return;
-			GameManager.Instance.SendMessage("OnProtagonistDestroyed", this, SendMessageOptions.DontRequireReceiver);
-		}
 
 		protected void FixedUpdate() {
 			FixedUpdateControl();
