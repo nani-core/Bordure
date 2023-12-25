@@ -16,7 +16,6 @@ namespace NaniCore.Loopool {
 			protagonist = GetComponent<Protagonist>();
 
 			playerInput = gameObject.EnsureComponent<PlayerInput>();
-			playerInput.actions = protagonist.Profile.inputActions;
 			playerInput.notificationBehavior = PlayerNotifications.SendMessages;
 			playerInput.actions.FindActionMap("Normal").Enable();
 

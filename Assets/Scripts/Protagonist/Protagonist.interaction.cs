@@ -3,8 +3,11 @@ using System.Collections;
 
 namespace NaniCore.Loopool {
 	public partial class Protagonist : MonoBehaviour {
+		#region Serialized fields
+		[SerializeField] private FocusUi focus;
+		#endregion
+
 		#region Fields
-		private FocusUi focus;
 		private Interactable focusingObject;
 		private Grabbable grabbingObject;
 		private Coroutine grabbingCoroutine;
@@ -77,16 +80,8 @@ namespace NaniCore.Loopool {
 		private void StartInteraction() {
 			inputHandler = gameObject.EnsureComponent<ProtagonistInputHandler>();
 
-			// Create interaction UI.
-			if(Profile?.interactionUiPrefab == null) {
-				Debug.LogWarning("No interaction UI prefab for the protagonist to intialize with.", this);
-			}
-			else {
-				var interactionCanvas = Instantiate(Profile.interactionUiPrefab, transform);
-				focus = interactionCanvas.GetComponentInChildren<FocusUi>();
-				if(focus == null) {
-					Debug.LogWarning("No FocusUi component found in the protagonist interaction UI prefab.", this);
-				}
+			if(focus == null) {
+				Debug.LogWarning("No FocusUi component found in the protagonist interaction UI prefab.", this);
 			}
 
 			FocusingObject = null;
