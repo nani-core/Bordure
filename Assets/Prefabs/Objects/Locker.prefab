@@ -48,6 +48,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -1842022620691312911, guid: 4cc06740a61838c48b3dde9df010402b, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 4afd6cc7b88c5fa4eb1493cdd8ec3c6a, type: 2}
     - target: {fileID: -1807970279642858887, guid: 4cc06740a61838c48b3dde9df010402b, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
@@ -86,7 +90,7 @@ PrefabInstance:
       addedObject: {fileID: 2921982609223177355}
     - targetCorrespondingSourceObject: {fileID: -1807970279642858887, guid: 4cc06740a61838c48b3dde9df010402b, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 9019878194587480959}
+      addedObject: {fileID: 7760833750199928808}
     - targetCorrespondingSourceObject: {fileID: -1807970279642858887, guid: 4cc06740a61838c48b3dde9df010402b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1563702441857150708}
@@ -115,8 +119,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.8564544, y: 0.14784598, z: 1.0473732}
-  m_Center: {x: 0.42822814, y: -0.010788453, z: -0.00027170774}
+  m_Size: {x: 0.7764543, y: 0.04401272, z: 0.9672816}
+  m_Center: {x: 0.38822716, y: 0.0000000037252894, z: -0.00022585687}
 --- !u!54 &1483395456906790446
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -153,10 +157,10 @@ HingeJoint:
   m_GameObject: {fileID: 715746628621212138}
   m_ConnectedBody: {fileID: 1563702441857150708}
   m_ConnectedArticulationBody: {fileID: 0}
-  m_Anchor: {x: -0.375, y: 0, z: 0}
+  m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 0, y: 0, z: 1}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.37500024, y: -0.31788504, z: 0.13225192}
+  m_ConnectedAnchor: {x: -0.38822746, y: -0.35901332, z: 0.5962188}
   serializedVersion: 2
   m_UseSpring: 0
   m_Spring:
@@ -173,7 +177,7 @@ HingeJoint:
   m_UseAcceleration: 0
   m_Limits:
     min: -120
-    max: 120
+    max: 0
     bounciness: 0.3
     bounceMinVelocity: 0.2
     contactDistance: 0
@@ -227,8 +231,8 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: -1807970279642858887, guid: 4cc06740a61838c48b3dde9df010402b, type: 3}
   m_PrefabInstance: {fileID: 1866361734348163847}
   m_PrefabAsset: {fileID: 0}
---- !u!65 &9019878194587480959
-BoxCollider:
+--- !u!64 &7760833750199928808
+MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -245,9 +249,10 @@ BoxCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.9999999, y: 0.7999999, z: 1.1999998}
-  m_Center: {x: -0.0000000745058, y: 0.017993, z: 0.5999999}
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 8733429697405204941, guid: 4cc06740a61838c48b3dde9df010402b, type: 3}
 --- !u!54 &1563702441857150708
 Rigidbody:
   m_ObjectHideFlags: 0
