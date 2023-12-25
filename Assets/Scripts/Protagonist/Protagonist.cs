@@ -88,6 +88,11 @@ namespace NaniCore.Loopool {
 			}
 #endif
 
+			if(!GameManager.Instance.RegisterProtagonist(this)) {
+				Destroy(gameObject);
+				return;
+			}
+
 			if(Profile == null) {
 				Debug.LogWarning("No profile is configured for the protagonist.", this);
 				return;
@@ -98,8 +103,6 @@ namespace NaniCore.Loopool {
 			StartAudio();
 
 			DontDestroyOnLoad(gameObject);
-
-			GameManager.Instance.SendMessage("OnProtagonistCreated", this, SendMessageOptions.DontRequireReceiver);
 		}
 
 		protected void Update() {
@@ -122,7 +125,7 @@ namespace NaniCore.Loopool {
 				return;
 			if(GameManager.Instance.Protagonist != this)
 				return;
-			GameManager.Instance.SendMessage("OnProtagonistDestroyed", this, SendMessageOptions.DontRequireReceiver);
+			GameManager.Instance.UnregisterProtagonist(this);
 		}
 
 		protected void FixedUpdate() {
