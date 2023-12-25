@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Linq;
 using System.Reflection;
+using System.Collections.Generic;
 
 namespace NaniCore.Loopool {
 	public partial class GameManager : MonoBehaviour {
@@ -23,16 +24,15 @@ namespace NaniCore.Loopool {
 
 		#region Functions
 		private Protagonist InitializeProtagonist() {
-			var existingProtagonists = FindObjectsOfType<Protagonist>(true).ToList();
-#if UNITY_EDITOR
-			if(!Application.isPlaying) {
-				foreach(Transform child in transform) {
-					var p = child.GetComponent<Protagonist>();
-					if(p)
-						existingProtagonists.Add(p);
+			List<Protagonist> existingProtagonists;
+			{
+				var runtime = new HashSet<Protagonist>(FindObjectsOfType<Protagonist>(true));
+				if(!Application.isPlaying) {
+					foreach(var protagonist in gameObject.FindAllComponentsInEditor<Protagonist>(true))
+						runtime.Add(protagonist);
 				}
+				existingProtagonists = runtime.ToList();
 			}
-#endif
 			if(spawnPoint != null) {
 				Protagonist target;
 
@@ -50,17 +50,7 @@ namespace NaniCore.Loopool {
 					// If none is suitable, create one.
 					if(target == null) {
 						if(Settings.protagonist != null) {
-							GameObject newInstance;
-#if UNITY_EDITOR
-							if(Application.isPlaying) {
-								newInstance = Instantiate(Settings.protagonist.gameObject);
-							}
-							else {
-								newInstance = UnityEditor.PrefabUtility.InstantiatePrefab(Settings.protagonist.gameObject) as GameObject;
-							}
-#else
-							newInstance = Instantiate(Settings.protagonist.gameObject);
-#endif
+							var newInstance = Settings.protagonist.gameObject.InstantiatePrefab();
 							target = newInstance.GetComponent<Protagonist>();
 							if(target == null) {
 								Debug.LogWarning("Warning: There is no component of type Protagonist on the protagonist prefab.", Settings.protagonist);
@@ -82,7 +72,8 @@ namespace NaniCore.Loopool {
 					target.transform.rotation = Quaternion.LookRotation(spawnPoint.forward);
 
 					target.gameObject.name = "Protagonist";
-					target.gameObject.hideFlags = HideFlags.DontSaveInEditor | HideFlags.DontSaveInBuild;
+					if(!Application.isPlaying)
+						target.gameObject.MakeUntouchable();
 				}
 
 				// Assign the profile.

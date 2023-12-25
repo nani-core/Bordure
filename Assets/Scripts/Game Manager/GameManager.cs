@@ -5,7 +5,7 @@ namespace NaniCore.Loopool {
 	[ExecuteInEditMode]
 	public partial class GameManager : MonoBehaviour {
 		#region Serialized fields
-		[SerializeField] [Expandable] private GameSettings settings;
+		[SerializeField][Expandable] private GameSettings settings;
 		[SerializeField] private Transform spawnPoint;
 		#endregion
 
@@ -16,10 +16,8 @@ namespace NaniCore.Loopool {
 		#region Life cycle
 		protected void Awake() {
 #if UNITY_EDITOR
-			if(!Application.isPlaying) {
-				OnEditorAwake();
+			if(!Application.isPlaying)
 				return;
-			}
 #endif
 			if(!EnsureSingleton())
 				return;
@@ -31,7 +29,7 @@ namespace NaniCore.Loopool {
 		protected void Update() {
 #if UNITY_EDITOR
 			if(!Application.isPlaying) {
-				OnEditorUpdate();
+				OnEditUpdate();
 				return;
 			}
 #endif
@@ -40,10 +38,8 @@ namespace NaniCore.Loopool {
 
 		protected void OnDestroy() {
 #if UNITY_EDITOR
-			if(!Application.isPlaying) {
-				OnEditorDestroy();
+			if(!Application.isPlaying)
 				return;
-			}
 #endif
 			EndDebugUi();
 			RenderUtility.ReleasePooledResources();

@@ -1,7 +1,4 @@
 using UnityEngine;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 
 namespace NaniCore {
 	public abstract class ArchitectureGenerator : MonoBehaviour {
@@ -28,25 +25,24 @@ namespace NaniCore {
 		}
 		#endregion
 
-#if UNITY_EDITOR
 		#region Fields
-		protected const HideFlags gizmosHideFlag = HideFlags.HideAndDontSave;
 		protected abstract string GizmozRootName { get; }
 		protected Transform gizmosRoot;
 		#endregion
 
 		#region Functions
 		protected GameObject InstantiateGizmos(GameObject template, Transform under) {
-			var instance = PrefabUtility.InstantiatePrefab(template, under) as GameObject;
-			instance.hideFlags = gizmosHideFlag;
+			var instance = template.InstantiatePrefab(under);
+			instance.MakeUntouchable();
 			return instance;
 		}
 
+#if UNITY_EDITOR
 		[ContextMenu("Regenerate in Edit Mode")]
 		protected void RegenerateInEditMode() {
 			if(Application.isPlaying)
 				return;
-			if (this == null)
+			if(this == null)
 				return;
 			if(gizmosRoot == null)
 				gizmosRoot = transform.Find(GizmozRootName);
@@ -56,33 +52,39 @@ namespace NaniCore {
 			}
 			gizmosRoot = new GameObject(GizmozRootName).transform;
 			gizmosRoot.SetParent(transform, false);
-			gizmosRoot.gameObject.hideFlags = gizmosHideFlag;
+			gizmosRoot.MakeUntouchable(false);
 			Construct(gizmosRoot, InstantiateGizmos);
 			gizmosRoot?.gameObject?.SetActive(enabled);
 		}
+#endif
 		#endregion
 
 		#region Life cycle
+#if UNITY_EDITOR
 		protected void OnValidate() {
 			if(Application.isPlaying)
 				return;
 			if(!(enabled && gameObject.activeInHierarchy))
 				return;
-			EditorApplication.delayCall += RegenerateInEditMode;
+			UnityEditor.EditorApplication.delayCall += RegenerateInEditMode;
 		}
+#endif
 
 		protected void OnEnable() {
+#if UNITY_EDITOR
 			if(Application.isPlaying)
 				return;
+#endif
 			gizmosRoot?.gameObject?.SetActive(true);
 		}
 
 		protected void OnDisable() {
+#if UNITY_EDITOR
 			if(Application.isPlaying)
 				return;
+#endif
 			gizmosRoot?.gameObject?.SetActive(false);
 		}
 		#endregion
-#endif
 	}
 }
