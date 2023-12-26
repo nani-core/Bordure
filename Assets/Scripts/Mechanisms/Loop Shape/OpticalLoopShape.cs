@@ -168,7 +168,7 @@ namespace NaniCore.Loopool {
 			);
 		}
 
-		protected void FixedUpdate() {
+		protected void Update() {
 			visible = childRenderers.Any(r => r.isVisible);
 			validated = PerformValidation();
 		}
