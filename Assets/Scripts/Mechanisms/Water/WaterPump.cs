@@ -6,15 +6,15 @@ namespace NaniCore.Loopool {
 		[SerializeField] private ParticleSystem particle;
 		#endregion
 
-		#region Functions
-		protected override void UpdateFlowingState() {
-			IsFlowing = IsActive && water != null && water.Height < Height;
-		}
+		#region Interfaces
+		public override bool IsSatisfied => water.Height >= Height;
+		#endregion
 
+		#region Functions
 		protected override void UpdateVisualState() {
 			if(particle != null) {
 				var particleEmmision = particle.emission;
-				particleEmmision.enabled = IsFlowing;
+				particleEmmision.enabled = enabled;
 			}
 		}
 
