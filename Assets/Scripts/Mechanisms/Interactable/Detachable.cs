@@ -7,10 +7,10 @@ using NaughtyAttributes;
 namespace NaniCore.Loopool {
 	public partial class Detachable : Interactable {
 		#region Serialized fields
-		[SerializeField] private bool useDetachingEjection;
-		[ShowIf("useDetachingEjection")][SerializeField] private Vector3 ejectionVelocity;
-		[ShowIf("useDetachingEjection")][SerializeField] private Vector3 ejectionOrigin;
-		[SerializeField] private UnityEvent onDetached;
+		public bool useDetachingEjection;
+		[ShowIf("useDetachingEjection")] public Vector3 ejectionVelocity;
+		[ShowIf("useDetachingEjection")] public Vector3 ejectionOrigin;
+		public UnityEvent onDetached;
 		#endregion
 
 		#region Fields
@@ -37,10 +37,14 @@ namespace NaniCore.Loopool {
 		private IEnumerator DetachCoroutine() {
 			transform.SetParent(null, true);
 			if(Rigidbody) {
+				var meshCollider = Rigidbody.GetComponent<MeshCollider>();
+				if(meshCollider != null) {
+					meshCollider.convex = true;
+				}
 				Rigidbody.isKinematic = false;
 				if(useDetachingEjection) {
 					Rigidbody.AddForceAtPosition(
-						transform.localToWorldMatrix.MultiplyVector(ejectionVelocity),
+						transform.localToWorldMatrix.MultiplyVector(ejectionVelocity).normalized * ejectionVelocity.magnitude,
 						transform.localToWorldMatrix.MultiplyPoint(ejectionOrigin),
 						ForceMode.VelocityChange
 					);

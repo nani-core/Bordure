@@ -37,7 +37,7 @@ Shader "NaniCore/IndicateByValue" {
 				structurePS ps;
 				float4 color = tex2D(_MainTex, vs.uv);
 				bool yes = distance(color, _Value) < _Tolerance / 256;
-				ps.target00 = float4(float3(1, 1, 1) * (yes ? 1 : 0), 1);
+				ps.target00 = float4(float3(1, 1, 1), 1) * (yes ? 1 : 0);
 				return ps;
 			}
 			ENDCG

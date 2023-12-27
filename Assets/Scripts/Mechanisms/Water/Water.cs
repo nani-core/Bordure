@@ -20,9 +20,7 @@ namespace NaniCore.Loopool {
 		private HashSet<Waterlet> waterlets = new HashSet<Waterlet>();
 		#endregion
 
-		#region Functions
-		private BoxCollider Collider => GetComponent<BoxCollider>();
-
+		#region Interfaces
 		public float Height {
 			get => height;
 			set {
@@ -34,7 +32,7 @@ namespace NaniCore.Loopool {
 				var previousHeight = height;
 				height = value;
 				foreach(var waterlet in ActiveWaterlets)
-					waterlet.SendMessage("OnWaterHeightChange", previousHeight, SendMessageOptions.DontRequireReceiver);
+					waterlet.OnWaterHeightChange(previousHeight);
 			}
 		}
 
@@ -42,9 +40,20 @@ namespace NaniCore.Loopool {
 			set {
 				if(targetHeightCoroutine != null)
 					StopCoroutine(targetHeightCoroutine);
-				targetHeightCoroutine = StartCoroutine(SetTargetHeightCoroutine(value));
+				if(isActiveAndEnabled)
+					targetHeightCoroutine = StartCoroutine(SetTargetHeightCoroutine(value));
 			}
 		}
+
+		public IEnumerable<Waterlet> Waterlets => waterlets;
+
+		public IEnumerable<Waterlet> ActiveWaterlets {
+			get => waterlets.Where(waterlet => waterlet.enabled);
+		}
+		#endregion
+
+		#region Functions
+		private BoxCollider Collider => GetComponent<BoxCollider>();
 
 		private IEnumerator SetTargetHeightCoroutine(float value) {
 			if(Height == value)
@@ -64,6 +73,10 @@ namespace NaniCore.Loopool {
 
 		private void UpdateFloatablePhysicsOnEndOfFixedUpdate(Floatable floatable) {
 			var rb = floatable.Rigidbody;
+			// Kinematic floatables might haven't been released yet.
+			if(rb.isKinematic)
+				return;
+
 			var downward = Physics.gravity.normalized;
 			// Positive is downward.
 			var offsetToSurface = Vector3.Dot(downward, rb.position - transform.position) + Height;
@@ -84,10 +97,6 @@ namespace NaniCore.Loopool {
 			waterlets.Remove(waterlet);
 		}
 
-		private IEnumerable<Waterlet> ActiveWaterlets {
-			get => waterlets.Where(waterlet => waterlet.IsActive);
-		}
-
 		public void UpdateTargetHeight() {
 			var activeWaterlets = ActiveWaterlets;
 			List<Waterlet> pumps = new List<Waterlet>(), dumps = new List<Waterlet>();
@@ -103,6 +112,15 @@ namespace NaniCore.Loopool {
 			foreach(var pump in pumps)
 				height = Mathf.Max(height, pump.Height);
 			TargetHeight = height;
+		}
+		#endregion
+
+		#region Message handlers
+		public void OnWaterletEnabled(Waterlet target) {
+			foreach(var waterlet in Waterlets) {
+				if(waterlet != target && waterlet.enabled)
+					waterlet.enabled = false;
+			}
 		}
 		#endregion
 
