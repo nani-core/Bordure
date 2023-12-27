@@ -187,11 +187,14 @@ namespace NaniCore.Loopool {
 
 		private void ValidateGround() {
 			bool result = SweepTest(Physics.gravity, out RaycastHit hitInfo, profile.skinDepth, .5f);
+			// Cannot jump when stepping on movable foundation.
+			/*
 			var hitRb = hitInfo.rigidbody;
 			if(hitRb != null) {
 				if(hitRb.velocity.magnitude > .01f)
 					result = false;
 			}
+			*/
 			isOnGround = result;
 		}
 

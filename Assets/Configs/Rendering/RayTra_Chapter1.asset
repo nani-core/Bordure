@@ -48,7 +48,7 @@ MonoBehaviour:
     m_Value: 50
   meanFreePath:
     m_OverrideState: 1
-    m_Value: 5
+    m_Value: 10
   enableVolumetricFog:
     m_OverrideState: 1
     m_Value: 1
@@ -330,6 +330,28 @@ MonoBehaviour:
   screenFadeDistance:
     m_OverrideState: 1
     m_Value: 0.078
+--- !u!114 &-4031691467790839764
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da5ab44aadfb1804db5fd470983ac1b8, type: 3}
+  m_Name: LiftGammaGain
+  m_EditorClassIdentifier: 
+  active: 0
+  lift:
+    m_OverrideState: 0
+    m_Value: {x: 1, y: 0.97801226, z: 0.8641779, w: -0.01672235}
+  gamma:
+    m_OverrideState: 1
+    m_Value: {x: 0.9399307, y: 1, z: 0.94809735, w: 0.122699365}
+  gain:
+    m_OverrideState: 0
+    m_Value: {x: 1, y: 1, z: 1, w: 0}
 --- !u!114 &-3191247917488149063
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -471,6 +493,7 @@ MonoBehaviour:
   - {fileID: -8060346969041476028}
   - {fileID: 129793298484406382}
   - {fileID: -7613555767942812584}
+  - {fileID: -4031691467790839764}
 --- !u!114 &129793298484406382
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -849,13 +872,13 @@ MonoBehaviour:
     m_Value: 0
   meteringMode:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 0
   luminanceSource:
     m_OverrideState: 0
     m_Value: 1
   fixedExposure:
     m_OverrideState: 1
-    m_Value: 14
+    m_Value: 13.8
   compensation:
     m_OverrideState: 1
     m_Value: 0

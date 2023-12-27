@@ -73,6 +73,10 @@ namespace NaniCore.Loopool {
 
 		private void UpdateFloatablePhysicsOnEndOfFixedUpdate(Floatable floatable) {
 			var rb = floatable.Rigidbody;
+			// Kinematic floatables might haven't been released yet.
+			if(rb.isKinematic)
+				return;
+
 			var downward = Physics.gravity.normalized;
 			// Positive is downward.
 			var offsetToSurface = Vector3.Dot(downward, rb.position - transform.position) + Height;
