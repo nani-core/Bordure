@@ -90,6 +90,7 @@ namespace NaniCore {
 		protected override void Construct(Transform under, Instantiator instantiator) {
 			foreach(var face in Faces) {
 				var faceObj = new GameObject($"{gameObject.name} (wall {face.name})");
+				faceObj.isStatic = gameObject.isStatic;
 
 				var faceTransform = faceObj.transform;
 				faceTransform.SetParent(under, false);
@@ -125,6 +126,7 @@ namespace NaniCore {
 				{
 					var concreteObj = GameObject.CreatePrimitive(PrimitiveType.Cube);
 					concreteObj.name = $"{gameObject.name} (concrete {face.name})";
+					concreteObj.isStatic = gameObject.isStatic;
 					var concreteTransform = concreteObj.transform;
 					concreteTransform.SetParent(faceTransform, false);
 

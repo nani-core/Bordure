@@ -32,6 +32,7 @@ namespace NaniCore {
 							continue;
 						var instance = instantiator(tile, under).transform;
 						instance.localPosition = localPosition;
+						instance.gameObject.isStatic = gameObject.isStatic;
 					}
 				}
 			}
