@@ -13951,6 +13951,10 @@ PrefabInstance:
       value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 5520164683677592306, guid: 04b9fb05edf41d84fbf96e25b53e5bd7, type: 3}
+      propertyPath: m_UseSpring
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5520164683677592306, guid: 04b9fb05edf41d84fbf96e25b53e5bd7, type: 3}
       propertyPath: m_Limits.max
       value: 0
       objectReference: {fileID: 0}
@@ -13959,8 +13963,20 @@ PrefabInstance:
       value: -180
       objectReference: {fileID: 0}
     - target: {fileID: 5520164683677592306, guid: 04b9fb05edf41d84fbf96e25b53e5bd7, type: 3}
+      propertyPath: m_Spring.damper
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5520164683677592306, guid: 04b9fb05edf41d84fbf96e25b53e5bd7, type: 3}
+      propertyPath: m_Spring.spring
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5520164683677592306, guid: 04b9fb05edf41d84fbf96e25b53e5bd7, type: 3}
       propertyPath: m_ConnectedAnchor.y
       value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 5520164683677592306, guid: 04b9fb05edf41d84fbf96e25b53e5bd7, type: 3}
+      propertyPath: m_Spring.targetPosition
+      value: -150
       objectReference: {fileID: 0}
     - target: {fileID: 7154040840688155089, guid: 04b9fb05edf41d84fbf96e25b53e5bd7, type: 3}
       propertyPath: m_LocalPosition.x
