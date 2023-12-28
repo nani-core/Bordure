@@ -13,7 +13,7 @@ namespace NaniCore.Loopool {
 		[SerializeField] protected GameObject gastro;
 		[SerializeField][Range(0, 1)] private float thickness;
 		[SerializeField][Range(0, 1)] private float thicknessTolerance;
-#if UNITY_EDITOR
+#if DEBUG
 		[SerializeField] private bool showDebugLayer = false;
 		[SerializeField][ShowIf("showDebugLayer")][Range(0, 1)] private float debugLayerOpacity = 1f;
 #endif
@@ -88,8 +88,10 @@ namespace NaniCore.Loopool {
 				maskTexture.Destroy();
 			}
 
+#if DEBUG
 			if(showDebugLayer)
 				GameManager.Instance.DrawDebugFrame(mrtTexture, debugLayerOpacity);
+#endif
 
 			if(!mrtTexture.HasValue(gastroColor)) {
 				// Don't forget to release temporary RT on early returns!

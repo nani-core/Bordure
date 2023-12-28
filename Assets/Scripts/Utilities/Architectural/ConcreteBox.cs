@@ -38,6 +38,8 @@ namespace NaniCore {
 		}
 
 		#region Functions
+		protected override string GizmozRootName => "$ConcreteBoxGizmosRoot";
+
 		IEnumerable<FaceInfo> Faces {
 			get {
 				if(xp) yield return new FaceInfo {
@@ -143,9 +145,5 @@ namespace NaniCore {
 			}
 		}
 		#endregion
-
-#if UNITY_EDITOR
-		protected override string GizmozRootName => "$ConcreteBoxGizmosRoot";
-#endif
 	}
 }

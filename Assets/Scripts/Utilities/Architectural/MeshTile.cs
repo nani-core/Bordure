@@ -13,6 +13,8 @@ namespace NaniCore {
 		#endregion
 
 		#region Functions
+		protected override string GizmozRootName => "$MeshTileGizmosRoot";
+
 		protected override void Construct(Transform under, Instantiator instantiator) {
 			if(tile == null)
 				return;
@@ -67,9 +69,5 @@ namespace NaniCore {
 			}
 		}
 		#endregion
-
-#if UNITY_EDITOR
-		protected override string GizmozRootName => "$MeshTileGizmosRoot";
-#endif
 	}
 }
