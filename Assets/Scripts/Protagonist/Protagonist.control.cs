@@ -76,6 +76,12 @@ namespace NaniCore.Loopool {
 		}
 		#endregion
 
+		#region Functions
+		private bool SweepTestGround(out RaycastHit hit, float distance, float backUpRatio = .5f, Vector3 offset = default) {
+			return rigidbody.SweepTestEx(-Upward, out hit, distance, backUpRatio, offset, GameManager.Instance.GroundLayerMask);
+		}
+		#endregion
+
 		#region Life cycle
 		protected void StartControl() {
 			if(Profile == null)
@@ -112,15 +118,15 @@ namespace NaniCore.Loopool {
 			var originalPosition = rigidbody.position;
 			var offset = desiredMovementVelocity.normalized * profile.skinDepth;
 			rigidbody.position += offset;
-			var isHit = SweepTest(-Upward, out RaycastHit stepHitInfo, profile.stepHeight * 2f, .5f);
+			var isHit = SweepTestGround(out RaycastHit stepHit, profile.stepHeight * 2f);
 			rigidbody.position = originalPosition;
 			if(!isHit)
 				return;
-			var deltaY = Vector3.Dot(stepHitInfo.point - rigidbody.position, Upward);
+			var deltaY = Vector3.Dot(stepHit.point - rigidbody.position, Upward);
 			if(Mathf.Abs(deltaY) < .1f)
 				return;
 			// Teleport to desired position.
-			var desiredPosition = originalPosition + (stepHitInfo.point - offset - originalPosition).ProjectOntoAxis(Upward);
+			var desiredPosition = originalPosition + (stepHit.point - offset - originalPosition).ProjectOntoAxis(Upward);
 			rigidbody.MovePosition(desiredPosition);
 			// Grant helper velocity.
 			var minimumHelperVelocity = desiredMovementVelocity.normalized * (MovingSpeed * .5f);
@@ -144,20 +150,6 @@ namespace NaniCore.Loopool {
 
 			rigidbody = gameObject.EnsureComponent<Rigidbody>();
 			rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
-		}
-
-		private bool SweepTest(Vector3 direction, out RaycastHit hitInfo, float distance, float backupRatio = 0, Vector3 offset = default) {
-			direction.Normalize();
-			var originalPos = rigidbody.position;
-			rigidbody.position += direction * (distance * backupRatio * -1) + offset;
-			bool result = rigidbody.SweepTest(direction, out hitInfo, distance);
-			if(result) {
-				int shouldExclude = hitInfo.collider.gameObject.layer & rigidbody.excludeLayers;
-				if(shouldExclude != 0)
-					result = false;
-			}
-			rigidbody.position = originalPos;
-			return result;
 		}
 
 		public void OrientDelta(Vector2 delta) {
@@ -186,12 +178,11 @@ namespace NaniCore.Loopool {
 		}
 
 		private void ValidateGround() {
-			bool result = SweepTest(Physics.gravity, out RaycastHit hitInfo, profile.skinDepth, .5f);
+			bool result = SweepTestGround(out RaycastHit hit, profile.skinDepth);
 			// Cannot jump when stepping on movable foundation.
 			/*
-			var hitRb = hitInfo.rigidbody;
-			if(hitRb != null) {
-				if(hitRb.velocity.magnitude > .01f)
+			if(hit.rigidbody != null) {
+				if(hit.rigidbody.velocity.magnitude > .01f)
 					result = false;
 			}
 			*/

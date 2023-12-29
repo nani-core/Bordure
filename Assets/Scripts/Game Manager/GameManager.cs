@@ -22,6 +22,7 @@ namespace NaniCore.Loopool {
 			if(!EnsureSingleton())
 				return;
 
+			StartConstants();
 			protagonist = InitializeProtagonist();
 			StartDebugUi();
 		}
