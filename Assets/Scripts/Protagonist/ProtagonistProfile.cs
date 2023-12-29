@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 
 namespace NaniCore.Loopool {
-	[CreateAssetMenu(menuName = "Nani Core/Loopool/Protagonist Profile")]
+	[CreateAssetMenu(menuName = "Nani Core/Protagonist Profile")]
 	public class ProtagonistProfile : ScriptableObject {
 		[Header("Geometry")]
 		[Min(0)] public float height = 1.6f;

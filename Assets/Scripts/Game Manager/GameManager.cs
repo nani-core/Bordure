@@ -6,7 +6,7 @@ namespace NaniCore.Loopool {
 	public partial class GameManager : MonoBehaviour {
 		#region Serialized fields
 		[SerializeField][Expandable] private GameSettings settings;
-		[SerializeField] private Transform spawnPoint;
+		[SerializeField] private Level startLevel;
 		#endregion
 
 		#region Interfaces

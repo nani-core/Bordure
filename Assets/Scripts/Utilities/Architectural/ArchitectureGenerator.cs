@@ -40,7 +40,7 @@ namespace NaniCore {
 #if UNITY_EDITOR
 		[ContextMenu("Regenerate in Edit Mode")]
 		protected void RegenerateInEditMode() {
-			if(Application.isPlaying)
+			if(Application.isPlaying || this == null)
 				return;
 			if(this == null)
 				return;
