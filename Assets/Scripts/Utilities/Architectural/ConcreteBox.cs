@@ -127,6 +127,7 @@ namespace NaniCore {
 					var concreteObj = GameObject.CreatePrimitive(PrimitiveType.Cube);
 					concreteObj.name = $"{gameObject.name} (concrete {face.name})";
 					concreteObj.isStatic = gameObject.isStatic;
+					concreteObj.layer = LayerMask.NameToLayer("Concrete");
 					var concreteTransform = concreteObj.transform;
 					concreteTransform.SetParent(faceTransform, false);
 

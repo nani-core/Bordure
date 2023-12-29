@@ -17,7 +17,7 @@ namespace NaniCore.Loopool {
 		private bool isWalking = false;
 		private bool isSprinting = false;
 		private bool isJumping = false;
-		private Vector2 bufferedMovementDelta, bufferedMovementVelocity;
+		private Vector2 bufferedMovementVelocity;
 		private Vector3 desiredMovementVelocity;
 		#endregion
 
@@ -76,12 +76,6 @@ namespace NaniCore.Loopool {
 		}
 		#endregion
 
-		#region Functions
-		private bool SweepTestGround(out RaycastHit hit, float distance, float backUpRatio = .5f, Vector3 offset = default) {
-			return rigidbody.SweepTestEx(-Upward, out hit, distance, backUpRatio, offset, GameManager.Instance.GroundLayerMask);
-		}
-		#endregion
-
 		#region Life cycle
 		protected void StartControl() {
 			if(Profile == null)
@@ -115,30 +109,28 @@ namespace NaniCore.Loopool {
 			if(isJumping || desiredMovementVelocity.magnitude == 0f)
 				return;
 
-			var originalPosition = rigidbody.position;
-			var offset = desiredMovementVelocity.normalized * profile.skinDepth;
-			rigidbody.position += offset;
-			var isHit = SweepTestGround(out RaycastHit stepHit, profile.stepHeight * 2f);
-			rigidbody.position = originalPosition;
-			if(!isHit)
-				return;
-			var deltaY = Vector3.Dot(stepHit.point - rigidbody.position, Upward);
-			if(Mathf.Abs(deltaY) < .1f)
-				return;
-			// Teleport to desired position.
-			var desiredPosition = originalPosition + (stepHit.point - offset - originalPosition).ProjectOntoAxis(Upward);
-			rigidbody.MovePosition(desiredPosition);
-			// Grant helper velocity.
-			var minimumHelperVelocity = desiredMovementVelocity.normalized * (MovingSpeed * .5f);
-			var helperSpeed = Vector3.Dot(minimumHelperVelocity, desiredMovementVelocity.normalized);
-			helperSpeed = Mathf.Max(0, helperSpeed);
-			var trimmedHelperVelocity = desiredMovementVelocity.normalized * helperSpeed;
-			rigidbody.AddForce(trimmedHelperVelocity, ForceMode.VelocityChange);
-			rigidbody.velocity = rigidbody.velocity.ProjectOntoPlane(Upward);
+			DealStepping();
 		}
 		#endregion
 
 		#region Functions
+		private bool SweepTestGround(out RaycastHit hit, float distance, float backUpRatio = .5f, Vector3 offset = default) {
+			var direction = -Upward;
+			var hits = rigidbody.SweepTestAll(direction, distance, backUpRatio, offset, GameManager.Instance.GroundLayerMask);
+			float maxGroundingAngle = Mathf.Deg2Rad * profile.maxGroundingAngle;
+			foreach(var candidate in hits) {
+				// Check if the step is too sloped.
+				float angle = Mathf.Deg2Rad * Vector3.Angle(-direction, candidate.normal);
+				if(angle > maxGroundingAngle)
+					continue;
+
+				hit = candidate;
+				return true;
+			}
+			hit = default;
+			return false;
+		}
+
 		private void ApplyGeometry() {
 			if(Profile == null)
 				return;
@@ -161,10 +153,6 @@ namespace NaniCore.Loopool {
 		public void MoveVelocity(Vector2 vXy) {
 			bufferedMovementVelocity += vXy;
 			hasJustMoved = hasJustMoved || vXy.magnitude > .01f;
-		}
-
-		public void MoveDelta(Vector2 dXy) {
-			bufferedMovementDelta += dXy;
 		}
 
 		public void Jump() {
@@ -197,8 +185,7 @@ namespace NaniCore.Loopool {
 		}
 
 		private void UpdateDesiredMovementVelocity(float deltaTime) {
-			var bufferedDelta = bufferedMovementDelta + bufferedMovementVelocity * deltaTime;
-			bufferedMovementDelta = Vector3.zero;
+			var bufferedDelta = bufferedMovementVelocity * deltaTime;
 			bufferedMovementVelocity = Vector3.zero;
 			desiredMovementVelocity = eye.transform.right * bufferedDelta.x + transform.forward * bufferedDelta.y;
 			desiredMovementVelocity *= MovingSpeed / deltaTime;
@@ -221,6 +208,20 @@ namespace NaniCore.Loopool {
 			hasJustMoved = false;
 			animator?.SetBool("Walking", isWalking);
 			animator?.SetBool("Sprinting", IsSprinting);
+		}
+
+		private void DealStepping() {
+			var offset = desiredMovementVelocity.normalized * profile.skinDepth;
+			var isHit = SweepTestGround(out RaycastHit hit, profile.stepHeight * 2f, .5f, offset);
+			if(!isHit)
+				return;
+			var deltaY = Vector3.Dot(hit.point - rigidbody.position, Upward);
+			if(Mathf.Abs(deltaY) < .1f)
+				return;
+
+			// Teleport to desired position.
+			var desiredPosition = rigidbody.position + (hit.point - offset - rigidbody.position).ProjectOntoAxis(Upward);
+			rigidbody.MovePosition(desiredPosition);
 		}
 		#endregion
 	}
