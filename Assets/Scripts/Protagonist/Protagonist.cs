@@ -73,7 +73,6 @@ namespace NaniCore.Loopool {
 
 			StartControl();
 			StartInteraction();
-			StartAudio();
 		}
 
 		protected void Update() {

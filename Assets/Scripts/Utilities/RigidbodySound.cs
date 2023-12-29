@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 namespace NaniCore.Loopool {
 	[RequireComponent(typeof(Rigidbody))]
@@ -11,6 +12,7 @@ namespace NaniCore.Loopool {
 		#endregion
 
 		#region Fields
+		private bool immune = true;
 		private bool inWater = false;
 		#endregion
 
@@ -22,10 +24,23 @@ namespace NaniCore.Loopool {
 				return;
 			StartCoroutine(AudioUtility.PlayOneShotAtCoroutine(clip, worldPosition, transform));
 		}
+
+		private IEnumerator ImmuneCoroutine(float time = .1f) {
+			immune = true;
+			yield return new WaitForSeconds(time);
+			immune = false;
+		}
 		#endregion
 
 		#region Life cycle
+		protected void OnEnable() {
+			StartCoroutine(ImmuneCoroutine());
+		}
+
 		protected void OnCollisionEnter(Collision collision) {
+			if(immune)
+				return;
+
 			var rv = collision.relativeVelocity;
 			foreach(var contact in collision.contacts) {
 				var collidingSpeed = Vector3.Dot(rv, contact.normal);
@@ -37,16 +52,26 @@ namespace NaniCore.Loopool {
 		}
 
 		protected void OnTriggerEnter(Collider other) {
-			if(other.gameObject.layer == LayerMask.NameToLayer("Water")) {
-				inWater = true;
-				PlaySound(onEnterWater.PickRandom());
+			if(immune)
+				return;
+
+			if(!inWater) {
+				if(other.gameObject.layer == LayerMask.NameToLayer("Water")) {
+					inWater = true;
+					PlaySound(onEnterWater.PickRandom());
+				}
 			}
 		}
 
 		protected void OnTriggerExit(Collider other) {
-			if(other.gameObject.layer == LayerMask.NameToLayer("Water")) {
-				inWater = false;
-				PlaySound(onLeaveWater.PickRandom());
+			if(immune)
+				return;
+
+			if(inWater) {
+				if(other.gameObject.layer == GameManager.Instance.WaterLayer) {
+					inWater = false;
+					PlaySound(onLeaveWater.PickRandom());
+				}
 			}
 		}
 		#endregion

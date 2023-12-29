@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 
 namespace NaniCore.Loopool {
-	[CreateAssetMenu(menuName = "Nani Core/Loopool/Protagonist Profile")]
+	[CreateAssetMenu(menuName = "Nani Core/Protagonist Profile")]
 	public class ProtagonistProfile : ScriptableObject {
 		[Header("Geometry")]
 		[Min(0)] public float height = 1.6f;
@@ -14,7 +14,7 @@ namespace NaniCore.Loopool {
 		[Min(0)] public float walkingSpeed = 3f;
 		[Min(0)] public float sprintingSpeed = 5f;
 		[Range(0, 1)] public float acceleration = .5f;
-		[Min(0)] public float stepDistance = 1.3f;
+		[Range(0, 90)] public float maxGroundingAngle = 45f;
 		[Min(0)] public float orientingSpeed = 1f;
 		[Min(0)] public float jumpingHeight = 1f;
 		[Min(0)] public float stepHeight = .3f;

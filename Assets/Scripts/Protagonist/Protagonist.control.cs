@@ -16,8 +16,7 @@ namespace NaniCore.Loopool {
 		private bool hasJustMoved = false;
 		private bool isWalking = false;
 		private bool isSprinting = false;
-		private bool isJumping = false;
-		private Vector2 bufferedMovementDelta, bufferedMovementVelocity;
+		private Vector2 bufferedMovementVelocity;
 		private Vector3 desiredMovementVelocity;
 		#endregion
 
@@ -33,7 +32,6 @@ namespace NaniCore.Loopool {
 			get => isSprinting;
 			set => isSprinting = value;
 		}
-		public bool IsJumping => isJumping;
 
 		private float MovingSpeed => IsSprinting ? profile.sprintingSpeed : profile.walkingSpeed;
 
@@ -106,33 +104,31 @@ namespace NaniCore.Loopool {
 		}
 
 		protected void LateUpdateControl() {
-			if(isJumping || desiredMovementVelocity.magnitude == 0f)
+			if(desiredMovementVelocity.magnitude == 0f)
 				return;
 
-			var originalPosition = rigidbody.position;
-			var offset = desiredMovementVelocity.normalized * profile.skinDepth;
-			rigidbody.position += offset;
-			var isHit = SweepTest(-Upward, out RaycastHit stepHitInfo, profile.stepHeight * 2f, .5f);
-			rigidbody.position = originalPosition;
-			if(!isHit)
-				return;
-			var deltaY = Vector3.Dot(stepHitInfo.point - rigidbody.position, Upward);
-			if(Mathf.Abs(deltaY) < .1f)
-				return;
-			// Teleport to desired position.
-			var desiredPosition = originalPosition + (stepHitInfo.point - offset - originalPosition).ProjectOntoAxis(Upward);
-			rigidbody.MovePosition(desiredPosition);
-			// Grant helper velocity.
-			var minimumHelperVelocity = desiredMovementVelocity.normalized * (MovingSpeed * .5f);
-			var helperSpeed = Vector3.Dot(minimumHelperVelocity, desiredMovementVelocity.normalized);
-			helperSpeed = Mathf.Max(0, helperSpeed);
-			var trimmedHelperVelocity = desiredMovementVelocity.normalized * helperSpeed;
-			rigidbody.AddForce(trimmedHelperVelocity, ForceMode.VelocityChange);
-			rigidbody.velocity = rigidbody.velocity.ProjectOntoPlane(Upward);
+			DealStepping();
 		}
 		#endregion
 
 		#region Functions
+		private bool SweepTestGround(out RaycastHit hit, float distance, float backUpRatio = .5f, Vector3 offset = default) {
+			var direction = -Upward;
+			var hits = rigidbody.SweepTestAll(direction, distance, backUpRatio, offset, GameManager.Instance.GroundLayerMask);
+			float maxGroundingAngle = Mathf.Deg2Rad * profile.maxGroundingAngle;
+			foreach(var candidate in hits) {
+				// Check if the step is too sloped.
+				float angle = Mathf.Deg2Rad * Vector3.Angle(-direction, candidate.normal);
+				if(angle > maxGroundingAngle)
+					continue;
+
+				hit = candidate;
+				return true;
+			}
+			hit = default;
+			return false;
+		}
+
 		private void ApplyGeometry() {
 			if(Profile == null)
 				return;
@@ -146,20 +142,6 @@ namespace NaniCore.Loopool {
 			rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
 		}
 
-		private bool SweepTest(Vector3 direction, out RaycastHit hitInfo, float distance, float backupRatio = 0, Vector3 offset = default) {
-			direction.Normalize();
-			var originalPos = rigidbody.position;
-			rigidbody.position += direction * (distance * backupRatio * -1) + offset;
-			bool result = rigidbody.SweepTest(direction, out hitInfo, distance);
-			if(result) {
-				int shouldExclude = hitInfo.collider.gameObject.layer & rigidbody.excludeLayers;
-				if(shouldExclude != 0)
-					result = false;
-			}
-			rigidbody.position = originalPos;
-			return result;
-		}
-
 		public void OrientDelta(Vector2 delta) {
 			delta *= profile.orientingSpeed;
 			Azimuth += delta.x;
@@ -171,10 +153,6 @@ namespace NaniCore.Loopool {
 			hasJustMoved = hasJustMoved || vXy.magnitude > .01f;
 		}
 
-		public void MoveDelta(Vector2 dXy) {
-			bufferedMovementDelta += dXy;
-		}
-
 		public void Jump() {
 			if(!IsOnGround)
 				return;
@@ -182,32 +160,22 @@ namespace NaniCore.Loopool {
 			var gravity = -Vector3.Dot(Physics.gravity, Upward);
 			float speed = Mathf.Sqrt(2f * gravity * profile.jumpingHeight);
 			rigidbody.AddForce(Upward * speed, ForceMode.VelocityChange);
-			StartCoroutine(JumpCoroutine());
 		}
 
 		private void ValidateGround() {
-			bool result = SweepTest(Physics.gravity, out RaycastHit hitInfo, profile.skinDepth, .5f);
+			bool result = SweepTestGround(out RaycastHit hit, profile.skinDepth);
 			// Cannot jump when stepping on movable foundation.
 			/*
-			var hitRb = hitInfo.rigidbody;
-			if(hitRb != null) {
-				if(hitRb.velocity.magnitude > .01f)
+			if(hit.rigidbody != null) {
+				if(hit.rigidbody.velocity.magnitude > .01f)
 					result = false;
 			}
 			*/
 			isOnGround = result;
 		}
 
-		private IEnumerator JumpCoroutine() {
-			isJumping = true;
-			yield return new WaitForSeconds(.1f);
-			yield return new WaitUntil(() => IsOnGround);
-			isJumping = false;
-		}
-
 		private void UpdateDesiredMovementVelocity(float deltaTime) {
-			var bufferedDelta = bufferedMovementDelta + bufferedMovementVelocity * deltaTime;
-			bufferedMovementDelta = Vector3.zero;
+			var bufferedDelta = bufferedMovementVelocity * deltaTime;
 			bufferedMovementVelocity = Vector3.zero;
 			desiredMovementVelocity = eye.transform.right * bufferedDelta.x + transform.forward * bufferedDelta.y;
 			desiredMovementVelocity *= MovingSpeed / deltaTime;
@@ -230,6 +198,21 @@ namespace NaniCore.Loopool {
 			hasJustMoved = false;
 			animator?.SetBool("Walking", isWalking);
 			animator?.SetBool("Sprinting", IsSprinting);
+		}
+
+		private void DealStepping() {
+			var offset = desiredMovementVelocity.normalized * profile.skinDepth;
+			var isHit = SweepTestGround(out RaycastHit hit, profile.stepHeight * 2f, .5f, offset);
+			if(!isHit)
+				return;
+			var deltaY = Vector3.Dot(hit.point - rigidbody.position, Upward);
+			// Downward steppings are ignored.
+			if(deltaY < 1e-2f)
+				return;
+
+			// Teleport to desired position.
+			var desiredPosition = rigidbody.position + (hit.point - offset - rigidbody.position).ProjectOntoAxis(Upward);
+			rigidbody.MovePosition(desiredPosition);
 		}
 		#endregion
 	}
