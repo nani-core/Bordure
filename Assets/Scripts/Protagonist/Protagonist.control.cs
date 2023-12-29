@@ -16,7 +16,6 @@ namespace NaniCore.Loopool {
 		private bool hasJustMoved = false;
 		private bool isWalking = false;
 		private bool isSprinting = false;
-		private bool isJumping = false;
 		private Vector2 bufferedMovementVelocity;
 		private Vector3 desiredMovementVelocity;
 		#endregion
@@ -33,7 +32,6 @@ namespace NaniCore.Loopool {
 			get => isSprinting;
 			set => isSprinting = value;
 		}
-		public bool IsJumping => isJumping;
 
 		private float MovingSpeed => IsSprinting ? profile.sprintingSpeed : profile.walkingSpeed;
 
@@ -106,7 +104,7 @@ namespace NaniCore.Loopool {
 		}
 
 		protected void LateUpdateControl() {
-			if(isJumping || desiredMovementVelocity.magnitude == 0f)
+			if(desiredMovementVelocity.magnitude == 0f)
 				return;
 
 			DealStepping();
@@ -162,7 +160,6 @@ namespace NaniCore.Loopool {
 			var gravity = -Vector3.Dot(Physics.gravity, Upward);
 			float speed = Mathf.Sqrt(2f * gravity * profile.jumpingHeight);
 			rigidbody.AddForce(Upward * speed, ForceMode.VelocityChange);
-			StartCoroutine(JumpCoroutine());
 		}
 
 		private void ValidateGround() {
@@ -175,13 +172,6 @@ namespace NaniCore.Loopool {
 			}
 			*/
 			isOnGround = result;
-		}
-
-		private IEnumerator JumpCoroutine() {
-			isJumping = true;
-			yield return new WaitForSeconds(.1f);
-			yield return new WaitUntil(() => IsOnGround);
-			isJumping = false;
 		}
 
 		private void UpdateDesiredMovementVelocity(float deltaTime) {
@@ -216,7 +206,8 @@ namespace NaniCore.Loopool {
 			if(!isHit)
 				return;
 			var deltaY = Vector3.Dot(hit.point - rigidbody.position, Upward);
-			if(Mathf.Abs(deltaY) < .1f)
+			// Downward steppings are ignored.
+			if(deltaY < 1e-2f)
 				return;
 
 			// Teleport to desired position.
