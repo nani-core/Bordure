@@ -8,6 +8,7 @@ namespace NaniCore.Loopool {
 		#endregion
 
 		#region Interfaces
+		public LayerMask WaterLayer => waterLayer;
 		public LayerMask GroundLayerMask => ~((1 << waterLayer) | (1 << concreteLayer));
 		#endregion
 
