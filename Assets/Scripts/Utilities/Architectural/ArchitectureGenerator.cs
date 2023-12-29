@@ -52,6 +52,7 @@ namespace NaniCore {
 			}
 			gizmosRoot = new GameObject(GizmozRootName).transform;
 			gizmosRoot.SetParent(transform, false);
+			gizmosRoot.gameObject.isStatic = gameObject.isStatic;
 			Construct(gizmosRoot, InstantiateGizmos);
 			gizmosRoot.MakeUntouchable();
 			gizmosRoot?.gameObject?.SetActive(enabled);

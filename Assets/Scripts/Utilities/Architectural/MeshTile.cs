@@ -13,6 +13,8 @@ namespace NaniCore {
 		#endregion
 
 		#region Functions
+		protected override string GizmozRootName => "$MeshTileGizmosRoot";
+
 		protected override void Construct(Transform under, Instantiator instantiator) {
 			if(tile == null)
 				return;
@@ -30,6 +32,7 @@ namespace NaniCore {
 							continue;
 						var instance = instantiator(tile, under).transform;
 						instance.localPosition = localPosition;
+						instance.gameObject.isStatic = gameObject.isStatic;
 					}
 				}
 			}
@@ -67,9 +70,5 @@ namespace NaniCore {
 			}
 		}
 		#endregion
-
-#if UNITY_EDITOR
-		protected override string GizmozRootName => "$MeshTileGizmosRoot";
-#endif
 	}
 }
