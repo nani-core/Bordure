@@ -151,7 +151,7 @@ namespace NaniCore.Loopool {
 		}
 
 		private bool Raycast(out RaycastHit hitInfo) {
-			return Physics.Raycast(Camera.ViewportPointToRay(Vector2.one * .5f), out hitInfo, profile.maxInteractionDistance);
+			return Physics.Raycast(Camera.ViewportPointToRay(Vector2.one * .5f), out hitInfo, profile.maxInteractionDistance, GameManager.Instance.GrabbingLayerMask);
 		}
 
 		#region Grabbing
