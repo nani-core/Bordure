@@ -96,7 +96,7 @@ namespace NaniCore.Loopool {
 		#endregion
 
 		#region Life cycle
-		private void StartInteraction() {
+		private void InitializeInteraction() {
 			inputHandler = gameObject.EnsureComponent<ProtagonistInputHandler>();
 
 			if(focus == null) {

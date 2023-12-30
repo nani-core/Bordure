@@ -71,8 +71,8 @@ namespace NaniCore.Loopool {
 				return;
 			}
 
-			StartControl();
-			StartInteraction();
+			InitializeControl();
+			InitializeInteraction();
 		}
 
 		protected void Update() {

@@ -15,7 +15,7 @@ namespace NaniCore.Loopool {
 		#endregion
 
 		#region Life cycle
-		protected void StartConstants() {
+		protected void InitializeConstants() {
 			defaultLayer = LayerMask.NameToLayer("Default");
 			waterLayer = LayerMask.NameToLayer("Water");
 			concreteLayer = LayerMask.NameToLayer("Concrete");

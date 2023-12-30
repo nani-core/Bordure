@@ -75,7 +75,7 @@ namespace NaniCore.Loopool {
 		#endregion
 
 		#region Life cycle
-		protected void StartControl() {
+		protected void InitializeControl() {
 			if(Profile == null)
 				return;
 
