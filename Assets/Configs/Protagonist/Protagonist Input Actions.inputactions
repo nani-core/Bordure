@@ -185,6 +185,15 @@
                     "processors": "",
                     "interactions": "Press(behavior=2)",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Reset Grabbing Transform",
+                    "type": "Button",
+                    "id": "07d8f3b9-7046-4cb2-90f2-b1dd56892b75",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -196,6 +205,17 @@
                     "processors": "",
                     "groups": "PC",
                     "action": "Set Grabbing Orienting",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "aa10239e-ed8f-484f-bf17-82be6785ab60",
+                    "path": "<Mouse>/middleButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PC",
+                    "action": "Reset Grabbing Transform",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

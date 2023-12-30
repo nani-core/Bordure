@@ -75,6 +75,10 @@ namespace NaniCore.Loopool {
 			bool raw = value.Get<float>() > .5f;
 			protagonist.GrabbingOrienting = raw;
 		}
+
+		protected void OnResetGrabbingTransform() {
+			protagonist.ResetGrabbingTransform();
+		}
 		#endregion
 	}
 }
