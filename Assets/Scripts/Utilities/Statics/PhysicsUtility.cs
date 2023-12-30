@@ -39,5 +39,26 @@ namespace NaniCore {
 			hit = hits[0];
 			return true;
 		}
+
+		public static List<RaycastHit> RaycastAll(Vector3 origin, Vector3 direction, float distance, LayerMask layerMask, bool includeTriggers) {
+			var hits = Physics.RaycastAll(origin, direction, distance, layerMask).ToList();
+			if(!includeTriggers)
+				hits.RemoveAll(hit => hit.collider.isTrigger);
+			hits.Sort((a, b) => {
+				return (int)Mathf.Sign(a.distance - b.distance);
+			});
+			return hits;
+		}
+
+		public static bool Raycast(Vector3 origin, Vector3 direction, out RaycastHit hit, float distance, LayerMask layerMask, bool includeTriggers) {
+			direction.Normalize();
+			var hits = RaycastAll(origin, direction, distance, layerMask, includeTriggers);
+			if(hits.Count == 0) {
+				hit = default;
+				return false;
+			}
+			hit = hits[0];
+			return true;
+		}
 	}
 }

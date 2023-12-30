@@ -107,15 +107,16 @@ namespace NaniCore.Loopool {
 		}
 
 		private void LateUpdateInteraction() {
+			bool hasHit = Raycast(out RaycastHit hit);
+
 			// If not grabbing anything, check for focus.
 			if(GrabbingObject == null) {
-				bool isHit = Raycast(out RaycastHit hitInfo);
-				if(!isHit)
+				if(!hasHit)
 					FocusingObject = null;
 				else {
 					// Don't focus on inactive targets.
 					bool set = false;
-					foreach(var interactable in hitInfo.transform.GetComponents<Interactable>()) {
+					foreach(var interactable in hit.transform.GetComponents<Interactable>()) {
 						if(!interactable.isActiveAndEnabled)
 							continue;
 						FocusingObject = interactable;
@@ -127,11 +128,10 @@ namespace NaniCore.Loopool {
 			}
 			// If grabbing blocked, drop.
 			else {
-				bool isHit = Raycast(out RaycastHit hitInfo);
 				// Don't drop if not hit, might be due to orienting too fast.
-				if(isHit) {
-					bool isHitPointIntertweening = Vector3.Distance(hitInfo.point, eye.position) < Vector3.Distance(GrabbingObject.transform.position, eye.position);
-					bool isNotDescendantOfGrabbingObject = !hitInfo.transform.IsChildOf(GrabbingObject.transform);
+				if(hasHit) {
+					bool isHitPointIntertweening = Vector3.Distance(hit.point, eye.position) < Vector3.Distance(GrabbingObject.transform.position, eye.position);
+					bool isNotDescendantOfGrabbingObject = !hit.transform.IsChildOf(GrabbingObject.transform);
 					if(isHitPointIntertweening && isNotDescendantOfGrabbingObject)
 						GrabbingObject = null;
 				}
@@ -170,8 +170,8 @@ namespace NaniCore.Loopool {
 		}
 
 		private bool Raycast(out RaycastHit hitInfo) {
-			// TODO: Ignore triggers.
-			return Physics.Raycast(Camera.ViewportPointToRay(Vector2.one * .5f), out hitInfo, profile.maxInteractionDistance, GameManager.Instance.GrabbingLayerMask);
+			var ray = Camera.ViewportPointToRay(Vector2.one * .5f);
+			return PhysicsUtility.Raycast(ray.origin, ray.direction, out hitInfo, profile.maxInteractionDistance, GameManager.Instance.GrabbingLayerMask, false);
 		}
 
 		private IEnumerator GrabCoroutine(Grabbable target) {
