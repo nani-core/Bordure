@@ -51,7 +51,6 @@ namespace NaniCore.Loopool {
 				if(collidingSpeed >= minCollideSpeed) {
 					var clip = onCollide.PickRandom();
 					float volume = 1 - minCollideSpeed / collidingSpeed;
-					Debug.Log($"Playing {clip} with volume={volume}.");
 					PlaySound(clip, contact.point, volume);
 				}
 			}
