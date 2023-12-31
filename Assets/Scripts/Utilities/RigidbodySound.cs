@@ -19,10 +19,14 @@ namespace NaniCore.Loopool {
 		#region Functions
 		public void PlaySound(AudioClip clip)
 			=> PlaySound(clip, transform.position);
-		public void PlaySound(AudioClip clip, Vector3 worldPosition) {
+		public void PlaySound(AudioClip clip, Vector3 worldPosition, float volume = 1f) {
 			if(clip == null)
 				return;
-			StartCoroutine(AudioUtility.PlayOneShotAtCoroutine(clip, worldPosition, transform));
+
+			AudioUtility.AudioPlayConfig audioConfig = new(AudioUtility.defaultAudioPlayConfig) {
+				volume = volume,
+			};
+			StartCoroutine(AudioUtility.PlayOneShotAtCoroutine(clip, worldPosition, transform, audioConfig));
 		}
 
 		private IEnumerator ImmuneCoroutine(float time = .1f) {
@@ -38,15 +42,17 @@ namespace NaniCore.Loopool {
 		}
 
 		protected void OnCollisionEnter(Collision collision) {
-			if(immune)
+			if(immune || inWater)
 				return;
 
 			var rv = collision.relativeVelocity;
 			foreach(var contact in collision.contacts) {
 				var collidingSpeed = Vector3.Dot(rv, contact.normal);
 				if(collidingSpeed >= minCollideSpeed) {
-					if(!inWater)
-						PlaySound(onCollide.PickRandom(), contact.point);
+					var clip = onCollide.PickRandom();
+					float volume = 1 - minCollideSpeed / collidingSpeed;
+					Debug.Log($"Playing {clip} with volume={volume}.");
+					PlaySound(clip, contact.point, volume);
 				}
 			}
 		}
