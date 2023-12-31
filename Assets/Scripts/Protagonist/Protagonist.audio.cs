@@ -10,7 +10,7 @@ namespace NaniCore.Loopool {
 
 		#region Functions
 		public void PlayFootstepSound() {
-			footAudioSource.PlayOneShot(profile.stepAudioClips.PickRandom());
+			footAudioSource.PlayOneShot(Profile.stepAudioClips.PickRandom());
 		}
 
 		private void PlaySfx(AudioClip clip) {

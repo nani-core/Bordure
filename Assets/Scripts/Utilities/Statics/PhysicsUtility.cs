@@ -40,6 +40,7 @@ namespace NaniCore {
 			return true;
 		}
 
+
 		public static List<RaycastHit> RaycastAll(Vector3 origin, Vector3 direction, float distance, LayerMask layerMask, bool includeTriggers) {
 			var hits = Physics.RaycastAll(origin, direction, distance, layerMask).ToList();
 			if(!includeTriggers)

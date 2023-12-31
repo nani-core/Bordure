@@ -26,7 +26,7 @@ namespace NaniCore.Loopool {
 				focusingObject = value;
 				if(focusingObject) {
 					focusingObject.SendMessage("OnFocusEnter", SendMessageOptions.DontRequireReceiver);
-					PlaySfx(profile.onFocusSound);
+					PlaySfx(Profile.onFocusSound);
 				}
 
 				UpdateFocusUi();
@@ -42,14 +42,14 @@ namespace NaniCore.Loopool {
 				if(grabbingObject != null) {
 					grabbingObject.transform.SetParent(null, true);
 					grabbingObject.SendMessage("OnGrabEnd");
-					PlaySfx(profile.onDropSound);
+					PlaySfx(Profile.onDropSound);
 				}
 
 				grabbingObject = value;
 
 				if(grabbingObject != null) {
 					grabbingObject.SendMessage("OnGrabBegin");
-					PlaySfx(profile.onGrabSound);
+					PlaySfx(Profile.onGrabSound);
 
 					grabbingObject.transform.SetParent(eye.transform, true);
 				}
@@ -81,7 +81,7 @@ namespace NaniCore.Loopool {
 		}
 
 		public void GrabbingOrientDelta(float delta) {
-			delta *= profile.orientingSpeed;
+			delta *= Profile.orientingSpeed;
 			float grabbingAzimuth = grabbingObject.transform.localRotation.eulerAngles.y * Mathf.PI / 180;
 			grabbingAzimuth += delta;
 			grabbingObject.transform.localRotation = Quaternion.Euler(0, grabbingAzimuth * 180 / Mathf.PI, 0);
@@ -171,7 +171,7 @@ namespace NaniCore.Loopool {
 
 		private bool Raycast(out RaycastHit hitInfo) {
 			var ray = Camera.ViewportPointToRay(Vector2.one * .5f);
-			return PhysicsUtility.Raycast(ray.origin, ray.direction, out hitInfo, profile.maxInteractionDistance, GameManager.Instance.GrabbingLayerMask, false);
+			return PhysicsUtility.Raycast(ray.origin, ray.direction, out hitInfo, Profile.maxInteractionDistance, GameManager.Instance.GrabbingLayerMask, false);
 		}
 
 		private IEnumerator GrabCoroutine(Grabbable target) {
@@ -186,8 +186,8 @@ namespace NaniCore.Loopool {
 				endRotation = Quaternion.Euler(0, grabbingAzimuth * 180 / Mathf.PI, 0);
 
 			float startTime = Time.time;
-			for(float t; (t = (Time.time - startTime) / profile.grabbingTransitionDuration) < 1;) {
-				t = MathUtility.Ease(t, profile.grabbingEasingFactor);
+			for(float t; (t = (Time.time - startTime) / Profile.grabbingTransitionDuration) < 1;) {
+				t = MathUtility.Ease(t, Profile.grabbingEasingFactor);
 				target.transform.localPosition = Vector3.Lerp(startPosition, endPosition, t);
 				target.transform.localRotation = Quaternion.Slerp(startRotation, endRotation, t);
 				yield return new WaitForFixedUpdate();

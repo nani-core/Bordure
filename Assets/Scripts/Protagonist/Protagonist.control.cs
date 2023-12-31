@@ -1,5 +1,4 @@
 using UnityEngine;
-using System.Collections;
 
 namespace NaniCore.Loopool {
 	public partial class Protagonist : MonoBehaviour {
@@ -16,7 +15,9 @@ namespace NaniCore.Loopool {
 		private bool hasJustMoved = false;
 		private bool isWalking = false;
 		private bool isSprinting = false;
+		/// <summary>The 2D movement input during this frame, in operation space.</summary>
 		private Vector2 bufferedMovementVelocity;
+		/// <summary>The target velocity due to movement, in world space.</summary>
 		private Vector3 desiredMovementVelocity;
 		#endregion
 
@@ -33,7 +34,7 @@ namespace NaniCore.Loopool {
 			set => isSprinting = value;
 		}
 
-		private float MovingSpeed => IsSprinting ? profile.sprintingSpeed : profile.walkingSpeed;
+		private float MovingSpeed => IsSprinting ? Profile.sprintingSpeed : Profile.walkingSpeed;
 
 		/// <summary>
 		/// What direction is the protagonist looking at, in rad.
@@ -85,7 +86,7 @@ namespace NaniCore.Loopool {
 				eye = transform.Find("Eye") ?? new GameObject("Eye").transform;
 				eye.SetParent(transform, false);
 			}
-			eye.localPosition = Vector3.up * (profile.height - profile.eyeHanging);
+			eye.localPosition = Vector3.up * (Profile.height - Profile.eyeHanging);
 			eye.localRotation = Quaternion.identity;
 			eye.localScale = Vector3.one;
 		}
@@ -98,16 +99,14 @@ namespace NaniCore.Loopool {
 
 		protected void FixedUpdateControl() {
 			ValidateGround();
+
 			UpdateDesiredMovementVelocity(Time.fixedDeltaTime);
 			ApplyBufferedMovement(Time.fixedDeltaTime);
-			UpdateWalkingState();
-		}
-
-		protected void LateUpdateControl() {
-			if(desiredMovementVelocity.magnitude == 0f)
+			if(!IsOnGround)
 				return;
+			DealStepping(Time.fixedDeltaTime);
 
-			DealStepping();
+			UpdateWalkingAnimationState();
 		}
 		#endregion
 
@@ -115,9 +114,10 @@ namespace NaniCore.Loopool {
 		private bool SweepTestGround(out RaycastHit hit, float distance, float backUpRatio = .5f, Vector3 offset = default) {
 			var direction = -Upward;
 			var hits = rigidbody.SweepTestAll(direction, distance, backUpRatio, offset, GameManager.Instance.GroundLayerMask);
-			float maxGroundingAngle = Mathf.Deg2Rad * profile.maxGroundingAngle;
+
 			foreach(var candidate in hits) {
 				// Check if the step is too sloped.
+				float maxGroundingAngle = Mathf.Deg2Rad * Profile.maxGroundingAngle;
 				float angle = Mathf.Deg2Rad * Vector3.Angle(-direction, candidate.normal);
 				if(angle > maxGroundingAngle)
 					continue;
@@ -125,6 +125,7 @@ namespace NaniCore.Loopool {
 				hit = candidate;
 				return true;
 			}
+
 			hit = default;
 			return false;
 		}
@@ -134,16 +135,16 @@ namespace NaniCore.Loopool {
 				return;
 
 			capsuleCollider = gameObject.EnsureComponent<CapsuleCollider>();
-			capsuleCollider.height = profile.height;
-			capsuleCollider.center = Vector3.up * (profile.height * .5f);
-			capsuleCollider.radius = profile.radius;
+			capsuleCollider.height = Profile.height;
+			capsuleCollider.center = Vector3.up * (Profile.height * .5f);
+			capsuleCollider.radius = Profile.radius;
 
 			rigidbody = gameObject.EnsureComponent<Rigidbody>();
 			rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
 		}
 
 		public void OrientDelta(Vector2 delta) {
-			delta *= profile.orientingSpeed;
+			delta *= Profile.orientingSpeed;
 			Azimuth += delta.x;
 			Zenith += delta.y;
 		}
@@ -158,12 +159,12 @@ namespace NaniCore.Loopool {
 				return;
 
 			var gravity = -Vector3.Dot(Physics.gravity, Upward);
-			float speed = Mathf.Sqrt(2f * gravity * profile.jumpingHeight);
+			float speed = Mathf.Sqrt(2f * gravity * Profile.jumpingHeight);
 			rigidbody.AddForce(Upward * speed, ForceMode.VelocityChange);
 		}
 
 		private void ValidateGround() {
-			bool result = SweepTestGround(out RaycastHit hit, profile.skinDepth);
+			bool result = SweepTestGround(out RaycastHit hit, Profile.skinDepth);
 			// Cannot jump when stepping on movable foundation.
 			/*
 			if(hit.rigidbody != null) {
@@ -180,7 +181,7 @@ namespace NaniCore.Loopool {
 			desiredMovementVelocity = eye.transform.right * bufferedDelta.x + transform.forward * bufferedDelta.y;
 			desiredMovementVelocity *= MovingSpeed / deltaTime;
 			if(!IsOnGround) {
-				desiredMovementVelocity *= profile.midAirAttenuation;
+				desiredMovementVelocity *= Profile.midAirAttenuation;
 			}
 		}
 
@@ -189,30 +190,51 @@ namespace NaniCore.Loopool {
 
 			var velocityDifference = targetVelocity - rigidbody.velocity;
 			// Only taking horizontal movement into account.
-			var force = velocityDifference.ProjectOntoPlane(Upward) * profile.acceleration;
+			var force = velocityDifference.ProjectOntoPlane(Upward) * Profile.acceleration;
 			rigidbody.AddForce(force, ForceMode.VelocityChange);
 		}
 
-		private void UpdateWalkingState() {
+		private void UpdateWalkingAnimationState() {
 			isWalking = IsOnGround && hasJustMoved;
 			hasJustMoved = false;
 			animator?.SetBool("Walking", isWalking);
 			animator?.SetBool("Sprinting", IsSprinting);
 		}
 
-		private void DealStepping() {
-			var offset = desiredMovementVelocity.normalized * profile.skinDepth;
-			var isHit = SweepTestGround(out RaycastHit hit, profile.stepHeight * 2f, .5f, offset);
+		private void DealStepping(float deltaTime) {
+			if(!IsOnGround)
+				return;
+			// Don't deal stepping when standing still.
+			if(desiredMovementVelocity.magnitude < 1e-1f)
+				return;
+			
+			// Prepare basic values.
+			// Don't use real horizontal velocity, or the cast won't succeed when touching walls.
+			Vector3 vx = desiredMovementVelocity.ProjectOntoPlane(Upward);
+			Vector3 vy = rigidbody.velocity.ProjectOntoAxis(Upward);
+
+			// Calculate the step horizontal offset.
+			Vector3 deltaX = vx * Mathf.Max(deltaTime, .1f);
+			// For greater moving speed, the offset is amplified to hitting the staircase.
+			if(deltaX.magnitude < Profile.stepDetectionDistance)
+				deltaX = deltaX.normalized * Profile.stepDetectionDistance;
+
+			// Perform the sweep cast and calculate vertical offset.
+			var isHit = SweepTestGround(out RaycastHit hit, Profile.stepHeight * 2, .5f, deltaX);
 			if(!isHit)
 				return;
-			var deltaY = Vector3.Dot(hit.point - rigidbody.position, Upward);
-			// Downward steppings are ignored.
-			if(deltaY < 1e-2f)
+			Vector3 deltaY = (hit.point - rigidbody.position).ProjectOntoAxis(Upward);
+
+			// Invalidate downward steppings.
+			if(Vector3.Dot(deltaY, Upward) < 1e-1f)
 				return;
 
-			// Teleport to desired position.
-			var desiredPosition = rigidbody.position + (hit.point - offset - rigidbody.position).ProjectOntoAxis(Upward);
-			rigidbody.MovePosition(desiredPosition);
+			// Calculate expected vertical velocity.
+			Vector3 expectedVy = Upward * Mathf.Sqrt(2f * deltaY.magnitude * Physics.gravity.magnitude);
+			Vector3 deltaVy = expectedVy - vy;
+
+			// Apply vertical velocity.
+			rigidbody.AddForce(deltaVy, ForceMode.VelocityChange);
 		}
 		#endregion
 	}
