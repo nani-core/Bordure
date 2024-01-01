@@ -10,7 +10,7 @@ namespace NaniCore {
 	/// </summary>
 	public partial class DtCarrier : Carrier {
 		#region Serialized fields
-		/// Not yet to be implemented.
+		/// <remarks>Not yet implemented.</remarks>
 		[SerializeField] private AudioClip movingSound;
 		[SerializeField] private AudioClip onClosedSound;
 		[SerializeField] private Transform closedTransform;
@@ -53,29 +53,16 @@ namespace NaniCore {
 
 				progress = value;
 
-				{
-					Transform target = Target.transform;
+				Vector3 newPosition = Vector3.Lerp(closedTransform.position, openedTransform.position, progress);
+				Quaternion newOrientation = Quaternion.Slerp(closedTransform.rotation, openedTransform.rotation, progress);
 
-					Vector3
-						oldPosition = target.position,
-						newPosition = Vector3.Lerp(closedTransform.position, openedTransform.position, progress);
-					Quaternion
-						oldOrientation = target.rotation,
-						newOrientation = Quaternion.Slerp(closedTransform.rotation, openedTransform.rotation, progress);
-
-					// Set the linear and angular velocity for the rigidbody, if it exists.
-					if(Rigidbody != null) {
-						Rigidbody.position = newPosition;
-						Rigidbody.rotation = newOrientation;
-
-						float dt = Time.fixedDeltaTime;
-						Rigidbody.velocity = (newPosition - oldPosition) / dt;
-						Rigidbody.angularVelocity = MathUtility.OrientationDeltaToAngularVelocity(oldOrientation, newOrientation) * (Mathf.Rad2Deg / dt);
-					}
-					else {
-						target.position = newPosition;
-						target.rotation = newOrientation;
-					}
+				if(Rigidbody != null) {
+					Rigidbody.MovePosition(newPosition);
+					Rigidbody.MoveRotation(newOrientation);
+				}
+				else {
+					Target.transform.position = newPosition;
+					Target.transform.rotation = newOrientation;
 				}
 			}
 		}
@@ -101,9 +88,6 @@ namespace NaniCore {
 		}
 
 		private IEnumerator EaseProgressCoroutine(float targetProgress, float duration) {
-			if(Rigidbody)
-				Rigidbody.constraints = RigidbodyConstraints.None;
-
 			float oldProgress = progress;
 			duration *= Mathf.Abs(oldProgress - targetProgress);
 			float startTime = Time.time;
@@ -112,9 +96,6 @@ namespace NaniCore {
 				yield return new WaitForFixedUpdate();
 			}
 			Progress = targetProgress;
-
-			if(Rigidbody)
-				Rigidbody.constraints = RigidbodyConstraints.FreezeAll;
 		}
 		#endregion
 
@@ -122,6 +103,8 @@ namespace NaniCore {
 		protected new void Start() {
 			base.Start();
 
+			if(Rigidbody != null)
+				Rigidbody.isKinematic = true;
 			Progress = IsOpened ? 1.0f : 0.0f;
 		}
 		#endregion
