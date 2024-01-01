@@ -88,5 +88,11 @@ namespace NaniCore {
 				return 0f;
 			return value;
 		}
+
+		/// <remarks>Return in radians.</remarks>
+		public static Vector3 OrientationDeltaToAngularVelocity(Quaternion before, Quaternion after) {
+			(after * Quaternion.Inverse(before)).ToAngleAxis(out float angleDeg, out Vector3 axis);
+			return axis * (angleDeg * Mathf.Deg2Rad);
+		}
 	}
 }

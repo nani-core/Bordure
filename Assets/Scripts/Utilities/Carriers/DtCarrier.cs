@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 using System.Collections;
+using System;
 
 namespace NaniCore {
 	/// <summary>
@@ -41,20 +42,51 @@ namespace NaniCore {
 		}
 		#endregion
 
-		#region Functions
-		private void SetProgress(float progress) {
-			if(openedTransform == null || closedTransform == null)
-				return;
-			target.transform.position = Vector3.Lerp(closedTransform.position, openedTransform.position, progress);
-			target.transform.rotation = Quaternion.Slerp(closedTransform.rotation, openedTransform.rotation, progress);
-			this.progress = progress;
+		#region Interface
+		public float Progress {
+			get => progress;
+			set {
+				if(Target == null)
+					return;
+				if(openedTransform == null || closedTransform == null)
+					return;
+
+				progress = value;
+
+				{
+					Transform target = Target.transform;
+
+					Vector3
+						oldPosition = target.position,
+						newPosition = Vector3.Lerp(closedTransform.position, openedTransform.position, progress);
+					Quaternion
+						oldOrientation = target.rotation,
+						newOrientation = Quaternion.Slerp(closedTransform.rotation, openedTransform.rotation, progress);
+
+					// Set the linear and angular velocity for the rigidbody, if it exists.
+					if(Rigidbody != null) {
+						Rigidbody.position = newPosition;
+						Rigidbody.rotation = newOrientation;
+
+						float dt = Time.fixedDeltaTime;
+						Rigidbody.velocity = (newPosition - oldPosition) / dt;
+						Rigidbody.angularVelocity = MathUtility.OrientationDeltaToAngularVelocity(oldOrientation, newOrientation) * (Mathf.Rad2Deg / dt);
+					}
+					else {
+						target.position = newPosition;
+						target.rotation = newOrientation;
+					}
+				}
+			}
 		}
 
 		public void ToggleOpeningState() {
 			IsOpened = !IsOpened;
 			onToggled.Invoke();
 		}
+		#endregion
 
+		#region Functions
 		private IEnumerator SetOpeningStateCoroutine(bool targetOpened, float duration) {
 			if(targetOpened == true && isOpened == false)
 				StartCoroutine(AudioUtility.PlayOneShotAtCoroutine(onOpenedSound, transform.position, transform));
@@ -69,20 +101,28 @@ namespace NaniCore {
 		}
 
 		private IEnumerator EaseProgressCoroutine(float targetProgress, float duration) {
+			if(Rigidbody)
+				Rigidbody.constraints = RigidbodyConstraints.None;
+
 			float oldProgress = progress;
 			duration *= Mathf.Abs(oldProgress - targetProgress);
 			float startTime = Time.time;
 			for(float time; (time = Time.time - startTime) < duration;) {
-				SetProgress(Mathf.Lerp(oldProgress, targetProgress, time / duration));
+				Progress = Mathf.Lerp(oldProgress, targetProgress, time / duration);
 				yield return new WaitForFixedUpdate();
 			}
-			SetProgress(targetProgress);
+			Progress = targetProgress;
+
+			if(Rigidbody)
+				Rigidbody.constraints = RigidbodyConstraints.FreezeAll;
 		}
 		#endregion
 
 		#region Life cycle
-		protected void Start() {
-			SetProgress(IsOpened ? 1.0f : 0.0f);
+		protected new void Start() {
+			base.Start();
+
+			Progress = IsOpened ? 1.0f : 0.0f;
 		}
 		#endregion
 	}
