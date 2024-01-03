@@ -1,32 +1,52 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 using System.Collections.Generic;
 using System.Linq;
 using NaughtyAttributes;
 
 namespace NaniCore {
 	public class ConcreteBox : ArchitectureGenerator {
-		#region Serialized fields
-		[Header("Material")]
-		public GameObject[] tiles = new GameObject[0];
-		public Material concreteMaterial;
+		[System.Serializable]
+		public struct FaceConfig {
+			public GameObject[] tiles;
+			public Material concreteMaterial;
+			[Min(0)] public float concreteThickness;
+			[Min(0)] public float concreteDepth;
+			public List<GameObject> hollowObjects;
+			[ShowIf("inward")] public bool preventOverlapping;
+			[ShowIf("inward")] public bool forceFillCorner;
+		}
 
-		[Header("Geometry")]
+		#region Serialized fields
 		public Vector3Int count = Vector3Int.one * 8;
 		public Vector3 spacing = Vector3.one;
-		[Min(0)] public float concreteThickness = 1;
-		[Min(0)] public float concreteDepth = .01f;
-		public List<GameObject> hollowObjects = new List<GameObject>();
 		public bool inward = false;
-		[ShowIf("inward")] public bool preventOverlapping = false;
-		[ShowIf("inward")] public bool forceFillCorner = false;
 
-		[Header("Generation")]
+		[Label("Face Config")] public FaceConfig defaultConfig;
+
 		[Label("X+ (right)")] public bool xp = true;
+		[Label("Override")][ShowIf("xp")] public bool xpOverride = false;
+		[Label("")][ShowIf(EConditionOperator.And, "xpOverride", "xp")] public FaceConfig xpConfig;
+
 		[Label("X- (left)")] public bool xm = false;
+		[Label("Override")][ShowIf("xm")] public bool xmOverride = false;
+		[Label("")][ShowIf(EConditionOperator.And, "xmOverride", "xm")] public FaceConfig xmConfig;
+
 		[Label("Y+ (up)")] public bool yp = true;
+		[Label("Override")][ShowIf("yp")] public bool ypOverride = false;
+		[Label("")][ShowIf(EConditionOperator.And, "ypOverride", "yp")] public FaceConfig ypConfig;
+
 		[Label("Y- (down)")] public bool ym = false;
+		[Label("Override")][ShowIf("ym")] public bool ymOverride = false;
+		[Label("")][ShowIf(EConditionOperator.And, "ymOverride", "ym")] public FaceConfig ymConfig;
+
 		[Label("Z+ (forward)")] public bool zp = true;
+		[Label("Override")][ShowIf("zp")] public bool zpOverride = false;
+		[Label("")][ShowIf(EConditionOperator.And, "zpOverride", "zp")] public FaceConfig zpConfig;
+
 		[Label("Z- (backward)")] public bool zm = false;
+		[Label("Override")][ShowIf("zm")] public bool zmOverride = false;
+		[Label("")][ShowIf(EConditionOperator.And, "zmOverride", "zm")] public FaceConfig zmConfig;
 		#endregion
 
 		struct FaceInfo {
@@ -35,6 +55,7 @@ namespace NaniCore {
 			public (int, int) countDim;
 			public Vector3 euler;
 			public Vector3 offset;
+			public FaceConfig config;
 		}
 
 		#region Functions
@@ -48,6 +69,7 @@ namespace NaniCore {
 					countDim = (2, 1),
 					euler = Vector3.up * -90,
 					offset = Vector3.right,
+					config = xpOverride ? xpConfig : defaultConfig,
 				};
 				if(xm) yield return new FaceInfo {
 					name = "X-",
@@ -55,6 +77,7 @@ namespace NaniCore {
 					countDim = (2, 1),
 					euler = Vector3.up * 90,
 					offset = Vector3.left,
+					config = xmOverride ? xmConfig : defaultConfig,
 				};
 				if(yp) yield return new FaceInfo {
 					name = "Y+",
@@ -62,6 +85,7 @@ namespace NaniCore {
 					countDim = (0, 2),
 					euler = Vector3.right * 90,
 					offset = Vector3.up,
+					config = ypOverride ? ypConfig : defaultConfig,
 				};
 				if(ym) yield return new FaceInfo {
 					name = "Y-",
@@ -69,6 +93,7 @@ namespace NaniCore {
 					countDim = (0, 2),
 					euler = Vector3.right * -90,
 					offset = Vector3.down,
+					config = ymOverride ? ymConfig : defaultConfig,
 				};
 				if(zp) yield return new FaceInfo {
 					name = "Z+",
@@ -76,6 +101,7 @@ namespace NaniCore {
 					countDim = (0, 1),
 					euler = Vector3.up * 180,
 					offset = Vector3.forward,
+					config = zpOverride ? zpConfig : defaultConfig,
 				};
 				if(zm) yield return new FaceInfo {
 					name = "Z-",
@@ -83,6 +109,7 @@ namespace NaniCore {
 					countDim = (0, 1),
 					euler = Vector3.zero,
 					offset = Vector3.back,
+					config = zmOverride ? zmConfig : defaultConfig,
 				};
 			}
 		}
@@ -105,7 +132,7 @@ namespace NaniCore {
 				// Initialze and generate tile.
 				var meshTile = faceObj.AddComponent<MeshTile>();
 				{
-					meshTile.tiles = tiles.ToArray();
+					meshTile.tiles = face.config.tiles.ToArray();
 					meshTile.seed = (int)HashUtility.Hash(seed, face.name.GetHashCode());
 
 					meshTile.i = Vector3.right * spacing.x;
@@ -119,7 +146,7 @@ namespace NaniCore {
 
 					meshTile.uvw = Vector3.one * .5f;
 
-					meshTile.hollowObjects = hollowObjects.ToList();
+					meshTile.hollowObjects = face.config.hollowObjects;
 				}
 				meshTile.Construct();
 
@@ -132,19 +159,19 @@ namespace NaniCore {
 					var concreteTransform = concreteObj.transform;
 					concreteTransform.SetParent(faceTransform, false);
 
-					concreteTransform.localPosition = Vector3.forward * (concreteThickness * .5f + concreteDepth);
+					concreteTransform.localPosition = Vector3.forward * (face.config.concreteThickness * .5f + face.config.concreteDepth);
 
-					var size = Vector3.one * concreteThickness;
+					var size = Vector3.one * face.config.concreteThickness;
 					var hSize = Vector3.Scale(count, spacing);
-					hSize += Vector3.one * ((inward && !preventOverlapping ? 1 : -1) * concreteDepth * 2);
-					if(inward && forceFillCorner)
+					hSize += Vector3.one * ((inward && !face.config.preventOverlapping ? 1 : -1) * face.config.concreteDepth * 2);
+					if(inward && face.config.forceFillCorner)
 						hSize += spacing * 2;
 					size[0] = hSize[face.countDim.Item1];
 					size[1] = hSize[face.countDim.Item2];
 					concreteTransform.localScale = size;
 
-					if(concreteMaterial != null)
-						concreteObj.GetComponent<Renderer>().sharedMaterial = concreteMaterial;
+					if(face.config.concreteMaterial != null)
+						concreteObj.GetComponent<Renderer>().sharedMaterial = face.config.concreteMaterial;
 				}
 			}
 		}
