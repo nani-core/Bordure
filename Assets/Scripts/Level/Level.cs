@@ -1,5 +1,4 @@
 using UnityEngine;
-using NaughtyAttributes;
 
 namespace NaniCore.Loopool {
 	public class Level : MonoBehaviour {
