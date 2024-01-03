@@ -10,12 +10,11 @@ namespace NaniCore.Loopool {
 		#region Fields
 		private Interactable focusingObject;
 		private Grabbable grabbingObject;
-		private Coroutine grabbingCoroutine;
 		private bool grabbingOrienting;
 		private LoopShape satisfiedLoopShape;
 		#endregion
 
-		#region Properties
+		#region Interfaces
 		public Interactable FocusingObject {
 			get => focusingObject;
 			set {
@@ -27,7 +26,7 @@ namespace NaniCore.Loopool {
 				focusingObject = value;
 				if(focusingObject) {
 					focusingObject.SendMessage("OnFocusEnter", SendMessageOptions.DontRequireReceiver);
-					PlaySfx(profile.onFocusSound);
+					PlaySfx(Profile.onFocusSound);
 				}
 
 				UpdateFocusUi();
@@ -40,14 +39,20 @@ namespace NaniCore.Loopool {
 				if(grabbingObject == value)
 					return;
 
-				if(grabbingObject) {
-					if(grabbingCoroutine != null)
-						StopCoroutine(grabbingCoroutine);
-					StartCoroutine(EndGrabbingCoroutine(grabbingObject));
+				if(grabbingObject != null) {
+					grabbingObject.transform.SetParent(null, true);
+					grabbingObject.SendMessage("OnGrabEnd");
+					PlaySfx(Profile.onDropSound);
 				}
+
 				grabbingObject = value;
-				if(grabbingObject)
-					grabbingCoroutine = StartCoroutine(GrabCoroutine(grabbingObject));
+
+				if(grabbingObject != null) {
+					grabbingObject.SendMessage("OnGrabBegin");
+					PlaySfx(Profile.onGrabSound);
+
+					grabbingObject.transform.SetParent(eye.transform, true);
+				}
 
 				UpdateFocusUi();
 				inputHandler.SetGrabbingActionEnabled(grabbingObject != null);
@@ -74,10 +79,24 @@ namespace NaniCore.Loopool {
 				UpdateFocusUi();
 			}
 		}
+
+		public void GrabbingOrientDelta(float delta) {
+			delta *= Profile.orientingSpeed;
+			float grabbingAzimuth = grabbingObject.transform.localRotation.eulerAngles.y * Mathf.PI / 180;
+			grabbingAzimuth += delta;
+			grabbingObject.transform.localRotation = Quaternion.Euler(0, grabbingAzimuth * 180 / Mathf.PI, 0);
+		}
+
+		public void ResetGrabbingTransform() {
+			if(GrabbingObject == null)
+				return;
+
+			StartCoroutine(GrabCoroutine(grabbingObject));
+		}
 		#endregion
 
 		#region Life cycle
-		private void StartInteraction() {
+		private void InitializeInteraction() {
 			inputHandler = gameObject.EnsureComponent<ProtagonistInputHandler>();
 
 			if(focus == null) {
@@ -88,15 +107,16 @@ namespace NaniCore.Loopool {
 		}
 
 		private void LateUpdateInteraction() {
+			bool hasHit = Raycast(out RaycastHit hit);
+
 			// If not grabbing anything, check for focus.
 			if(GrabbingObject == null) {
-				bool isHit = Raycast(out RaycastHit hitInfo);
-				if(!isHit)
+				if(!hasHit)
 					FocusingObject = null;
 				else {
 					// Don't focus on inactive targets.
 					bool set = false;
-					foreach(var interactable in hitInfo.transform.GetComponents<Interactable>()) {
+					foreach(var interactable in hit.transform.GetComponents<Interactable>()) {
 						if(!interactable.isActiveAndEnabled)
 							continue;
 						FocusingObject = interactable;
@@ -108,11 +128,10 @@ namespace NaniCore.Loopool {
 			}
 			// If grabbing blocked, drop.
 			else {
-				bool isHit = Raycast(out RaycastHit hitInfo);
 				// Don't drop if not hit, might be due to orienting too fast.
-				if(isHit) {
-					bool isHitPointIntertweening = Vector3.Distance(hitInfo.point, eye.position) < Vector3.Distance(GrabbingObject.transform.position, eye.position);
-					bool isNotDescendantOfGrabbingObject = !hitInfo.transform.IsChildOf(GrabbingObject.transform);
+				if(hasHit) {
+					bool isHitPointIntertweening = Vector3.Distance(hit.point, eye.position) < Vector3.Distance(GrabbingObject.transform.position, eye.position);
+					bool isNotDescendantOfGrabbingObject = !hit.transform.IsChildOf(GrabbingObject.transform);
 					if(isHitPointIntertweening && isNotDescendantOfGrabbingObject)
 						GrabbingObject = null;
 				}
@@ -151,33 +170,11 @@ namespace NaniCore.Loopool {
 		}
 
 		private bool Raycast(out RaycastHit hitInfo) {
-			return Physics.Raycast(Camera.ViewportPointToRay(Vector2.one * .5f), out hitInfo, profile.maxInteractionDistance);
-		}
-
-		#region Grabbing
-		public void GrabbingOrientDelta(float delta) {
-			delta *= profile.orientingSpeed;
-			float grabbingAzimuth = grabbingObject.transform.localRotation.eulerAngles.y * Mathf.PI / 180;
-			grabbingAzimuth += delta;
-			grabbingObject.transform.localRotation = Quaternion.Euler(0, grabbingAzimuth * 180 / Mathf.PI, 0);
+			var ray = Camera.ViewportPointToRay(Vector2.one * .5f);
+			return PhysicsUtility.Raycast(ray.origin, ray.direction, out hitInfo, Profile.maxInteractionDistance, GameManager.Instance.GrabbingLayerMask, false);
 		}
 
 		private IEnumerator GrabCoroutine(Grabbable target) {
-			yield return BeginGrabbingCoroutine(target);
-			while(GrabbingObject == target) {
-				yield return DuringGrabbingCoroutine(target);
-				yield return new WaitForFixedUpdate();
-			}
-			yield return EndGrabbingCoroutine(target);
-			grabbingCoroutine = null;
-		}
-
-		private IEnumerator BeginGrabbingCoroutine(Grabbable target) {
-			target.SendMessage("OnGrabBegin");
-			PlaySfx(profile.onGrabSound);
-
-			target.transform.SetParent(eye.transform, true);
-
 			float grabbingDistance = Vector3.Distance(target.transform.position, eye.transform.position);
 			float grabbingAzimuth = target.transform.localRotation.eulerAngles.y * Mathf.PI / 180;
 
@@ -189,31 +186,15 @@ namespace NaniCore.Loopool {
 				endRotation = Quaternion.Euler(0, grabbingAzimuth * 180 / Mathf.PI, 0);
 
 			float startTime = Time.time;
-			for(float t; (t = (Time.time - startTime) / profile.grabbingTransitionDuration) < 1;) {
-				t = MathUtility.Ease(t, profile.grabbingEasingFactor);
+			for(float t; (t = (Time.time - startTime) / Profile.grabbingTransitionDuration) < 1;) {
+				t = MathUtility.Ease(t, Profile.grabbingEasingFactor);
 				target.transform.localPosition = Vector3.Lerp(startPosition, endPosition, t);
 				target.transform.localRotation = Quaternion.Slerp(startRotation, endRotation, t);
 				yield return new WaitForFixedUpdate();
 			}
 			target.transform.localPosition = endPosition;
 			target.transform.localRotation = endRotation;
-
-			yield break;
 		}
-
-		private IEnumerator DuringGrabbingCoroutine(Grabbable target) {
-			yield break;
-		}
-
-		private IEnumerator EndGrabbingCoroutine(Grabbable target) {
-			target.transform.SetParent(null, true);
-
-			target.SendMessage("OnGrabEnd");
-			PlaySfx(profile.onDropSound);
-
-			yield break;
-		}
-		#endregion
 
 		public void Interact() {
 			if(SatisfiedLoopShape != null) {

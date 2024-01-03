@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 using System.Collections;
+using System;
 
 namespace NaniCore {
 	/// <summary>
@@ -9,7 +10,7 @@ namespace NaniCore {
 	/// </summary>
 	public partial class DtCarrier : Carrier {
 		#region Serialized fields
-		/// Not yet to be implemented.
+		/// <remarks>Not yet implemented.</remarks>
 		[SerializeField] private AudioClip movingSound;
 		[SerializeField] private AudioClip onClosedSound;
 		[SerializeField] private Transform closedTransform;
@@ -41,20 +42,38 @@ namespace NaniCore {
 		}
 		#endregion
 
-		#region Functions
-		private void SetProgress(float progress) {
-			if(openedTransform == null || closedTransform == null)
-				return;
-			target.transform.position = Vector3.Lerp(closedTransform.position, openedTransform.position, progress);
-			target.transform.rotation = Quaternion.Slerp(closedTransform.rotation, openedTransform.rotation, progress);
-			this.progress = progress;
+		#region Interface
+		public float Progress {
+			get => progress;
+			set {
+				if(Target == null)
+					return;
+				if(openedTransform == null || closedTransform == null)
+					return;
+
+				progress = value;
+
+				Vector3 newPosition = Vector3.Lerp(closedTransform.position, openedTransform.position, progress);
+				Quaternion newOrientation = Quaternion.Slerp(closedTransform.rotation, openedTransform.rotation, progress);
+
+				if(Rigidbody != null) {
+					Rigidbody.MovePosition(newPosition);
+					Rigidbody.MoveRotation(newOrientation);
+				}
+				else {
+					Target.transform.position = newPosition;
+					Target.transform.rotation = newOrientation;
+				}
+			}
 		}
 
 		public void ToggleOpeningState() {
 			IsOpened = !IsOpened;
 			onToggled.Invoke();
 		}
+		#endregion
 
+		#region Functions
 		private IEnumerator SetOpeningStateCoroutine(bool targetOpened, float duration) {
 			if(targetOpened == true && isOpened == false)
 				StartCoroutine(AudioUtility.PlayOneShotAtCoroutine(onOpenedSound, transform.position, transform));
@@ -73,16 +92,20 @@ namespace NaniCore {
 			duration *= Mathf.Abs(oldProgress - targetProgress);
 			float startTime = Time.time;
 			for(float time; (time = Time.time - startTime) < duration;) {
-				SetProgress(Mathf.Lerp(oldProgress, targetProgress, time / duration));
+				Progress = Mathf.Lerp(oldProgress, targetProgress, time / duration);
 				yield return new WaitForFixedUpdate();
 			}
-			SetProgress(targetProgress);
+			Progress = targetProgress;
 		}
 		#endregion
 
 		#region Life cycle
-		protected void Start() {
-			SetProgress(IsOpened ? 1.0f : 0.0f);
+		protected new void Start() {
+			base.Start();
+
+			if(Rigidbody != null)
+				Rigidbody.isKinematic = true;
+			Progress = IsOpened ? 1.0f : 0.0f;
 		}
 		#endregion
 	}

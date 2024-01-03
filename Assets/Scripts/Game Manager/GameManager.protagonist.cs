@@ -20,6 +20,10 @@ namespace NaniCore.Loopool {
 			}
 		}
 		public Camera MainCamera => Protagonist?.Camera;
+
+		public void DestroyProtagonist() {
+			FinalizeProtagonist();
+		}
 		#endregion
 
 		#region Functions
@@ -100,6 +104,12 @@ namespace NaniCore.Loopool {
 				}
 				return null;
 			}
+		}
+
+		private void FinalizeProtagonist() {
+			Destroy(Protagonist);
+			protagonist = null;
+			AudioListener = null;
 		}
 		#endregion
 	}

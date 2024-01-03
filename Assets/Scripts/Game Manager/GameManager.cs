@@ -22,9 +22,14 @@ namespace NaniCore.Loopool {
 			if(!EnsureSingleton())
 				return;
 
-			StartConstants();
+			Initialize();
+		}
+
+		protected void Initialize() {
+			InitializeConstants();
+			InitializeAudio();
 			protagonist = InitializeProtagonist();
-			StartDebugUi();
+			InitializeDebugUi();
 		}
 
 		protected void Update() {
@@ -42,7 +47,7 @@ namespace NaniCore.Loopool {
 			if(!Application.isPlaying)
 				return;
 #endif
-			EndDebugUi();
+			FinalizeDebugUi();
 			RenderUtility.ReleasePooledResources();
 		}
 		#endregion

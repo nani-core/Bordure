@@ -71,8 +71,9 @@ namespace NaniCore.Loopool {
 				return;
 			}
 
-			StartControl();
-			StartInteraction();
+			InitializeAudio();
+			InitializeControl();
+			InitializeInteraction();
 		}
 
 		protected void Update() {
@@ -100,7 +101,6 @@ namespace NaniCore.Loopool {
 				return;
 			}
 #endif
-			LateUpdateControl();
 			LateUpdateInteraction();
 		}
 		#endregion

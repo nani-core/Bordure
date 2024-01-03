@@ -19,7 +19,7 @@ namespace NaniCore.Loopool {
 		#endregion
 
 		#region Life cycle
-		protected void StartDebugUi() {
+		protected void InitializeDebugUi() {
 			if(debugLayer == null)
 				return;
 
@@ -32,7 +32,7 @@ namespace NaniCore.Loopool {
 			debugFrame?.SetValue(Color.clear);
 		}
 
-		protected void EndDebugUi() {
+		protected void FinalizeDebugUi() {
 			debugFrame?.Destroy();
 		}
 		#endregion

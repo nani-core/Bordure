@@ -5,10 +5,20 @@ namespace NaniCore {
 	public static class AudioUtility {
 		public struct AudioPlayConfig {
 			public Vector2 range;
+			public float volume;
+
+			public AudioPlayConfig(Vector2 range, float volume) {
+				this.range = range;
+				this.volume = volume;
+			}
+			public AudioPlayConfig(AudioPlayConfig config) : this(config.range, config.volume) { }
 
 			public void ApplyOn(AudioSource source) {
 				if(source == null)
 					return;
+
+				source.volume = volume;
+
 				source.minDistance = range.x;
 				source.maxDistance = range.y;
 			}
