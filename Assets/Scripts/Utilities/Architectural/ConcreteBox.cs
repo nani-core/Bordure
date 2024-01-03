@@ -7,7 +7,7 @@ namespace NaniCore {
 	public class ConcreteBox : ArchitectureGenerator {
 		#region Serialized fields
 		[Header("Material")]
-		public GameObject tile;
+		public GameObject[] tiles = new GameObject[0];
 		public Material concreteMaterial;
 
 		[Header("Geometry")]
@@ -103,24 +103,25 @@ namespace NaniCore {
 				faceTransform.localRotation = orientation;
 
 				// Initialze and generate tile.
-				var tile = faceObj.AddComponent<MeshTile>();
+				var meshTile = faceObj.AddComponent<MeshTile>();
 				{
-					tile.tile = this.tile;
+					meshTile.tiles = tiles.ToArray();
+					meshTile.seed = (int)HashUtility.Hash(seed, face.name.GetHashCode());
 
-					tile.i = Vector3.right * spacing.x;
-					tile.j = Vector3.up * spacing.y;
-					tile.k = Vector3.forward * spacing.z;
+					meshTile.i = Vector3.right * spacing.x;
+					meshTile.j = Vector3.up * spacing.y;
+					meshTile.k = Vector3.forward * spacing.z;
 
 					Vector3Int count = Vector3Int.one;
 					count[0] = this.count[face.countDim.Item1];
 					count[1] = this.count[face.countDim.Item2];
-					tile.count = count;
+					meshTile.count = count;
 
-					tile.uvw = Vector3.one * .5f;
+					meshTile.uvw = Vector3.one * .5f;
 
-					tile.hollowObjects = hollowObjects.ToList();
+					meshTile.hollowObjects = hollowObjects.ToList();
 				}
-				tile.Construct();
+				meshTile.Construct();
 
 				// Generate concrete.
 				{

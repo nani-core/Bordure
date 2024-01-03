@@ -2,6 +2,47 @@ using UnityEngine;
 
 namespace NaniCore {
 	public abstract class ArchitectureGenerator : MonoBehaviour {
+		#region Serialized fields
+		[SerializeField] public int seed;
+		#endregion
+
+		#region Fields
+		protected abstract string GizmozRootName { get; }
+		protected Transform gizmosRoot;
+		#endregion
+
+		#region Life cycle
+		protected void Start() {
+			Construct();
+		}
+
+#if UNITY_EDITOR
+		protected void OnValidate() {
+			if(Application.isPlaying)
+				return;
+			if(!(enabled && gameObject.activeInHierarchy))
+				return;
+			UnityEditor.EditorApplication.delayCall += RegenerateInEditMode;
+		}
+#endif
+
+		protected void OnEnable() {
+#if UNITY_EDITOR
+			if(Application.isPlaying)
+				return;
+#endif
+			gizmosRoot?.gameObject?.SetActive(true);
+		}
+
+		protected void OnDisable() {
+#if UNITY_EDITOR
+			if(Application.isPlaying)
+				return;
+#endif
+			gizmosRoot?.gameObject?.SetActive(false);
+		}
+		#endregion
+
 		#region Functions
 		protected delegate GameObject Instantiator(GameObject template, Transform under);
 		protected abstract void Construct(Transform under, Instantiator instantiator);
@@ -17,20 +58,7 @@ namespace NaniCore {
 				Destroy(this);
 			}
 		}
-		#endregion
 
-		#region Life cycle
-		protected void Start() {
-			Construct();
-		}
-		#endregion
-
-		#region Fields
-		protected abstract string GizmozRootName { get; }
-		protected Transform gizmosRoot;
-		#endregion
-
-		#region Functions
 		protected GameObject InstantiateGizmos(GameObject template, Transform under) {
 			var instance = template.InstantiatePrefab(under);
 			instance.MakeUntouchable();
@@ -58,34 +86,6 @@ namespace NaniCore {
 			gizmosRoot?.gameObject?.SetActive(enabled);
 		}
 #endif
-		#endregion
-
-		#region Life cycle
-#if UNITY_EDITOR
-		protected void OnValidate() {
-			if(Application.isPlaying)
-				return;
-			if(!(enabled && gameObject.activeInHierarchy))
-				return;
-			UnityEditor.EditorApplication.delayCall += RegenerateInEditMode;
-		}
-#endif
-
-		protected void OnEnable() {
-#if UNITY_EDITOR
-			if(Application.isPlaying)
-				return;
-#endif
-			gizmosRoot?.gameObject?.SetActive(true);
-		}
-
-		protected void OnDisable() {
-#if UNITY_EDITOR
-			if(Application.isPlaying)
-				return;
-#endif
-			gizmosRoot?.gameObject?.SetActive(false);
-		}
 		#endregion
 	}
 }
