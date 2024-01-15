@@ -1,6 +1,7 @@
 using UnityEngine;
 
 namespace NaniCore.Loopool {
+	[RequireComponent(typeof(RigidbodyAgent))]
 	public partial class Protagonist : MonoBehaviour {
 		#region Serialized fields
 		[SerializeField] private new Camera camera;
@@ -11,14 +12,16 @@ namespace NaniCore.Loopool {
 		#region Fields
 		private CapsuleCollider capsuleCollider;
 		private new Rigidbody rigidbody;
+		private RigidbodyAgent rigidbodyAgent;
 		private bool isOnGround = false;
 		private bool hasJustMoved = false;
 		private bool isWalking = false;
 		private bool isSprinting = false;
+		private bool isInWater = false;
 		/// <summary>The 2D movement input during this frame, in operation space.</summary>
-		private Vector2 bufferedMovementVelocity;
+		private Vector3 bufferedMovement;
 		/// <summary>The target velocity due to movement, in world space.</summary>
-		private Vector3 desiredMovementVelocity;
+		private Vector3 desiredMovement;
 		#endregion
 
 		#region Properties
@@ -26,6 +29,7 @@ namespace NaniCore.Loopool {
 		public Camera Camera => camera;
 		public Vector3 Upward => transform.up;
 
+		public bool IsSwimming => isInWater;
 		public bool IsOnGround => isOnGround;
 		public bool IsWalking => isWalking;
 
@@ -89,6 +93,8 @@ namespace NaniCore.Loopool {
 			eye.localPosition = Vector3.up * (Profile.height - Profile.eyeHanging);
 			eye.localRotation = Quaternion.identity;
 			eye.localScale = Vector3.one;
+
+			rigidbodyAgent = GetComponent<RigidbodyAgent>();
 		}
 
 #if UNITY_EDITOR
@@ -98,15 +104,40 @@ namespace NaniCore.Loopool {
 #endif
 
 		protected void FixedUpdateControl() {
-			ValidateGround();
+			ValidateMovementConditions();
 
-			UpdateDesiredMovementVelocity(Time.fixedDeltaTime);
-			ApplyBufferedMovement(Time.fixedDeltaTime);
-			if(!IsOnGround)
-				return;
-			DealStepping(Time.fixedDeltaTime);
+			if(!IsSwimming) {
+				// Walking.
+				desiredMovement = eye.transform.right * bufferedMovement.x + transform.forward * bufferedMovement.z;
+				desiredMovement *= MovingSpeed;
+				if(!IsOnGround)
+					desiredMovement *= Profile.midAirAttenuation;
 
-			UpdateWalkingAnimationState();
+				var force = (desiredMovement - rigidbody.velocity) * Profile.acceleration;
+				// Only taking horizontal movement into account.
+				force = force.ProjectOntoPlane(Upward);
+				rigidbody.AddForce(force, ForceMode.VelocityChange);
+
+				if(IsOnGround)
+					DealStepping(Time.fixedDeltaTime);
+			}
+			else {
+				// Swimming.
+				var xzMovement = bufferedMovement;
+				xzMovement.y = 0;
+				var worldMovement = eye.transform.localToWorldMatrix.MultiplyVector(xzMovement);
+				worldMovement += Upward * bufferedMovement.y;
+				desiredMovement = worldMovement * Profile.swimmingSpeed;
+				var force = (desiredMovement - rigidbody.velocity) * Profile.acceleration;
+				rigidbody.AddForce(force, ForceMode.VelocityChange);
+
+				// Simulate buoyancy.
+				rigidbody.AddForce(Upward * rigidbody.mass * .4f, ForceMode.Force);
+			}
+
+			bufferedMovement = Vector3.zero;
+
+			UpdateMovingAnimation();
 		}
 		#endregion
 
@@ -149,9 +180,9 @@ namespace NaniCore.Loopool {
 			Zenith += delta.y;
 		}
 
-		public void MoveVelocity(Vector2 vXy) {
-			bufferedMovementVelocity += vXy;
-			hasJustMoved = hasJustMoved || vXy.magnitude > .01f;
+		public void MoveVelocity(Vector3 velocity) {
+			bufferedMovement += velocity;
+			hasJustMoved = hasJustMoved || velocity.magnitude > .01f;
 		}
 
 		public void Jump() {
@@ -163,54 +194,21 @@ namespace NaniCore.Loopool {
 			rigidbody.AddForce(Upward * speed, ForceMode.VelocityChange);
 		}
 
-		private void ValidateGround() {
-			bool result = SweepTestGround(out RaycastHit hit, Profile.skinDepth);
-			// Cannot jump when stepping on movable foundation.
-			/*
-			if(hit.rigidbody != null) {
-				if(hit.rigidbody.velocity.magnitude > .01f)
-					result = false;
-			}
-			*/
-			isOnGround = result;
-		}
-
-		private void UpdateDesiredMovementVelocity(float deltaTime) {
-			var bufferedDelta = bufferedMovementVelocity * deltaTime;
-			bufferedMovementVelocity = Vector3.zero;
-			desiredMovementVelocity = eye.transform.right * bufferedDelta.x + transform.forward * bufferedDelta.y;
-			desiredMovementVelocity *= MovingSpeed / deltaTime;
-			if(!IsOnGround) {
-				desiredMovementVelocity *= Profile.midAirAttenuation;
-			}
-		}
-
-		private void ApplyBufferedMovement(float deltaTime) {
-			var targetVelocity = desiredMovementVelocity;
-
-			var velocityDifference = targetVelocity - rigidbody.velocity;
-			// Only taking horizontal movement into account.
-			var force = velocityDifference.ProjectOntoPlane(Upward) * Profile.acceleration;
-			rigidbody.AddForce(force, ForceMode.VelocityChange);
-		}
-
-		private void UpdateWalkingAnimationState() {
-			isWalking = IsOnGround && hasJustMoved;
-			hasJustMoved = false;
-			animator?.SetBool("Walking", isWalking);
-			animator?.SetBool("Sprinting", IsSprinting);
+		private void ValidateMovementConditions() {
+			isOnGround = SweepTestGround(out RaycastHit _, Profile.skinDepth);
+			isInWater = rigidbodyAgent.IsOverlappingWithLayers(1 << GameManager.Instance.WaterLayer);
 		}
 
 		private void DealStepping(float deltaTime) {
 			if(!IsOnGround)
 				return;
 			// Don't deal stepping when standing still.
-			if(desiredMovementVelocity.magnitude < 1e-1f)
+			if(desiredMovement.magnitude < 1e-1f)
 				return;
-			
+
 			// Prepare basic values.
 			// Don't use real horizontal velocity, or the cast won't succeed when touching walls.
-			Vector3 vx = desiredMovementVelocity.ProjectOntoPlane(Upward);
+			Vector3 vx = desiredMovement.ProjectOntoPlane(Upward);
 			Vector3 vy = rigidbody.velocity.ProjectOntoAxis(Upward);
 
 			// Calculate the step horizontal offset.
@@ -235,6 +233,13 @@ namespace NaniCore.Loopool {
 
 			// Apply vertical velocity.
 			rigidbody.AddForce(deltaVy, ForceMode.VelocityChange);
+		}
+
+		private void UpdateMovingAnimation() {
+			isWalking = !IsSwimming && IsOnGround && hasJustMoved;
+			hasJustMoved = false;
+			animator?.SetBool("Walking", isWalking);
+			animator?.SetBool("Sprinting", IsSprinting);
 		}
 		#endregion
 	}

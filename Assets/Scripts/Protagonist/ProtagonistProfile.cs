@@ -21,6 +21,7 @@ namespace NaniCore.Loopool {
 		[Min(0)] public float stepDetectionDistance = .2f;
 		[Tooltip("How will the control ability decrease when midair.")]
 		[Range(0, 1)] public float midAirAttenuation = .5f;
+		[Min(0)] public float swimmingSpeed = 3f;
 
 		[Header("Interaction")]
 		[Min(0)] public float maxInteractionDistance = 20f;

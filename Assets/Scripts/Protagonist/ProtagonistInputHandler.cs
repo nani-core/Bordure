@@ -7,8 +7,10 @@ namespace NaniCore.Loopool {
 		#region Fields
 		protected Protagonist protagonist;
 		protected PlayerInput playerInput;
-		protected Vector2 moveVelocity;
 		private InputActionMap grabbingActionMap;
+
+		protected Vector3 moveVelocity;
+		protected float floating = 0f, sinking = 0f;
 		#endregion
 
 		#region Life cycle
@@ -31,6 +33,11 @@ namespace NaniCore.Loopool {
 		}
 
 		protected void FixedUpdate() {
+			if(!protagonist.IsSwimming)
+				moveVelocity.y = 0;
+			else
+				moveVelocity.y = floating - sinking;
+
 			protagonist.MoveVelocity(moveVelocity);
 		}
 		#endregion
@@ -46,7 +53,9 @@ namespace NaniCore.Loopool {
 
 		#region Handlers
 		protected void OnMoveVelocity(InputValue value) {
-			moveVelocity = value.Get<Vector2>();
+			var raw = value.Get<Vector2>();
+			moveVelocity.x = raw.x;
+			moveVelocity.z = raw.y;
 		}
 
 		protected void OnOrientDelta(InputValue value) {
@@ -61,8 +70,18 @@ namespace NaniCore.Loopool {
 			protagonist.IsSprinting = value.Get<float>() > .5f;
 		}
 
-		protected void OnJump() {
-			protagonist.Jump();
+		protected void OnJump(InputValue value) {
+			float raw = value.Get<float>();
+			if(!protagonist.IsSwimming) {
+				if(raw > 0)
+					protagonist.Jump();
+			}
+			floating = raw;
+		}
+
+		protected void OnCrouch(InputValue value) {
+			float raw = value.Get<float>();
+			sinking = raw;
 		}
 
 		protected void OnInteract() {
