@@ -845,7 +845,7 @@ Transform:
   m_GameObject: {fileID: 103202747}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -7.0304465, y: 1.1110001, z: 3.6502228}
+  m_LocalPosition: {x: -7.030456, y: 1.1110001, z: 3.6502275}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1043,7 +1043,7 @@ MonoBehaviour:
     camera:
       camera: 0
   m_ProxyVolume: {fileID: 0}
-  m_BakedTexture: {fileID: 8900000, guid: 4070c9d5c5655e54fbaa1e612e7bee0c, type: 3}
+  m_BakedTexture: {fileID: 8900000, guid: 97df07f7d298401458745233e024e278, type: 3}
   m_CustomTexture: {fileID: 0}
   m_BakedRenderData:
     m_WorldToCameraRHS:
@@ -2247,7 +2247,7 @@ Transform:
   m_GameObject: {fileID: 221111942}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.235237, y: -1.2889996, z: 7.1732364}
+  m_LocalPosition: {x: -7.2352467, y: -1.2889996, z: 7.173246}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2445,7 +2445,7 @@ MonoBehaviour:
     camera:
       camera: 0
   m_ProxyVolume: {fileID: 0}
-  m_BakedTexture: {fileID: 8900000, guid: ac3c29473f0cbef4e93313a2b33ca7ca, type: 3}
+  m_BakedTexture: {fileID: 8900000, guid: 8e1241d84789dab40a553132f47afe79, type: 3}
   m_CustomTexture: {fileID: 0}
   m_BakedRenderData:
     m_WorldToCameraRHS:
@@ -3463,6 +3463,21 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 276186938845626852, guid: f1d4c9ccac7ef044db46347f55265425, type: 3}
   m_PrefabInstance: {fileID: 619404367}
   m_PrefabAsset: {fileID: 0}
+--- !u!115 &537643731
+MonoScript:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  serializedVersion: 7
+  m_DefaultReferences: {}
+  m_Icon: {fileID: 0}
+  m_Type: 0
+  m_ExecutionOrder: 0
+  m_ClassName: SceneObjectIDMapSceneAsset
+  m_Namespace: UnityEngine.Rendering.HighDefinition
+  m_AssemblyName: Unity.RenderPipelines.HighDefinition.Runtime
 --- !u!1 &561812849
 GameObject:
   m_ObjectHideFlags: 0
@@ -3924,7 +3939,7 @@ Transform:
   m_GameObject: {fileID: 616058811}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 7.9402933, y: -1.8999996, z: 1.2700005}
+  m_LocalPosition: {x: 7.940303, y: -1.8999996, z: 1.2700005}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4122,7 +4137,7 @@ MonoBehaviour:
     camera:
       camera: 0
   m_ProxyVolume: {fileID: 0}
-  m_BakedTexture: {fileID: 8900000, guid: 78962a4ea023cc04597f74c48d3e7ca3, type: 3}
+  m_BakedTexture: {fileID: 8900000, guid: 50b6d02b22f6a01488b75eee94ab479f, type: 3}
   m_CustomTexture: {fileID: 0}
   m_BakedRenderData:
     m_WorldToCameraRHS:
@@ -4427,6 +4442,78 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f1d4c9ccac7ef044db46347f55265425, type: 3}
+--- !u!1 &665537462
+GameObject:
+  m_ObjectHideFlags: 19
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 665537464}
+  - component: {fileID: 665537463}
+  m_Layer: 0
+  m_Name: SceneIDMap
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &665537463
+MonoBehaviour:
+  m_ObjectHideFlags: 19
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 665537462}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 537643731}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Entries:
+  - id: 0
+    category: 0
+    gameObject: {fileID: 103202747}
+  - id: 1
+    category: 0
+    gameObject: {fileID: 221111942}
+  - id: 2
+    category: 0
+    gameObject: {fileID: 616058811}
+  - id: 3
+    category: 0
+    gameObject: {fileID: 1080416112}
+  - id: 4
+    category: 0
+    gameObject: {fileID: 1322623328}
+  - id: 5
+    category: 0
+    gameObject: {fileID: 1563220102}
+  - id: 6
+    category: 0
+    gameObject: {fileID: 1688894977}
+  - id: 7
+    category: 0
+    gameObject: {fileID: 1747428447}
+  - id: 8
+    category: 0
+    gameObject: {fileID: 1783919183}
+--- !u!4 &665537464
+Transform:
+  m_ObjectHideFlags: 19
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 665537462}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &673358370
 GameObject:
   m_ObjectHideFlags: 0
@@ -5795,7 +5882,7 @@ Transform:
   m_GameObject: {fileID: 1080416112}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -10.070457, y: 1.8900003, z: 0.7399998}
+  m_LocalPosition: {x: -10.070477, y: 1.8900003, z: 0.7399998}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5993,7 +6080,7 @@ MonoBehaviour:
     camera:
       camera: 0
   m_ProxyVolume: {fileID: 0}
-  m_BakedTexture: {fileID: 8900000, guid: cf715d47b15e011408eade45f0de0f97, type: 3}
+  m_BakedTexture: {fileID: 8900000, guid: ee29ab18a956e004cb401a136e0ca8ac, type: 3}
   m_CustomTexture: {fileID: 0}
   m_BakedRenderData:
     m_WorldToCameraRHS:
@@ -7152,7 +7239,7 @@ MonoBehaviour:
     camera:
       camera: 0
   m_ProxyVolume: {fileID: 0}
-  m_BakedTexture: {fileID: 8900000, guid: 36746421015f0a942bef01e71913e000, type: 3}
+  m_BakedTexture: {fileID: 8900000, guid: 0ae34ea8735712d41aa87da01d090385, type: 3}
   m_CustomTexture: {fileID: 0}
   m_BakedRenderData:
     m_WorldToCameraRHS:
@@ -8512,7 +8599,7 @@ Transform:
   m_GameObject: {fileID: 1563220102}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -7.0304484, y: 1.1110001, z: -3.047224}
+  m_LocalPosition: {x: -7.03046, y: 1.1110001, z: -3.0472298}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8710,7 +8797,7 @@ MonoBehaviour:
     camera:
       camera: 0
   m_ProxyVolume: {fileID: 0}
-  m_BakedTexture: {fileID: 8900000, guid: a06b4730862fd8c4abb095a4d0dc025f, type: 3}
+  m_BakedTexture: {fileID: 8900000, guid: 1df08741c6f27c648853f36d429f8a3c, type: 3}
   m_CustomTexture: {fileID: 0}
   m_BakedRenderData:
     m_WorldToCameraRHS:
@@ -9607,7 +9694,7 @@ MonoBehaviour:
     camera:
       camera: 0
   m_ProxyVolume: {fileID: 0}
-  m_BakedTexture: {fileID: 8900000, guid: f8b95d3591dd8b64e8f952cc6a7bf602, type: 3}
+  m_BakedTexture: {fileID: 8900000, guid: e59876caf620a354aad5316061344c6d, type: 3}
   m_CustomTexture: {fileID: 0}
   m_BakedRenderData:
     m_WorldToCameraRHS:
@@ -10173,7 +10260,7 @@ Transform:
   m_GameObject: {fileID: 1747428447}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -3.5204268, y: 2.087, z: 0.07900047}
+  m_LocalPosition: {x: -3.5204363, y: 2.087, z: 0.07900047}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -10371,7 +10458,7 @@ MonoBehaviour:
     camera:
       camera: 0
   m_ProxyVolume: {fileID: 0}
-  m_BakedTexture: {fileID: 8900000, guid: 7936eba982a8a3240806620880303bc6, type: 3}
+  m_BakedTexture: {fileID: 8900000, guid: af1617694f40e044a84948ce90596b7f, type: 3}
   m_CustomTexture: {fileID: 0}
   m_BakedRenderData:
     m_WorldToCameraRHS:
@@ -11751,7 +11838,7 @@ MonoBehaviour:
     camera:
       camera: 0
   m_ProxyVolume: {fileID: 0}
-  m_BakedTexture: {fileID: 8900000, guid: abf6c3b9486936b41be7188d22b4d32a, type: 3}
+  m_BakedTexture: {fileID: 8900000, guid: 8a97a1fee8d8e1840847eee545ec3a3d, type: 3}
   m_CustomTexture: {fileID: 0}
   m_BakedRenderData:
     m_WorldToCameraRHS:
@@ -12541,3 +12628,4 @@ SceneRoots:
   - {fileID: 1606239466}
   - {fileID: 1624860504}
   - {fileID: 7328584992422770646}
+  - {fileID: 665537464}
