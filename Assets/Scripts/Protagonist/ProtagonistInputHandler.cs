@@ -33,7 +33,7 @@ namespace NaniCore.Loopool {
 		}
 
 		protected void FixedUpdate() {
-			if(!protagonist.IsSwimming)
+			if(!protagonist.IsInWater)
 				moveVelocity.y = 0;
 			else
 				moveVelocity.y = floating - sinking;
@@ -72,11 +72,12 @@ namespace NaniCore.Loopool {
 
 		protected void OnJump(InputValue value) {
 			float raw = value.Get<float>();
-			if(!protagonist.IsSwimming) {
-				if(raw > 0)
+			floating = raw;
+			if(raw > 0) {
+				// Can jump in water.
+				if(protagonist.IsOnGround)
 					protagonist.Jump();
 			}
-			floating = raw;
 		}
 
 		protected void OnCrouch(InputValue value) {
