@@ -10,14 +10,27 @@ namespace NaniCore.Loopool {
 		#endregion
 
 		#region Interfaces
+		public delegate void LevelCallback(Level self);
+		public LevelCallback onLoaded, onUnloaded;
+
 		public SpawnPoint SpawnPoint {
 			get {
 #if DEBUG
-				return debugSpawnPoint ?? spawnPoint;
+				return debugSpawnPoint != null ?  debugSpawnPoint : spawnPoint;
 #else
 				return spawnPoint;
 #endif
 			}
+		}
+		#endregion
+
+		#region Life cycle
+		protected void Start() {
+			onLoaded?.Invoke(this);
+		}
+
+		protected void OnDestroy() {
+			onUnloaded?.Invoke(this);
 		}
 		#endregion
 	}
