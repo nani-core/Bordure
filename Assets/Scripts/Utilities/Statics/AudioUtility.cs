@@ -13,7 +13,7 @@ namespace NaniCore {
 			}
 			public AudioPlayConfig(AudioPlayConfig config) : this(config.range, config.volume) { }
 
-			public void ApplyOn(AudioSource source) {
+			public readonly void ApplyOn(AudioSource source) {
 				if(source == null)
 					return;
 
@@ -24,7 +24,7 @@ namespace NaniCore {
 			}
 		}
 
-		public static AudioPlayConfig defaultAudioPlayConfig = new AudioPlayConfig {
+		public static AudioPlayConfig defaultAudioPlayConfig = new() {
 			range = new Vector2(0, 1),
 		};
 
@@ -33,7 +33,7 @@ namespace NaniCore {
 		public static IEnumerator PlayOneShotAtCoroutine(AudioClip clip, Vector3 worldPosition, Transform under, AudioPlayConfig config) {
 			if(clip == null)
 				yield break;
-			GameObject player = new GameObject("One Shot Audio Player");
+			GameObject player = new("One Shot Audio Player");
 			player.transform.position = worldPosition;
 			player.transform.SetParent(under, true);
 			AudioSource source = player.AddComponent<AudioSource>();

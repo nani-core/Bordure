@@ -42,7 +42,9 @@ namespace NaniCore {
 
 
 		public static List<RaycastHit> RaycastAll(Vector3 origin, Vector3 direction, float distance, LayerMask layerMask, bool includeTriggers) {
+#pragma warning disable UNT0028 // Use non-allocating physics APIs
 			var hits = Physics.RaycastAll(origin, direction, distance, layerMask).ToList();
+#pragma warning restore UNT0028 // Use non-allocating physics APIs
 			if(!includeTriggers)
 				hits.RemoveAll(hit => hit.collider.isTrigger);
 			hits.Sort((a, b) => {

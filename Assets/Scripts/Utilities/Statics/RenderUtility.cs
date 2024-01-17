@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace NaniCore {
 	public static class RenderUtility {
-		private static Dictionary<string, Shader> shaderPool = new Dictionary<string, Shader>();
+		private static readonly Dictionary<string, Shader> shaderPool = new();
 		public static Shader GetPoolShader(string name) {
 			Shader shader = null;
 			if(shaderPool.ContainsKey(name))
@@ -15,17 +15,17 @@ namespace NaniCore {
 			return shader;
 		}
 
-		private static Dictionary<string, Material> materialPool = new Dictionary<string, Material>();
+		private static readonly Dictionary<string, Material> materialPool = new();
 		public static Material GetPooledMaterial(string shaderName) {
 			if(materialPool.ContainsKey(shaderName)) {
 				var pooledMat = materialPool[shaderName];
-				if(pooledMat != null && pooledMat.shader?.name == shaderName)
+				if(pooledMat != null && pooledMat.shader != null && pooledMat.shader.name == shaderName)
 					return pooledMat;
 			}
 			Shader shader = GetPoolShader(shaderName);
 			if(shader == null)
 				return null;
-			Material mat = new Material(shader);
+			Material mat = new(shader);
 			materialPool.Add(shaderName, mat);
 			return mat;
 		}
@@ -141,7 +141,7 @@ namespace NaniCore {
 
 		public static void RenderMask(this RenderTexture texture, GameObject gameObject, Camera camera, bool disregardDepth = false, Material overrideMaterial = null) {
 			disregardDepth = disregardDepth || overrideMaterial != null;
-			var maskMaterial = overrideMaterial ?? GetPooledMaterial("NaniCore/ObjectMask");
+			var maskMaterial = overrideMaterial != null ? overrideMaterial : GetPooledMaterial("NaniCore/ObjectMask");
 			List<(Renderer, Material[], int)> map = new();
 			foreach(var renderer in gameObject.transform.GetComponentsInChildren<Renderer>()) {
 				map.Add((renderer, renderer.sharedMaterials, renderer.gameObject.layer));
@@ -211,7 +211,7 @@ namespace NaniCore {
 
 		/// <remarks>Remember to destroy the Texture2D after use.</remarks>
 		public static Texture2D CreateTexture2D(this RenderTexture texture) {
-			Texture2D t2d = new Texture2D(texture.width, texture.height);
+			Texture2D t2d = new(texture.width, texture.height);
 			RenderTexture.active = texture;
 			t2d.ReadPixels(new Rect(0, 0, texture.width, texture.height), 0, 0);
 			return t2d;
@@ -221,10 +221,10 @@ namespace NaniCore {
 			value = default;
 			if(texture == null)
 				return false;
-			Rect bounds = new Rect(Vector2.zero, texture.Size());
+			Rect bounds = new(Vector2.zero, texture.Size());
 			if(!bounds.Contains(position))
 				return false;
-			Texture2D t2d = new Texture2D(1, 1);
+			Texture2D t2d = new(1, 1);
 			RenderTexture.active = texture;
 			t2d.ReadPixels(new Rect(position.x, position.y, 1, 1), 0, 0);
 			value = t2d.GetPixel(0, 0);
@@ -332,8 +332,7 @@ namespace NaniCore {
 
 			var downsampleSize = (Vector2)texture.Size() * sampleRate;
 			var downsample = texture.Resample(new Vector2Int((int)downsampleSize.x, (int)downsampleSize.y));
-			Vector2Int downsampledPosition;
-			if(!FindAnyPositionOfValueNoDownSample(downsample, value, 1, out downsampledPosition)) {
+			if(!FindAnyPositionOfValueNoDownSample(downsample, value, 1, out Vector2Int downsampledPosition)) {
 				downsample.Destroy();
 				return false;
 			}

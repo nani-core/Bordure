@@ -87,11 +87,15 @@ namespace NaniCore.Loopool {
 			ApplyGeometry();
 
 			if(eye == null) {
-				eye = transform.Find("Eye") ?? new GameObject("Eye").transform;
-				eye.SetParent(transform, false);
+				eye = transform.Find("Eye");
+				if(eye == null)
+					eye = new GameObject("Eye").transform;
 			}
-			eye.localPosition = Vector3.up * (Profile.height - Profile.eyeHanging);
-			eye.localRotation = Quaternion.identity;
+			eye.SetParent(transform, false);
+			eye.SetLocalPositionAndRotation(
+				Vector3.up * (Profile.height - Profile.eyeHanging),
+				Quaternion.identity
+			);
 			eye.localScale = Vector3.one;
 
 			rigidbodyAgent = GetComponent<RigidbodyAgent>();
@@ -242,8 +246,10 @@ namespace NaniCore.Loopool {
 		private void UpdateMovingAnimation() {
 			isWalking = !IsInWater && IsOnGround && hasJustMoved;
 			hasJustMoved = false;
-			animator?.SetBool("Walking", isWalking);
-			animator?.SetBool("Sprinting", IsSprinting);
+			if(animator != null) {
+				animator.SetBool("Walking", isWalking);
+				animator.SetBool("Sprinting", IsSprinting);
+			}
 		}
 		#endregion
 	}

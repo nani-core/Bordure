@@ -188,8 +188,10 @@ namespace NaniCore.Loopool {
 			float startTime = Time.time;
 			for(float t; (t = (Time.time - startTime) / Profile.grabbingTransitionDuration) < 1;) {
 				t = MathUtility.Ease(t, Profile.grabbingEasingFactor);
-				target.transform.localPosition = Vector3.Lerp(startPosition, endPosition, t);
-				target.transform.localRotation = Quaternion.Slerp(startRotation, endRotation, t);
+				target.transform.SetLocalPositionAndRotation(
+					Vector3.Lerp(startPosition, endPosition, t),
+					Quaternion.Slerp(startRotation, endRotation, t)
+				);
 				yield return new WaitForFixedUpdate();
 			}
 			target.transform.localPosition = endPosition;

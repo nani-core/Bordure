@@ -21,11 +21,11 @@ namespace NaniCore.Loopool {
 
 		#region Properties
 		public Material Material {
-			get => renderer?.sharedMaterial;
+			get => renderer != null ? renderer.sharedMaterial : null;
 			set {
 				if(renderer == null || value == Material)
 					return;
-				if(hasStamped && renderer?.sharedMaterial) {
+				if(hasStamped && Material != null) {
 					ReleaseCurrentStampingTexture();
 					Destroy(renderer.sharedMaterial);
 				}
@@ -90,7 +90,7 @@ namespace NaniCore.Loopool {
 		}
 
 		private void ReleaseCurrentStampingTexture() {
-			if(Material?.mainTexture == null)
+			if(Material == null || Material.mainTexture == null)
 				return;
 
 			var textureToBeDestroyed = Material.mainTexture;

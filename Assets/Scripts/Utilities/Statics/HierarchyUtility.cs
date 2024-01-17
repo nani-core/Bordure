@@ -8,8 +8,7 @@ namespace NaniCore {
 	public static class HierarchyUtility {
 		#region Component
 		public static T EnsureComponent<T>(this GameObject gameObject) where T : Component {
-			var existing = gameObject.GetComponent<T>();
-			if(existing != null)
+			if(gameObject.TryGetComponent<T>(out var existing))
 				return existing;
 			return gameObject.AddComponent<T>();
 		}
@@ -81,8 +80,7 @@ namespace NaniCore {
 #if UNITY_EDITOR
 			if(!Application.isPlaying) {
 				foreach(Transform child in root.transform) {
-					var here = child.GetComponent<T>();
-					if(here != null)
+					if(child.TryGetComponent<T>(out var here))
 						yield return here;
 					foreach(var grandchild in child.gameObject.FindAllComponentsInEditor<T>(includeInactive))
 						yield return grandchild;
