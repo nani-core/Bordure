@@ -136,7 +136,7 @@ namespace NaniCore.Loopool {
 				rigidbody.AddForce(deltaVelovity * Profile.acceleration, ForceMode.VelocityChange);
 
 				// Apply vertical movement.
-				if(verticalMovement > .1f) {
+				if(Mathf.Abs(verticalMovement) > .1f) {
 					float verticalForce = verticalMovement * Profile.swimmingSpeed - Vector3.Dot(rigidbody.velocity, Upward);
 					rigidbody.AddForce(Upward * (verticalForce * Profile.acceleration), ForceMode.VelocityChange);
 				}
@@ -144,7 +144,7 @@ namespace NaniCore.Loopool {
 				// Apply friction.
 				rigidbody.AddForce(-rigidbody.velocity * .08f, ForceMode.VelocityChange);
 				// Apply buoyancy.
-				rigidbody.AddForce(-Physics.gravity * .3f * rigidbody.mass, ForceMode.Force);
+				rigidbody.AddForce(-Physics.gravity * (.3f * rigidbody.mass), ForceMode.Force);
 			}
 
 			if(IsOnGround && hasJustMoved && !IsInWater)
