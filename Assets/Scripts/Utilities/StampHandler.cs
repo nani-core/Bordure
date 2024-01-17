@@ -21,7 +21,7 @@ namespace NaniCore.Loopool {
 
 		#region Properties
 		public Material Material {
-			get => renderer != null ? renderer.sharedMaterial : null;
+			get => renderer?.sharedMaterial;
 			set {
 				if(renderer == null || value == Material)
 					return;

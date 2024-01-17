@@ -466,7 +466,7 @@ namespace NaniCore {
 					continue;
 				}
 				var resultFilter = resultObject.GetComponent<MeshFilter>();
-				var resultMesh = resultFilter == null ? null : resultFilter.sharedMesh;
+				var resultMesh = resultFilter?.sharedMesh;
 				if(resultMesh == null)
 					continue;
 				resultMesh.name = $"{filter.sharedMesh.name} (operated)";

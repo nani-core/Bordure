@@ -16,7 +16,7 @@ namespace NaniCore.Loopool {
 		public SpawnPoint SpawnPoint {
 			get {
 #if DEBUG
-				return debugSpawnPoint != null ?  debugSpawnPoint : spawnPoint;
+				return debugSpawnPoint ?? spawnPoint;
 #else
 				return spawnPoint;
 #endif

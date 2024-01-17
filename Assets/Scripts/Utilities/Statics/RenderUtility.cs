@@ -141,7 +141,7 @@ namespace NaniCore {
 
 		public static void RenderMask(this RenderTexture texture, GameObject gameObject, Camera camera, bool disregardDepth = false, Material overrideMaterial = null) {
 			disregardDepth = disregardDepth || overrideMaterial != null;
-			var maskMaterial = overrideMaterial != null ? overrideMaterial : GetPooledMaterial("NaniCore/ObjectMask");
+			var maskMaterial = overrideMaterial ?? GetPooledMaterial("NaniCore/ObjectMask");
 			List<(Renderer, Material[], int)> map = new();
 			foreach(var renderer in gameObject.transform.GetComponentsInChildren<Renderer>()) {
 				map.Add((renderer, renderer.sharedMaterials, renderer.gameObject.layer));
