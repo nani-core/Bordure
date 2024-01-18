@@ -5,19 +5,19 @@ using System.Linq;
 namespace NaniCore.Loopool {
 	[RequireComponent(typeof(Rigidbody))]
 	public class RigidbodyAgent : MonoBehaviour {
+		#region Serialized fields
+		[SerializeField] private RigidbodyTier tier;
+		#endregion
+
 		#region Fields
+		private new Rigidbody rigidbody;
 		private readonly Dictionary<Collider, ContactPoint[]> colliderContacts = new();
 		private readonly HashSet<Collider> overlappingTriggers = new();
 		#endregion
 
 		#region Interfaces
-		public delegate void ColliderContactUpdateNotifier(Collision collision);
-		public ColliderContactUpdateNotifier onColliderEnter;
-		public ColliderContactUpdateNotifier onColliderExit;
-
-		public delegate void TriggerUpdateNotifier(Collider collider);
-		public TriggerUpdateNotifier onTriggerEnter;
-		public TriggerUpdateNotifier onTriggerExit;
+		public Rigidbody Rigidbody => rigidbody;
+		public RigidbodyTier Tier => tier;
 
 		public Dictionary<Collider, ContactPoint[]> ColliderContacts => colliderContacts;
 		public HashSet<Collider> OverlappingTriggers => overlappingTriggers;
@@ -27,18 +27,42 @@ namespace NaniCore.Loopool {
 		}
 		#endregion
 
+		#region Delegates
+		#region Instance
+		public delegate void ColliderContactUpdateNotifier(Collision collision);
+		public ColliderContactUpdateNotifier onColliderEnter;
+		public ColliderContactUpdateNotifier onColliderExit;
+
+		public delegate void TriggerUpdateNotifier(Collider collider);
+		public TriggerUpdateNotifier onTriggerEnter;
+		public TriggerUpdateNotifier onTriggerExit;
+		#endregion
+
+		#region Static
+		public delegate void GlobalColliderContactUpdateNotifier(Collision collision);
+		public static GlobalColliderContactUpdateNotifier onColliderEnterStatic;
+		public static GlobalColliderContactUpdateNotifier onColliderExitStatic;
+
+		public delegate void GlobalTriggerUpdateNotifier(Collider trigger, Rigidbody rigidbody);
+		public static GlobalTriggerUpdateNotifier onTriggerEnterStatic;
+		public static GlobalTriggerUpdateNotifier onTriggerExitStatic;
+		#endregion
+		#endregion
+
 		#region Functions
 		private void UpdateColliderContact(Collision collision) {
 			var collider = collision.collider;
 			if(collider == null)
 				return;
-			var contactCount = colliderContacts.Count;
+			var contactCount = collision.contactCount;
 			if(contactCount == 0) {
 				// Remove escaped collider.
-				if(!colliderContacts.ContainsKey(collider))
-					return;
-				colliderContacts.Remove(collider);
-				onColliderExit?.Invoke(collision);
+				if(colliderContacts.ContainsKey(collider)) {
+					colliderContacts.Remove(collider);
+					onColliderExit?.Invoke(collision);
+					onColliderExitStatic?.Invoke(collision);
+				}
+				return;
 			}
 
 			bool isNew = false;
@@ -61,12 +85,18 @@ namespace NaniCore.Loopool {
 
 			collision.GetContacts(contactArray);
 			colliderContacts[collider] = contactArray;
-			if(isNew)
+			if(isNew) {
 				onColliderEnter?.Invoke(collision);
+				onColliderEnterStatic?.Invoke(collision);
+			}
 		}
 		#endregion
 
 		#region Life cycle
+		protected void Start() {
+			rigidbody = GetComponent<Rigidbody>();
+		}
+
 		protected void OnCollisionEnter(Collision collision) => UpdateColliderContact(collision);
 		protected void OnCollisionStay(Collision collision) => UpdateColliderContact(collision);
 		protected void OnCollisionExit(Collision collision) => UpdateColliderContact(collision);
@@ -76,12 +106,14 @@ namespace NaniCore.Loopool {
 				return;
 			overlappingTriggers.Add(trigger);
 			onTriggerEnter?.Invoke(trigger);
+			onTriggerEnterStatic?.Invoke(trigger, Rigidbody);
 		}
 		protected void OnTriggerExit(Collider trigger) {
 			if(trigger == null)
 				return;
 			overlappingTriggers.Remove(trigger);
 			onTriggerExit?.Invoke(trigger);
+			onTriggerExitStatic?.Invoke(trigger, Rigidbody);
 		}
 
 		protected void FixedUpdate() {

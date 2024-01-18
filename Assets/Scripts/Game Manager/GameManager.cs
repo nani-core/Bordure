@@ -27,6 +27,7 @@ namespace NaniCore.Loopool {
 
 		protected void Initialize() {
 			InitializeConstants();
+			InitializeRigidbody();
 			InitializeAudio();
 			protagonist = InitializeProtagonist();
 			InitializeDebugUi();
