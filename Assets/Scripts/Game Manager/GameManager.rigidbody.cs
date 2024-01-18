@@ -3,7 +3,7 @@ using UnityEngine;
 namespace NaniCore.Loopool {
 	public partial class GameManager : MonoBehaviour {
 		#region Functions
-		private void OnCollisionEnterCallback(Collision collision) {
+		private static void OnCollisionEnterCallback(Collision collision) {
 			if(collision == null || collision.contactCount == 0)
 				return;
 
@@ -17,46 +17,50 @@ namespace NaniCore.Loopool {
 				contactPoint.thisCollider.attachedRigidbody?.GetComponent<RigidbodyAgent>(),
 				contactPoint.otherCollider.attachedRigidbody?.GetComponent<RigidbodyAgent>()
 			);
-
-			var (tierA, tierB) = (a.GetTier(), b.GetTier());
-			if((tierA | tierB) == 0)
+			if(!FlipAgentPairByTier(ref a, ref b))
 				return;
-
-			if(tierA == 0) {
-				(a, b) = (b, a);
-#pragma warning disable IDE0059
-				// They will be sooner or later used.
-				(tierA, tierB) = (tierB, tierA);
-#pragma warning restore IDE0059
-			}
 
 			OnRigidbodyCollided(a, b, collision);
 		}
 
-		private void OnRigidbodyCollided(RigidbodyAgent a, RigidbodyAgent b, Collision collision) {
-			foreach(var contact in collision.contacts) {
-				float hardness = collision.impulse.magnitude / (a.Rigidbody.mass * (b?.Rigidbody?.mass ?? 1));
-				// Generate collision sounds.
-				{
-					// TODO: The attenuation coefficient 10f should be configured.
-					a.StartCoroutine(AudioUtility.PlayOneShotAtCoroutine(
-						// TODO: The collision sound should be regarding the tiers.
-						Settings.collisionSound,
-						contact.point,
-						a.transform,
-						new() {
-							volume = 1f - 1f / (hardness / 10f + 1f),
-						}
-					));
-				}
-			}
+		private static bool FlipAgentPairByTier(ref RigidbodyAgent a, ref RigidbodyAgent b) {
+			var (tierA, tierB) = (a.GetTier(), b.GetTier());
+			if((tierA | tierB) == 0)
+				return false;
+			if(tierA == 0)
+				(a, b) = (b, a);
+			return true;
+		}
+
+		private static void OnRigidbodyCollided(RigidbodyAgent a, RigidbodyAgent b, Collision collision) {
+			float hardness = collision.impulse.magnitude * (a.Rigidbody.mass * (b?.Rigidbody?.mass ?? 1));
+			Vector3 point = Vector3.zero;
+			foreach(var contact in collision.contacts)
+				point += contact.point;
+			point /= collision.contacts.Length;
+			Instance.PlayPhysicalSound(Instance.Settings.collisionSound, point, a.transform, hardness);
+		}
+
+		private static void OnTriggerEnterCallback(Collider trigger, Rigidbody rigidbody) {
+			if(trigger.gameObject.layer != Instance.WaterLayer)
+				return;
+
+			Instance.PlayPhysicalSound(Instance.Settings.enterWaterSound, rigidbody);
+		}
+
+		private static void OnTriggerExitCallback(Collider trigger, Rigidbody rigidbody) {
+			if(trigger.gameObject.layer != Instance.WaterLayer)
+				return;
+
+			Instance.PlayPhysicalSound(Instance.Settings.exitWaterSound, rigidbody);
 		}
 		#endregion
 
 		#region Life cycle
 		protected void InitializeRigidbody() {
 			RigidbodyAgent.onColliderEnterStatic += OnCollisionEnterCallback;
-			// TODO: Enter and leave water.
+			RigidbodyAgent.onTriggerEnterStatic += OnTriggerEnterCallback;
+			RigidbodyAgent.onTriggerExitStatic += OnTriggerExitCallback;
 		}
 		#endregion
 	}

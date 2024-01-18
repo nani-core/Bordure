@@ -39,13 +39,13 @@ namespace NaniCore.Loopool {
 		#endregion
 
 		#region Static
-		public delegate void GlobalColliderContactUpdateNotifier(Collision collision);
-		public static GlobalColliderContactUpdateNotifier onColliderEnterStatic;
-		public static GlobalColliderContactUpdateNotifier onColliderExitStatic;
+		public delegate void StaticColliderContactUpdateNotifier(Collision collision);
+		public static StaticColliderContactUpdateNotifier onColliderEnterStatic;
+		public static StaticColliderContactUpdateNotifier onColliderExitStatic;
 
-		public delegate void GlobalTriggerUpdateNotifier(Collider trigger, Rigidbody rigidbody);
-		public static GlobalTriggerUpdateNotifier onTriggerEnterStatic;
-		public static GlobalTriggerUpdateNotifier onTriggerExitStatic;
+		public delegate void StaticTriggerUpdateNotifier(Collider trigger, Rigidbody rigidbody);
+		public static StaticTriggerUpdateNotifier onTriggerEnterStatic;
+		public static StaticTriggerUpdateNotifier onTriggerExitStatic;
 		#endregion
 		#endregion
 

@@ -1,5 +1,4 @@
 using UnityEngine;
-using NaughtyAttributes;
 
 namespace NaniCore.Loopool {
 	[CreateAssetMenu(menuName = "Nani Core/Game Settings")]
@@ -8,7 +7,16 @@ namespace NaniCore.Loopool {
 		public Protagonist protagonist;
 		public ProtagonistProfile protagonistProfile;
 
+		[Header("Audio")]
+		[Min(0)] public float physicalSoundBaseGain = .1f;
+		[Min(0)] public float maxPhysicalSoundGain = 5f;
+		[Min(0)] public float physicalSoundRange = 10f;
+		[Min(0)] public float physicalSoundAttenuation = 5f;
+
 		[Header("Rigidbody")]
-		public AudioClip collisionSound;	// Only temporary.
+		// Only temporary.
+		public AudioClip collisionSound;
+		public AudioClip enterWaterSound;
+		public AudioClip exitWaterSound;
 	}
 }
