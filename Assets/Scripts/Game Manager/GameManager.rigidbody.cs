@@ -1,10 +1,9 @@
-using Palmmedia.ReportGenerator.Core;
 using UnityEngine;
 
 namespace NaniCore.Loopool {
 	public partial class GameManager : MonoBehaviour {
 		#region Functions
-		private static void OnCollisionEnterCallback(Collision collision) {
+		private void OnCollisionEnterCallback(Collision collision) {
 			if(collision == null || collision.contactCount == 0)
 				return;
 
@@ -18,46 +17,37 @@ namespace NaniCore.Loopool {
 				contactPoint.thisCollider.GetComponent<RigidbodyAgent>(),
 				contactPoint.otherCollider.GetComponent<RigidbodyAgent>()
 			);
-			if(!FlipAgentPairByTier(ref a, ref b))
-				return;
 
 			OnRigidbodyCollided(a, b, collision);
 		}
 
-		private static bool FlipAgentPairByTier(ref RigidbodyAgent a, ref RigidbodyAgent b) {
-			var (tierA, tierB) = (a.GetTier(), b.GetTier());
-			if((tierA | tierB) == 0)
-				return false;
-			if(tierA == 0)
-				(a, b) = (b, a);
-			return true;
-		}
-
-		private static void OnRigidbodyCollided(RigidbodyAgent a, RigidbodyAgent b, Collision collision) {
+		private void OnRigidbodyCollided(RigidbodyAgent a, RigidbodyAgent b, Collision collision) {
 			float impulse = collision.impulse.magnitude;
-			float minImpulse = Instance.Settings.minPhysicalSoundImpulse;
+			float minImpulse = Settings.minPhysicalSoundImpulse;
 			if(impulse < minImpulse)
 				return;
 			float hardness = impulse - minImpulse;
+
 			Vector3 point = Vector3.zero;
 			foreach(var contact in collision.contacts)
 				point += contact.point;
 			point /= collision.contacts.Length;
-			Instance.PlayPhysicalSound(Instance.Settings.collisionSound, point, a.transform, hardness);
+
+			PlayPhysicalSound(Settings.collisionSound, point, a.transform, hardness);
 		}
 
-		private static void OnTriggerEnterCallback(Collider trigger, Rigidbody rigidbody) {
-			if(trigger.gameObject.layer != Instance.WaterLayer)
+		private void OnTriggerEnterCallback(Collider trigger, Rigidbody rigidbody) {
+			if(trigger.gameObject.layer != WaterLayer)
 				return;
 
-			Instance.PlayPhysicalSound(Instance.Settings.enterWaterSound, rigidbody);
+			PlayPhysicalSound(Settings.enterWaterSound, rigidbody);
 		}
 
-		private static void OnTriggerExitCallback(Collider trigger, Rigidbody rigidbody) {
-			if(trigger.gameObject.layer != Instance.WaterLayer)
+		private void OnTriggerExitCallback(Collider trigger, Rigidbody rigidbody) {
+			if(trigger.gameObject.layer != WaterLayer)
 				return;
 
-			Instance.PlayPhysicalSound(Instance.Settings.exitWaterSound, rigidbody);
+			PlayPhysicalSound(Settings.exitWaterSound, rigidbody);
 		}
 		#endregion
 
