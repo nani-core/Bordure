@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace NaniCore.Loopool {
-	[RequireComponent(typeof(Rigidbody))]
 	public class RigidbodyAgent : MonoBehaviour {
 		#region Serialized fields
 		[SerializeField] private RigidbodyTier tier;
@@ -94,7 +93,8 @@ namespace NaniCore.Loopool {
 
 		#region Life cycle
 		protected void Start() {
-			rigidbody = GetComponent<Rigidbody>();
+			if(!TryGetComponent(out rigidbody))
+				rigidbody = null;
 		}
 
 		protected void OnCollisionEnter(Collision collision) => UpdateColliderContact(collision);

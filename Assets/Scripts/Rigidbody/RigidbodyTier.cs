@@ -6,7 +6,7 @@ namespace NaniCore.Loopool {
 	 * a common lower-bit sequence.
 	 */
 	public enum RigidbodyTier {
-		Undefined = 0x0,
+		Default = 0x0,
 
 		Stone = 0x1,
 		Ceramic = 0x1 | 0x2,

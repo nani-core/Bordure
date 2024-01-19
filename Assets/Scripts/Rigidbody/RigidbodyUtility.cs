@@ -3,11 +3,9 @@ using UnityEngine;
 namespace NaniCore.Loopool {
 	public static class RigidbodyUtility {
 		public static bool IsDerivedFromTier(this RigidbodyTier self, RigidbodyTier parent) {
-			if(parent == 0)
+			if((uint)self < (uint)parent)
 				return false;
-			if(self < parent)
-				return false;
-			return (self & parent) == parent;
+			return ((uint)self & (uint)parent) == (uint)parent;
 		}
 
 		public static bool IsOfTier(this RigidbodyAgent rba, RigidbodyTier tier) {
@@ -21,10 +19,10 @@ namespace NaniCore.Loopool {
 
 
 		public static RigidbodyTier GetTier(this RigidbodyAgent rba) {
-			return rba?.Tier ?? RigidbodyTier.Undefined;
+			return rba?.Tier ?? RigidbodyTier.Default;
 		}
 		public static RigidbodyTier GetTier(this Rigidbody rb) {
-			return rb?.GetComponent<RigidbodyAgent>()?.GetTier() ?? RigidbodyTier.Undefined;
+			return rb?.GetComponent<RigidbodyAgent>()?.GetTier() ?? RigidbodyTier.Default;
 		}
 	}
 }

@@ -1,3 +1,4 @@
+using Palmmedia.ReportGenerator.Core;
 using UnityEngine;
 
 namespace NaniCore.Loopool {
@@ -14,8 +15,8 @@ namespace NaniCore.Loopool {
 				contactPoint = contactPoints[0];
 			}
 			var (a, b) = (
-				contactPoint.thisCollider.attachedRigidbody?.GetComponent<RigidbodyAgent>(),
-				contactPoint.otherCollider.attachedRigidbody?.GetComponent<RigidbodyAgent>()
+				contactPoint.thisCollider.GetComponent<RigidbodyAgent>(),
+				contactPoint.otherCollider.GetComponent<RigidbodyAgent>()
 			);
 			if(!FlipAgentPairByTier(ref a, ref b))
 				return;
@@ -33,7 +34,11 @@ namespace NaniCore.Loopool {
 		}
 
 		private static void OnRigidbodyCollided(RigidbodyAgent a, RigidbodyAgent b, Collision collision) {
-			float hardness = collision.impulse.magnitude * (a.Rigidbody.mass * (b?.Rigidbody?.mass ?? 1));
+			float impulse = collision.impulse.magnitude;
+			float minImpulse = Instance.Settings.minPhysicalSoundImpulse;
+			if(impulse < minImpulse)
+				return;
+			float hardness = impulse - minImpulse;
 			Vector3 point = Vector3.zero;
 			foreach(var contact in collision.contacts)
 				point += contact.point;
