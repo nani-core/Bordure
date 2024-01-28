@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace NaniCore.Loopool {
+namespace NaniCore.Stencil {
 	public class Level : MonoBehaviour {
 		#region Serialized fields
 		[SerializeField] private SpawnPoint spawnPoint;

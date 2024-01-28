@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace NaniCore.Loopool {
+namespace NaniCore.Stencil {
 	[RequireComponent(typeof(Rigidbody))]
 	public class Floatable : MonoBehaviour {
 		#region Fields

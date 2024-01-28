@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace NaniCore.Loopool {
+namespace NaniCore.Stencil {
 	public class LevelLoader : MonoBehaviour {
 		#region Serialized fields
 		[SerializeField] private Level template;

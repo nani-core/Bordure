@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace NaniCore.Loopool {
+namespace NaniCore.Stencil {
 	public class Clickable : Interactable {
 		#region Serialized fields
 		[SerializeField] protected UnityEvent onClicked;

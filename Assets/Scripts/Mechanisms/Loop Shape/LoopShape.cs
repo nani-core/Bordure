@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using System.Collections.Generic;
 
-namespace NaniCore.Loopool {
+namespace NaniCore.Stencil {
 	public abstract class LoopShape : MonoBehaviour {
 		#region Static
 		protected static HashSet<LoopShape> all;

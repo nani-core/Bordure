@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace NaniCore.Loopool {
+namespace NaniCore.Stencil {
 	[CreateAssetMenu(menuName = "Nani Core/Game Settings")]
 	public class GameSettings : ScriptableObject {
 		[Header("Protagonist")]

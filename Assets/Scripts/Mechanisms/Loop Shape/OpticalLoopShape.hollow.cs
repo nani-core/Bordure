@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-namespace NaniCore.Loopool {
+namespace NaniCore.Stencil {
 	public partial class OpticalLoopShape : LoopShape {
 		private static bool generateFrustumWithSilhouette = false;
 

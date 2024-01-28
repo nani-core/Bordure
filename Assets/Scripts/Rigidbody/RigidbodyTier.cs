@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace NaniCore.Loopool {
+namespace NaniCore.Stencil {
 	/**
 	 * For two tiers to be belonging to the same parent tier, they must share
 	 * a common lower-bit sequence.

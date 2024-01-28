@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace NaniCore.Loopool {
+namespace NaniCore.Stencil {
 	public static class RigidbodyUtility {
 		public static bool IsDerivedFromTier(this RigidbodyTier self, RigidbodyTier parent) {
 			if((uint)self < (uint)parent)

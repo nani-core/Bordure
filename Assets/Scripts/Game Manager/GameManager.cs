@@ -1,7 +1,7 @@
 using UnityEngine;
 using NaughtyAttributes;
 
-namespace NaniCore.Loopool {
+namespace NaniCore.Stencil {
 	[ExecuteInEditMode]
 	public partial class GameManager : MonoBehaviour {
 		#region Serialized fields

@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace NaniCore.Loopool {
+namespace NaniCore.Stencil {
 	public class RigidbodyAgent : MonoBehaviour {
 		#region Serialized fields
 		[SerializeField] private RigidbodyTier tier;

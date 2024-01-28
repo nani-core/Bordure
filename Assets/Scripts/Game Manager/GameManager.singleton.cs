@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace NaniCore.Loopool {
+namespace NaniCore.Stencil {
 	public partial class GameManager : MonoBehaviour {
 		private static GameManager instance;
 		public static GameManager Instance => instance;

@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-namespace NaniCore.Loopool {
+namespace NaniCore.Stencil {
 	public partial class Protagonist : MonoBehaviour {
 		#region Serialized fields
 		[SerializeField] private FocusUi focus;

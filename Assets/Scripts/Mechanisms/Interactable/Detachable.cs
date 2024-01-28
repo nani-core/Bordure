@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using NaughtyAttributes;
 
-namespace NaniCore.Loopool {
+namespace NaniCore.Stencil {
 	public partial class Detachable : Interactable {
 		#region Serialized fields
 		public bool useDetachingEjection;

@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-namespace NaniCore.Loopool {
+namespace NaniCore.Stencil {
 	public static class LevelUtility {
 		public struct LevelRegistry {
 			public Level template;

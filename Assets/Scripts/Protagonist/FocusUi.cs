@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 using UnityEngine.UI;
 
-namespace NaniCore.Loopool {
+namespace NaniCore.Stencil {
 	public class FocusUi : MonoBehaviour {
 		#region Serialized fields
 		[SerializeField] private Image image;

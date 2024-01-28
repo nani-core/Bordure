@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace NaniCore.Loopool {
+namespace NaniCore.Stencil {
 	[RequireComponent(typeof(RigidbodyAgent))]
 	public partial class Protagonist : MonoBehaviour {
 		#region Serialized fields

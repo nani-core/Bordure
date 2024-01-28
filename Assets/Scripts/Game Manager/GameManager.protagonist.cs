@@ -3,7 +3,7 @@ using System.Linq;
 using System.Reflection;
 using System.Collections.Generic;
 
-namespace NaniCore.Loopool {
+namespace NaniCore.Stencil {
 	public partial class GameManager : MonoBehaviour {
 		#region Fields
 		private Protagonist protagonist;

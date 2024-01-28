@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-namespace NaniCore.Loopool {
+namespace NaniCore.Stencil {
 	[CreateAssetMenu(menuName = "Nani Core/Protagonist Profile")]
 	public class ProtagonistProfile : ScriptableObject {
 		[Header("Geometry")]

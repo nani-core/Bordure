@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace NaniCore.Loopool {
+namespace NaniCore.Stencil {
 	[RequireComponent(typeof(BoxCollider))]
 	public partial class Water : MonoBehaviour {
 		#region Serialized fields

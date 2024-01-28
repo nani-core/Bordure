@@ -1,7 +1,7 @@
 #if UNITY_EDITOR
 using UnityEngine;
 
-namespace NaniCore.Loopool {
+namespace NaniCore.Stencil {
 	public partial class Water : MonoBehaviour {
 		#region Life cycle
 		protected void OnValidate() {

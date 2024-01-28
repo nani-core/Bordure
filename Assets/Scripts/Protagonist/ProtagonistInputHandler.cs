@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace NaniCore.Loopool {
+namespace NaniCore.Stencil {
 	[RequireComponent(typeof(Protagonist))]
 	public class ProtagonistInputHandler : MonoBehaviour {
 		#region Fields

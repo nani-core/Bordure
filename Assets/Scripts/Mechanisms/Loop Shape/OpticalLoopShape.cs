@@ -3,7 +3,7 @@ using NaughtyAttributes;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace NaniCore.Loopool {
+namespace NaniCore.Stencil {
 	public partial class OpticalLoopShape : LoopShape {
 		const float standardHeight = 216f;
 
