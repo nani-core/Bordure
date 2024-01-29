@@ -14,7 +14,7 @@ namespace NaniCore.Stencil {
 		#region Interfaces
 		public bool IsValid {
 			get {
-				if(validator == null)
+				if(validator == null || !isActiveAndEnabled)
 					return false;
 				if(validator.isActiveAndEnabled && validator.IsValid)
 					return true;
@@ -23,7 +23,6 @@ namespace NaniCore.Stencil {
 		}
 
 		public void Open() {
-			enabled = false;
 			onOpen?.Invoke();
 		}
 

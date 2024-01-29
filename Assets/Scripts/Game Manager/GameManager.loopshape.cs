@@ -35,7 +35,7 @@ namespace NaniCore.Stencil {
 		#region Life cycle
 		protected void UpdateLoopShape() {
 			loopshapes.RemoveAll(loopshape => loopshape == null);
-			validLoopshapes = loopshapes.Where(loopshape => loopshape.isActiveAndEnabled && loopshape.IsValid).ToArray();
+			validLoopshapes = loopshapes.Where(loopshape => loopshape.IsValid).ToArray();
 		}
 		#endregion
 	}
