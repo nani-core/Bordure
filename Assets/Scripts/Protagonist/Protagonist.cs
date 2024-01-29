@@ -43,7 +43,7 @@ namespace NaniCore.Stencil {
 								plate.Pressed = !plate.Pressed;
 								acted = true;
 								break;
-							case OpticalLoopShape opticalLoopShape:
+							case OpticalValidator opticalLoopShape:
 								opticalLoopShape.SendMessage("OnLoopShapeOpen", SendMessageOptions.DontRequireReceiver);
 								break;
 							case Interactable interactable:
@@ -84,6 +84,7 @@ namespace NaniCore.Stencil {
 				return;
 			}
 #endif
+			UpdateInteraction();
 		}
 
 #if UNITY_EDITOR

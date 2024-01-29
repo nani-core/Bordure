@@ -18,12 +18,17 @@ namespace NaniCore.Stencil {
 		#endregion
 
 		#region Fields
+		private int type = -1;
 		private float r;
 		#endregion
 
 		#region Functions
 		public void UpdateFocusAnimated(int type) {
-			switch(type) {
+			if(this.type == type)
+				return;
+
+			this.type = type;
+			switch(this.type) {
 				case 0:
 					ZoomCubic(focusRadiusMap.Normal);
 					break;

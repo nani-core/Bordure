@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections;
-using UnityEditor.PackageManager;
 
 namespace NaniCore.Stencil {
 	public partial class Protagonist : MonoBehaviour {
@@ -12,7 +11,6 @@ namespace NaniCore.Stencil {
 		private Interactable focusingObject;
 		private Grabbable grabbingObject;
 		private bool grabbingOrienting;
-		private LoopShape satisfiedLoopShape;
 		#endregion
 
 		#region Interfaces
@@ -29,8 +27,6 @@ namespace NaniCore.Stencil {
 					focusingObject.SendMessage("OnFocusEnter", SendMessageOptions.DontRequireReceiver);
 					PlaySfx(Profile.onFocusSound);
 				}
-
-				UpdateFocusUi();
 			}
 		}
 
@@ -55,7 +51,6 @@ namespace NaniCore.Stencil {
 					grabbingObject.transform.SetParent(eye.transform, true);
 				}
 
-				UpdateFocusUi();
 				inputHandler.SetGrabbingActionEnabled(grabbingObject != null);
 			}
 		}
@@ -63,17 +58,6 @@ namespace NaniCore.Stencil {
 		public bool GrabbingOrienting {
 			get => grabbingObject != null && grabbingOrienting;
 			set => grabbingOrienting = grabbingObject != null && value;
-		}
-
-		public LoopShape SatisfiedLoopShape {
-			get => satisfiedLoopShape;
-			set {
-				if(satisfiedLoopShape == value)
-					return;
-
-				satisfiedLoopShape = value;
-				UpdateFocusUi();
-			}
 		}
 
 		public void GrabbingOrientDelta(float delta) {
@@ -100,6 +84,10 @@ namespace NaniCore.Stencil {
 			}
 
 			FocusingObject = null;
+		}
+
+		private void UpdateInteraction() {
+			UpdateFocusUi();
 		}
 
 		private void LateUpdateInteraction() {
@@ -132,22 +120,6 @@ namespace NaniCore.Stencil {
 						GrabbingObject = null;
 				}
 			}
-			// If any loop shape is satisfied, check for invalidation.
-			if(SatisfiedLoopShape != null) {
-				if(!SatisfiedLoopShape.isActiveAndEnabled || !SatisfiedLoopShape.Validate(eye))
-					SatisfiedLoopShape = null;
-			}
-			// If no loop shape is satisfied, seek for activation.
-			else {
-				foreach(var loopshape in LoopShape.All) {
-					if(!loopshape.isActiveAndEnabled)
-						continue;
-					if(loopshape.Validate(eye)) {
-						SatisfiedLoopShape = loopshape;
-						break;
-					}
-				}
-			}
 		}
 		#endregion
 
@@ -155,7 +127,8 @@ namespace NaniCore.Stencil {
 		private void UpdateFocusUi() {
 			if(focus == null)
 				return;
-			if(SatisfiedLoopShape)
+
+			if(GameManager.Instance.HasValidLoopshapes)
 				focus.UpdateFocusAnimated(1);
 			else if(GrabbingObject)
 				focus.UpdateFocusAnimated(2);
@@ -190,10 +163,10 @@ namespace NaniCore.Stencil {
 		}
 
 		public void Interact() {
-			if(SatisfiedLoopShape != null) {
+			if(GameManager.Instance.HasValidLoopshapes) {
 				GrabbingObject = null;
-				SatisfiedLoopShape.SendMessage("OnLoopShapeOpen");
-				SatisfiedLoopShape = null;
+				foreach(var loopshape in GameManager.Instance.ValidLoopshapes)
+					loopshape.Open();
 			}
 			else if(GrabbingObject != null) {
 				GrabbingObject = null;

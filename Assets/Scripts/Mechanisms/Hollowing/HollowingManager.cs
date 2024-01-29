@@ -1,20 +1,23 @@
 using UnityEngine;
-using System.Collections;
+using MeshMakerNamespace;
 
 namespace NaniCore.Stencil {
-	public partial class OpticalLoopShape : LoopShape {
+	public class HollowingManager : MonoBehaviour {
+		#region Serialized fields
+		[SerializeField] protected Material sectionMaterial;
+		#endregion
 		private static bool generateFrustumWithSilhouette = false;
 
 		#region Functions
 		private static GameObject GenerateHollowShape(GameObject go, Camera camera) {
 			if(go == null || camera == null)
 				return null;
-			
+
 			// Generate the frustum mesh.
 			Mesh frustum;
 			float
 				from = camera.nearClipPlane,
-				to = Mathf.Min(20f, camera.farClipPlane);	// This clipping is important to keep CSG behaving normal.
+				to = Mathf.Min(20f, camera.farClipPlane);   // This clipping is important to keep CSG behaving normal.
 			if(generateFrustumWithSilhouette) {
 				var mask = RenderUtility.CreateScreenSizedRT();
 				float referenceSize = mask.width;
@@ -41,45 +44,27 @@ namespace NaniCore.Stencil {
 			return obj;
 		}
 
-		private IEnumerator EjectNeogastroCoroutine(MeshFilter filter, MeshFilter resultFilter) {
-			var detachable = neogastro.AddComponent<Detachable>();
-			detachable.useDetachingEjection = useDetachingEjection;
-			detachable.ejectionVelocity = ejectionVelocity;
-			detachable.ejectionOrigin = ejectionOrigin;
-			yield return new WaitForEndOfFrame();
-			detachable.Detach();
-		}
-
-		/// <summary>
-		/// Create a hole with gastro's shape on blasto.
-		/// </summary>
 		/// <remarks>
 		/// Needs to be refined to avoid memory leak.
 		/// </remarks>
-		public void Hollow() {
-			GameObject hollowShape = GenerateHollowShape(gastro, GameManager.Instance?.MainCamera);
+		public void Hollow(GameObject shape) {
+			StampHandler.Stamp(gameObject, GameManager.Instance?.MainCamera);
+
+			GameObject hollowShape = GenerateHollowShape(shape, GameManager.Instance?.MainCamera);
 
 			float epsilon = 1e-3f;
-			// Neogastro.
 			// There should only be one `resultFilter` and is assigned to `neoGastro`.
-			foreach(var (filter, resultFilter) in blasto.OperateMesh(hollowShape, MeshMakerNamespace.CSG.Operation.Intersection, epsilon, sectionMaterial)) {
-				neogastro = resultFilter.gameObject;
-				neogastro.name = $"{filter.gameObject.name} (neogastro)";
+			foreach(var (filter, resultFilter) in gameObject.OperateMesh(hollowShape, CSG.Operation.Intersection, epsilon, sectionMaterial)) {
+				var hollowedObject = resultFilter.gameObject;
+				hollowedObject.name = $"{filter.gameObject.name} (hollowed)";
 
 				// Generate physics
-				var resultCollider = neogastro.GetComponent<MeshCollider>();
-				if(resultCollider == null)
-					resultCollider = neogastro.AddComponent<MeshCollider>();
+				if(!hollowedObject.TryGetComponent<MeshCollider>(out var resultCollider))
+					resultCollider = hollowedObject.AddComponent<MeshCollider>();
 				resultCollider.sharedMesh = resultFilter.sharedMesh;
 				if(resultCollider != null) {
 					resultCollider.convex = true;
-					var rigidbody = neogastro.GetComponent<Rigidbody>();
-					if(useDetachingEjection) {
-						if(rigidbody == null)
-							rigidbody = neogastro.AddComponent<Rigidbody>();
-						StartCoroutine(EjectNeogastroCoroutine(filter, resultFilter));
-					}
-					if(rigidbody != null) {
+					if(hollowedObject.TryGetComponent<Rigidbody>(out var rigidbody)) {
 						rigidbody.constraints = RigidbodyConstraints.None;
 						try {
 							rigidbody.isKinematic = false;
@@ -91,7 +76,7 @@ namespace NaniCore.Stencil {
 					}
 				}
 			}
-			foreach(var (filter, resultFilter) in blasto.OperateMesh(hollowShape, MeshMakerNamespace.CSG.Operation.Subtract, epsilon, sectionMaterial)) {
+			foreach(var (filter, resultFilter) in gameObject.OperateMesh(hollowShape, CSG.Operation.Subtract, epsilon, sectionMaterial)) {
 				filter.sharedMesh = resultFilter.sharedMesh;
 				filter.GetComponent<MeshCollider>().sharedMesh = resultFilter.sharedMesh;
 				filter.GetComponent<Renderer>().sharedMaterials = resultFilter.GetComponent<Renderer>().sharedMaterials;
@@ -100,7 +85,7 @@ namespace NaniCore.Stencil {
 
 			Destroy(hollowShape);
 
-			// TODO: Restore original blasto materials.
+			// TODO: Restore original gameObject materials.
 		}
 		#endregion
 	}

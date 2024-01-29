@@ -40,6 +40,7 @@ namespace NaniCore.Stencil {
 				return;
 			}
 #endif
+			UpdateLoopShape();
 			UpdateDebugUi();
 		}
 

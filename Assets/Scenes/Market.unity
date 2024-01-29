@@ -1060,6 +1060,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 182701640}
+  - component: {fileID: 182701642}
   - component: {fileID: 182701641}
   m_Layer: 0
   m_Name: Pattern Square S
@@ -1094,54 +1095,32 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 182701639}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 135e024c3b79a7a4c843a60ffee7695f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onValidated:
-    m_PersistentCalls:
-      m_Calls: []
-  onInvalidated:
-    m_PersistentCalls:
-      m_Calls: []
-  onOpen:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1310363891}
-        m_TargetAssemblyTypeName: NaniCore.Stencil.Detachable, Assembly-CSharp
-        m_MethodName: Detach
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 182701641}
-        m_TargetAssemblyTypeName: NaniCore.Stencil.OpticalLoopShape, Assembly-CSharp
-        m_MethodName: DestroyGastro
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  blasto: {fileID: 182701639}
   gastro: {fileID: 376953119}
   thickness: 0.05
   thicknessTolerance: 0.01
+  validationTolerance: 2
   showDebugLayer: 0
   debugLayerOpacity: 1
-  sectionMaterial: {fileID: 0}
-  useDetachingEjection: 0
-  ejectionVelocity: {x: 0, y: 0, z: 0}
-  ejectionOrigin: {x: 0, y: 0, z: 0}
+--- !u!114 &182701642
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 182701639}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d6e294ff361bcd44898b5e77c7933ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onOpen:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &229546329
 GameObject:
   m_ObjectHideFlags: 0
@@ -3325,6 +3304,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 450548190}
+  - component: {fileID: 450548192}
   - component: {fileID: 450548191}
   m_Layer: 0
   m_Name: Pattern Square 2
@@ -3364,49 +3344,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 135e024c3b79a7a4c843a60ffee7695f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onValidated:
-    m_PersistentCalls:
-      m_Calls: []
-  onInvalidated:
-    m_PersistentCalls:
-      m_Calls: []
-  onOpen:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 405417742}
-        m_TargetAssemblyTypeName: NaniCore.Stencil.Detachable, Assembly-CSharp
-        m_MethodName: Detach
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 450548191}
-        m_TargetAssemblyTypeName: NaniCore.Stencil.OpticalLoopShape, Assembly-CSharp
-        m_MethodName: DestroyGastro
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  blasto: {fileID: 450548189}
   gastro: {fileID: 577852288}
   thickness: 0.05
   thicknessTolerance: 0.01
+  validationTolerance: 2
   showDebugLayer: 0
   debugLayerOpacity: 1
-  sectionMaterial: {fileID: 0}
-  useDetachingEjection: 0
-  ejectionVelocity: {x: 0, y: 0, z: 0}
-  ejectionOrigin: {x: 0, y: 0, z: 0}
+--- !u!114 &450548192
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 450548189}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d6e294ff361bcd44898b5e77c7933ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onOpen:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1001 &456855855
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4770,6 +4728,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 624659063}
+  - component: {fileID: 624659065}
   - component: {fileID: 624659064}
   m_Layer: 0
   m_Name: Pattern Square L
@@ -4804,54 +4763,32 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 624659062}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 135e024c3b79a7a4c843a60ffee7695f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onValidated:
-    m_PersistentCalls:
-      m_Calls: []
-  onInvalidated:
-    m_PersistentCalls:
-      m_Calls: []
-  onOpen:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1411382102}
-        m_TargetAssemblyTypeName: NaniCore.Stencil.Detachable, Assembly-CSharp
-        m_MethodName: Detach
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 624659064}
-        m_TargetAssemblyTypeName: NaniCore.Stencil.OpticalLoopShape, Assembly-CSharp
-        m_MethodName: DestroyGastro
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  blasto: {fileID: 624659062}
   gastro: {fileID: 1470337193}
   thickness: 0.05
   thicknessTolerance: 0.01
+  validationTolerance: 2
   showDebugLayer: 0
   debugLayerOpacity: 1
-  sectionMaterial: {fileID: 0}
-  useDetachingEjection: 0
-  ejectionVelocity: {x: 0, y: 0, z: 0}
-  ejectionOrigin: {x: 0, y: 0, z: 0}
+--- !u!114 &624659065
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 624659062}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d6e294ff361bcd44898b5e77c7933ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onOpen:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &629570193
 GameObject:
   m_ObjectHideFlags: 0
@@ -10285,6 +10222,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1316292697}
+  - component: {fileID: 1316292699}
   - component: {fileID: 1316292698}
   m_Layer: 0
   m_Name: Pattern Square M
@@ -10319,54 +10257,32 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1316292696}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 135e024c3b79a7a4c843a60ffee7695f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onValidated:
-    m_PersistentCalls:
-      m_Calls: []
-  onInvalidated:
-    m_PersistentCalls:
-      m_Calls: []
-  onOpen:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1365849985}
-        m_TargetAssemblyTypeName: NaniCore.Stencil.Detachable, Assembly-CSharp
-        m_MethodName: Detach
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1316292698}
-        m_TargetAssemblyTypeName: NaniCore.Stencil.OpticalLoopShape, Assembly-CSharp
-        m_MethodName: DestroyGastro
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  blasto: {fileID: 1316292696}
   gastro: {fileID: 521507739}
   thickness: 0.05
   thicknessTolerance: 0.01
+  validationTolerance: 2
   showDebugLayer: 0
   debugLayerOpacity: 1
-  sectionMaterial: {fileID: 0}
-  useDetachingEjection: 0
-  ejectionVelocity: {x: 0, y: 0, z: 0}
-  ejectionOrigin: {x: 0, y: 0, z: 0}
+--- !u!114 &1316292699
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1316292696}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d6e294ff361bcd44898b5e77c7933ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onOpen:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1326242192
 GameObject:
   m_ObjectHideFlags: 0
@@ -17177,6 +17093,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2115685216}
+  - component: {fileID: 2115685218}
   - component: {fileID: 2115685217}
   m_Layer: 0
   m_Name: Pattern Square 1
@@ -17216,49 +17133,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 135e024c3b79a7a4c843a60ffee7695f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onValidated:
-    m_PersistentCalls:
-      m_Calls: []
-  onInvalidated:
-    m_PersistentCalls:
-      m_Calls: []
-  onOpen:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1025461356}
-        m_TargetAssemblyTypeName: NaniCore.Stencil.Detachable, Assembly-CSharp
-        m_MethodName: Detach
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 2115685217}
-        m_TargetAssemblyTypeName: NaniCore.Stencil.OpticalLoopShape, Assembly-CSharp
-        m_MethodName: DestroyGastro
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  blasto: {fileID: 2115685215}
   gastro: {fileID: 1362987203}
   thickness: 0.05
   thicknessTolerance: 0.01
+  validationTolerance: 2
   showDebugLayer: 0
   debugLayerOpacity: 1
-  sectionMaterial: {fileID: 0}
-  useDetachingEjection: 0
-  ejectionVelocity: {x: 0, y: 0, z: 0}
-  ejectionOrigin: {x: 0, y: 0, z: 0}
+--- !u!114 &2115685218
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2115685215}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d6e294ff361bcd44898b5e77c7933ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onOpen:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &2119268083
 GameObject:
   m_ObjectHideFlags: 0
