@@ -46,8 +46,6 @@ namespace NaniCore.Stencil {
 		}
 
 		private bool PerformValidation() {
-			if(GameManager.Instance?.Protagonist == null)
-				return false;
 			if(!visible || gastro == null)
 				return false;
 
@@ -55,7 +53,8 @@ namespace NaniCore.Stencil {
 
 			if(gastro != null) {
 				// Invalidate if not focusing on the gastro.
-				if(!GameManager.Instance.Protagonist.EyeCast(out RaycastHit eyeHit) || !eyeHit.transform.IsChildOf(gastro.transform))
+				var protagonist = GameManager.Instance?.Protagonist;
+				if(protagonist == null || !protagonist.IsLookingAt(gameObject))
 					return false;
 			}
 
@@ -111,9 +110,7 @@ namespace NaniCore.Stencil {
 		#endregion
 
 		#region Life cycle
-		protected new void Start() {
-			base.Start();
-
+		protected void Start() {
 			childRenderers = GetComponentsInChildren<Renderer>();
 		}
 

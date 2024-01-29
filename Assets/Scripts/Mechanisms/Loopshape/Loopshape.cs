@@ -4,7 +4,7 @@ using UnityEngine.Events;
 namespace NaniCore.Stencil {
 	public class Loopshape : MonoBehaviour {
 		#region Serialized fields
-		[SerializeField] protected UnityEvent onOpen;
+		[SerializeField] public UnityEvent onOpen;
 		#endregion
 
 		#region Fields

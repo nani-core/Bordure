@@ -14,7 +14,7 @@ namespace NaniCore {
 		}
 
 		public static T EnsureComponent<T>(this Component target) where T : Component
-			=> target.gameObject.GetComponent<T>();
+			=> target.gameObject.EnsureComponent<T>();
 		#endregion
 
 		#region Prefab
