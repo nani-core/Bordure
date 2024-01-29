@@ -163,8 +163,7 @@ Transform:
   m_LocalPosition: {x: -5.41, y: 0.22, z: 0.85}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 2049687160}
+  m_Children: []
   m_Father: {fileID: 1108807574}
   m_LocalEulerAnglesHint: {x: 0, y: 32.185, z: 0}
 --- !u!114 &57860720
@@ -179,7 +178,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a68c43fe1f2a47cfa234b5eeaa98012, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Intensity: 200000
+  m_Intensity: 500000
   m_EnableSpotReflector: 1
   m_LuxAtDistance: 1
   m_InnerSpotPercent: 0
@@ -193,7 +192,7 @@ MonoBehaviour:
   m_AffectSpecular: 1
   m_NonLightmappedOnly: 0
   m_ShapeWidth: 0.6410369
-  m_ShapeHeight: 6.3796706
+  m_ShapeHeight: 5.952784
   m_AspectRatio: 1
   m_ShapeRadius: 0.025
   m_SoftnessScale: 1
@@ -301,8 +300,8 @@ Light:
   m_Type: 0
   m_Shape: 0
   m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
-  m_Intensity: 200000
-  m_Range: 14.524383
+  m_Intensity: 500000
+  m_Range: 9.050642
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
@@ -320,13 +319,13 @@ Light:
       e02: 0
       e03: 0
       e10: 0
-      e11: 0.3134958
+      e11: 0.33597726
       e12: 0
       e13: 0
       e20: 0
       e21: 0
-      e22: 0.13865411
-      e23: -1.0138655
+      e22: 0.22344767
+      e23: -1.0223448
       e30: 0
       e31: 0
       e32: 0
@@ -342,11 +341,11 @@ Light:
   m_RenderingLayerMask: 1
   m_Lightmapping: 4
   m_LightShadowCasterMode: 2
-  m_AreaSize: {x: 0.6410369, y: 6.3796706}
+  m_AreaSize: {x: 0.6410369, y: 5.952784}
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 1
-  m_BoundingSphereOverride: {x: 0, y: 0, z: 7.2621913, w: 7.938338}
+  m_BoundingSphereOverride: {x: 0, y: 0, z: 4.525321, w: 5.42588}
   m_UseBoundingSphereOverride: 1
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
@@ -8747,6 +8746,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 2049687160}
   - {fileID: 57860719}
   m_Father: {fileID: 1429281471}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -16348,12 +16348,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2049687159}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0.06989346, z: -0, w: 0.9975545}
-  m_LocalPosition: {x: -1.156, y: 0, z: 1.821}
+  m_LocalRotation: {x: -0, y: 0.2093551, z: -0, w: 0.9778397}
+  m_LocalPosition: {x: -5.4184017, y: 0.22000003, z: 3.0069208}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 57860719}
+  m_Father: {fileID: 1108807574}
   m_LocalEulerAnglesHint: {x: 0, y: -8.016, z: 0}
 --- !u!114 &2049687161
 MonoBehaviour:
@@ -16367,7 +16367,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a68c43fe1f2a47cfa234b5eeaa98012, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Intensity: 50000
+  m_Intensity: 500000
   m_EnableSpotReflector: 1
   m_LuxAtDistance: 1
   m_InnerSpotPercent: 0
@@ -16489,8 +16489,8 @@ Light:
   m_Type: 0
   m_Shape: 0
   m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
-  m_Intensity: 50000
-  m_Range: 14.524383
+  m_Intensity: 500000
+  m_Range: 11.190288
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
@@ -16513,8 +16513,8 @@ Light:
       e13: 0
       e20: 0
       e21: 0
-      e22: 0.13865411
-      e23: -1.0138655
+      e22: 0.18033798
+      e23: -1.0180339
       e30: 0
       e31: 0
       e32: 0
@@ -16534,7 +16534,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 1
-  m_BoundingSphereOverride: {x: 0, y: 0, z: 7.2621913, w: 7.938338}
+  m_BoundingSphereOverride: {x: 0, y: 0, z: 5.595144, w: 6.44852}
   m_UseBoundingSphereOverride: 1
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
