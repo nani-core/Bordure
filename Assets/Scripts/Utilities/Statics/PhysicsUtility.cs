@@ -63,5 +63,7 @@ namespace NaniCore {
 			hit = hits[0];
 			return true;
 		}
+		public static bool Raycast(Ray ray, out RaycastHit hit, float distance, LayerMask layerMask, bool includeTriggers)
+			=> Raycast(ray.origin, ray.direction, out hit, distance, layerMask, includeTriggers);
 	}
 }

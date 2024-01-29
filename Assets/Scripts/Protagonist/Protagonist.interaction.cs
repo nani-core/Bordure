@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEditor.PackageManager;
 
 namespace NaniCore.Stencil {
 	public partial class Protagonist : MonoBehaviour {
@@ -70,12 +71,7 @@ namespace NaniCore.Stencil {
 				if(satisfiedLoopShape == value)
 					return;
 
-				if(satisfiedLoopShape)
-					satisfiedLoopShape.SendMessage("OnLoopShapeUnsatisfy", SendMessageOptions.DontRequireReceiver);
 				satisfiedLoopShape = value;
-				if(satisfiedLoopShape)
-					satisfiedLoopShape.SendMessage("OnLoopShapeSatisfy", SendMessageOptions.DontRequireReceiver);
-
 				UpdateFocusUi();
 			}
 		}
@@ -107,7 +103,7 @@ namespace NaniCore.Stencil {
 		}
 
 		private void LateUpdateInteraction() {
-			bool hasHit = Raycast(out RaycastHit hit);
+			bool hasHit = PhysicsUtility.Raycast(CameraRay, out RaycastHit hit, Profile.maxInteractionDistance, GameManager.Instance.GrabbingLayerMask, false);
 
 			// If not grabbing anything, check for focus.
 			if(GrabbingObject == null) {
@@ -167,11 +163,6 @@ namespace NaniCore.Stencil {
 				focus.UpdateFocusAnimated(1);
 			else
 				focus.UpdateFocusAnimated(0);
-		}
-
-		private bool Raycast(out RaycastHit hitInfo) {
-			var ray = Camera.ViewportPointToRay(Vector2.one * .5f);
-			return PhysicsUtility.Raycast(ray.origin, ray.direction, out hitInfo, Profile.maxInteractionDistance, GameManager.Instance.GrabbingLayerMask, false);
 		}
 
 		private IEnumerator GrabCoroutine(Grabbable target) {

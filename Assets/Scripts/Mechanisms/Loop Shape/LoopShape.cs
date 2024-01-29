@@ -17,8 +17,6 @@ namespace NaniCore.Stencil {
 
 		#region Serialized fields
 		[Header("Events")]
-		[SerializeField] protected UnityEvent onValidated;
-		[SerializeField] protected UnityEvent onInvalidated;
 		[SerializeField] protected UnityEvent onOpen;
 		#endregion
 
@@ -27,14 +25,6 @@ namespace NaniCore.Stencil {
 		#endregion
 
 		#region Message handlers
-		protected virtual void OnLoopShapeSatisfy() {
-			onValidated?.Invoke();
-		}
-
-		protected virtual void OnLoopShapeUnsatisfy() {
-			onInvalidated?.Invoke();
-		}
-
 		protected virtual void OnLoopShapeOpen() {
 			onOpen?.Invoke();
 			enabled = false;
