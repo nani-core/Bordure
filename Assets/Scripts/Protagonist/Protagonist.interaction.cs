@@ -73,6 +73,10 @@ namespace NaniCore.Stencil {
 
 			StartCoroutine(GrabCoroutine(grabbingObject));
 		}
+
+		public bool EyeCast(out RaycastHit hit) {
+			return PhysicsUtility.Raycast(EyeRay, out hit, Profile.maxInteractionDistance, GameManager.Instance.GrabbingLayerMask, false);
+		}
 		#endregion
 
 		#region Life cycle
@@ -91,7 +95,7 @@ namespace NaniCore.Stencil {
 		}
 
 		private void LateUpdateInteraction() {
-			bool hasHit = PhysicsUtility.Raycast(CameraRay, out RaycastHit hit, Profile.maxInteractionDistance, GameManager.Instance.GrabbingLayerMask, false);
+			bool hasHit = EyeCast(out RaycastHit hit);
 
 			// If not grabbing anything, check for focus.
 			if(GrabbingObject == null) {

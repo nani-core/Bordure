@@ -29,8 +29,7 @@ namespace NaniCore.Stencil {
 
 		#region Functions
 		public void Cheat() {
-			bool hasHit = PhysicsUtility.Raycast(CameraRay, out RaycastHit hit, Profile.maxInteractionDistance, GameManager.Instance.GrabbingLayerMask, false);
-			if(hasHit) {
+			if(EyeCast(out RaycastHit hit)) {
 				for(var target = hit.transform; target != null; target = target.parent) {
 					bool acted = false;
 					foreach(var component in target.GetComponents<Component>()) {

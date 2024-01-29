@@ -29,7 +29,7 @@ namespace NaniCore.Stencil {
 		public Camera Camera => camera;
 		public Vector3 Upward => transform.up;
 
-		public Ray CameraRay => camera.ViewportPointToRay(new Vector2(.5f, .5f));
+		public Ray EyeRay => camera.ViewportPointToRay(new Vector2(.5f, .5f));
 
 		public bool IsInWater => isInWater;
 		public bool IsOnGround => isOnGround;

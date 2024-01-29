@@ -51,6 +51,16 @@ namespace NaniCore.Stencil {
 			if(!visible || gastro == null)
 				return false;
 
+			// Rough, geometry-based invalidation.
+
+			if(gastro != null) {
+				// Invalidate if not focusing on the gastro.
+				if(!GameManager.Instance.Protagonist.EyeCast(out RaycastHit eyeHit) || !eyeHit.transform.IsChildOf(gastro.transform))
+					return false;
+			}
+
+			// Real optical validation.
+
 			var mrtTexture = RenderTexture.GetTemporary(Mathf.FloorToInt(standardHeight * Screen.width / Screen.height), Mathf.FloorToInt(standardHeight));
 			mrtTexture.SetValue(Color.clear);
 
