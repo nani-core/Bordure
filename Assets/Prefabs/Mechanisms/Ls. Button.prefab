@@ -9,6 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1478614073287861844}
+  - component: {fileID: 60392806301804560}
+  - component: {fileID: 8241488682446413523}
   m_Layer: 0
   m_Name: Ls. Button
   m_TagString: Untagged
@@ -33,6 +35,49 @@ Transform:
   - {fileID: 4259349958515919090}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &60392806301804560
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6295137449434130800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0b1f49cf0faacd47afb0c5ba87bfc06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  overrideTarget: 1
+  target: {fileID: 4975004008279365945}
+  includeChildren: 1
+--- !u!114 &8241488682446413523
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6295137449434130800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d6e294ff361bcd44898b5e77c7933ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  oneTime: 0
+  onOpen:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4971319725719393765}
+        m_TargetAssemblyTypeName: NaniCore.DtCarrier, Assembly-CSharp
+        m_MethodName: ToggleOpeningState
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &8081634953847908578
 GameObject:
   m_ObjectHideFlags: 0
@@ -225,19 +270,20 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7339460749496765930, guid: e3b9ca6e91d35204c869b17e8cd02663, type: 3}
       propertyPath: m_Name
-      value: Automatic Door
+      value: Button Carrier
       objectReference: {fileID: 0}
     - target: {fileID: 8641172071095634965, guid: e3b9ca6e91d35204c869b17e8cd02663, type: 3}
       propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9166740471945008416, guid: e3b9ca6e91d35204c869b17e8cd02663, type: 3}
+      propertyPath: m_Name
+      value: Button
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 9166740471945008416, guid: e3b9ca6e91d35204c869b17e8cd02663, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 4845339167976433297}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e3b9ca6e91d35204c869b17e8cd02663, type: 3}
 --- !u!4 &4259349958515919090 stripped
 Transform:
@@ -249,53 +295,14 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7218266969205244214, guid: e3b9ca6e91d35204c869b17e8cd02663, type: 3}
   m_PrefabInstance: {fileID: 2364886109534524627}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 4975004008279365945}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ccbeed49de33f86429e414eca8c05d61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &6910508127405539827 stripped
+--- !u!1 &4975004008279365945 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 9166740471945008416, guid: e3b9ca6e91d35204c869b17e8cd02663, type: 3}
+  m_CorrespondingSourceObject: {fileID: 7339460749496765930, guid: e3b9ca6e91d35204c869b17e8cd02663, type: 3}
   m_PrefabInstance: {fileID: 2364886109534524627}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &4845339167976433297
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6910508127405539827}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 502d2518f3711f04cb25d73887ab726a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  onClicked:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 4971319725719393765}
-        m_TargetAssemblyTypeName: NaniCore.Stencil.DtCarrier, Assembly-CSharp
-        m_MethodName: set_IsOpened
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 4845339167976433297}
-        m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
-        m_MethodName: set_enabled
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2

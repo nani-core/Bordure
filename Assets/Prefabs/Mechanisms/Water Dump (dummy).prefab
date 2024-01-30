@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 155808444409536694}
   - component: {fileID: 4499470394133632376}
+  - component: {fileID: 2908290633387604792}
+  - component: {fileID: 583001833170830995}
   m_Layer: 0
   m_Name: Water Dump (dummy)
   m_TagString: Untagged
@@ -48,8 +50,48 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   water: {fileID: 0}
   pivot: {fileID: 1845322903358688714}
-  active: 0
   swirl: {fileID: 7555871251392535705}
+--- !u!114 &2908290633387604792
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2838896866480933526}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0b1f49cf0faacd47afb0c5ba87bfc06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  overrideTarget: 1
+  target: {fileID: 4477809666596004948}
+--- !u!114 &583001833170830995
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2838896866480933526}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d6e294ff361bcd44898b5e77c7933ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onOpen:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4499470394133632376}
+        m_TargetAssemblyTypeName: NaniCore.Stencil.Waterlet, Assembly-CSharp
+        m_MethodName: ToggleActive
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &3793621007665441330
 GameObject:
   m_ObjectHideFlags: 0
@@ -145,7 +187,6 @@ GameObject:
   - component: {fileID: 7837829696777529373}
   - component: {fileID: 6841504718901762238}
   - component: {fileID: 1682878014689758067}
-  - component: {fileID: 912739048946329841}
   m_Layer: 0
   m_Name: Cylinder
   m_TagString: Untagged
@@ -240,33 +281,6 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &912739048946329841
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4477809666596004948}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 502d2518f3711f04cb25d73887ab726a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  onClicked:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 4499470394133632376}
-        m_TargetAssemblyTypeName: NaniCore.Stencil.Waterlet, Assembly-CSharp
-        m_MethodName: ToggleActive
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!1 &8452147683499752559
 GameObject:
   m_ObjectHideFlags: 0

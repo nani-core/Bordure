@@ -78,8 +78,14 @@ namespace NaniCore.Stencil {
 			return PhysicsUtility.Raycast(EyeRay, out hit, Profile.maxInteractionDistance, GameManager.Instance.GrabbingLayerMask, false);
 		}
 
-		public bool IsLookingAt(GameObject target) {
-			return EyeCast(out var hit) && hit.transform.IsChildOf(target.transform);
+		public bool IsLookingAt(GameObject target, bool includeChildren = true) {
+			var hasHit = EyeCast(out var hit);
+			if(!hasHit)
+				return false;
+			if(includeChildren)
+				return hit.transform.IsChildOf(target.transform);
+			else
+				return hit.transform == target.transform;
 		}
 		#endregion
 

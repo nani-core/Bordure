@@ -2,8 +2,10 @@ using UnityEngine;
 using UnityEngine.Events;
 
 namespace NaniCore.Stencil {
+	[RequireComponent(typeof(LoopshapeValidator))]
 	public class Loopshape : MonoBehaviour {
 		#region Serialized fields
+		[SerializeField] public bool oneTime;
 		[SerializeField] public UnityEvent onOpen;
 		#endregion
 
@@ -24,6 +26,9 @@ namespace NaniCore.Stencil {
 
 		public void Open() {
 			onOpen?.Invoke();
+
+			if(oneTime)
+				enabled = false;
 		}
 
 		public void Hollow() {

@@ -11,7 +11,7 @@ namespace NaniCore.Stencil {
 		#region Interfaces
 		public Loopshape[] Loopshapes => loopshapes.Where(loopshape => loopshape.isActiveAndEnabled).ToArray();
 		public Loopshape[] ValidLoopshapes => validLoopshapes;
-		public bool HasValidLoopshapes => validLoopshapes.Length > 0;
+		public bool HasValidLoopshapes => validLoopshapes != null && validLoopshapes?.Length > 0;
 		#endregion
 
 		#region Event handlers

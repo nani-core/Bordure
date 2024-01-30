@@ -121,13 +121,15 @@ ParticleSystemRenderer:
   m_RenderAlignment: 0
   m_Pivot: {x: 0, y: 0, z: 0}
   m_Flip: {x: 0, y: 0, z: 0}
-  m_UseCustomVertexStreams: 0
   m_EnableGPUInstancing: 1
   m_ApplyActiveColorSpace: 1
   m_AllowRoll: 1
   m_FreeformStretching: 0
   m_RotateWithStretchDirection: 1
+  m_UseCustomVertexStreams: 0
   m_VertexStreams: 00010304
+  m_UseCustomTrailVertexStreams: 0
+  m_TrailVertexStreams: 00010304
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
   m_Mesh1: {fileID: 0}
   m_Mesh2: {fileID: 0}
@@ -4939,7 +4941,10 @@ PrefabInstance:
       addedObject: {fileID: 1678477648800052349}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9b56065844c5c8c4f91488a172fc8714, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1104674876299018074}
+      addedObject: {fileID: 4656942477140957260}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9b56065844c5c8c4f91488a172fc8714, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6428371113279098898}
   m_SourcePrefab: {fileID: 100100000, guid: 9b56065844c5c8c4f91488a172fc8714, type: 3}
 --- !u!1 &484151559788676008 stripped
 GameObject:
@@ -4982,9 +4987,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   water: {fileID: 0}
   pivot: {fileID: 7317344457784807106}
-  active: 0
   particle: {fileID: 5238551471260361874}
---- !u!114 &1104674876299018074
+--- !u!114 &4656942477140957260
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4993,10 +4997,26 @@ MonoBehaviour:
   m_GameObject: {fileID: 484151559788676008}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 502d2518f3711f04cb25d73887ab726a, type: 3}
+  m_Script: {fileID: 11500000, guid: b0b1f49cf0faacd47afb0c5ba87bfc06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onClicked:
+  overrideTarget: 0
+  target: {fileID: 0}
+  includeChildren: 1
+--- !u!114 &6428371113279098898
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 484151559788676008}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d6e294ff361bcd44898b5e77c7933ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  oneTime: 0
+  onOpen:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1678477648800052349}

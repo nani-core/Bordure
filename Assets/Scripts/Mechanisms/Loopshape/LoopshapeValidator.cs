@@ -8,7 +8,9 @@ namespace NaniCore.Stencil {
 
 		#region Interfaces
 		public bool IsValid => isValid;
+		#endregion
 
+		#region Functions
 		protected abstract bool Validate();
 		#endregion
 

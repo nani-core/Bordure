@@ -76,6 +76,12 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 4cc06740a61838c48b3dde9df010402b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8464145676620887118}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 4cc06740a61838c48b3dde9df010402b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4762958965659258004}
     - targetCorrespondingSourceObject: {fileID: -8068073526183931155, guid: 4cc06740a61838c48b3dde9df010402b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6065121332675250959}
@@ -85,9 +91,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -8068073526183931155, guid: 4cc06740a61838c48b3dde9df010402b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1712772569989453959}
-    - targetCorrespondingSourceObject: {fileID: -8068073526183931155, guid: 4cc06740a61838c48b3dde9df010402b, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 2921982609223177355}
     - targetCorrespondingSourceObject: {fileID: -1807970279642858887, guid: 4cc06740a61838c48b3dde9df010402b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7760833750199928808}
@@ -187,19 +190,39 @@ HingeJoint:
   m_EnablePreprocessing: 1
   m_MassScale: 1
   m_ConnectedMassScale: 1
---- !u!114 &2921982609223177355
+--- !u!1 &1524415465415865942 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 4cc06740a61838c48b3dde9df010402b, type: 3}
+  m_PrefabInstance: {fileID: 1866361734348163847}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8464145676620887118
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 715746628621212138}
+  m_GameObject: {fileID: 1524415465415865942}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 502d2518f3711f04cb25d73887ab726a, type: 3}
+  m_Script: {fileID: 11500000, guid: b0b1f49cf0faacd47afb0c5ba87bfc06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onClicked:
+  overrideTarget: 0
+  target: {fileID: 0}
+--- !u!114 &4762958965659258004
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1524415465415865942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d6e294ff361bcd44898b5e77c7933ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  oneTime: 1
+  onOpen:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1712772569989453959}
@@ -213,18 +236,6 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 2921982609223177355}
-        m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
-        m_MethodName: set_enabled
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
         m_CallState: 2
 --- !u!1 &9155372224626569598 stripped
 GameObject:
