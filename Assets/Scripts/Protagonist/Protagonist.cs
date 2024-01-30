@@ -29,8 +29,8 @@ namespace NaniCore.Stencil {
 
 		#region Functions
 		public void Cheat() {
-			if(EyeCast(out RaycastHit hit)) {
-				for(var target = hit.transform; target != null; target = target.parent) {
+			if(LookingAtObject != null) {
+				for(var target = LookingAtObject.transform; target != null; target = target.parent) {
 					bool acted = false;
 					foreach(var component in target.GetComponents<Component>()) {
 						switch(component) {

@@ -29,7 +29,9 @@ namespace NaniCore.Stencil {
 			if(protagonist == null)
 				return false;
 
-			return protagonist.IsLookingAt(Target, includeChildren);
+			if(protagonist.LookingAtObject == null)
+				return false;
+			return protagonist.LookingAtObject.IsChildOf(Target);
 		}
 		#endregion
 	}

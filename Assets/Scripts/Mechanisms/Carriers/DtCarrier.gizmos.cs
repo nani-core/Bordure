@@ -18,9 +18,9 @@ namespace NaniCore {
 		}
 
 		protected void OnValidate() {
-			if(openedTransform.IsChildOf(Target.transform))
+			if(openedTransform.IsChildOf(Target))
 				openedTransform = null;
-			if(closedTransform.IsChildOf(Target.transform))
+			if(closedTransform.IsChildOf(Target))
 				closedTransform = null;
 			if(isOpened) {
 				if(openedTransform) {

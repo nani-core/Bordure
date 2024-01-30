@@ -1,4 +1,6 @@
 using UnityEngine;
+using Unity.VisualScripting;
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -91,6 +93,18 @@ namespace NaniCore {
 			foreach(var component in root.GetComponentsInChildren<T>(includeInactive))
 				yield return component;
 		}
+		#endregion
+
+		#region Hierarchical
+		public static bool IsChildOf(this GameObject a, GameObject b) {
+			if(a == null)
+				return false;
+			if(b == null)
+				return true;
+			return a.transform.IsChildOf(b.transform);
+		}
+		public static bool IsChildOf(this Transform a, GameObject b) => a?.gameObject.IsChildOf(b) ?? false;
+		public static bool IsChildOf(this GameObject a, Transform b) => a.IsChildOf(b?.gameObject);
 		#endregion
 	}
 }

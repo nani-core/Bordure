@@ -8,12 +8,16 @@ namespace NaniCore.Stencil {
 		#endregion
 
 		#region Fields
+		private GameObject lookingAtObject = null;
 		private Interactable focusingObject;
 		private Grabbable grabbingObject;
+		private RaycastHit lookingHit;
 		private bool grabbingOrienting;
 		#endregion
 
 		#region Interfaces
+		public GameObject LookingAtObject => lookingAtObject;
+
 		public Interactable FocusingObject {
 			get => focusingObject;
 			set {
@@ -77,16 +81,6 @@ namespace NaniCore.Stencil {
 		public bool EyeCast(out RaycastHit hit) {
 			return PhysicsUtility.Raycast(EyeRay, out hit, Profile.maxInteractionDistance, GameManager.Instance.GrabbingLayerMask, false);
 		}
-
-		public bool IsLookingAt(GameObject target, bool includeChildren = true) {
-			var hasHit = EyeCast(out var hit);
-			if(!hasHit)
-				return false;
-			if(includeChildren)
-				return hit.transform.IsChildOf(target.transform);
-			else
-				return hit.transform == target.transform;
-		}
 		#endregion
 
 		#region Life cycle
@@ -101,20 +95,21 @@ namespace NaniCore.Stencil {
 		}
 
 		private void UpdateInteraction() {
+			bool hasHit = EyeCast(out RaycastHit lookingHit);
+			lookingAtObject = hasHit ? lookingHit.transform.gameObject : null;
+
 			UpdateFocusUi();
 		}
 
 		private void LateUpdateInteraction() {
-			bool hasHit = EyeCast(out RaycastHit hit);
-
 			// If not grabbing anything, check for focus.
 			if(GrabbingObject == null) {
-				if(!hasHit)
+				if(LookingAtObject == null)
 					FocusingObject = null;
 				else {
 					// Don't focus on inactive targets.
 					bool set = false;
-					foreach(var interactable in hit.transform.GetComponents<Interactable>()) {
+					foreach(var interactable in LookingAtObject.transform.GetComponents<Interactable>()) {
 						if(!interactable.isActiveAndEnabled)
 							continue;
 						FocusingObject = interactable;
@@ -127,9 +122,9 @@ namespace NaniCore.Stencil {
 			// If grabbing blocked, drop.
 			else {
 				// Don't drop if not hit, might be due to orienting too fast.
-				if(hasHit) {
-					bool isHitPointIntertweening = Vector3.Distance(hit.point, eye.position) < Vector3.Distance(GrabbingObject.transform.position, eye.position);
-					bool isNotDescendantOfGrabbingObject = !hit.transform.IsChildOf(GrabbingObject.transform);
+				if(LookingAtObject != null) {
+					bool isHitPointIntertweening = Vector3.Distance(lookingHit.point, eye.position) < Vector3.Distance(GrabbingObject.transform.position, eye.position);
+					bool isNotDescendantOfGrabbingObject = !LookingAtObject.IsChildOf(GrabbingObject.transform);
 					if(isHitPointIntertweening && isNotDescendantOfGrabbingObject)
 						GrabbingObject = null;
 				}
