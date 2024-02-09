@@ -20,7 +20,7 @@ namespace NaniCore {
 
 		#region Life cycle
 		protected void Start() {
-			rigidbody = target?.GetComponent<Rigidbody>();
+			rigidbody = Target?.GetComponent<Rigidbody>();
 		}
 		#endregion
 	}
