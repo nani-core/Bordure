@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 402816469770935}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   seed: 0
-  count: {x: 1, y: 2, z: 8}
+  count: {x: 8, y: 2, z: 1}
   spacing: {x: 1, y: 1, z: 1}
   inward: 0
   defaultConfig:
@@ -57,7 +57,7 @@ MonoBehaviour:
     hollowObjects: []
     preventOverlapping: 0
     forceFillCorner: 0
-  xp: 1
+  xp: 0
   xpOverride: 0
   xpConfig:
     tiles: []
@@ -107,7 +107,7 @@ MonoBehaviour:
     hollowObjects: []
     preventOverlapping: 0
     forceFillCorner: 0
-  zm: 0
+  zm: 1
   zmOverride: 0
   zmConfig:
     tiles: []
@@ -2258,8 +2258,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 439617337663585365}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 2.5, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 2.5, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2278,19 +2278,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   seed: 0
-  count: {x: 1, y: 1, z: 8}
+  count: {x: 8, y: 1, z: 1}
   spacing: {x: 1, y: 1, z: 1}
   inward: 1
   defaultConfig:
     tiles:
-    - {fileID: 7078305486055922736, guid: 8f71d0b2b60bc534a84ae49c12162cec, type: 3}
+    - {fileID: 7078305486055922736, guid: 6d6884c25d34e7a45809fcb3f0f8508a, type: 3}
     concreteMaterial: {fileID: 0}
     concreteThickness: 0.25
     concreteDepth: 0.01
     hollowObjects: []
     preventOverlapping: 1
     forceFillCorner: 0
-  xp: 0
+  xp: 1
   xpOverride: 0
   xpConfig:
     tiles: []
@@ -2300,7 +2300,7 @@ MonoBehaviour:
     hollowObjects: []
     preventOverlapping: 0
     forceFillCorner: 0
-  xm: 0
+  xm: 1
   xmOverride: 0
   xmConfig:
     tiles: []
@@ -2330,7 +2330,7 @@ MonoBehaviour:
     hollowObjects: []
     preventOverlapping: 0
     forceFillCorner: 0
-  zp: 1
+  zp: 0
   zpOverride: 0
   zpConfig:
     tiles: []
@@ -2340,7 +2340,7 @@ MonoBehaviour:
     hollowObjects: []
     preventOverlapping: 0
     forceFillCorner: 0
-  zm: 1
+  zm: 0
   zmOverride: 0
   zmConfig:
     tiles: []
@@ -9893,6 +9893,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 9062423475827642559}
+  - {fileID: 5041545786937655781}
   m_Father: {fileID: 6155756684125239265}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7513455219225240650
@@ -11184,7 +11185,8 @@ Transform:
   m_LocalPosition: {x: 2, y: 2, z: -4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 7732367462228804573}
   m_Father: {fileID: 6155756684125239265}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!114 &7963566034326262429
@@ -15561,6 +15563,59 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &3747233638272069679
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7732367462228804573}
+  - component: {fileID: 5855320931327431}
+  m_Layer: 0
+  m_Name: Skirting
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7732367462228804573
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3747233638272069679}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -2, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5298970223736261959}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5855320931327431
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3747233638272069679}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4a1df8fde466b44095b2e9a47bd1dd7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  seed: 0
+  tiles:
+  - {fileID: 919132149155446097, guid: 5037e5a399ba57946b1554bf653300a5, type: 3}
+  i: {x: 1, y: 0, z: 0}
+  j: {x: 0, y: 1, z: 0}
+  k: {x: 0, y: 0, z: 1}
+  count: {x: 10, y: 1, z: 1}
+  uvw: {x: 0.5, y: 0.5, z: 0.5}
+  hollowObjects: []
 --- !u!1 &3775333993418477209
 GameObject:
   m_ObjectHideFlags: 0
@@ -22152,7 +22207,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5382173069873018698}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 3.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -22172,7 +22227,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   seed: 0
-  count: {x: 1, y: 1, z: 8}
+  count: {x: 8, y: 1, z: 1}
   spacing: {x: 1, y: 1, z: 1}
   inward: 0
   defaultConfig:
@@ -22184,7 +22239,7 @@ MonoBehaviour:
     hollowObjects: []
     preventOverlapping: 0
     forceFillCorner: 0
-  xp: 1
+  xp: 0
   xpOverride: 0
   xpConfig:
     tiles: []
@@ -22234,7 +22289,7 @@ MonoBehaviour:
     hollowObjects: []
     preventOverlapping: 0
     forceFillCorner: 0
-  zm: 0
+  zm: 1
   zmOverride: 0
   zmConfig:
     tiles: []
@@ -25491,6 +25546,59 @@ MonoBehaviour:
     hollowObjects: []
     preventOverlapping: 0
     forceFillCorner: 0
+--- !u!1 &6285290524616182235
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1482460870486878156}
+  - component: {fileID: 3700373800929687420}
+  m_Layer: 0
+  m_Name: Skirting
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1482460870486878156
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6285290524616182235}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -0.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8182153406163654119}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3700373800929687420
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6285290524616182235}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4a1df8fde466b44095b2e9a47bd1dd7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  seed: 0
+  tiles:
+  - {fileID: 919132149155446097, guid: 5037e5a399ba57946b1554bf653300a5, type: 3}
+  i: {x: 1, y: 0, z: 0}
+  j: {x: 0, y: 1, z: 0}
+  k: {x: 0, y: 0, z: 1}
+  count: {x: 8, y: 1, z: 1}
+  uvw: {x: 0.5, y: 0.5, z: 0.5}
+  hollowObjects: []
 --- !u!1 &6299157200995344224
 GameObject:
   m_ObjectHideFlags: 0
@@ -32719,16 +32827,17 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8287915448934460889}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -7.500017, y: 0, z: 0}
+  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: -7.5, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2849276043734565039}
   - {fileID: 6153960040057055467}
   - {fileID: 1027885316049218977}
+  - {fileID: 1482460870486878156}
   m_Father: {fileID: 6155756684125239265}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!1 &8291450380618060783
 GameObject:
   m_ObjectHideFlags: 0
@@ -33520,6 +33629,59 @@ MonoBehaviour:
     hollowObjects: []
     preventOverlapping: 0
     forceFillCorner: 0
+--- !u!1 &8417997948824189477
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5041545786937655781}
+  - component: {fileID: 8403322423877973340}
+  m_Layer: 0
+  m_Name: Skirting
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5041545786937655781
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8417997948824189477}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -2, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6840793338784585372}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8403322423877973340
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8417997948824189477}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4a1df8fde466b44095b2e9a47bd1dd7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  seed: 0
+  tiles:
+  - {fileID: 919132149155446097, guid: 5037e5a399ba57946b1554bf653300a5, type: 3}
+  i: {x: 1, y: 0, z: 0}
+  j: {x: 0, y: 1, z: 0}
+  k: {x: 0, y: 0, z: 1}
+  count: {x: 10, y: 1, z: 1}
+  uvw: {x: 0.5, y: 0.5, z: 0.5}
+  hollowObjects: []
 --- !u!1 &8443026750512209430
 GameObject:
   m_ObjectHideFlags: 0
