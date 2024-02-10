@@ -12726,7 +12726,7 @@ GameObject:
   - component: {fileID: 777293143671997687}
   - component: {fileID: 174156115337616893}
   m_Layer: 0
-  m_Name: Chunk6
+  m_Name: Chunk6 (Ceiling)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12741,7 +12741,7 @@ Transform:
   m_GameObject: {fileID: 3182305163529505505}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -6.999998, y: 2, z: -0.00000023841858}
+  m_LocalPosition: {x: -7, y: 2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -12802,7 +12802,7 @@ MonoBehaviour:
     hollowObjects: []
     preventOverlapping: 0
     forceFillCorner: 0
-  ym: 1
+  ym: 0
   ymOverride: 0
   ymConfig:
     tiles: []
@@ -16568,6 +16568,60 @@ MonoBehaviour:
     hollowObjects: []
     preventOverlapping: 0
     forceFillCorner: 0
+--- !u!1 &3973287202176133496
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 22682466132826214}
+  - component: {fileID: 1795831732562338494}
+  m_Layer: 0
+  m_Name: Center Fine Rug Ground
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 2147483647
+  m_IsActive: 1
+--- !u!4 &22682466132826214
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3973287202176133496}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: -7, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6599931074820343520}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+--- !u!114 &1795831732562338494
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3973287202176133496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4a1df8fde466b44095b2e9a47bd1dd7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  seed: 0
+  tiles:
+  - {fileID: 7078305486055922736, guid: 43b129ac3b9b7fb48b911d033d6b5edb, type: 3}
+  - {fileID: 7078305486055922736, guid: df6638aff2acc0644b720f014d4f72f2, type: 3}
+  i: {x: 1, y: 0, z: 0}
+  j: {x: 0, y: 1, z: 0}
+  k: {x: 0, y: 0, z: 1}
+  count: {x: 14, y: 8, z: 1}
+  uvw: {x: 0.5, y: 0.5, z: 0.5}
+  hollowObjects: []
 --- !u!1 &4029828566368942726
 GameObject:
   m_ObjectHideFlags: 0
@@ -28447,6 +28501,7 @@ Transform:
   - {fileID: 5298970223736261959}
   - {fileID: 4125685728895157053}
   - {fileID: 777293143671997687}
+  - {fileID: 22682466132826214}
   - {fileID: 8236912021721804138}
   - {fileID: 449712700703607424}
   - {fileID: 6412432547465636700}
