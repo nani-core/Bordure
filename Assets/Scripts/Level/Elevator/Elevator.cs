@@ -2,16 +2,18 @@ using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
+using System.Collections;
 using System.Collections.Generic;
 
 namespace NaniCore.Stencil {
 	public class Elevator : MonoBehaviour {
 		#region Serialized fields
-		[SerializeField] private Transform doorTransform;
+		[SerializeField] private Transform anchor;
+		[SerializeField] private DtCarrier door;
 		[SerializeField] private ElevatorButton buttonPrefab;
 		[SerializeField] private Transform buttonAnchor;
 		[SerializeField][Min(0)] private float buttonDistance = .25f;
-		[SerializeField] private Level level;
+		[SerializeField] private Level currentLevel;
 		[SerializeField] private List<Level> levels = new();
 		#endregion
 
@@ -45,15 +47,32 @@ namespace NaniCore.Stencil {
 		}
 
 		private void OnButtonClicked(ElevatorButton button) {
-			level.gameObject.SetActive(false);
-			level = GameManager.Instance.LoadLevel(button.Level);
+			StartCoroutine(SwitchLevelCoroutine(button.Level));
+		}
 
-			var anchor = level.gameObject.GetComponentInChildren<ElevatorAnchor>();
+		private IEnumerator SwitchLevelCoroutine(Level level) {
+			door.IsOpened = false;
+			yield return new WaitForSeconds(door.Duration);
+
+			yield return new WaitForSeconds(.5f);
+			SwitchLevel(level);
+			yield return new WaitForSeconds(.5f);
+
+			door.IsOpened = true;
+			yield return new WaitForSeconds(door.Duration);
+		}
+
+		private void SwitchLevel(Level level) {
+			if(currentLevel != null)
+				currentLevel.gameObject.SetActive(false);
+			currentLevel = GameManager.Instance.LoadLevel(level);
+
+			var anchor = currentLevel.gameObject.GetComponentInChildren<ElevatorAnchor>();
 			if(anchor == null) {
-				Debug.LogWarning($"Level \"{level}\" has no elevator anchor!", level);
+				Debug.LogWarning($"Level \"{currentLevel}\" has no elevator anchor!", currentLevel);
 			}
 			else {
-				level.transform.AlignWith(anchor.transform, doorTransform);
+				currentLevel.transform.AlignWith(anchor.transform, this.anchor);
 			}
 		}
 		#endregion

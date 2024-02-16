@@ -18,21 +18,20 @@ namespace NaniCore {
 		}
 
 		protected void OnValidate() {
+			if(!(Target && openedTransform && closedTransform))
+				return;
+
 			if(openedTransform.IsChildOf(Target))
 				openedTransform = null;
 			if(closedTransform.IsChildOf(Target))
 				closedTransform = null;
 			if(isOpened) {
-				if(openedTransform) {
-					Target.transform.position = openedTransform.position;
-					Target.transform.rotation = openedTransform.rotation;
-				}
+				if(openedTransform)
+					Target.AlignWith(openedTransform);
 			}
 			else {
-				if(closedTransform) {
-					Target.transform.position = closedTransform.position;
-					Target.transform.rotation = closedTransform.rotation;
-				}
+				if(closedTransform)
+					Target.AlignWith(closedTransform);
 			}
 		}
 		#endregion

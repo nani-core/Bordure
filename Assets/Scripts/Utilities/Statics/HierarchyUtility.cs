@@ -149,6 +149,9 @@ namespace NaniCore {
 			target.RotateAlong(reference.position, rotation);
 			target.position += movement;
 		}
+		public static void AlignWith(this Transform target, Transform alignment) {
+			target.SetPositionAndRotation(alignment.position, alignment.rotation);
+		}
 		#endregion
 	}
 }

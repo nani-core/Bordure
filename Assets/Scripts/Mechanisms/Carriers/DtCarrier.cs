@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.Events;
 using System.Collections;
-using System;
 
 namespace NaniCore {
 	/// <summary>
@@ -39,6 +38,11 @@ namespace NaniCore {
 				}
 				movementCoroutine = StartCoroutine(SetOpeningStateCoroutine(value, openingDuration));
 			}
+		}
+
+		public float Duration {
+			get => openingDuration;
+			set => openingDuration = value;
 		}
 		#endregion
 
