@@ -71,7 +71,7 @@ namespace NaniCore.Stencil {
 				// Assign the transform.
 				{
 					target.transform.SetParent(transform, true);
-					SpawnPoint spawnPoint = startLevel.SpawnPoint;
+					SpawnPoint spawnPoint = startLevel.DebugSpawnPoint;
 					target.transform.position = spawnPoint.transform.position;
 					target.transform.rotation = Quaternion.LookRotation(spawnPoint.transform.forward);
 
