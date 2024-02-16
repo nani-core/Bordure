@@ -9,10 +9,17 @@ namespace NaniCore.Stencil {
 	public class Elevator : MonoBehaviour {
 		#region Serialized fields
 		[SerializeField] private Transform anchor;
+		
+		[Header("Door")]
 		[SerializeField] private DtCarrier door;
+		[SerializeField][Min(0)] private float doorWaitTime;
+
+		[Header("Buttons")]
 		[SerializeField] private ElevatorButton buttonPrefab;
 		[SerializeField] private Transform buttonAnchor;
 		[SerializeField][Min(0)] private float buttonDistance = .25f;
+
+		[Header("Levels")]
 		[SerializeField] private Level currentLevel;
 		[SerializeField] private List<Level> levels = new();
 		#endregion
@@ -54,9 +61,9 @@ namespace NaniCore.Stencil {
 			door.IsOpened = false;
 			yield return new WaitForSeconds(door.Duration);
 
-			yield return new WaitForSeconds(.5f);
+			yield return new WaitForSeconds(doorWaitTime * .5f);
 			SwitchLevel(level);
-			yield return new WaitForSeconds(.5f);
+			yield return new WaitForSeconds(doorWaitTime * .5f);
 
 			door.IsOpened = true;
 			yield return new WaitForSeconds(door.Duration);
