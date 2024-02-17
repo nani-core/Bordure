@@ -83,7 +83,7 @@ namespace NaniCore.Stencil {
 			var friction = -rigidbody.velocity * resistance;
 			friction = downward * Vector3.Dot(downward, friction);
 			// TODO: make this time-independent.
-			rigidbody.velocity += buoyancy + friction;
+			rigidbody.AddForce(buoyancy + friction, ForceMode.Impulse);
 		}
 
 		public void AddWaterlet(Waterlet waterlet) {
