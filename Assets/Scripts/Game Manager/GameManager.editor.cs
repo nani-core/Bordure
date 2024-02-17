@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEditor;
 
-namespace NaniCore.Loopool {
+namespace NaniCore.Stencil {
 	public partial class GameManager : MonoBehaviour {
 		#region Life cycle
 		protected void OnEditUpdate() {

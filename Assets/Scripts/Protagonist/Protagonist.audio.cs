@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace NaniCore.Loopool {
+namespace NaniCore.Stencil {
 	public partial class Protagonist : MonoBehaviour {
 		#region Fields
 		[SerializeField] private AudioListener audioListener;

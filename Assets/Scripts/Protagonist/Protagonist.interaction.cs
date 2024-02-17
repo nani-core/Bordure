@@ -1,20 +1,23 @@
 using UnityEngine;
 using System.Collections;
 
-namespace NaniCore.Loopool {
+namespace NaniCore.Stencil {
 	public partial class Protagonist : MonoBehaviour {
 		#region Serialized fields
 		[SerializeField] private FocusUi focus;
 		#endregion
 
 		#region Fields
+		private GameObject lookingAtObject = null;
 		private Interactable focusingObject;
 		private Grabbable grabbingObject;
+		private RaycastHit lookingHit;
 		private bool grabbingOrienting;
-		private LoopShape satisfiedLoopShape;
 		#endregion
 
 		#region Interfaces
+		public GameObject LookingAtObject => lookingAtObject;
+
 		public Interactable FocusingObject {
 			get => focusingObject;
 			set {
@@ -28,8 +31,6 @@ namespace NaniCore.Loopool {
 					focusingObject.SendMessage("OnFocusEnter", SendMessageOptions.DontRequireReceiver);
 					PlaySfx(Profile.onFocusSound);
 				}
-
-				UpdateFocusUi();
 			}
 		}
 
@@ -54,7 +55,6 @@ namespace NaniCore.Loopool {
 					grabbingObject.transform.SetParent(eye.transform, true);
 				}
 
-				UpdateFocusUi();
 				inputHandler.SetGrabbingActionEnabled(grabbingObject != null);
 			}
 		}
@@ -62,22 +62,6 @@ namespace NaniCore.Loopool {
 		public bool GrabbingOrienting {
 			get => grabbingObject != null && grabbingOrienting;
 			set => grabbingOrienting = grabbingObject != null && value;
-		}
-
-		public LoopShape SatisfiedLoopShape {
-			get => satisfiedLoopShape;
-			set {
-				if(satisfiedLoopShape == value)
-					return;
-
-				if(satisfiedLoopShape)
-					satisfiedLoopShape.SendMessage("OnLoopShapeUnsatisfy", SendMessageOptions.DontRequireReceiver);
-				satisfiedLoopShape = value;
-				if(satisfiedLoopShape)
-					satisfiedLoopShape.SendMessage("OnLoopShapeSatisfy", SendMessageOptions.DontRequireReceiver);
-
-				UpdateFocusUi();
-			}
 		}
 
 		public void GrabbingOrientDelta(float delta) {
@@ -93,6 +77,10 @@ namespace NaniCore.Loopool {
 
 			StartCoroutine(GrabCoroutine(grabbingObject));
 		}
+
+		public bool EyeCast(out RaycastHit hit) {
+			return PhysicsUtility.Raycast(EyeRay, out hit, Profile.maxInteractionDistance, GameManager.Instance.GrabbingLayerMask, false);
+		}
 		#endregion
 
 		#region Life cycle
@@ -106,17 +94,22 @@ namespace NaniCore.Loopool {
 			FocusingObject = null;
 		}
 
-		private void LateUpdateInteraction() {
-			bool hasHit = Raycast(out RaycastHit hit);
+		private void UpdateInteraction() {
+			bool hasHit = EyeCast(out RaycastHit lookingHit);
+			lookingAtObject = hasHit ? lookingHit.transform.gameObject : null;
 
+			UpdateFocusUi();
+		}
+
+		private void LateUpdateInteraction() {
 			// If not grabbing anything, check for focus.
 			if(GrabbingObject == null) {
-				if(!hasHit)
+				if(LookingAtObject == null)
 					FocusingObject = null;
 				else {
 					// Don't focus on inactive targets.
 					bool set = false;
-					foreach(var interactable in hit.transform.GetComponents<Interactable>()) {
+					foreach(var interactable in LookingAtObject.transform.GetComponents<Interactable>()) {
 						if(!interactable.isActiveAndEnabled)
 							continue;
 						FocusingObject = interactable;
@@ -129,27 +122,11 @@ namespace NaniCore.Loopool {
 			// If grabbing blocked, drop.
 			else {
 				// Don't drop if not hit, might be due to orienting too fast.
-				if(hasHit) {
-					bool isHitPointIntertweening = Vector3.Distance(hit.point, eye.position) < Vector3.Distance(GrabbingObject.transform.position, eye.position);
-					bool isNotDescendantOfGrabbingObject = !hit.transform.IsChildOf(GrabbingObject.transform);
+				if(LookingAtObject != null) {
+					bool isHitPointIntertweening = Vector3.Distance(lookingHit.point, eye.position) < Vector3.Distance(GrabbingObject.transform.position, eye.position);
+					bool isNotDescendantOfGrabbingObject = !LookingAtObject.IsChildOf(GrabbingObject.transform);
 					if(isHitPointIntertweening && isNotDescendantOfGrabbingObject)
 						GrabbingObject = null;
-				}
-			}
-			// If any loop shape is satisfied, check for invalidation.
-			if(SatisfiedLoopShape != null) {
-				if(!SatisfiedLoopShape.isActiveAndEnabled || !SatisfiedLoopShape.Validate(eye))
-					SatisfiedLoopShape = null;
-			}
-			// If no loop shape is satisfied, seek for activation.
-			else {
-				foreach(var loopshape in LoopShape.All) {
-					if(!loopshape.isActiveAndEnabled)
-						continue;
-					if(loopshape.Validate(eye)) {
-						SatisfiedLoopShape = loopshape;
-						break;
-					}
 				}
 			}
 		}
@@ -159,7 +136,8 @@ namespace NaniCore.Loopool {
 		private void UpdateFocusUi() {
 			if(focus == null)
 				return;
-			if(SatisfiedLoopShape)
+
+			if(GameManager.Instance.HasValidLoopshapes)
 				focus.UpdateFocusAnimated(1);
 			else if(GrabbingObject)
 				focus.UpdateFocusAnimated(2);
@@ -167,11 +145,6 @@ namespace NaniCore.Loopool {
 				focus.UpdateFocusAnimated(1);
 			else
 				focus.UpdateFocusAnimated(0);
-		}
-
-		private bool Raycast(out RaycastHit hitInfo) {
-			var ray = Camera.ViewportPointToRay(Vector2.one * .5f);
-			return PhysicsUtility.Raycast(ray.origin, ray.direction, out hitInfo, Profile.maxInteractionDistance, GameManager.Instance.GrabbingLayerMask, false);
 		}
 
 		private IEnumerator GrabCoroutine(Grabbable target) {
@@ -188,8 +161,10 @@ namespace NaniCore.Loopool {
 			float startTime = Time.time;
 			for(float t; (t = (Time.time - startTime) / Profile.grabbingTransitionDuration) < 1;) {
 				t = MathUtility.Ease(t, Profile.grabbingEasingFactor);
-				target.transform.localPosition = Vector3.Lerp(startPosition, endPosition, t);
-				target.transform.localRotation = Quaternion.Slerp(startRotation, endRotation, t);
+				target.transform.SetLocalPositionAndRotation(
+					Vector3.Lerp(startPosition, endPosition, t),
+					Quaternion.Slerp(startRotation, endRotation, t)
+				);
 				yield return new WaitForFixedUpdate();
 			}
 			target.transform.localPosition = endPosition;
@@ -197,10 +172,10 @@ namespace NaniCore.Loopool {
 		}
 
 		public void Interact() {
-			if(SatisfiedLoopShape != null) {
+			if(GameManager.Instance.HasValidLoopshapes) {
 				GrabbingObject = null;
-				SatisfiedLoopShape.SendMessage("OnLoopShapeOpen");
-				SatisfiedLoopShape = null;
+				foreach(var loopshape in GameManager.Instance.ValidLoopshapes)
+					loopshape.Open();
 			}
 			else if(GrabbingObject != null) {
 				GrabbingObject = null;

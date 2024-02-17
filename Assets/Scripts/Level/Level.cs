@@ -1,7 +1,6 @@
 using UnityEngine;
-using NaughtyAttributes;
 
-namespace NaniCore.Loopool {
+namespace NaniCore.Stencil {
 	public class Level : MonoBehaviour {
 		#region Serialized fields
 		[SerializeField] private SpawnPoint spawnPoint;
@@ -11,6 +10,9 @@ namespace NaniCore.Loopool {
 		#endregion
 
 		#region Interfaces
+		public delegate void LevelCallback(Level self);
+		public LevelCallback onLoaded, onUnloaded;
+
 		public SpawnPoint SpawnPoint {
 			get {
 #if DEBUG
@@ -19,6 +21,16 @@ namespace NaniCore.Loopool {
 				return spawnPoint;
 #endif
 			}
+		}
+		#endregion
+
+		#region Life cycle
+		protected void Start() {
+			onLoaded?.Invoke(this);
+		}
+
+		protected void OnDestroy() {
+			onUnloaded?.Invoke(this);
 		}
 		#endregion
 	}

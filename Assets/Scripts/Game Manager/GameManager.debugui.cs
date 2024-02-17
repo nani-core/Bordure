@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace NaniCore.Loopool {
+namespace NaniCore.Stencil {
 	public partial class GameManager : MonoBehaviour {
 		#region Serialized fields
 		[SerializeField] private UnityEngine.UI.RawImage debugLayer;

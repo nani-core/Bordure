@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace NaniCore.Loopool {
+namespace NaniCore.Stencil {
 	[RequireComponent(typeof(Collider))]
 	public abstract class Interactable : MonoBehaviour {
 		#region Fields

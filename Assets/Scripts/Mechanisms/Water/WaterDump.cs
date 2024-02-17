@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace NaniCore.Loopool {
+namespace NaniCore.Stencil {
 	public class WaterDump : Waterlet {
 		#region Serialized fields
 		[SerializeField] private Renderer swirl;

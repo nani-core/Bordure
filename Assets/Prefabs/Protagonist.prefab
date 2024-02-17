@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 6022575187056927592}
   - component: {fileID: 7872440418422959296}
   - component: {fileID: 6511844381013605281}
-  - component: {fileID: 534486562430408440}
   - component: {fileID: 3524366057543280268}
+  - component: {fileID: 3563855882666355811}
   m_Layer: 0
   m_Name: Protagonist
   m_TagString: Player
@@ -131,25 +131,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &534486562430408440
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4058287826626517768}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b63e04505288de54c9c450764e4bf8c4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  minCollideSpeed: 4
-  onCollide:
-  - {fileID: 8300000, guid: 3842f42f23be5f442bba8b5a7e809fd9, type: 3}
-  onEnterWater:
-  - {fileID: 8300000, guid: cc51fed85a51b584a95717d21814b3b6, type: 3}
-  onLeaveWater:
-  - {fileID: 8300000, guid: 287e873048cfe41409e9f781794af12e, type: 3}
 --- !u!114 &3524366057543280268
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -180,6 +161,19 @@ MonoBehaviour:
   m_DefaultActionMap: Normal
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 127493516489721286}
+--- !u!114 &3563855882666355811
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4058287826626517768}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38c10526267b2fb4e900b5e19a2f9e65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tier: 0
 --- !u!1 &4302651705071766166
 GameObject:
   m_ObjectHideFlags: 0
@@ -517,8 +511,8 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
+  MinDistance: 0.1
+  MaxDistance: 2
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0
@@ -553,7 +547,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -677,8 +671,8 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
+  MinDistance: 0.1
+  MaxDistance: 2
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0
@@ -713,7 +707,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0

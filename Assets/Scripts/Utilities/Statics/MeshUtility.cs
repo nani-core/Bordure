@@ -13,7 +13,7 @@ namespace NaniCore {
 			public Vector2 uv;
 			// uv1...uv8
 
-			public Vertex Apply(Matrix4x4 transform) {
+			public readonly Vertex Apply(Matrix4x4 transform) {
 				Vertex result = this;
 				result.position = transform.MultiplyPoint(position);
 				result.normal = transform.MultiplyVector(normal);
@@ -33,7 +33,7 @@ namespace NaniCore {
 
 			var result = new List<Vertex>();
 			for(int i = 0; i < mesh.vertexCount; ++i) {
-				Vertex vertex = new Vertex {
+				Vertex vertex = new() {
 					position = positions[i],
 				};
 				if(i < normals.Length)
@@ -145,7 +145,7 @@ namespace NaniCore {
 				case 2: {
 						Mesh a = meshes[0], b = meshes[1];
 
-						GameObject ao = new GameObject(), bo = new GameObject();
+						GameObject ao = new(), bo = new();
 						ao.AddComponent<MeshFilter>().sharedMesh = a;
 						bo.AddComponent<MeshFilter>().sharedMesh = b;
 
@@ -299,7 +299,7 @@ namespace NaniCore {
 		#endregion
 
 		#region Frustum
-		private static readonly List<int> singleFrustumIndices = new List<int> {
+		private static readonly List<int> singleFrustumIndices = new() {
 			/**
 			 * 0 --- 1    0 1 2
 			 * |\   /|    0 0'1'
@@ -331,7 +331,7 @@ namespace NaniCore {
 		}
 
 		public static Mesh BaseMeshToFrustum(this Mesh baseMesh, float from, float to, float epsilon = 1e-4f) {
-			List<Mesh> singleFrustums = new List<Mesh>();
+			List<Mesh> singleFrustums = new();
 			// Generate single frustums.
 			{
 				// Preparation.
@@ -367,12 +367,12 @@ namespace NaniCore {
 							continue;
 					}
 
-					List<Vertex> vertices = new List<Vertex> {
+					List<Vertex> vertices = new() {
 						nearVertices[a], nearVertices[b], nearVertices[c],
 						farVertices[a], farVertices[b], farVertices[c],
 					};
 
-					Mesh frustum = new Mesh();
+					Mesh frustum = new();
 					frustum.SetVertices(vertices);
 					frustum.SetSubmeshIndices(new List<int>[] { singleFrustumIndices });
 
@@ -426,8 +426,9 @@ namespace NaniCore {
 					return mesh;
 				});
 
-			Mesh result = new Mesh();
-			result.name = $"{go.name} (merged)";
+			Mesh result = new() {
+				name = $"{go.name} (merged)"
+			};
 			result.Append(appends);
 
 			foreach(Mesh mesh in appends) {
@@ -443,7 +444,7 @@ namespace NaniCore {
 			Material sectionMaterial = null
 			) {
 			float oldEpsilon = CSG.EPSILON;
-			CSG csg = new CSG();
+			CSG csg = new();
 			CSG.EPSILON = epsilon;
 
 			csg.Brush = shape;
@@ -471,10 +472,9 @@ namespace NaniCore {
 				resultMesh.name = $"{filter.sharedMesh.name} (operated)";
 
 				// Apply materials for the fresh-cut section faces.
-				var resultRenderer = resultObject.GetComponent<Renderer>();
-				if(resultRenderer != null) {
+				if(resultObject.TryGetComponent<Renderer>(out var resultRenderer)) {
 					var materialList = resultRenderer.sharedMaterials.ToList();
-					materialList[materialList.Count - 1] = sectionMaterial;
+					materialList[^1] = sectionMaterial;
 					resultRenderer.sharedMaterials = materialList.ToArray();
 				}
 

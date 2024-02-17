@@ -1,7 +1,7 @@
 using UnityEngine;
 using System;
 
-namespace NaniCore.Loopool {
+namespace NaniCore.Stencil {
 	/// <summary>
 	/// This is a auxiliary agent class that helps to manage the life cycle
 	/// of a stamped gameobject.
@@ -25,7 +25,7 @@ namespace NaniCore.Loopool {
 			set {
 				if(renderer == null || value == Material)
 					return;
-				if(hasStamped && renderer?.sharedMaterial) {
+				if(hasStamped && Material != null) {
 					ReleaseCurrentStampingTexture();
 					Destroy(renderer.sharedMaterial);
 				}
@@ -90,7 +90,7 @@ namespace NaniCore.Loopool {
 		}
 
 		private void ReleaseCurrentStampingTexture() {
-			if(Material?.mainTexture == null)
+			if(Material == null || Material.mainTexture == null)
 				return;
 
 			var textureToBeDestroyed = Material.mainTexture;

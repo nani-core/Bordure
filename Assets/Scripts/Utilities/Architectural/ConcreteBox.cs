@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Serialization;
 using System.Collections.Generic;
 using System.Linq;
 using NaughtyAttributes;
@@ -132,7 +131,7 @@ namespace NaniCore {
 				// Initialze and generate tile.
 				var meshTile = faceObj.AddComponent<MeshTile>();
 				{
-					meshTile.tiles = face.config.tiles.ToArray();
+					meshTile.tiles = face.config.tiles?.ToArray() ?? new GameObject[0];
 					meshTile.seed = (int)HashUtility.Hash(seed, face.name.GetHashCode());
 
 					meshTile.i = Vector3.right * spacing.x;

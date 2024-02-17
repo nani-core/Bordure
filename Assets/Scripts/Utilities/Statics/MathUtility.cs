@@ -54,11 +54,8 @@ namespace NaniCore {
 			=> x - divisor * x.Residue(divisor);
 
 		public static bool DegreeInRange(float x, float min, float max) {
-			if(max < min) {
-				float t = max;
-				max = min;
-				min = t;
-			}
+			if(max < min)
+				(min, max) = (max, min);
 			float minRes = min.Residue(360);
 			min += minRes;
 			max += minRes;

@@ -1,7 +1,7 @@
 using UnityEngine;
 using NaughtyAttributes;
 
-namespace NaniCore.Loopool {
+namespace NaniCore.Stencil {
 	[ExecuteInEditMode]
 	public partial class Protagonist : MonoBehaviour {
 		#region Serialized fields
@@ -29,8 +29,8 @@ namespace NaniCore.Loopool {
 
 		#region Functions
 		public void Cheat() {
-			if(Raycast(out RaycastHit hitInfo)) {
-				for(var target = hitInfo.transform; target != null; target = target.parent) {
+			if(LookingAtObject != null) {
+				for(var target = LookingAtObject.transform; target != null; target = target.parent) {
 					bool acted = false;
 					foreach(var component in target.GetComponents<Component>()) {
 						switch(component) {
@@ -42,7 +42,7 @@ namespace NaniCore.Loopool {
 								plate.Pressed = !plate.Pressed;
 								acted = true;
 								break;
-							case OpticalLoopShape opticalLoopShape:
+							case OpticalValidator opticalLoopShape:
 								opticalLoopShape.SendMessage("OnLoopShapeOpen", SendMessageOptions.DontRequireReceiver);
 								break;
 							case Interactable interactable:
@@ -83,6 +83,7 @@ namespace NaniCore.Loopool {
 				return;
 			}
 #endif
+			UpdateInteraction();
 		}
 
 #if UNITY_EDITOR

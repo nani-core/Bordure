@@ -1,4 +1,6 @@
 using UnityEngine;
+using Unity.VisualScripting;
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -8,14 +10,13 @@ namespace NaniCore {
 	public static class HierarchyUtility {
 		#region Component
 		public static T EnsureComponent<T>(this GameObject gameObject) where T : Component {
-			var existing = gameObject.GetComponent<T>();
-			if(existing != null)
+			if(gameObject.TryGetComponent<T>(out var existing))
 				return existing;
 			return gameObject.AddComponent<T>();
 		}
 
 		public static T EnsureComponent<T>(this Component target) where T : Component
-			=> target.gameObject.GetComponent<T>();
+			=> target.gameObject.EnsureComponent<T>();
 		#endregion
 
 		#region Prefab
@@ -81,8 +82,7 @@ namespace NaniCore {
 #if UNITY_EDITOR
 			if(!Application.isPlaying) {
 				foreach(Transform child in root.transform) {
-					var here = child.GetComponent<T>();
-					if(here != null)
+					if(child.TryGetComponent<T>(out var here))
 						yield return here;
 					foreach(var grandchild in child.gameObject.FindAllComponentsInEditor<T>(includeInactive))
 						yield return grandchild;
@@ -93,6 +93,18 @@ namespace NaniCore {
 			foreach(var component in root.GetComponentsInChildren<T>(includeInactive))
 				yield return component;
 		}
+		#endregion
+
+		#region Hierarchical
+		public static bool IsChildOf(this GameObject a, GameObject b) {
+			if(a == null)
+				return false;
+			if(b == null)
+				return true;
+			return a.transform.IsChildOf(b.transform);
+		}
+		public static bool IsChildOf(this Transform a, GameObject b) => a?.gameObject.IsChildOf(b) ?? false;
+		public static bool IsChildOf(this GameObject a, Transform b) => a.IsChildOf(b?.gameObject);
 		#endregion
 	}
 }

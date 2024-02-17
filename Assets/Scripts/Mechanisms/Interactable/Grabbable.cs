@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace NaniCore.Loopool {
+namespace NaniCore.Stencil {
 	public class Grabbable : Interactable {
 		#region Serialized fields
 		[SerializeField] private UnityEvent onGrabBegin;
