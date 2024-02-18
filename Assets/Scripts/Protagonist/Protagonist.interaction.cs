@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Linq;
 
 namespace NaniCore.Stencil {
 	public partial class Protagonist : MonoBehaviour {
@@ -11,10 +12,12 @@ namespace NaniCore.Stencil {
 		private GameObject lookingAtObject = null;
 		private Transform grabbingObject;
 		private bool grabbingOrienting;
+		private RaycastHit lookingHit;
 		#endregion
 
 		#region Interfaces
 		public GameObject LookingAtObject => lookingAtObject;
+		public Vector3 LookingPosition => lookingHit.point;
 
 		public Transform GrabbingObject {
 			get => grabbingObject;
@@ -75,7 +78,7 @@ namespace NaniCore.Stencil {
 		}
 
 		private void UpdateInteraction() {
-			bool hasHit = EyeCast(out RaycastHit lookingHit);
+			bool hasHit = EyeCast(out lookingHit);
 			lookingAtObject = hasHit ? lookingHit.transform.gameObject : null;
 
 			UpdateFocusUi();
@@ -87,12 +90,24 @@ namespace NaniCore.Stencil {
 			if(focus == null)
 				return;
 
-			if(GameManager.Instance.HasValidLoopshapes)
+			float effectiveCastDistance = Vector3.Distance(lookingHit.point, Eye.position);
+			if(GameManager.Instance.HasValidLoopshapes) {
 				focus.CurrentStatus = FocusUi.Status.Hovering;
-			else if(GrabbingObject)
-				focus.CurrentStatus = FocusUi.Status.Grabbing;
-			else
+				float maxCastDistance = Profile.maxInteractionDistance;
+				foreach(var loopshape in GameManager.Instance.ValidLoopshapes) {
+					foreach(FocusValidator fv in loopshape.ValidValidators.Cast<FocusValidator>())
+						maxCastDistance = Mathf.Min(maxCastDistance, fv.MaxDistance);
+				}
+				focus.Opacity = 1 - Mathf.Clamp01(effectiveCastDistance / maxCastDistance);
+			}
+			else if(!GrabbingObject) {
 				focus.CurrentStatus = FocusUi.Status.Normal;
+				focus.Opacity = 1 - Mathf.Clamp01(effectiveCastDistance / Profile.maxInteractionDistance);
+			}
+			else {
+				focus.CurrentStatus = FocusUi.Status.Grabbing;
+				focus.Opacity = 1f;
+			}
 		}
 
 		private IEnumerator GrabCoroutine(Transform target) {

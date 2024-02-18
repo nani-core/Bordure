@@ -16,6 +16,8 @@ namespace NaniCore.Stencil {
 		#region Interfaces
 		public bool IsValid => validValidators.Count > 0;
 
+		public IEnumerable<LoopshapeValidator> ValidValidators => validValidators;
+
 		public void Open() {
 			onOpen?.Invoke();
 
