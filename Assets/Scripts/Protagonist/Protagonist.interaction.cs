@@ -138,13 +138,13 @@ namespace NaniCore.Stencil {
 				return;
 
 			if(GameManager.Instance.HasValidLoopshapes)
-				focus.UpdateFocusAnimated(1);
+				focus.CurrentStatus = FocusUi.Status.Hovering;
 			else if(GrabbingObject)
-				focus.UpdateFocusAnimated(2);
+				focus.CurrentStatus = FocusUi.Status.Grabbing;
 			else if(FocusingObject)
-				focus.UpdateFocusAnimated(1);
+				focus.CurrentStatus = FocusUi.Status.Hovering;
 			else
-				focus.UpdateFocusAnimated(0);
+				focus.CurrentStatus = FocusUi.Status.Normal;
 		}
 
 		private IEnumerator GrabCoroutine(Grabbable target) {
