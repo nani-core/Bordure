@@ -110,7 +110,8 @@ namespace NaniCore.Stencil {
 		#endregion
 
 		#region Life cycle
-		protected void Start() {
+		protected new void Start() {
+			base.Start();
 			childRenderers = GetComponentsInChildren<Renderer>();
 		}
 

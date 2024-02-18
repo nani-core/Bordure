@@ -1,28 +1,20 @@
 using UnityEngine;
 using UnityEngine.Events;
+using System.Collections.Generic;
 
 namespace NaniCore.Stencil {
-	[RequireComponent(typeof(LoopshapeValidator))]
 	public class Loopshape : MonoBehaviour {
 		#region Serialized fields
-		[SerializeField] public bool oneTime;
-		[SerializeField] public UnityEvent onOpen;
+		public bool oneTime;
+		public UnityEvent onOpen = new();
 		#endregion
 
 		#region Fields
-		private LoopshapeValidator validator;
+		private readonly HashSet<LoopshapeValidator> validValidators = new();
 		#endregion
 
 		#region Interfaces
-		public bool IsValid {
-			get {
-				if(validator == null || !isActiveAndEnabled)
-					return false;
-				if(validator.isActiveAndEnabled && validator.IsValid)
-					return true;
-				return false;
-			}
-		}
+		public bool IsValid => validValidators.Count > 0;
 
 		public void Open() {
 			onOpen?.Invoke();
@@ -32,24 +24,27 @@ namespace NaniCore.Stencil {
 		}
 
 		public void Hollow() {
-			switch(validator) {
-				case OpticalValidator opt:
-					GameObject gastro = opt.gastro;
-					this.EnsureComponent<HollowingManager>().Hollow(gastro);
-					gastro.SetActive(false);
-					break;
-				default:
-					Debug.LogWarning($"This loopshape doesn't have a hollowable validator type.", this);
-					return;
+			foreach(var validator in  validValidators) {
+				OpticalValidator optical = validator as OpticalValidator;
+				if(optical == null)
+					continue;
+				GameObject gastro = optical.gastro;
+				this.EnsureComponent<HollowingManager>().Hollow(gastro);
+				gastro.SetActive(false);
 			}
+		}
 
+		public void OnValidatorUpdate(LoopshapeValidator validator) {
+			if(validator.IsValid)
+				validValidators.Add(validator);
+			else
+				validValidators.Remove(validator);
+			validValidators.RemoveWhere(v => v == null);
 		}
 		#endregion
 
 		#region Life cycle
 		protected void Start() {
-			validator = GetComponentInChildren<LoopshapeValidator>(true);
-
 			if(GameManager.Instance != null)
 				GameManager.Instance.SendMessage("OnLoopShapeCreated", this);
 		}

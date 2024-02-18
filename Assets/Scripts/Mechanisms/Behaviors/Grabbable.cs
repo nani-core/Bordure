@@ -2,26 +2,43 @@ using UnityEngine;
 using UnityEngine.Events;
 
 namespace NaniCore.Stencil {
-	public class Grabbable : Interactable {
+	[RequireComponent(typeof(Collider))]
+	public class Grabbable : MonoBehaviour {
 		#region Serialized fields
 		[SerializeField] private UnityEvent onGrabBegin;
 		[SerializeField] private UnityEvent onGrabEnd;
 		#endregion
 
-		#region Message handlers
-		protected override void OnInteract() {
-			if(!isActiveAndEnabled)
-				return;
-			GameManager.Instance.Protagonist.GrabbingObject = this;
-		}
-		#endregion
-
-		#region Grabbing
+		#region Fields
+		private new Rigidbody rigidbody;
+		private bool wasKinematicWhenGrabbingStarted = false;
 		private bool isKinematic = false;
 		private RigidbodyConstraints originalConstraints;
 		private Transform originalParent;
+		#endregion
 
-#pragma warning disable IDE0052 // Remove unread private members
+		#region Interfaces
+		public bool IsGrabbed => GameManager.Instance.Protagonist.GrabbingObject == transform;
+
+		public void Grab() {
+			GameManager.Instance.Protagonist.GrabbingObject = transform;
+		}
+
+		public void Drop() {
+			if(IsGrabbed)
+				GameManager.Instance.Protagonist.GrabbingObject = null;
+		}
+		#endregion
+
+		#region Functions
+		protected Rigidbody Rigidbody {
+			get {
+				if(rigidbody != null && rigidbody.transform == transform)
+					return rigidbody;
+				return rigidbody = GetComponent<Rigidbody>();
+			}
+		}
+
 		private bool IsKinematic {
 			get => isKinematic;
 			set {
@@ -46,26 +63,33 @@ namespace NaniCore.Stencil {
 				isKinematic = value;
 			}
 		}
-#pragma warning restore IDE0052 // Remove unread private members
+		#endregion
 
+		#region Message handlers
 		protected void OnGrabBegin() {
+			wasKinematicWhenGrabbingStarted = IsKinematic;
 			IsKinematic = true;
 			onGrabBegin.Invoke();
 		}
 
 		protected void OnGrabEnd() {
-			IsKinematic = false;
+			if(!wasKinematicWhenGrabbingStarted)
+				IsKinematic = false;
 			onGrabEnd.Invoke();
 		}
 		#endregion
 
 		#region Life cycle
+		protected void Start() {
+			wasKinematicWhenGrabbingStarted = IsKinematic;
+
+			var loopshape = transform.EnsureComponent<Loopshape>();
+			loopshape.onOpen.AddListener(Grab);
+			transform.EnsureComponent<GrabbableValidator>();
+		}
+
 		protected void OnCollisionEnter(Collision _) {
-			var protagonist = GameManager.Instance?.Protagonist;
-			if(protagonist == null)
-				return;
-			if(protagonist.GrabbingObject == this)
-				protagonist.GrabbingObject = null;
+			Drop();
 		}
 		#endregion
 	}

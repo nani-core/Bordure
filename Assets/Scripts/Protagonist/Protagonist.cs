@@ -34,20 +34,12 @@ namespace NaniCore.Stencil {
 					bool acted = false;
 					foreach(var component in target.GetComponents<Component>()) {
 						switch(component) {
-							case DtCarrier door:
-								door.ToggleOpeningState();
-								acted = true;
-								break;
 							case PressurePlate plate:
 								plate.Pressed = !plate.Pressed;
 								acted = true;
 								break;
-							case OpticalValidator opticalLoopShape:
-								opticalLoopShape.SendMessage("OnLoopShapeOpen", SendMessageOptions.DontRequireReceiver);
-								break;
-							case Interactable interactable:
-								interactable.SendMessage("OnInteract", SendMessageOptions.DontRequireReceiver);
-								acted = true;
+							case Loopshape loopshape:
+								loopshape.Open();
 								break;
 						}
 					}
@@ -94,15 +86,6 @@ namespace NaniCore.Stencil {
 
 		protected void FixedUpdate() {
 			FixedUpdateControl();
-		}
-
-		protected void LateUpdate() {
-#if UNITY_EDITOR
-			if(!Application.isPlaying) {
-				return;
-			}
-#endif
-			LateUpdateInteraction();
 		}
 		#endregion
 	}

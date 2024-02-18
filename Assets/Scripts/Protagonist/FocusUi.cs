@@ -2,6 +2,7 @@ using UnityEngine;
 using System;
 using System.Collections;
 using UnityEngine.UI;
+using static UnityEditor.Experimental.GraphView.Port;
 
 namespace NaniCore.Stencil {
 	public class FocusUi : MonoBehaviour {
@@ -18,9 +19,11 @@ namespace NaniCore.Stencil {
 		#endregion
 
 		#region Fields
+		private Material material;
 		public enum Status { Normal = 0, Hovering, Grabbing, }
 		private Status currentStatus = Status.Normal;
 		private float radius;
+		private float opacity = 1f;
 		#endregion
 
 		#region Interfaces
@@ -38,7 +41,15 @@ namespace NaniCore.Stencil {
 			get => radius;
 			set {
 				radius = value;
-				image.material.SetFloat("_Radius", radius);
+				material.SetFloat("_Radius", radius);
+			}
+		}
+
+		public float Opacity {
+			get => opacity;
+			set {
+				opacity = value;
+				material.SetFloat("_Opacity", opacity);
 			}
 		}
 		#endregion
@@ -78,7 +89,7 @@ namespace NaniCore.Stencil {
 
 		#region Life cycle
 		protected void Start() {
-			image.material = new Material(image.material);
+			image.material = material = new Material(image.material);
 			Radius = 0;
 			AnimateZooming();
 		}

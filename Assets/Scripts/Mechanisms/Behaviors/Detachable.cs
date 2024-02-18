@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.Events;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace NaniCore.Stencil {
@@ -13,7 +12,6 @@ namespace NaniCore.Stencil {
 		#endregion
 
 		#region Fields
-		private readonly List<Grabbable> disabledGrabbables = new List<Grabbable>();
 		private new Rigidbody rigidbody;
 		#endregion
 
@@ -45,10 +43,6 @@ namespace NaniCore.Stencil {
 				transform.localToWorldMatrix.MultiplyPoint(ejectionOrigin),
 				ForceMode.VelocityChange
 			);
-
-			foreach(var grabbable in disabledGrabbables)
-				grabbable.enabled = true;
-			disabledGrabbables.Clear();
 
 			SendMessage("OnDetached", SendMessageOptions.DontRequireReceiver);
 			enabled = false;
