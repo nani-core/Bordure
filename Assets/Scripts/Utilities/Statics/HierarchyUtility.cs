@@ -120,7 +120,7 @@ namespace NaniCore {
 			else
 				Object.DestroyImmediate(target);
 #else
-			Object.Destroy(component);
+			Object.Destroy(target);
 #endif
 		}
 

@@ -1,15 +1,12 @@
 using UnityEngine;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 using System.Collections;
 using System.Collections.Generic;
 
 namespace NaniCore.Stencil {
-	public class Elevator : MonoBehaviour {
+	public partial class Elevator : MonoBehaviour {
 		#region Serialized fields
 		[SerializeField] private Transform anchor;
-		
+
 		[Header("Door")]
 		[SerializeField] private DtCarrier door;
 		[SerializeField][Min(0)] private float doorWaitTime;
@@ -35,11 +32,9 @@ namespace NaniCore.Stencil {
 		#endregion
 
 		#region Life cycle
-#if UNITY_EDITOR
-		protected void OnValidate() {
-			EditorApplication.delayCall += UpdateButtons;
+		protected void Start() {
+			UpdateButtons();
 		}
-#endif
 		#endregion
 
 		#region Functions
