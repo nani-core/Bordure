@@ -48,7 +48,9 @@ Shader "Hidden/Focus Animated Shader" {
 #elif defined(_SHAPE_SQUARE)
 			#define set_offset set_square
 			inline float set_square(v2f i, float a) {
-				return max(abs(i.uv.x - .5f), abs(i.uv.y - .5f)) - a;
+				float crc = length(i.uv - .5f);
+				float sqr = max(abs(i.uv.x - .5f), abs(i.uv.y - .5f));
+				return lerp(crc, sqr, saturate(a * 5)) - a;
 			}
 #endif
 
