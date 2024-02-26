@@ -26,7 +26,7 @@ namespace NaniCore.Stencil {
 		}
 
 		public void Hollow() {
-			foreach(var validator in  validValidators) {
+			foreach(var validator in validValidators) {
 				OpticalValidator optical = validator as OpticalValidator;
 				if(optical == null)
 					continue;

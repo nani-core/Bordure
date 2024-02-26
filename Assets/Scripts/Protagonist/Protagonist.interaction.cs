@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections;
-using System.Linq;
 
 namespace NaniCore.Stencil {
 	public partial class Protagonist : MonoBehaviour {
@@ -95,8 +94,12 @@ namespace NaniCore.Stencil {
 				focus.CurrentStatus = FocusUi.Status.Hovering;
 				float maxCastDistance = Profile.maxInteractionDistance;
 				foreach(var loopshape in GameManager.Instance.ValidLoopshapes) {
-					foreach(FocusValidator fv in loopshape.ValidValidators.Cast<FocusValidator>())
+					foreach(var validator in loopshape.ValidValidators) {
+						if(validator is not FocusValidator)
+							continue;
+						var fv = validator as FocusValidator;
 						maxCastDistance = Mathf.Min(maxCastDistance, fv.MaxDistance);
+					}
 				}
 				focus.Opacity = 1 - Mathf.Clamp01(effectiveCastDistance / maxCastDistance);
 			}
@@ -137,7 +140,7 @@ namespace NaniCore.Stencil {
 			if(GrabbingObject != null) {
 				GrabbingObject = null;
 			}
-			else if(GameManager.Instance.HasValidLoopshapes) {
+			if(GameManager.Instance.HasValidLoopshapes) {
 				GrabbingObject = null;
 				foreach(var loopshape in GameManager.Instance.ValidLoopshapes)
 					loopshape.Open();
