@@ -71,19 +71,29 @@ namespace NaniCore.Stencil {
 			targetHeightCoroutine = null;
 		}
 
-		private void UpdateFloatingBodyPhysicsOnEndOfFixedUpdate(Rigidbody rigidbody) {
+		private void UpdateFloatingBodyPhysics(Rigidbody rigidbody) {
 			// Kinematic floatables might haven't been released yet.
 			if(rigidbody.isKinematic)
 				return;
 
-			var downward = Physics.gravity.normalized;
-			// Positive is downward.
-			var offsetToSurface = Vector3.Dot(downward, rigidbody.position - transform.position) + Height;
-			var buoyancy = downward * -Mathf.Clamp(offsetToSurface, 0, 1);
-			var friction = -rigidbody.velocity * profile.damp;
-			friction = downward * Vector3.Dot(downward, friction);
-			// TODO: make this time-independent.
-			rigidbody.AddForce(buoyancy + friction, ForceMode.Impulse);
+			Vector3 totalForce = default, totalTorque = default;
+
+			// Buoyancy force.
+			var collider = rigidbody.GetComponent<Collider>();
+			var bounds = collider.bounds;
+			var sunkDepth = Mathf.Clamp(Height - bounds.min.y, 0, bounds.extents.y);
+			var sunkVolume = bounds.extents.x * bounds.extents.z * sunkDepth;
+			totalForce += Physics.gravity * (sunkVolume * profile.density * -1);
+
+			// Damp.
+			var dampCoefficient = bounds.size.sqrMagnitude * profile.damp;
+			dampCoefficient *= Mathf.Min(1, rigidbody.mass);	// Prevent glitching for light objects.
+			totalForce += rigidbody.velocity * (dampCoefficient * -1);
+			totalTorque += rigidbody.angularVelocity * (dampCoefficient * -1);
+
+			// Apply the effect.
+			rigidbody.AddForce(totalForce, ForceMode.Force);
+			rigidbody.AddTorque(totalTorque, ForceMode.Force);
 		}
 
 		public void AddWaterlet(Waterlet waterlet) {
@@ -133,20 +143,18 @@ namespace NaniCore.Stencil {
 		}
 
 		protected void OnTriggerEnter(Collider other) {
-			var rigidbody = other.transform.GetComponent<Rigidbody>();
-			if(rigidbody != null)
+			if(other.transform.TryGetComponent<Rigidbody>(out var rigidbody))
 				floatingBodies.Add(rigidbody);
 		}
 		protected void OnTriggerExit(Collider other) {
-			var rigidbody = other.transform.GetComponent<Rigidbody>();
-			if(rigidbody != null)
+			if(other.transform.TryGetComponent<Rigidbody>(out var rigidbody))
 				floatingBodies.Remove(rigidbody);
 		}
 
 		protected void FixedUpdate() {
 			floatingBodies.RemoveWhere(f => f == null);
-			foreach(var floatable in floatingBodies) {
-				UpdateFloatingBodyPhysicsOnEndOfFixedUpdate(floatable);
+			foreach(var body in floatingBodies) {
+				UpdateFloatingBodyPhysics(body);
 			}
 		}
 		#endregion
