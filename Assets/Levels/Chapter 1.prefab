@@ -7404,13 +7404,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1587027665180804227}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0.7071058, z: -0, w: 0.70710784}
+  m_LocalRotation: {x: -0, y: 0.0000013113021, z: -0, w: 1}
   m_LocalPosition: {x: -7, y: -4, z: 6}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 4565601382443622358}
-  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8794107891338888342
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26987,6 +26987,7 @@ GameObject:
   - component: {fileID: 2424719197808532537}
   - component: {fileID: 5951902839565551786}
   - component: {fileID: 3125103297646460936}
+  - component: {fileID: 6201385644666211365}
   m_Layer: 0
   m_Name: Hollowed Door
   m_TagString: Untagged
@@ -27216,6 +27217,33 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 6201385644666211365}
+        m_TargetAssemblyTypeName: NaniCore.Stencil.ModelHighligher, Assembly-CSharp
+        m_MethodName: Highlight
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &6201385644666211365
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5760839679603298473}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3252e05ce982e1428962f17b570e27b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  color: {r: 1, g: 1, b: 1, a: 1}
+  duration: 1
+  templateMaterial: {fileID: 2100000, guid: ca55a3d54ee73ab41beea79c7ba6cab1, type: 2}
 --- !u!1 &5792090132206424468
 GameObject:
   m_ObjectHideFlags: 0
