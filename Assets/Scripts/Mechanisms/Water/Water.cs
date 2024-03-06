@@ -10,7 +10,7 @@ namespace NaniCore.Stencil {
 		[SerializeField] private Transform surface;
 		[SerializeField][Min(0)] private float height = 1;
 		[SerializeField][Min(0)] private float speed = 1;
-		[SerializeField][Range(0, 1)] private float resistance = .5f;
+		[SerializeField] private WaterProfile profile;
 		#endregion
 
 		#region Fields
@@ -80,7 +80,7 @@ namespace NaniCore.Stencil {
 			// Positive is downward.
 			var offsetToSurface = Vector3.Dot(downward, rigidbody.position - transform.position) + Height;
 			var buoyancy = downward * -Mathf.Clamp(offsetToSurface, 0, 1);
-			var friction = -rigidbody.velocity * resistance;
+			var friction = -rigidbody.velocity * profile.damp;
 			friction = downward * Vector3.Dot(downward, friction);
 			// TODO: make this time-independent.
 			rigidbody.AddForce(buoyancy + friction, ForceMode.Impulse);
@@ -124,6 +124,14 @@ namespace NaniCore.Stencil {
 		#endregion
 
 		#region Life cycle
+		protected void OnEnable() {
+			if(profile == null) {
+				Debug.LogWarning($"Warning: {this} has no water profile!", this);
+				enabled = false;
+				return;
+			}
+		}
+
 		protected void OnTriggerEnter(Collider other) {
 			var rigidbody = other.transform.GetComponent<Rigidbody>();
 			if(rigidbody != null)
