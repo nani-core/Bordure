@@ -6,7 +6,8 @@ namespace NaniCore.Stencil {
 		#region Serialized fields
 		[SerializeField] private bool overrideTarget;
 		[ShowIf("overrideTarget")][SerializeField] private GameObject target;
-		[SerializeField] public bool includeChildren = true;
+		[SerializeField] private bool includeChildren = true;
+		[SerializeField][Min(0f)] private float maxDistance = 0f;
 		#endregion
 
 		#region Functions
@@ -21,6 +22,8 @@ namespace NaniCore.Stencil {
 			}
 		}
 
+		public float MaxDistance => maxDistance == 0f ? GameManager.Instance.Protagonist.Profile.maxInteractionDistance : maxDistance;
+
 		protected override bool Validate() {
 			if(!isActiveAndEnabled)
 				return false;
@@ -31,7 +34,17 @@ namespace NaniCore.Stencil {
 
 			if(protagonist.LookingAtObject == null)
 				return false;
-			return protagonist.LookingAtObject.IsChildOf(Target);
+			if(includeChildren) {
+				if(!protagonist.LookingAtObject.IsChildOf(Target))
+					return false;
+			}
+			else {
+				if(protagonist.LookingAtObject != Target)
+					return false;
+			}
+			if(Vector3.Distance(protagonist.Eye.position, protagonist.LookingPosition) > MaxDistance)
+				return false;
+			return true;
 		}
 		#endregion
 	}

@@ -10,14 +10,14 @@ namespace NaniCore.Stencil {
 		[SerializeField] private Transform surface;
 		[SerializeField][Min(0)] private float height = 1;
 		[SerializeField][Min(0)] private float speed = 1;
-		[SerializeField][Range(0, 1)] private float resistance = .5f;
+		[SerializeField] private WaterProfile profile;
 		#endregion
 
 		#region Fields
 		private Coroutine targetHeightCoroutine;
-		private HashSet<Floatable> floatables = new HashSet<Floatable>();
+		private readonly HashSet<Rigidbody> floatingBodies = new();
 		// Could be buggy.
-		private HashSet<Waterlet> waterlets = new HashSet<Waterlet>();
+		private HashSet<Waterlet> waterlets = new();
 		#endregion
 
 		#region Interfaces
@@ -71,20 +71,29 @@ namespace NaniCore.Stencil {
 			targetHeightCoroutine = null;
 		}
 
-		private void UpdateFloatablePhysicsOnEndOfFixedUpdate(Floatable floatable) {
-			var rb = floatable.Rigidbody;
+		private void UpdateFloatingBodyPhysics(Rigidbody rigidbody) {
 			// Kinematic floatables might haven't been released yet.
-			if(rb.isKinematic)
+			if(rigidbody.isKinematic)
 				return;
 
-			var downward = Physics.gravity.normalized;
-			// Positive is downward.
-			var offsetToSurface = Vector3.Dot(downward, rb.position - transform.position) + Height;
-			var buoyancy = downward * -Mathf.Clamp(offsetToSurface, 0, 1);
-			var friction = -rb.velocity * resistance;
-			friction = downward * Vector3.Dot(downward, friction);
-			// TODO: make this time-independent.
-			rb.velocity += buoyancy + friction;
+			Vector3 totalForce = default, totalTorque = default;
+
+			// Buoyancy force.
+			var collider = rigidbody.GetComponent<Collider>();
+			var bounds = collider.bounds;
+			var sunkDepth = Mathf.Clamp(Height - bounds.min.y, 0, bounds.extents.y);
+			var sunkVolume = bounds.extents.x * bounds.extents.z * sunkDepth;
+			totalForce += Physics.gravity * (sunkVolume * profile.density * -1);
+
+			// Damp.
+			var dampCoefficient = bounds.size.sqrMagnitude * profile.damp;
+			dampCoefficient *= Mathf.Min(1, rigidbody.mass);	// Prevent glitching for light objects.
+			totalForce += rigidbody.velocity * (dampCoefficient * -1);
+			totalTorque += rigidbody.angularVelocity * (dampCoefficient * -1);
+
+			// Apply the effect.
+			rigidbody.AddForce(totalForce, ForceMode.Force);
+			rigidbody.AddTorque(totalTorque, ForceMode.Force);
 		}
 
 		public void AddWaterlet(Waterlet waterlet) {
@@ -125,23 +134,27 @@ namespace NaniCore.Stencil {
 		#endregion
 
 		#region Life cycle
+		protected void OnEnable() {
+			if(profile == null) {
+				Debug.LogWarning($"Warning: {this} has no water profile!", this);
+				enabled = false;
+				return;
+			}
+		}
+
 		protected void OnTriggerEnter(Collider other) {
-			var floatable = other.transform.GetComponent<Floatable>();
-			if(floatable != null)
-				floatables.Add(floatable);
+			if(other.transform.TryGetComponent<Rigidbody>(out var rigidbody))
+				floatingBodies.Add(rigidbody);
 		}
 		protected void OnTriggerExit(Collider other) {
-			var floatable = other.transform.GetComponent<Floatable>();
-			if(floatable != null)
-				floatables.Remove(floatable);
+			if(other.transform.TryGetComponent<Rigidbody>(out var rigidbody))
+				floatingBodies.Remove(rigidbody);
 		}
 
 		protected void FixedUpdate() {
-			floatables.RemoveWhere(f => f == null);
-			foreach(var floatable in floatables) {
-				if(!floatable.isActiveAndEnabled)
-					continue;
-				UpdateFloatablePhysicsOnEndOfFixedUpdate(floatable);
+			floatingBodies.RemoveWhere(f => f == null);
+			foreach(var body in floatingBodies) {
+				UpdateFloatingBodyPhysics(body);
 			}
 		}
 		#endregion

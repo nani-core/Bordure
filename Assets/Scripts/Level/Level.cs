@@ -13,7 +13,9 @@ namespace NaniCore.Stencil {
 		public delegate void LevelCallback(Level self);
 		public LevelCallback onLoaded, onUnloaded;
 
-		public SpawnPoint SpawnPoint {
+		public SpawnPoint SpawnPoint => spawnPoint;
+
+		public SpawnPoint DebugSpawnPoint {
 			get {
 #if DEBUG
 				return debugSpawnPoint ?? spawnPoint;

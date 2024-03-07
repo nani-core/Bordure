@@ -27,6 +27,7 @@ namespace NaniCore.Stencil {
 
 		protected void Initialize() {
 			InitializeConstants();
+			InitializeLevel();
 			InitializeRigidbody();
 			InitializeAudio();
 			protagonist = InitializeProtagonist();

@@ -48,6 +48,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 4cc06740a61838c48b3dde9df010402b, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: -1842022620691312911, guid: 4cc06740a61838c48b3dde9df010402b, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -207,8 +211,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0b1f49cf0faacd47afb0c5ba87bfc06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  loopshape: {fileID: 4762958965659258004}
   overrideTarget: 0
   target: {fileID: 0}
+  includeChildren: 1
+  maxDistance: 0
 --- !u!114 &4762958965659258004
 MonoBehaviour:
   m_ObjectHideFlags: 0

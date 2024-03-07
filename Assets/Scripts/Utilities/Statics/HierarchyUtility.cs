@@ -105,6 +105,53 @@ namespace NaniCore {
 		}
 		public static bool IsChildOf(this Transform a, GameObject b) => a?.gameObject.IsChildOf(b) ?? false;
 		public static bool IsChildOf(this GameObject a, Transform b) => a.IsChildOf(b?.gameObject);
+
+		public static Transform[] Children(this Transform parent) {
+			Transform[] children = new Transform[parent.childCount];
+			for(int i = 0; i < parent.childCount; ++i)
+				children[i] = parent.GetChild(i);
+			return children;
+		}
+
+		public static void Destroy(this Object target) {
+#if UNITY_EDITOR
+			if(Application.isPlaying)
+				Object.Destroy(target);
+			else
+				Object.DestroyImmediate(target);
+#else
+			Object.Destroy(target);
+#endif
+		}
+
+		public static void DestroyAllChildren(this Transform parent) {
+			foreach(var child in parent.Children())
+				Destroy(child.gameObject);
+		}
+
+		public static void RotateAlong(this Transform target, Vector3 pivot, Quaternion rotation) {
+			Transform pivotTransform = new GameObject().transform;
+			pivotTransform.position = pivot;
+			var parent = target.parent;
+			target.SetParent(pivotTransform, true);
+			pivotTransform.rotation = rotation;
+			target.SetParent(parent, true);
+			Object.Destroy(pivotTransform.gameObject);
+		}
+
+		/// <param name="target">The GameObject to ge aligned in space.</param>
+		/// <param name="reference">What to align by.</param>
+		/// <param name="alignment">What to align to.</param>
+		public static void AlignWith(this Transform target, Transform reference, Transform alignment) {
+			Vector3 movement = alignment.position - reference.position;
+			Quaternion rotation = alignment.rotation * Quaternion.Inverse(reference.rotation);
+
+			target.RotateAlong(reference.position, rotation);
+			target.position += movement;
+		}
+		public static void AlignWith(this Transform target, Transform alignment) {
+			target.SetPositionAndRotation(alignment.position, alignment.rotation);
+		}
 		#endregion
 	}
 }

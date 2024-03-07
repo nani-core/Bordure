@@ -2697,7 +2697,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d272af244dc21ca40884c70c96f24cfd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useDetachingEjection: 1
   ejectionVelocity: {x: 0, y: 30, z: 0}
   ejectionOrigin: {x: -0.5, y: 0, z: 0}
   onDetached:
@@ -3465,7 +3464,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d272af244dc21ca40884c70c96f24cfd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useDetachingEjection: 1
   ejectionVelocity: {x: 0, y: 30, z: 0}
   ejectionOrigin: {x: -0.5, y: 0, z: 0}
   onDetached:
@@ -6902,7 +6900,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d272af244dc21ca40884c70c96f24cfd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useDetachingEjection: 1
   ejectionVelocity: {x: 5, y: 0, z: 0}
   ejectionOrigin: {x: 0, y: 0.5, z: 0}
   onDetached:
@@ -8038,7 +8035,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d272af244dc21ca40884c70c96f24cfd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useDetachingEjection: 1
   ejectionVelocity: {x: 0, y: -30, z: 0}
   ejectionOrigin: {x: -0.5, y: 0, z: 0}
   onDetached:
@@ -10131,7 +10127,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d272af244dc21ca40884c70c96f24cfd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useDetachingEjection: 1
   ejectionVelocity: {x: 0, y: -30, z: 0}
   ejectionOrigin: {x: -0.5, y: 0, z: 0}
   onDetached:
@@ -10633,7 +10628,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d272af244dc21ca40884c70c96f24cfd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useDetachingEjection: 1
   ejectionVelocity: {x: 0, y: -30, z: 0}
   ejectionOrigin: {x: -0.5, y: 0, z: 0}
   onDetached:
@@ -10749,7 +10743,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d272af244dc21ca40884c70c96f24cfd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useDetachingEjection: 1
   ejectionVelocity: {x: 0, y: -30, z: 0}
   ejectionOrigin: {x: -0.5, y: 0, z: 0}
   onDetached:
@@ -12174,6 +12167,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1678477648800052349, guid: a0b59c288a1822b49ac3523ef92d9767, type: 3}
+      propertyPath: water
+      value: 
+      objectReference: {fileID: 717304681}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -14717,7 +14714,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d272af244dc21ca40884c70c96f24cfd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useDetachingEjection: 1
   ejectionVelocity: {x: 0, y: -30, z: 0}
   ejectionOrigin: {x: -0.5, y: 0, z: 0}
   onDetached:
@@ -16437,33 +16433,13 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2506356413860954058, guid: 54f8be217e05f2142b1f5b6fd3833463, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 2065298388}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 54f8be217e05f2142b1f5b6fd3833463, type: 3}
 --- !u!4 &2065298386 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3380539396451463770, guid: 54f8be217e05f2142b1f5b6fd3833463, type: 3}
   m_PrefabInstance: {fileID: 2065298385}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &2065298387 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2506356413860954058, guid: 54f8be217e05f2142b1f5b6fd3833463, type: 3}
-  m_PrefabInstance: {fileID: 2065298385}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &2065298388
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2065298387}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 76fabe782672c894b9f6af8185296057, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2066085047
 GameObject:
   m_ObjectHideFlags: 0

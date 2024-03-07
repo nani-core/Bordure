@@ -54,7 +54,7 @@ namespace NaniCore.Stencil {
 			if(gastro != null) {
 				// Invalidate if not focusing on the gastro.
 				var protagonist = GameManager.Instance?.Protagonist;
-				if(protagonist == null || !protagonist.LookingAtObject.IsChildOf(gameObject))
+				if(protagonist == null || !protagonist.LookingAtObject.IsChildOf(gastro))
 					return false;
 			}
 
@@ -110,7 +110,8 @@ namespace NaniCore.Stencil {
 		#endregion
 
 		#region Life cycle
-		protected void Start() {
+		protected new void Start() {
+			base.Start();
 			childRenderers = GetComponentsInChildren<Renderer>();
 		}
 

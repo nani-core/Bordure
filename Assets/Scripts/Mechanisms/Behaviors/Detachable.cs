@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.Events;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace NaniCore.Stencil {
@@ -13,7 +12,6 @@ namespace NaniCore.Stencil {
 		#endregion
 
 		#region Fields
-		private readonly List<Grabbable> disabledGrabbables = new List<Grabbable>();
 		private new Rigidbody rigidbody;
 		#endregion
 
@@ -23,37 +21,28 @@ namespace NaniCore.Stencil {
 		}
 		#endregion
 
-		#region Functions
-		private Rigidbody Rigidbody {
-			get {
-				if(rigidbody == null)
-					rigidbody = GetComponent<Rigidbody>();
-				return rigidbody;
-			}
-		}
-
+		#region Interfaces
 		public void Detach() {
-			StartCoroutine(DetachCoroutine());
-		}
+			if(rigidbody == null)
+				rigidbody = GetComponent<Rigidbody>();
 
-		private IEnumerator DetachCoroutine() {
-			transform.SetParent(null, true);
-			var meshCollider = Rigidbody.GetComponent<MeshCollider>();
-			if(meshCollider != null) {
+			if(rigidbody.TryGetComponent<MeshCollider>(out var meshCollider))
 				meshCollider.convex = true;
+
+			Transform parent = transform.parent;
+			while(!parent.gameObject.isStatic) {
+				if(parent.parent == null)
+					break;
+				parent = parent.parent;
 			}
-			Rigidbody.isKinematic = false;
-			Rigidbody.AddForceAtPosition(
+			transform.SetParent(parent, true);
+
+			rigidbody.isKinematic = false;
+			rigidbody.AddForceAtPosition(
 				transform.localToWorldMatrix.MultiplyVector(ejectionVelocity).normalized * ejectionVelocity.magnitude,
 				transform.localToWorldMatrix.MultiplyPoint(ejectionOrigin),
 				ForceMode.VelocityChange
 			);
-
-			yield return new WaitForEndOfFrame();
-
-			foreach(var grabbable in disabledGrabbables)
-				grabbable.enabled = true;
-			disabledGrabbables.Clear();
 
 			SendMessage("OnDetached", SendMessageOptions.DontRequireReceiver);
 			enabled = false;
