@@ -4313,7 +4313,7 @@ GameObject:
   - component: {fileID: 2216208545560698847}
   - component: {fileID: 8508673000028042017}
   m_Layer: 0
-  m_Name: Chapter 1 Chamber4 Spawn Point
+  m_Name: Chapter 1 Room 4 Spawn Point
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7390,7 +7390,7 @@ GameObject:
   - component: {fileID: 4041755490607346781}
   - component: {fileID: 8794107891338888342}
   m_Layer: 0
-  m_Name: Chapter1 Corner2 Puzzle Spawn Point
+  m_Name: Chapter 1 Corner 2 Puzzle Spawn Point
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8189,7 +8189,7 @@ GameObject:
   - component: {fileID: 7086729076473182404}
   - component: {fileID: 9193147433900503554}
   m_Layer: 0
-  m_Name: Chapter 1 Chamber2 Spawn Point
+  m_Name: Chapter 1 Room 2 Spawn Point
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -23096,7 +23096,7 @@ GameObject:
   - component: {fileID: 1452115023058862501}
   - component: {fileID: 4268172488307644890}
   m_Layer: 0
-  m_Name: Chapter 1 Chamber3 Spawn Point
+  m_Name: Chapter 1 Room 3 Spawn Point
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28437,7 +28437,7 @@ GameObject:
   - component: {fileID: 6305087759088123100}
   - component: {fileID: 7119749462657543902}
   m_Layer: 0
-  m_Name: C1K5 Spawn Point
+  m_Name: Chapter 1 Corner 5 Spawn Point
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28499,6 +28499,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 9222841677116598824}
   - {fileID: 3714579710737776423}
   - {fileID: 4569446439399694731}
   - {fileID: 343369248945278281}
@@ -34974,6 +34975,50 @@ Transform:
   - {fileID: 8285498491923790699}
   m_Father: {fileID: 4521112092239981373}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &7844031324114963456
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9222841677116598824}
+  - component: {fileID: 3503552196532325623}
+  m_Layer: 0
+  m_Name: Chapter 1 Room 5 Spawn Point
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9222841677116598824
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7844031324114963456}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.7071058, z: -0, w: 0.7071078}
+  m_LocalPosition: {x: -8, y: -2, z: 4}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 6068143933309860295}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!114 &3503552196532325623
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7844031324114963456}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f93d73c3d716d4a47a38ba7cd6a67865, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7882391859679113625
 GameObject:
   m_ObjectHideFlags: 0
@@ -36601,7 +36646,7 @@ GameObject:
   - component: {fileID: 3943771972721268010}
   - component: {fileID: 6454801288449946064}
   m_Layer: 0
-  m_Name: Chapter 1 Chamber1 Spawn Point
+  m_Name: Chapter 1 Room 1 Spawn Point
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -41644,7 +41689,7 @@ HingeJoint:
   m_Anchor: {x: 0, y: 0, z: 0.48}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.36, y: 3, z: 10.768}
+  m_ConnectedAnchor: {x: 0, y: 0, z: -1.6000181}
   serializedVersion: 2
   m_UseSpring: 0
   m_Spring:
@@ -45961,6 +46006,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2100000, guid: 0d28c33cbc0bc204e84c8362aefe3e80, type: 2}
     - target: {fileID: 7797230143158359397, guid: 54f8be217e05f2142b1f5b6fd3833463, type: 3}
+      propertyPath: m_Mass
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7797230143158359397, guid: 54f8be217e05f2142b1f5b6fd3833463, type: 3}
       propertyPath: m_Constraints
       value: 122
       objectReference: {fileID: 0}
@@ -48739,6 +48788,10 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 0d28c33cbc0bc204e84c8362aefe3e80, type: 2}
+    - target: {fileID: 7797230143158359397, guid: 54f8be217e05f2142b1f5b6fd3833463, type: 3}
+      propertyPath: m_Mass
+      value: 0.1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
