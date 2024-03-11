@@ -21,7 +21,7 @@ namespace NaniCore.Stencil {
 		public AudioClip exitWaterSound;
 
 		[Header("Water")]
-		public Shader waterStreamShader;
+		public Material waterStreamMaterial;
 		public Vector3 defaultWaterEjectionVelocity = Vector3.forward;
 	}
 }
