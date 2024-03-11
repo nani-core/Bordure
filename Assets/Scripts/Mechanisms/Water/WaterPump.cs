@@ -10,7 +10,7 @@ namespace NaniCore.Stencil {
 		#region Fields
 		private MeshRenderer waterStreamRenderer;
 		private Material waterStreamMat;
-		private float motionTime = 0.0f;
+		private float waterStreamStartTime = 100.0f, waterStreamEndTime = 0.0f;
 		/// <summary>
 		/// How long should the water stream fall additionally to prevent a visual glitch.
 		/// </summary>
@@ -42,18 +42,13 @@ namespace NaniCore.Stencil {
 			waterStreamAdditionalHeightGain = 1.0f;
 
 			UpdateVisualState();
-		}
-
-		protected void FixedUpdate() {
-			if(motionTime < 100.0f) {
-				motionTime += Time.fixedDeltaTime;
-			}
+			StartCoroutine(UpdateWaterStreamCoroutine());
 		}
 
 		protected override void UpdateVisualState() {
-			if(waterStreamRenderer != null) {
-				waterStreamRenderer.gameObject.SetActive(enabled);
-				motionTime = 0.0f;
+			if(enabled) {
+				waterStreamStartTime = 0.0f;
+				waterStreamEndTime = 0.0f;
 			}
 		}
 
@@ -61,16 +56,31 @@ namespace NaniCore.Stencil {
 			if(waterStreamRenderer != null) {
 				float deltaHeight = Height - water.Height;
 				waterStreamMat.SetFloat("_Water_Height", deltaHeight + waterStreamAdditionalHeightGain);
-				float startTime, endTime;
 
-				if(enabled)
-					(startTime, endTime) = (0.0f, motionTime);
-				else
-					(startTime, endTime) = (motionTime, 100.0f);
-
-				waterStreamMat.SetFloat("_Start_Time", startTime);
-				waterStreamMat.SetFloat("_End_Time", endTime);
+				waterStreamMat.SetFloat("_Start_Time", waterStreamStartTime);
+				waterStreamMat.SetFloat("_End_Time", waterStreamEndTime);
 			}
+		}
+
+		private System.Collections.IEnumerator UpdateWaterStreamCoroutine() {
+			for(; ; ) {
+				UpdateWaterStream(Time.fixedDeltaTime);
+				yield return new WaitForFixedUpdate();
+			}
+		}
+
+		/// <summary>
+		/// This should be called repeatedly regardless of activity.
+		/// </summary>
+		private void UpdateWaterStream(float deltaTime) {
+			waterStreamEndTime += deltaTime;
+			waterStreamStartTime += deltaTime;
+			if(enabled)
+				waterStreamStartTime = 0.0f;
+
+			// UpdateVisualFrame() will not be called when inactive.
+			if(!enabled)
+				UpdateVisualFrame();
 		}
 		#endregion
 	}
