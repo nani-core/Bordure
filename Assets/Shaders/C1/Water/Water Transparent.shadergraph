@@ -805,6 +805,34 @@
             },
             "m_InputSlot": {
                 "m_Node": {
+                    "m_Id": "633ba812aac941939f711b8b248e0016"
+                },
+                "m_SlotId": 0
+            }
+        },
+        {
+            "m_OutputSlot": {
+                "m_Node": {
+                    "m_Id": "ad47fbc7f1d74147a3b1bf9e054d1882"
+                },
+                "m_SlotId": 2
+            },
+            "m_InputSlot": {
+                "m_Node": {
+                    "m_Id": "96e08e738a9a40c4aa6cc7f9e947e6de"
+                },
+                "m_SlotId": 0
+            }
+        },
+        {
+            "m_OutputSlot": {
+                "m_Node": {
+                    "m_Id": "ad47fbc7f1d74147a3b1bf9e054d1882"
+                },
+                "m_SlotId": 2
+            },
+            "m_InputSlot": {
+                "m_Node": {
                     "m_Id": "b9dc09dab43342c3bd04f3baf6cb28e3"
                 },
                 "m_SlotId": 0
@@ -878,34 +906,6 @@
                     "m_Id": "c78f1e3c628d40b59cdf8264c04bca8f"
                 },
                 "m_SlotId": 2
-            }
-        },
-        {
-            "m_OutputSlot": {
-                "m_Node": {
-                    "m_Id": "b9dc09dab43342c3bd04f3baf6cb28e3"
-                },
-                "m_SlotId": 1
-            },
-            "m_InputSlot": {
-                "m_Node": {
-                    "m_Id": "633ba812aac941939f711b8b248e0016"
-                },
-                "m_SlotId": 0
-            }
-        },
-        {
-            "m_OutputSlot": {
-                "m_Node": {
-                    "m_Id": "b9dc09dab43342c3bd04f3baf6cb28e3"
-                },
-                "m_SlotId": 1
-            },
-            "m_InputSlot": {
-                "m_Node": {
-                    "m_Id": "96e08e738a9a40c4aa6cc7f9e947e6de"
-                },
-                "m_SlotId": 0
             }
         },
         {
@@ -3061,10 +3061,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -3462.666748046875,
-            "y": 723.3333129882813,
-            "width": 148.0,
-            "height": 36.00006103515625
+            "x": -3518.666748046875,
+            "y": 723.3333740234375,
+            "width": 115.333251953125,
+            "height": 36.0
         }
     },
     "m_Slots": [
@@ -4336,10 +4336,10 @@
     "m_Guid": {
         "m_GuidSerialized": "6153ff99-55ca-405f-ad3f-09785bac199a"
     },
-    "m_Name": "DissolveState",
+    "m_Name": "TopCut",
     "m_DefaultRefNameVersion": 1,
-    "m_RefNameGeneratedByDisplayName": "DissolveState",
-    "m_DefaultReferenceName": "_DissolveState",
+    "m_RefNameGeneratedByDisplayName": "TopCut",
+    "m_DefaultReferenceName": "_TopCut",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
     "m_UseCustomSlotLabel": false,
@@ -4349,7 +4349,7 @@
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 0,
     "m_Hidden": false,
-    "m_Value": 0.0,
+    "m_Value": 0.10000000149011612,
     "m_FloatType": 1,
     "m_RangeValues": {
         "x": 0.0,
@@ -4415,7 +4415,7 @@
     "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
     "m_ObjectId": "870dc19305444cee88bb67f299fa8fc4",
     "m_Id": 0,
-    "m_DisplayName": "ReverseDissolveState",
+    "m_DisplayName": "BottomCut",
     "m_SlotType": 1,
     "m_Hidden": false,
     "m_ShaderOutputName": "Out",
@@ -7287,7 +7287,7 @@
     "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
     "m_ObjectId": "f0ba5fbc1e464366ae9a7aa681c7f07d",
     "m_Id": 0,
-    "m_DisplayName": "DissolveState",
+    "m_DisplayName": "TopCut",
     "m_SlotType": 1,
     "m_Hidden": false,
     "m_ShaderOutputName": "Out",
@@ -7662,10 +7662,10 @@
     "m_Guid": {
         "m_GuidSerialized": "48e8c0ce-8077-48be-aa52-95aa3d90a613"
     },
-    "m_Name": "ReverseDissolveState",
+    "m_Name": "BottomCut",
     "m_DefaultRefNameVersion": 1,
-    "m_RefNameGeneratedByDisplayName": "ReverseDissolveState",
-    "m_DefaultReferenceName": "_ReverseDissolveState",
+    "m_RefNameGeneratedByDisplayName": "BottomCut",
+    "m_DefaultReferenceName": "_BottomCut",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
     "m_UseCustomSlotLabel": false,
@@ -7675,7 +7675,7 @@
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 0,
     "m_Hidden": false,
-    "m_Value": 0.0,
+    "m_Value": 0.5,
     "m_FloatType": 1,
     "m_RangeValues": {
         "x": 0.0,
