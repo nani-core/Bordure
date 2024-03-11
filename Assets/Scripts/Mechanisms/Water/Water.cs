@@ -21,6 +21,9 @@ namespace NaniCore.Stencil {
 		#endregion
 
 		#region Interfaces
+		/// <summary>
+		/// The height offset from the water surface to the bottom of the water container.
+		/// </summary>
 		public float Height {
 			get => height;
 			set {
@@ -81,7 +84,7 @@ namespace NaniCore.Stencil {
 			// Buoyancy force.
 			var collider = rigidbody.GetComponent<Collider>();
 			var bounds = collider.bounds;
-			var sunkDepth = Mathf.Clamp(Height - bounds.min.y, 0, bounds.extents.y);
+			var sunkDepth = Mathf.Clamp(Height + transform.position.y - bounds.min.y, 0, bounds.extents.y);
 			var sunkVolume = bounds.extents.x * bounds.extents.z * sunkDepth;
 			totalForce += Physics.gravity * (sunkVolume * profile.density * -1);
 
