@@ -16,6 +16,9 @@ namespace NaniCore.Stencil {
 			enabled = !enabled;
 		}
 
+		/// <summary>
+		/// The relative height offset from the waterlet's pivot to the bottom of the water container.
+		/// </summary>
 		public float Height {
 			get {
 				if(water == null)
