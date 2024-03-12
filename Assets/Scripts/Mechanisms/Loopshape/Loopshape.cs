@@ -25,6 +25,10 @@ namespace NaniCore.Stencil {
 				enabled = false;
 		}
 
+		/// <summary>
+		/// This is a delegating function to automatically pass-in the gastro object.
+		/// The level designer could also manually pass it in.
+		/// </summary>
 		public void Hollow() {
 			foreach(var validator in validValidators) {
 				OpticalValidator optical = validator as OpticalValidator;
