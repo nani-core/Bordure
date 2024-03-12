@@ -68,6 +68,9 @@
         },
         {
             "m_Id": "b539452bb7f34666a4b15cd24e13ec47"
+        },
+        {
+            "m_Id": "d4e28a8665094af996bc5cd253652fa3"
         }
     ],
     "m_Keywords": [],
@@ -347,6 +350,9 @@
         },
         {
             "m_Id": "8f7f31674fed4888ad45232397c1aae3"
+        },
+        {
+            "m_Id": "8bb9c3eecc2747d7afa1ccacd289ecdc"
         }
     ],
     "m_GroupDatas": [],
@@ -528,6 +534,20 @@
                     "m_Id": "9398ac03233b4aa38be46a9b6bbc57a7"
                 },
                 "m_SlotId": 1
+            }
+        },
+        {
+            "m_OutputSlot": {
+                "m_Node": {
+                    "m_Id": "2d62a1e822714810a825859ee5246b64"
+                },
+                "m_SlotId": 1
+            },
+            "m_InputSlot": {
+                "m_Node": {
+                    "m_Id": "26bb112f367a4f66921d874827a361c3"
+                },
+                "m_SlotId": 0
             }
         },
         {
@@ -785,6 +805,20 @@
         {
             "m_OutputSlot": {
                 "m_Node": {
+                    "m_Id": "8bb9c3eecc2747d7afa1ccacd289ecdc"
+                },
+                "m_SlotId": 0
+            },
+            "m_InputSlot": {
+                "m_Node": {
+                    "m_Id": "2d62a1e822714810a825859ee5246b64"
+                },
+                "m_SlotId": 1420708354
+            }
+        },
+        {
+            "m_OutputSlot": {
+                "m_Node": {
                     "m_Id": "8d22d568015e4381b76d901a7a048346"
                 },
                 "m_SlotId": 2
@@ -1018,20 +1052,6 @@
                     "m_Id": "70ebb13b7b044dd8bc0885af6f368ae6"
                 },
                 "m_SlotId": 1
-            }
-        },
-        {
-            "m_OutputSlot": {
-                "m_Node": {
-                    "m_Id": "ab855de2784b4ce3ad664ab190560d8e"
-                },
-                "m_SlotId": 1
-            },
-            "m_InputSlot": {
-                "m_Node": {
-                    "m_Id": "26bb112f367a4f66921d874827a361c3"
-                },
-                "m_SlotId": 0
             }
         },
         {
@@ -2796,6 +2816,9 @@
             "m_Id": "a4ceb25845b346bb89558a8e93ac73d1"
         },
         {
+            "m_Id": "e561a0b299df4c05b007f4aec4b76bd0"
+        },
+        {
             "m_Id": "084f7645d29b4cee8ea2474badf285be"
         }
     ],
@@ -2814,7 +2837,8 @@
         "9da8a280-d3b3-4962-b898-e02d7b6efdcc",
         "305ed57b-d1a3-4eb0-8260-90f9f9586fa7",
         "8d5ff780-45cf-4878-b9fe-2f61eb048515",
-        "2281623b-7a03-44fd-87f7-610dfdbda19f"
+        "2281623b-7a03-44fd-87f7-610dfdbda19f",
+        "dd319dc2-2c7e-47e2-912b-47682fd03aa6"
     ],
     "m_PropertyIds": [
         238091112,
@@ -2822,7 +2846,8 @@
         903317488,
         538000547,
         -1316141027,
-        -188984766
+        -188984766,
+        1420708354
     ],
     "m_Dropdowns": [],
     "m_DropdownSelectedEntries": []
@@ -5444,6 +5469,9 @@
         },
         {
             "m_Id": "06d28fdb112a49b980e1908ee8fd0ce9"
+        },
+        {
+            "m_Id": "d4e28a8665094af996bc5cd253652fa3"
         }
     ]
 }
@@ -5535,6 +5563,42 @@
         "z": 0.0
     },
     "m_Labels": []
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.PropertyNode",
+    "m_ObjectId": "8bb9c3eecc2747d7afa1ccacd289ecdc",
+    "m_Group": {
+        "m_Id": ""
+    },
+    "m_Name": "Property",
+    "m_DrawState": {
+        "m_Expanded": true,
+        "m_Position": {
+            "serializedVersion": "2",
+            "x": -697.3333129882813,
+            "y": -318.66668701171877,
+            "width": 159.33331298828126,
+            "height": 36.000030517578128
+        }
+    },
+    "m_Slots": [
+        {
+            "m_Id": "b17a9cab004f49c09f5bb6f39a22e6df"
+        }
+    ],
+    "synonyms": [],
+    "m_Precision": 0,
+    "m_PreviewExpanded": true,
+    "m_DismissedVersion": 0,
+    "m_PreviewMode": 0,
+    "m_CustomColors": {
+        "m_SerializableColors": []
+    },
+    "m_Property": {
+        "m_Id": "d4e28a8665094af996bc5cd253652fa3"
+    }
 }
 
 {
@@ -7281,6 +7345,21 @@
 
 {
     "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
+    "m_ObjectId": "b17a9cab004f49c09f5bb6f39a22e6df",
+    "m_Id": 0,
+    "m_DisplayName": "Distort Intensity",
+    "m_SlotType": 1,
+    "m_Hidden": false,
+    "m_ShaderOutputName": "Out",
+    "m_StageCapability": 3,
+    "m_Value": 0.0,
+    "m_DefaultValue": 0.0,
+    "m_Labels": []
+}
+
+{
+    "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.BlockNode",
     "m_ObjectId": "b236ed71cc8b42cba40c6a1ea7275347",
     "m_Group": {
@@ -8559,6 +8638,34 @@
 }
 
 {
+    "m_SGVersion": 1,
+    "m_Type": "UnityEditor.ShaderGraph.Internal.Vector1ShaderProperty",
+    "m_ObjectId": "d4e28a8665094af996bc5cd253652fa3",
+    "m_Guid": {
+        "m_GuidSerialized": "77cad1ed-2ebc-458c-893b-0bef5131b204"
+    },
+    "m_Name": "Distort Intensity",
+    "m_DefaultRefNameVersion": 1,
+    "m_RefNameGeneratedByDisplayName": "Distort Intensity",
+    "m_DefaultReferenceName": "_Distort_Intensity",
+    "m_OverrideReferenceName": "",
+    "m_GeneratePropertyBlock": true,
+    "m_UseCustomSlotLabel": false,
+    "m_CustomSlotLabel": "",
+    "m_DismissedVersion": 0,
+    "m_Precision": 0,
+    "overrideHLSLDeclaration": false,
+    "hlslDeclarationOverride": 0,
+    "m_Hidden": false,
+    "m_Value": 0.03999999910593033,
+    "m_FloatType": 0,
+    "m_RangeValues": {
+        "x": 0.0,
+        "y": 1.0
+    }
+}
+
+{
     "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.PropertyNode",
     "m_ObjectId": "d6d806eed7344992a5784c8b325e5d65",
@@ -9113,6 +9220,21 @@
         "e32": 0.0,
         "e33": 1.0
     }
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
+    "m_ObjectId": "e561a0b299df4c05b007f4aec4b76bd0",
+    "m_Id": 1420708354,
+    "m_DisplayName": "Distortion Intensity",
+    "m_SlotType": 0,
+    "m_Hidden": false,
+    "m_ShaderOutputName": "_Distortion_Intensity",
+    "m_StageCapability": 3,
+    "m_Value": 0.20000000298023225,
+    "m_DefaultValue": 0.0,
+    "m_Labels": []
 }
 
 {
