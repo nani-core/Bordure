@@ -63,9 +63,11 @@ namespace NaniCore.Stencil {
 		}
 
 		private System.Collections.IEnumerator UpdateWaterStreamCoroutine() {
-			for(; ; ) {
-				UpdateWaterStream(Time.fixedDeltaTime);
+			for(float prev, now = Time.time; ; ) {
 				yield return new WaitForFixedUpdate();
+				prev = now;
+				now = Time.time;
+				UpdateWaterStream(now - prev);
 			}
 		}
 
