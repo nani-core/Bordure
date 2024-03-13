@@ -60,6 +60,34 @@ PrefabInstance:
       propertyPath: m_LocalScale.y
       value: 1.667
       objectReference: {fileID: 0}
+    - target: {fileID: 4979676039343303987, guid: 99d30aff828010046b20ce0f375467b2, type: 3}
+      propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4979676039343303987, guid: 99d30aff828010046b20ce0f375467b2, type: 3}
+      propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4979676039343303987, guid: 99d30aff828010046b20ce0f375467b2, type: 3}
+      propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 4175871537821157854}
+    - target: {fileID: 4979676039343303987, guid: 99d30aff828010046b20ce0f375467b2, type: 3}
+      propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4979676039343303987, guid: 99d30aff828010046b20ce0f375467b2, type: 3}
+      propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: Highlight
+      objectReference: {fileID: 0}
+    - target: {fileID: 4979676039343303987, guid: 99d30aff828010046b20ce0f375467b2, type: 3}
+      propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: NaniCore.Stencil.ModelHighligher, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 4979676039343303987, guid: 99d30aff828010046b20ce0f375467b2, type: 3}
+      propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 6924329076652874384, guid: 99d30aff828010046b20ce0f375467b2, type: 3}
       propertyPath: m_Name
       value: Exit Sign 1x2 Variant
@@ -137,10 +165,33 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 30203b06848f6db44905f7d990992971, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4175871537821157854}
   m_SourcePrefab: {fileID: 100100000, guid: 30203b06848f6db44905f7d990992971, type: 3}
 --- !u!4 &2577124950860538905 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 30203b06848f6db44905f7d990992971, type: 3}
   m_PrefabInstance: {fileID: 2614744205769819122}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2920612746194517667 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 30203b06848f6db44905f7d990992971, type: 3}
+  m_PrefabInstance: {fileID: 2614744205769819122}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4175871537821157854
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2920612746194517667}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3252e05ce982e1428962f17b570e27b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  color: {r: 1, g: 1, b: 1, a: 1}
+  duration: 1
+  templateMaterial: {fileID: 2100000, guid: ca55a3d54ee73ab41beea79c7ba6cab1, type: 2}

@@ -150,6 +150,7 @@ GameObject:
   - component: {fileID: 6805344795716589593}
   - component: {fileID: 7138289876953728988}
   - component: {fileID: 1689299860539069569}
+  - component: {fileID: 5847293502031601957}
   m_Layer: 0
   m_Name: Blasto
   m_TagString: Untagged
@@ -246,6 +247,21 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -4256192391346247547, guid: 026993a497c11bc4b972453e3891b5e7, type: 3}
+--- !u!114 &5847293502031601957
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3230585215888941600}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3252e05ce982e1428962f17b570e27b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  color: {r: 1, g: 1, b: 1, a: 1}
+  duration: 1
+  templateMaterial: {fileID: 2100000, guid: ca55a3d54ee73ab41beea79c7ba6cab1, type: 2}
 --- !u!1 &3955522368144167289
 GameObject:
   m_ObjectHideFlags: 0
@@ -504,6 +520,18 @@ MonoBehaviour:
       - m_Target: {fileID: 5233830358438867442}
         m_TargetAssemblyTypeName: NaniCore.Stencil.Detachable, Assembly-CSharp
         m_MethodName: Detach
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 5847293502031601957}
+        m_TargetAssemblyTypeName: NaniCore.Stencil.ModelHighligher, Assembly-CSharp
+        m_MethodName: Highlight
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

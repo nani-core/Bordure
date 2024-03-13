@@ -46,9 +46,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0b1f49cf0faacd47afb0c5ba87bfc06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  loopshape: {fileID: 9069698035221976526}
   overrideTarget: 1
   target: {fileID: 8002612743109384107}
   includeChildren: 1
+  maxDistance: 0
 --- !u!114 &9069698035221976526
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -77,6 +79,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+      - m_Target: {fileID: 7402542541705778992}
+        m_TargetAssemblyTypeName: NaniCore.Stencil.ModelHighligher, Assembly-CSharp
+        m_MethodName: Highlight
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
 --- !u!1 &3487588782582465966
 GameObject:
   m_ObjectHideFlags: 0
@@ -90,6 +104,7 @@ GameObject:
   - component: {fileID: 2677408757141721572}
   - component: {fileID: 4241877208328902148}
   - component: {fileID: 6863029755145322909}
+  - component: {fileID: 7402542541705778992}
   m_Layer: 0
   m_Name: Frame
   m_TagString: Untagged
@@ -211,6 +226,21 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 6
   m_CollisionDetection: 0
+--- !u!114 &7402542541705778992
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3487588782582465966}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3252e05ce982e1428962f17b570e27b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  color: {r: 1, g: 1, b: 1, a: 1}
+  duration: 1
+  templateMaterial: {fileID: 2100000, guid: ca55a3d54ee73ab41beea79c7ba6cab1, type: 2}
 --- !u!1 &4249343865177233629
 GameObject:
   m_ObjectHideFlags: 0

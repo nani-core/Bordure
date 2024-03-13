@@ -46,9 +46,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0b1f49cf0faacd47afb0c5ba87bfc06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  loopshape: {fileID: 1168554033187518002}
   overrideTarget: 1
   target: {fileID: 7808309271270958809}
   includeChildren: 1
+  maxDistance: 0
 --- !u!114 &1168554033187518002
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -68,6 +70,18 @@ MonoBehaviour:
       - m_Target: {fileID: 4471579020131763329}
         m_TargetAssemblyTypeName: NaniCore.Stencil.Detachable, Assembly-CSharp
         m_MethodName: Detach
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 913061598224144547}
+        m_TargetAssemblyTypeName: NaniCore.Stencil.ModelHighligher, Assembly-CSharp
+        m_MethodName: Highlight
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -200,6 +214,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4878498122401541581, guid: f1d35fe74de349945acd1257a5fbebe7, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5979082419089784074}
+    - targetCorrespondingSourceObject: {fileID: 4878498122401541581, guid: f1d35fe74de349945acd1257a5fbebe7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 913061598224144547}
     - targetCorrespondingSourceObject: {fileID: 7026343843153984662, guid: f1d35fe74de349945acd1257a5fbebe7, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5339008222435985163}
@@ -242,6 +259,21 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -5243098771569098612, guid: f1d35fe74de349945acd1257a5fbebe7, type: 3}
+--- !u!114 &913061598224144547
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5651403622973175682}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3252e05ce982e1428962f17b570e27b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  color: {r: 1, g: 1, b: 1, a: 1}
+  duration: 1
+  templateMaterial: {fileID: 2100000, guid: ca55a3d54ee73ab41beea79c7ba6cab1, type: 2}
 --- !u!1 &7808309271270958809 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7026343843153984662, guid: f1d35fe74de349945acd1257a5fbebe7, type: 3}
