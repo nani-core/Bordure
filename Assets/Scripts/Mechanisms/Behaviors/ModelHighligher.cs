@@ -6,18 +6,19 @@ using NaughtyAttributes;
 namespace NaniCore.Stencil {
 	public class ModelHighligher : MonoBehaviour {
 		#region Serialized fields
-		public Color color = Color.white;
-		[Min(0)] public float duration = 1.0f;
-		[Label("Material")] public Material templateMaterial = null;
+		/// <summary>
+		/// Do we want to only highlight certain submeshes or not.
+		/// </summary>
+		public bool selectiveSubmesh = false;
+		/// <summary>
+		/// The indices of the submeshes to highlight.
+		/// Would not take effect if `selectiveSubmesh` is not set.
+		/// </summary>
+		[ShowIf("selectiveSubmesh")] public List<int> submeshIndices = new();
 		#endregion
 
 		#region Interfaces
 		public void Highlight() {
-			if(templateMaterial == null) {
-				Debug.LogWarning($"{this} has no material set.", this);
-				return;
-			}
-
 			InitializeHighlight();
 			workingCoroutine = StartCoroutine(HighlightCoroutine());
 		}
@@ -32,9 +33,9 @@ namespace NaniCore.Stencil {
 		#region Functions
 		private void InitializeHighlight() {
 			// Initialize working material.
-			workingMaterial = new Material(templateMaterial);
-			workingMaterial.SetColor("_UnlitColor", color);
-			workingMaterial.SetColor("_EmmisiveColor", color);
+			workingMaterial = new Material(GameManager.Instance.Settings.defaultHighlightMaterial);
+			workingMaterial.SetColor("_UnlitColor", GameManager.Instance.Settings.defaultHighlightColor);
+			workingMaterial.SetColor("_EmmisiveColor", GameManager.Instance.Settings.defaultHighlightColor);
 
 			foreach(var referenceRender in GetComponentsInChildren<MeshRenderer>()) {
 				if(!referenceRender.TryGetComponent<MeshFilter>(out var referenceFilter))
@@ -45,12 +46,26 @@ namespace NaniCore.Stencil {
 				phantom.transform.SetParent(referenceRender.transform, false);
 				phantom.AddComponent<MeshFilter>().sharedMesh = referenceFilter.sharedMesh;
 				var renderer = phantom.AddComponent<MeshRenderer>();
-				renderer.sharedMaterial = workingMaterial;
 				workingRenderers.Add(renderer);
+
+				// Apply the material.
+				// There might be multiple submeshes, so we assign by array here.
+				int subMeshCount = referenceFilter.sharedMesh.subMeshCount;
+				var matArr = new Material[subMeshCount];
+				for(int i = 0; i < subMeshCount; ++i) {
+					Material chosenMat = workingMaterial;
+					if(selectiveSubmesh) {
+						if(submeshIndices.Contains(i))
+							chosenMat = GameManager.Instance.Settings.highlightOffMaterial;
+					}
+					matArr[i] = chosenMat;
+				}
+				renderer.sharedMaterials = matArr;
 			}
 		}
 
 		private IEnumerator HighlightCoroutine() {
+			float duration = GameManager.Instance.Settings.defaultHighlightDuration;
 			for(float startTime = Time.time, now; (now = Time.time) - startTime < duration;) {
 				float t = (now - startTime) / duration;
 				SetProgress(t);
@@ -78,11 +93,11 @@ namespace NaniCore.Stencil {
 		private void SetProgress(float t) {
 			float a = 1 - t;
 
-			float fullIntensity = templateMaterial.GetFloat("_EmissiveIntensity");
+			float fullIntensity = GameManager.Instance.Settings.defaultHighlightMaterial.GetFloat("_EmissiveIntensity");
 			float _intensity = fullIntensity * Mathf.Exp(10 * Mathf.Log(a));
 			workingMaterial.SetFloat("_EmissiveIntensity", _intensity);
 
-			Color _color = color;
+			Color _color = GameManager.Instance.Settings.defaultHighlightColor;
 			_color.a = a;
 			workingMaterial.SetColor("_UnlitColor", _color);
 		}

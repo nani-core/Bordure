@@ -64,6 +64,10 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 0cf927e9fac8aec41bd402b7bd0ce5e2, type: 2}
+    - target: {fileID: -1660384031183063813, guid: 4cc06740a61838c48b3dde9df010402b, type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: 0cf927e9fac8aec41bd402b7bd0ce5e2, type: 2}
     - target: {fileID: -305091885687274788, guid: 4cc06740a61838c48b3dde9df010402b, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -101,6 +105,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -1807970279642858887, guid: 4cc06740a61838c48b3dde9df010402b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1563702441857150708}
+    - targetCorrespondingSourceObject: {fileID: -1807970279642858887, guid: 4cc06740a61838c48b3dde9df010402b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2787088499215002035}
   m_SourcePrefab: {fileID: 100100000, guid: 4cc06740a61838c48b3dde9df010402b, type: 3}
 --- !u!1 &715746628621212138 stripped
 GameObject:
@@ -167,7 +174,7 @@ HingeJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 0, y: 0, z: 1}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.38822746, y: -0.35901332, z: 0.5962188}
+  m_ConnectedAnchor: {x: -0.38822755, y: -0.35901344, z: 0.5962188}
   serializedVersion: 2
   m_UseSpring: 0
   m_Spring:
@@ -244,6 +251,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+      - m_Target: {fileID: 2787088499215002035}
+        m_TargetAssemblyTypeName: NaniCore.Stencil.ModelHighligher, Assembly-CSharp
+        m_MethodName: Highlight
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
 --- !u!1 &9155372224626569598 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -1807970279642858887, guid: 4cc06740a61838c48b3dde9df010402b, type: 3}
@@ -298,3 +317,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 14
   m_CollisionDetection: 0
+--- !u!114 &2787088499215002035
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9155372224626569598}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3252e05ce982e1428962f17b570e27b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  color: {r: 1, g: 1, b: 1, a: 1}
+  duration: 1
+  templateMaterial: {fileID: 2100000, guid: ca55a3d54ee73ab41beea79c7ba6cab1, type: 2}
+  selectiveSubmesh: 1
+  submeshIndices: 00000000
