@@ -29,51 +29,20 @@ namespace NaniCore.Stencil {
 		}
 		#endregion
 
-		#region Functions
-		private void OnEnabilityChanged() {
-			water.UpdateTargetHeight();
-			UpdateVisualState();
-		}
-
-		/// <summary>
-		/// Automatically sets whether the visual cue is active.
-		/// </summary>
-		protected abstract void UpdateVisualState();
-
-		/// <summary>
-		/// Update the visual cue.
-		/// </summary>
-		protected virtual void UpdateVisualFrame() {
-		}
-		#endregion
-
 		#region Message handlers
 		public virtual void OnWaterHeightChange(float previousHeight) {
-			UpdateVisualFrame();
 			if(IsSatisfied)
 				enabled = false;
 		}
 		#endregion
 
 		#region Life cycle
-		protected void Start() {
+		protected void OnEnable() {
 			water?.AddWaterlet(this);
-			enabled = false;
 		}
 
 		protected void OnDestroy() {
 			water?.RemoveWaterlet(this);
-		}
-
-		protected void OnEnable() {
-			if(IsSatisfied)
-				return;
-			water.OnWaterletEnabled(this);
-			OnEnabilityChanged();
-		}
-
-		protected void OnDisable() {
-			OnEnabilityChanged();
 		}
 		#endregion
 	}

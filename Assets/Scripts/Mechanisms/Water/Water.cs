@@ -17,7 +17,7 @@ namespace NaniCore.Stencil {
 		private Coroutine targetHeightCoroutine;
 		private readonly HashSet<Rigidbody> floatingBodies = new();
 		// Could be buggy.
-		private HashSet<Waterlet> waterlets = new();
+		private readonly HashSet<Waterlet> waterlets = new();
 		#endregion
 
 		#region Interfaces
@@ -39,6 +39,8 @@ namespace NaniCore.Stencil {
 			}
 		}
 
+		public float WorldHeight => transform.position.y + Height;
+
 		public float TargetHeight {
 			set {
 				if(targetHeightCoroutine != null)
@@ -52,6 +54,14 @@ namespace NaniCore.Stencil {
 
 		public IEnumerable<Waterlet> ActiveWaterlets {
 			get => waterlets.Where(waterlet => waterlet.enabled);
+		}
+
+		public bool HasAnyActiveWaterletsOtherThan(Waterlet than) {
+			foreach(var waterlet in ActiveWaterlets) {
+				if(waterlet != than)
+					return true;
+			}
+			return false;
 		}
 		#endregion
 
@@ -122,30 +132,11 @@ namespace NaniCore.Stencil {
 		}
 
 		public void AddWaterlet(Waterlet waterlet) {
-			if(waterlets == null)
-				waterlets = new HashSet<Waterlet>();
 			waterlets.Add(waterlet);
 		}
 
 		public void RemoveWaterlet(Waterlet waterlet) {
 			waterlets.Remove(waterlet);
-		}
-
-		public void UpdateTargetHeight() {
-			var activeWaterlets = ActiveWaterlets;
-			List<Waterlet> pumps = new List<Waterlet>(), dumps = new List<Waterlet>();
-			foreach(var waterlet in activeWaterlets) {
-				if(waterlet is WaterPump)
-					pumps.Add(waterlet);
-				if(waterlet is WaterDump)
-					dumps.Add(waterlet);
-			}
-			float height = Height;
-			foreach(var dump in dumps)
-				height = Mathf.Min(height, dump.Height);
-			foreach(var pump in pumps)
-				height = Mathf.Max(height, pump.Height);
-			TargetHeight = height;
 		}
 		#endregion
 
