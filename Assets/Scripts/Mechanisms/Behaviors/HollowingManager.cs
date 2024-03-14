@@ -94,9 +94,9 @@ namespace NaniCore.Stencil {
 			// Create the subtracting blasto frame object.
 			foreach(var (filter, resultFilter) in gameObject.OperateMesh(hollowShape, CSG.Operation.Subtract, epsilon, sectionMaterial)) {
 				filter.sharedMesh = resultFilter.sharedMesh;
-				filter.GetComponent<MeshCollider>().sharedMesh = resultFilter.sharedMesh;
+				filter.EnsureComponent<MeshCollider>().sharedMesh = resultFilter.sharedMesh;
 				List<Material> newMatList = new();
-				Renderer renderer = filter.GetComponent<Renderer>();
+				var renderer = filter.EnsureComponent<MeshRenderer>();
 				if(matPairs.ContainsKey(renderer) && false) {
 					// Use original mats.
 					// Can't do. UV has been altered by CSG.

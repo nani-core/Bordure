@@ -91,6 +91,10 @@ namespace NaniCore.Stencil {
 		protected void OnCollisionEnter(Collision _) {
 			Drop();
 		}
+
+		protected void OnDisable() {
+			Drop();
+		}
 		#endregion
 	}
 }

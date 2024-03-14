@@ -25,9 +25,11 @@ namespace NaniCore.Stencil {
 		public Vector3 defaultWaterEjectionVelocity = Vector3.forward;
 
 		[Header("Highlight")]
-		public Color defaultHighlightColor = Color.white;
-		[Min(0)] public float defaultHighlightDuration = 1.0f;
-		public Material defaultHighlightMaterial;
+		public Color highlightColor = Color.white;
+		[Min(0)] public float highlightDuration = 1.0f;
+		[Min(0)] public float highlightEmmisiveIntensity = 1.0f;
+		[Min(0)] public float lightEmmisiveIntensity = 1.0f;
+		public Material highlightMaterial;
 		public Material highlightOffMaterial;
 	}
 }

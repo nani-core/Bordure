@@ -25,7 +25,7 @@ namespace NaniCore.Stencil {
 		#endregion
 
 		#region Functions
-		protected override bool Validate() => validated;
+		protected override bool Validate() => isActiveAndEnabled && validated;
 
 		private bool ValidateByMask(RenderTexture gastroMask, RenderTexture wholeMask) {
 			wholeMask.InfectByValue(Color.clear, standardHeight * thickness, validationTolerance);
@@ -46,7 +46,7 @@ namespace NaniCore.Stencil {
 		}
 
 		private bool PerformValidation() {
-			if(!visible || gastro == null)
+			if(!visible || gastro == null || !isActiveAndEnabled || !gastro.activeInHierarchy)
 				return false;
 
 			// Rough, geometry-based invalidation.

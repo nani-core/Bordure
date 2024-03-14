@@ -17,7 +17,7 @@ namespace NaniCore.Stencil {
 				if(isValid == value)
 					return;
 				isValid = value;
-				ChangeValidatedState();
+				Loopshape.OnValidatorUpdate(this);
 			}
 		}
 
@@ -32,10 +32,6 @@ namespace NaniCore.Stencil {
 
 		#region Functions
 		protected abstract bool Validate();
-
-		private void ChangeValidatedState() {
-			Loopshape.OnValidatorUpdate(this);
-		}
 		#endregion
 
 		#region Life cycle
@@ -50,7 +46,7 @@ namespace NaniCore.Stencil {
 		#endif
 
 		protected void Start() {
-			ChangeValidatedState();
+			Loopshape.RegisterValidator(this);
 		}
 
 		protected void Update() {

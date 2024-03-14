@@ -18,11 +18,15 @@ namespace NaniCore.Stencil {
 		}
 		
 		protected override bool Validate() {
+			if(!isActiveAndEnabled)
+				return false;
+
+			// This kind of validator *is* validated when the player is only
+			// focusing on but not acutally grabbing the target object.
 			if(!Grabbable.IsGrabbed)
 				return base.Validate();
-			else {
+			else
 				return false;
-			}
 		}
 
 		private bool IsGrabbingOccluded() {
