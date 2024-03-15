@@ -331,7 +331,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d6e294ff361bcd44898b5e77c7933ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  oneTime: 0
+  oneTime: 1
   onOpen:
     m_PersistentCalls:
       m_Calls:
@@ -347,6 +347,12 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  onValidated:
+    m_PersistentCalls:
+      m_Calls: []
+  onInvalidated:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &7540138708335276563
 GameObject:
   m_ObjectHideFlags: 0
