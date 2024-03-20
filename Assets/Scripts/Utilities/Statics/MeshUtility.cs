@@ -411,20 +411,26 @@ namespace NaniCore {
 		/// <remarks>
 		/// Not using CSG algorithms. Result may be ill-formed.
 		/// </remarks>
-		public static Mesh MergeGameObjectIntoMesh(this GameObject go) {
+		public static Mesh MergeGameObjectIntoMesh(this GameObject go, bool useProxyMeshFirst = true) {
 			if(go == null)
 				return null;
 
-			var appends = go.GetComponentsInChildren<MeshFilter>()
-				.Select(filter => {
-					Mesh mesh = filter.sharedMesh;
-					if(mesh == null)
-						return null;
-					mesh = Object.Instantiate(mesh);
-					var transform = filter.transform.RelativeTransform(go.transform);
-					mesh.ApplyTransform(transform);
-					return mesh;
-				});
+			List<Mesh> appends = new();
+			foreach(var meshFilter in go.GetComponentsInChildren<MeshFilter>()) {
+				Mesh mesh = null;
+				if(meshFilter.TryGetComponent<MeshCollider>(out var meshCollider))
+					mesh = meshCollider.sharedMesh;
+				if(mesh == null)
+					mesh = meshFilter.sharedMesh;
+				if(mesh == null)
+					return null;
+
+				mesh = Object.Instantiate(mesh);
+				appends.Add(mesh);
+
+				var transform = meshFilter.transform.RelativeTransform(go.transform);
+				mesh.ApplyTransform(transform);
+			}
 
 			Mesh result = new() {
 				name = $"{go.name} (merged)"
