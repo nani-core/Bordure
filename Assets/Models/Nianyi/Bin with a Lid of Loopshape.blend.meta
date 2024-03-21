@@ -1,11 +1,21 @@
 fileFormatVersion: 2
-guid: 2c5924c8eaef09b4289b43e14a1e3f1d
+guid: 83df4af64800ac349898e1ddc8bd409b
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Bin Body
+    second: {fileID: 2100000, guid: e361fb0d36063214da83e2e6341f3709, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Bin Lid
+    second: {fileID: 2100000, guid: e361fb0d36063214da83e2e6341f3709, type: 2}
   materials:
-    materialImportMode: 0
+    materialImportMode: 2
     materialName: 0
     materialSearch: 1
     materialLocation: 1
@@ -53,7 +63,7 @@ ModelImporter:
     keepQuads: 0
     weldVertices: 1
     bakeAxisConversion: 0
-    preserveHierarchy: 0
+    preserveHierarchy: 1
     skinWeightsMode: 0
     maxBonesPerVertex: 4
     minBoneWeight: 0.001
@@ -71,7 +81,7 @@ ModelImporter:
     strictVertexDataChecks: 0
   tangentSpace:
     normalSmoothAngle: 60
-    normalImportMode: 1
+    normalImportMode: 0
     tangentImportMode: 3
     normalCalculationMode: 4
     legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
@@ -101,7 +111,7 @@ ModelImporter:
   humanoidOversampling: 1
   avatarSetup: 0
   addHumanoidExtraRootOnlyWhenUsingAvatar: 1
-  importBlendShapeDeformPercent: 1
+  importBlendShapeDeformPercent: 0
   remapMaterialsIfMaterialImportModeIsNone: 0
   additionalBone: 0
   userData: 
