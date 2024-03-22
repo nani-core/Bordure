@@ -14,23 +14,6 @@ namespace NaniCore {
 			return t;
 		}
 
-		public static float InvertColorChannel(float f) {
-			int i = Mathf.FloorToInt(f * 256);
-			i ^= 0xff;
-			return (float)i / 256;
-		}
-
-		public static Color Invert(this Color c) {
-			c.r = InvertColorChannel(c.r);
-			c.g = InvertColorChannel(c.g);
-			c.b = InvertColorChannel(c.b);
-			return c;
-		}
-
-		public static bool IsSameHex(Color a, Color b) {
-			return Vector4.Distance(a, b) < 1f / 256;
-		}
-
 		public static Matrix4x4 RelativeTransform(Matrix4x4 from, Matrix4x4 to)
 			=> to.inverse * from;
 
@@ -90,6 +73,21 @@ namespace NaniCore {
 		public static Vector3 OrientationDeltaToAngularVelocity(Quaternion before, Quaternion after) {
 			(after * Quaternion.Inverse(before)).ToAngleAxis(out float angleDeg, out Vector3 axis);
 			return axis * (angleDeg * Mathf.Deg2Rad);
+		}
+
+		public static bool IsClear(this Color value) {
+			return Mathf.Max(value.a, value.maxColorComponent) < 1.0 / 256;
+		}
+
+		public static Rect MakeRect(params Vector2[] vectors) {
+			if(vectors.Length == 0)
+				return default;
+			Vector2 min = vectors[0], max = min;
+			for(int i = 0; i < vectors.Length; ++i) {
+				min = Vector2.Min(min, vectors[i]);
+				max = Vector2.Max(max, vectors[i]);
+			}
+			return new() { min = min, max = max };
 		}
 	}
 }
