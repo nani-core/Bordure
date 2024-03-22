@@ -52,9 +52,9 @@ namespace NaniCore.Stencil {
 			// Rough, geometry-based invalidation.
 
 			if(gastro != null) {
-				// Invalidate if not focusing on the gastro.
-				var protagonist = GameManager.Instance?.Protagonist;
-				if(protagonist == null || !protagonist.LookingAtObject.IsChildOf(gastro))
+				// Invalidate if not focusing on the gastro or the blasto (self).
+				var lookingAtObject = GameManager.Instance?.Protagonist?.LookingAtObject;
+				if(lookingAtObject == null || !(lookingAtObject.IsChildOf(gastro) || lookingAtObject.IsChildOf(gameObject)))
 					return false;
 			}
 
