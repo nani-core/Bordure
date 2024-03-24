@@ -134,8 +134,8 @@ MonoBehaviour:
           inWeight: 0
           outWeight: 0
         - serializedVersion: 3
-          time: 0.7740941
-          value: 0.90614897
+          time: 0.7662236
+          value: 0.9162562
           inSlope: 1.0495023
           outSlope: 1.0495023
           tangentMode: 0
@@ -395,20 +395,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   active: 1
   postExposure:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 0
   contrast:
     m_OverrideState: 1
-    m_Value: 66
+    m_Value: 59.5
   colorFilter:
     m_OverrideState: 0
     m_Value: {r: 1, g: 1, b: 1, a: 1}
   hueShift:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 0
   saturation:
-    m_OverrideState: 0
-    m_Value: 0
+    m_OverrideState: 1
+    m_Value: -5
 --- !u!114 &-4168850738167472915
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -433,7 +433,7 @@ MonoBehaviour:
     m_Value: 1
   fixedExposure:
     m_OverrideState: 1
-    m_Value: 13.844879
+    m_Value: 10.974775
   compensation:
     m_OverrideState: 1
     m_Value: 0
@@ -612,6 +612,7 @@ MonoBehaviour:
   - {fileID: -4582920828291923283}
   - {fileID: 8226624671603485698}
   - {fileID: -8124705591148576951}
+  - {fileID: 7608531224043923111}
 --- !u!114 &1462799797673370750
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -633,10 +634,10 @@ MonoBehaviour:
     m_Value: 0
   intensity:
     m_OverrideState: 1
-    m_Value: 0.575
+    m_Value: 0.467
   scatter:
     m_OverrideState: 1
-    m_Value: 0.139
+    m_Value: 0.239
   tint:
     m_OverrideState: 0
     m_Value: {r: 1, g: 1, b: 1, a: 1}
@@ -912,6 +913,31 @@ MonoBehaviour:
   screenFadeDistance:
     m_OverrideState: 1
     m_Value: 0.078
+--- !u!114 &7608531224043923111
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 598e2d32e2c7b0c418e030c3236d663a, type: 3}
+  m_Name: ChromaticAberration
+  m_EditorClassIdentifier: 
+  active: 1
+  quality:
+    m_OverrideState: 0
+    m_Value: 1
+  spectralLut:
+    m_OverrideState: 0
+    m_Value: {fileID: 0}
+  intensity:
+    m_OverrideState: 1
+    m_Value: 0.366
+  m_MaxSamples:
+    m_OverrideState: 0
+    m_Value: 6
 --- !u!114 &8226624671603485698
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -927,13 +953,13 @@ MonoBehaviour:
   active: 1
   lift:
     m_OverrideState: 1
-    m_Value: {x: 0.97879976, y: 0.96696264, z: 1, w: 0.018864838}
+    m_Value: {x: 1, y: 0.9774737, z: 0.95986867, w: 0.01647472}
   gamma:
     m_OverrideState: 1
-    m_Value: {x: 1, y: 0.9776744, z: 0.9146849, w: -0.05379943}
+    m_Value: {x: 1, y: 0.9776744, z: 0.9146849, w: -0.031833563}
   gain:
     m_OverrideState: 1
-    m_Value: {x: 0.99860704, y: 1, z: 0.9103419, w: -0.48266712}
+    m_Value: {x: 0.99860704, y: 1, z: 0.9103419, w: -0.27399078}
 --- !u!114 &8622545316168047911
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -1052,16 +1078,16 @@ MonoBehaviour:
     m_Value: 50
   meanFreePath:
     m_OverrideState: 1
-    m_Value: 50
+    m_Value: 25
   enableVolumetricFog:
     m_OverrideState: 1
     m_Value: 1
   albedo:
-    m_OverrideState: 0
-    m_Value: {r: 1, g: 1, b: 1, a: 1}
+    m_OverrideState: 1
+    m_Value: {r: 1, g: 0.5007745, b: 0.40566027, a: 1}
   globalLightProbeDimmer:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 0.627
   depthExtent:
     m_OverrideState: 1
     m_Value: 32
