@@ -142,8 +142,11 @@ namespace NaniCore.Stencil {
 				material = null;
 			}
 			if(renderers.Count > 0) {
-				foreach(var renderer in renderers)
+				foreach(var renderer in renderers) {
+					if(renderer == null)
+						continue;
 					Destroy(renderer.gameObject);
+				}
 				renderers.Clear();
 			}
 		}
