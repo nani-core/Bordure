@@ -70,6 +70,13 @@ namespace NaniCore {
 				return Vector2Int.zero;
 			return new Vector2Int(texture.width, texture.height);
 		}
+		public static void Resize(this RenderTexture texture, Vector2Int size) {
+			var resampled = texture.Resample(size);
+			texture.width = size.x;
+			texture.height = size.y;
+			Graphics.Blit(resampled, texture);
+			resampled.Destroy();
+		}
 
 		public static RenderTexture Duplicate(this RenderTexture texture) {
 			if(texture == null)
@@ -265,6 +272,11 @@ namespace NaniCore {
 		}
 		public static void InfectByValue(this RenderTexture texture, Color value, float radius, float tolerance = 1f)
 			=> InfectByValue(texture, value, Vector2.one * radius, tolerance);
+
+		public static void DenoiseMask(this RenderTexture texture, float radius = 2f) {
+			texture.InfectByValue(Color.white, radius);
+			texture.InfectByValue(Color.clear, radius);
+		}
 
 		public static bool HasValue(this RenderTexture texture, Color value, int stepRadius = 4, float tolerance = 1f) {
 			if(texture == null)

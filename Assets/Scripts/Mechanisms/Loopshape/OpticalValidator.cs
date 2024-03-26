@@ -69,7 +69,9 @@ namespace NaniCore.Bordure {
 				blastoMask = RenderUtility.CreateRT(validationSize),
 				gastroMask = RenderUtility.CreateRT(validationSize);
 			blastoMask.RenderMask(gameObject, GameManager.Instance?.MainCamera);
+			blastoMask.DenoiseMask();
 			gastroMask.RenderMask(gastro, GameManager.Instance?.MainCamera);
+			gastroMask.InfectByValue(Color.white, 2);
 
 			float bordureWidth;
 			{
