@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace NaniCore.Stencil {
+namespace NaniCore.Bordure {
 	public class WaterStream : MonoBehaviour {
 		#region Serialized field
 		[SerializeField] new MeshRenderer renderer;

@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEditor;
 
-namespace NaniCore.Stencil {
+namespace NaniCore.Bordure {
 	public partial class Elevator : MonoBehaviour {
 		#region Life cycle
 		protected void OnValidate() {

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace NaniCore.Stencil {
+namespace NaniCore.Bordure {
 	public class WaterPump : Waterlet {
 		#region Serialized fields
 		[SerializeField] private WaterStream waterStreamTemplate;

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace NaniCore.Stencil {
+namespace NaniCore.Bordure {
 	public partial class GameManager : MonoBehaviour {
 		#region Functions
 		private void OnCollisionEnterCallback(Collision collision) {

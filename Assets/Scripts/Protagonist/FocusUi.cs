@@ -4,7 +4,7 @@ using System.Collections;
 using UnityEngine.UI;
 using static UnityEditor.Experimental.GraphView.Port;
 
-namespace NaniCore.Stencil {
+namespace NaniCore.Bordure {
 	public class FocusUi : MonoBehaviour {
 		#region Serialized fields
 		[SerializeField] private Image image;

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace NaniCore.Stencil {
+namespace NaniCore.Bordure {
 	[CreateAssetMenu(menuName = "Nani Core/Water Profile")]
 	public class WaterProfile : ScriptableObject {
 		[SerializeField][Min(0)] public float density;

@@ -1,7 +1,7 @@
 #if UNITY_EDITOR
 using UnityEngine;
 
-namespace NaniCore.Stencil {
+namespace NaniCore.Bordure {
 	public partial class Water : MonoBehaviour {
 		#region Life cycle
 		protected void OnValidate() {

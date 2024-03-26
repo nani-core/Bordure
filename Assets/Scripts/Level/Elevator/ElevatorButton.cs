@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace NaniCore.Stencil {
+namespace NaniCore.Bordure {
 	public class ElevatorButton : MonoBehaviour {
 		#region Serialized fields
 		[SerializeField] private Loopshape loopshape;

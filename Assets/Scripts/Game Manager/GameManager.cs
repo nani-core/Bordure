@@ -1,7 +1,7 @@
 using UnityEngine;
 using NaughtyAttributes;
 
-namespace NaniCore.Stencil {
+namespace NaniCore.Bordure {
 	[ExecuteInEditMode]
 	public partial class GameManager : MonoBehaviour {
 		#region Serialized fields

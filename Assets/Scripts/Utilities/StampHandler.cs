@@ -1,7 +1,7 @@
 using UnityEngine;
 using System;
 
-namespace NaniCore.Stencil {
+namespace NaniCore.Bordure {
 	/// <summary>
 	/// This is a auxiliary agent class that helps to manage the life cycle
 	/// of a stamped gameobject.

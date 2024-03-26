@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace NaniCore.Stencil {
+namespace NaniCore.Bordure {
 	public abstract class LoopshapeValidator : MonoBehaviour {
 		#region Serialized fields
 		[SerializeField] private Loopshape loopshape;

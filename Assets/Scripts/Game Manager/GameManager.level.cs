@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-namespace NaniCore.Stencil {
+namespace NaniCore.Bordure {
 	public partial class GameManager : MonoBehaviour {
 		#region Fields
 		private readonly Dictionary<string, Level> loadedLevels = new();

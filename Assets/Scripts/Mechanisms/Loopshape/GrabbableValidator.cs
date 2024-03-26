@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace NaniCore.Stencil {
+namespace NaniCore.Bordure {
 	[RequireComponent(typeof(Grabbable))]
 	public class GrabbableValidator : FocusValidator {
 		#region Fields

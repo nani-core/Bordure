@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace NaniCore.Stencil {
+namespace NaniCore.Bordure {
 	public class WaterDump : Waterlet {
 		#region Serialized fields
 		[SerializeField] private Renderer swirl;

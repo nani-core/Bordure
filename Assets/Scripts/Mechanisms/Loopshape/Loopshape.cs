@@ -3,7 +3,7 @@ using UnityEngine.Events;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace NaniCore.Stencil {
+namespace NaniCore.Bordure {
 	public class Loopshape : MonoBehaviour {
 		#region Serialized fields
 		public bool oneTime;

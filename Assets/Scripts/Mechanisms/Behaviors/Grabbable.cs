@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace NaniCore.Stencil {
+namespace NaniCore.Bordure {
 	[RequireComponent(typeof(Collider))]
 	public class Grabbable : MonoBehaviour {
 		#region Serialized fields

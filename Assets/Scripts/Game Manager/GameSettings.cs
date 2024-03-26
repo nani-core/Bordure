@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace NaniCore.Stencil {
+namespace NaniCore.Bordure {
 	[CreateAssetMenu(menuName = "Nani Core/Game Settings")]
 	public class GameSettings : ScriptableObject {
 		[Header("Protagonist")]

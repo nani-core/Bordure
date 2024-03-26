@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace NaniCore.Stencil {
+namespace NaniCore.Bordure {
 	public abstract class Waterlet : MonoBehaviour {
 		#region Serialized fields
 		[SerializeField] protected Water water;

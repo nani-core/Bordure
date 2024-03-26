@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace NaniCore.Stencil {
+namespace NaniCore.Bordure {
 	public class OpticalValidator : LoopshapeValidator {
 		#region Constants
 		/// <summary>

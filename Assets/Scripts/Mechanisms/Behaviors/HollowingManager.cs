@@ -3,7 +3,7 @@ using MeshMakerNamespace;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace NaniCore.Stencil {
+namespace NaniCore.Bordure {
 	public class HollowingManager : MonoBehaviour {
 		#region Serialized fields
 		[SerializeField] protected Material sectionMaterial;

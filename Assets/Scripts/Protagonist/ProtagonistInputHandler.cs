@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace NaniCore.Stencil {
+namespace NaniCore.Bordure {
 	[RequireComponent(typeof(Protagonist))]
 	public class ProtagonistInputHandler : MonoBehaviour {
 		#region Fields

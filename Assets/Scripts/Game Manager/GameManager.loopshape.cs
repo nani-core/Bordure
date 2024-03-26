@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace NaniCore.Stencil {
+namespace NaniCore.Bordure {
 	public partial class GameManager {
 		#region Fields
 		private readonly List<Loopshape> loopshapes = new();

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using NaughtyAttributes;
 
-namespace NaniCore.Stencil {
+namespace NaniCore.Bordure {
 	public class ModelHighlighter : MonoBehaviour {
 		#region Serialized fields
 		/// <summary>

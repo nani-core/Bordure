@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace NaniCore.Stencil {
+namespace NaniCore.Bordure {
 	public static class RigidbodyUtility {
 		public static bool IsDerivedFromTier(this RigidbodyTier self, RigidbodyTier parent) {
 			if((uint)self < (uint)parent)

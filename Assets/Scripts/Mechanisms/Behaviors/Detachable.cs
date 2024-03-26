@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using System.Collections.Generic;
 
-namespace NaniCore.Stencil {
+namespace NaniCore.Bordure {
 	[RequireComponent(typeof(Rigidbody))]
 	public partial class Detachable : MonoBehaviour {
 		#region Serialized fields
