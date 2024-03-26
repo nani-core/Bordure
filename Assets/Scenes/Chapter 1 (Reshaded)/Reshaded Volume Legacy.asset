@@ -1,66 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-8319634992050949883
-MonoBehaviour:
-  m_ObjectHideFlags: 3
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aaa3b8214f75b354e9ba2caadd022259, type: 3}
-  m_Name: DepthOfField
-  m_EditorClassIdentifier: 
-  active: 1
-  quality:
-    m_OverrideState: 1
-    m_Value: 2
-  focusMode:
-    m_OverrideState: 1
-    m_Value: 1
-  focusDistance:
-    m_OverrideState: 1
-    m_Value: 3
-  focusDistanceMode:
-    m_OverrideState: 1
-    m_Value: 0
-  nearFocusStart:
-    m_OverrideState: 0
-    m_Value: 0
-  nearFocusEnd:
-    m_OverrideState: 0
-    m_Value: 4
-  farFocusStart:
-    m_OverrideState: 0
-    m_Value: 10
-  farFocusEnd:
-    m_OverrideState: 0
-    m_Value: 20
-  m_NearSampleCount:
-    m_OverrideState: 1
-    m_Value: 8
-  m_NearMaxBlur:
-    m_OverrideState: 1
-    m_Value: 7
-  m_FarSampleCount:
-    m_OverrideState: 1
-    m_Value: 14
-  m_FarMaxBlur:
-    m_OverrideState: 1
-    m_Value: 13
-  m_Resolution:
-    m_OverrideState: 1
-    m_Value: 1
-  m_HighQualityFiltering:
-    m_OverrideState: 1
-    m_Value: 1
-  m_PhysicallyBased:
-    m_OverrideState: 1
-    m_Value: 0
-  m_LimitManualRangeNearBlur:
-    m_OverrideState: 1
-    m_Value: 0
 --- !u!114 &-7994790775548873805
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -689,7 +628,7 @@ MonoBehaviour:
     m_Value: 1
   fixedExposure:
     m_OverrideState: 1
-    m_Value: 11
+    m_Value: 11.073097
   compensation:
     m_OverrideState: 1
     m_Value: 0
@@ -916,14 +855,12 @@ MonoBehaviour:
   - {fileID: 5591730262128132372}
   - {fileID: -3341774314920775984}
   - {fileID: -5159128420342791791}
-  - {fileID: 2593914770595633225}
   - {fileID: -3501891086000934285}
   - {fileID: 3419678963552559581}
   - {fileID: 1098977926253573687}
   - {fileID: -7922020983161014918}
   - {fileID: -1144792355188512958}
   - {fileID: -2171602525855549817}
-  - {fileID: -8319634992050949883}
 --- !u!114 &1098977926253573687
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -1005,31 +942,6 @@ MonoBehaviour:
   m_DenoiserRadius:
     m_OverrideState: 1
     m_Value: 0.5
---- !u!114 &2593914770595633225
-MonoBehaviour:
-  m_ObjectHideFlags: 3
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a6b00fcf518bb94a90b408492e07b44, type: 3}
-  m_Name: FilmGrain
-  m_EditorClassIdentifier: 
-  active: 1
-  type:
-    m_OverrideState: 1
-    m_Value: 2
-  intensity:
-    m_OverrideState: 1
-    m_Value: 1
-  response:
-    m_OverrideState: 0
-    m_Value: 0
-  texture:
-    m_OverrideState: 0
-    m_Value: {fileID: 0}
 --- !u!114 &3419678963552559581
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -1067,7 +979,7 @@ MonoBehaviour:
     m_Value: 0
   intensity:
     m_OverrideState: 1
-    m_Value: 0.575
+    m_Value: 0.406
   scatter:
     m_OverrideState: 1
     m_Value: 0.139
