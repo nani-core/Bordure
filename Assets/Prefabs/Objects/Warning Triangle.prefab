@@ -259,9 +259,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3252e05ce982e1428962f17b570e27b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  color: {r: 1, g: 1, b: 1, a: 1}
-  duration: 1
-  templateMaterial: {fileID: 2100000, guid: ca55a3d54ee73ab41beea79c7ba6cab1, type: 2}
+  selectiveSubmesh: 0
+  submeshIndices: 
 --- !u!1 &3955522368144167289
 GameObject:
   m_ObjectHideFlags: 0
@@ -327,8 +326,8 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 73c176f402d2c2f4d929aa5da7585d17, type: 2}
-  - {fileID: 2100000, guid: b7df7f297e7bffb409a56142beff7006, type: 2}
   - {fileID: 2100000, guid: 73c176f402d2c2f4d929aa5da7585d17, type: 2}
+  - {fileID: 2100000, guid: b7df7f297e7bffb409a56142beff7006, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -541,6 +540,12 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  onValidated:
+    m_PersistentCalls:
+      m_Calls: []
+  onInvalidated:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &8227094710535249237
 GameObject:
   m_ObjectHideFlags: 0
