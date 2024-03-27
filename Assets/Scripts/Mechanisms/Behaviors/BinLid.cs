@@ -4,49 +4,26 @@ namespace NaniCore.Bordure {
 	[RequireComponent(typeof(FocusValidator))]
 	public class BinLid : MonoBehaviour {
 		#region Fields
-		private FocusValidator validator;
-		private Coroutine rollingCoroutine;
+		[SerializeField] private FocusValidator validator;
+		[SerializeField] private Animator animator;
+		
+		private bool isRolling = false;
 		#endregion
 
 		#region Interfaces
-		private FocusValidator Validator {
-			get {
-				if(validator == null)
-					validator = GetComponent<FocusValidator>();
-				return validator;
-			}
-		}
-
-		public void Roll() {
-			if(rollingCoroutine != null) {
+		public void StartRolling() {
+			if(isRolling) {
 				Debug.LogWarning($"{this} is already rolling. Cancelling new rolling request.");
 				return;
 			}
-			rollingCoroutine = StartCoroutine(RollingCoroutine());
-		}
-		#endregion
-
-		#region Functions
-		private System.Collections.IEnumerator RollingCoroutine() {
-			// TODO: dummy
-			Validator.enabled = false;
-			Quaternion startOrientation = transform.rotation;
-			float duration = 1f;
-			for(float startTime = Time.time, t; (t = (Time.time - startTime) / duration) < 1;) {
-				SetRollingProgress(startOrientation, t);
-				yield return new WaitForFixedUpdate();
-			}
-			SetRollingProgress(startOrientation, 1f);
-			Validator.enabled = true;
-			rollingCoroutine = null;
+			animator.Play("Rolling");
+			validator.enabled = false;
+			isRolling = true;
 		}
 
-		private void SetRollingProgress(Quaternion startOrientation, float t) {
-			Quaternion rotation = default;
-			if(t != 1) {
-				rotation = Quaternion.Euler(Vector3.right * (360f * t));
-			}
-			transform.rotation = startOrientation * rotation;
+		public void EndRolling() {
+			validator.enabled = true;
+			isRolling = false;
 		}
 		#endregion
 	}
