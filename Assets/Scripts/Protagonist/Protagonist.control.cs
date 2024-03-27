@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace NaniCore.Stencil {
+namespace NaniCore.Bordure {
 	[RequireComponent(typeof(RigidbodyAgent))]
 	public partial class Protagonist : MonoBehaviour {
 		#region Serialized fields

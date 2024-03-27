@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-namespace NaniCore.Stencil {
+namespace NaniCore.Bordure {
 	public partial class Protagonist : MonoBehaviour {
 		#region Serialized fields
 		[SerializeField] private FocusUi focus;

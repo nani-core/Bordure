@@ -3,7 +3,7 @@ using UnityEngine.Events;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace NaniCore.Stencil {
+namespace NaniCore.Bordure {
 	[RequireComponent(typeof(Collider))]
 	public class PressurePlate : MonoBehaviour {
 		#region Serialized fields

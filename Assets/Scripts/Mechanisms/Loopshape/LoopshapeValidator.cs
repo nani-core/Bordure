@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace NaniCore.Stencil {
+namespace NaniCore.Bordure {
 	public abstract class LoopshapeValidator : MonoBehaviour {
 		#region Serialized fields
 		[SerializeField] private Loopshape loopshape;
@@ -12,12 +12,12 @@ namespace NaniCore.Stencil {
 
 		#region Interfaces
 		public bool IsValid {
-			get => isValid;
+			get => isValid && isActiveAndEnabled;
 			set {
 				if(isValid == value)
 					return;
 				isValid = value;
-				ChangeValidatedState();
+				Loopshape.OnValidatorUpdate(this);
 			}
 		}
 
@@ -32,10 +32,6 @@ namespace NaniCore.Stencil {
 
 		#region Functions
 		protected abstract bool Validate();
-
-		private void ChangeValidatedState() {
-			Loopshape.OnValidatorUpdate(this);
-		}
 		#endregion
 
 		#region Life cycle
@@ -50,7 +46,7 @@ namespace NaniCore.Stencil {
 		#endif
 
 		protected void Start() {
-			ChangeValidatedState();
+			Loopshape.RegisterValidator(this);
 		}
 
 		protected void Update() {
@@ -58,6 +54,10 @@ namespace NaniCore.Stencil {
 				IsValid = Validate();
 			else
 				IsValid = false;
+		}
+
+		protected void OnDestroy() {
+			IsValid = false;
 		}
 		#endregion
 	}

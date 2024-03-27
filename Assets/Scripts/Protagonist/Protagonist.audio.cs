@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace NaniCore.Stencil {
+namespace NaniCore.Bordure {
 	public partial class Protagonist : MonoBehaviour {
 		#region Fields
 		[SerializeField] private AudioListener audioListener;

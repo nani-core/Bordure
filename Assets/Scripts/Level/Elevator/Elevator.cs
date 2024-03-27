@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace NaniCore.Stencil {
+namespace NaniCore.Bordure {
 	public partial class Elevator : MonoBehaviour {
 		#region Serialized fields
 		[SerializeField] private Transform anchor;

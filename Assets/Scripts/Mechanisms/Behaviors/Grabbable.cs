@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace NaniCore.Stencil {
+namespace NaniCore.Bordure {
 	[RequireComponent(typeof(Collider))]
 	public class Grabbable : MonoBehaviour {
 		#region Serialized fields
@@ -18,7 +18,7 @@ namespace NaniCore.Stencil {
 		#endregion
 
 		#region Interfaces
-		public bool IsGrabbed => GameManager.Instance.Protagonist.GrabbingObject == transform;
+		public bool IsGrabbed => GameManager.Instance?.Protagonist?.GrabbingObject == transform;
 
 		public void Grab() {
 			GameManager.Instance.Protagonist.GrabbingObject = transform;
@@ -89,6 +89,10 @@ namespace NaniCore.Stencil {
 		}
 
 		protected void OnCollisionEnter(Collision _) {
+			Drop();
+		}
+
+		protected void OnDisable() {
 			Drop();
 		}
 		#endregion

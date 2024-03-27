@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace NaniCore.Stencil {
+namespace NaniCore.Bordure {
 	public class Level : MonoBehaviour {
 		#region Serialized fields
 		[SerializeField] private SpawnPoint spawnPoint;

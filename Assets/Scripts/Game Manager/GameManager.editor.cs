@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEditor;
 
-namespace NaniCore.Stencil {
+namespace NaniCore.Bordure {
 	public partial class GameManager : MonoBehaviour {
 		#region Life cycle
 		protected void OnEditUpdate() {

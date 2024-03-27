@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-namespace NaniCore.Stencil {
+namespace NaniCore.Bordure {
 	[CreateAssetMenu(menuName = "Nani Core/Protagonist Profile")]
 	public class ProtagonistProfile : ScriptableObject {
 		[Header("Geometry")]

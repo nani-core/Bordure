@@ -1,7 +1,7 @@
 using UnityEngine;
 using System;
 
-namespace NaniCore.Stencil {
+namespace NaniCore.Bordure {
 	/// <summary>
 	/// This is a auxiliary agent class that helps to manage the life cycle
 	/// of a stamped gameobject.
@@ -117,9 +117,12 @@ namespace NaniCore.Stencil {
 
 			target.AlignUvToViewportPosition(camera);
 
-			var handler = target.EnsureComponent<StampHandler>();
-			handler.Initialize();
-			handler.SetStampingTexture(camera.Capture());
+			var stampingTexture = camera.Capture();
+			foreach(var renderer in target.GetComponentsInChildren<MeshRenderer>()) {
+				var handler = renderer.EnsureComponent<StampHandler>();
+				handler.Initialize();
+				handler.SetStampingTexture(stampingTexture);
+			}
 		}
 		#endregion
 

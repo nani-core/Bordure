@@ -1,7 +1,7 @@
 using UnityEngine;
 using NaughtyAttributes;
 
-namespace NaniCore.Stencil {
+namespace NaniCore.Bordure {
 	public class FocusValidator : LoopshapeValidator {
 		#region Serialized fields
 		[SerializeField] private bool overrideTarget;

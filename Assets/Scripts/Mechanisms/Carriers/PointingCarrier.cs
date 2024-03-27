@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-namespace NaniCore.Stencil {
+namespace NaniCore.Bordure {
 	public partial class PointingCarrier : Carrier {
 		#region Serialized fields
 		[Tooltip("Radians per second.")]

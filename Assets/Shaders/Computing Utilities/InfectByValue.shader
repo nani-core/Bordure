@@ -4,6 +4,7 @@ Shader "NaniCore/InfectByValue" {
 		_Size ("Size", Vector) = (1920, 1080, 0, 1)
 		_Value ("Value", Color) = (0, 0, 0, 1)
 		_Radius ("Radius", Vector) = (1, 1, 0, 1)
+		_Tolerance ("Tolerance", float) = 1
 	}
 	SubShader {
 		Pass {

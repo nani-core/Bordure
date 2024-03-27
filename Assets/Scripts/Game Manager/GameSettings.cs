@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace NaniCore.Stencil {
+namespace NaniCore.Bordure {
 	[CreateAssetMenu(menuName = "Nani Core/Game Settings")]
 	public class GameSettings : ScriptableObject {
 		[Header("Protagonist")]
@@ -19,5 +19,17 @@ namespace NaniCore.Stencil {
 		public AudioClip collisionSound;
 		public AudioClip enterWaterSound;
 		public AudioClip exitWaterSound;
+
+		[Header("Water")]
+		public Material waterStreamMaterial;
+		public Vector3 defaultWaterEjectionVelocity = Vector3.forward;
+
+		[Header("Highlight")]
+		public Color highlightColor = Color.white;
+		[Min(0)] public float highlightDuration = 1.0f;
+		[Min(0)] public float highlightEmmisiveIntensity = 1.0f;
+		[Min(0)] public float lightEmmisiveIntensity = 1.0f;
+		public Material highlightMaterial;
+		public Material highlightOffMaterial;
 	}
 }

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace NaniCore.Stencil {
+namespace NaniCore.Bordure {
 	public partial class GameManager : MonoBehaviour {
 		#region Serialized fields
 		[SerializeField] private UnityEngine.UI.RawImage debugLayer;

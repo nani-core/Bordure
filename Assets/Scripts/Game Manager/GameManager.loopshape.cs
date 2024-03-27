@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace NaniCore.Stencil {
+namespace NaniCore.Bordure {
 	public partial class GameManager {
 		#region Fields
 		private readonly List<Loopshape> loopshapes = new();
@@ -9,6 +9,9 @@ namespace NaniCore.Stencil {
 		#endregion
 
 		#region Interfaces
+		/// <summary>
+		/// Loopshapes that are currently enabled.
+		/// </summary>
 		public Loopshape[] Loopshapes => loopshapes.Where(loopshape => loopshape.isActiveAndEnabled).ToArray();
 		public Loopshape[] ValidLoopshapes => validLoopshapes;
 		public bool HasValidLoopshapes => validLoopshapes != null && validLoopshapes?.Length > 0;
