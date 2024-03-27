@@ -32,7 +32,6 @@ namespace NaniCore.Bordure {
 		#region Function
 		private bool DetermineRollingDirection() {
 			var point = transform.worldToLocalMatrix.MultiplyPoint(GameManager.Instance.Protagonist.LookingPosition);
-			Debug.Log(point);
 			return point.y < 0;
 		}
 		#endregion
