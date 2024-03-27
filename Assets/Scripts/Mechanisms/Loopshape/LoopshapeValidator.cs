@@ -12,7 +12,7 @@ namespace NaniCore.Bordure {
 
 		#region Interfaces
 		public bool IsValid {
-			get => isValid;
+			get => isValid && isActiveAndEnabled;
 			set {
 				if(isValid == value)
 					return;
@@ -54,6 +54,10 @@ namespace NaniCore.Bordure {
 				IsValid = Validate();
 			else
 				IsValid = false;
+		}
+
+		protected void OnDestroy() {
+			IsValid = false;
 		}
 		#endregion
 	}

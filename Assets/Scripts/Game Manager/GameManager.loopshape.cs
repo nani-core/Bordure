@@ -9,6 +9,9 @@ namespace NaniCore.Bordure {
 		#endregion
 
 		#region Interfaces
+		/// <summary>
+		/// Loopshapes that are currently enabled.
+		/// </summary>
 		public Loopshape[] Loopshapes => loopshapes.Where(loopshape => loopshape.isActiveAndEnabled).ToArray();
 		public Loopshape[] ValidLoopshapes => validLoopshapes;
 		public bool HasValidLoopshapes => validLoopshapes != null && validLoopshapes?.Length > 0;
