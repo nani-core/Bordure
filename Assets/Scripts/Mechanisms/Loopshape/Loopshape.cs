@@ -23,7 +23,7 @@ namespace NaniCore.Bordure {
 		public IEnumerable<LoopshapeValidator> ValidValidators => validators.Where(validator => validator.IsValid);
 
 		public void Open() {
-			Debug.Log($"{this} is opened.", this);
+			Debug.Log($"{name} is opened.", this);
 			onOpen?.Invoke();
 
 			if(oneTime)

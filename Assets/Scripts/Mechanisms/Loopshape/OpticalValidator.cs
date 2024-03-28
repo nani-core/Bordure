@@ -1,4 +1,5 @@
 using NaughtyAttributes;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -6,23 +7,6 @@ using UnityEngine;
 namespace NaniCore.Bordure {
 	public class OpticalValidator : LoopshapeValidator {
 		#region Constants
-		/// <summary>
-		/// The standard height of the RT on which the validation algorithm will be performed.
-		/// </summary>
-		/// <remarks>
-		/// The higher this value is, the more accurate the validation algorithm's result will be;
-		/// at the meantime the performance cost will be higher.
-		/// </remarks>
-		const int standardHeight = 216;
-		// The standard thickness of the bordure, measured in portion.
-		const float thickness = 1.0f / 6.0f;
-		/// <summary>
-		/// In the last step of the validation algorithm, how much remaining areas are allowed.
-		/// </summary>
-		/// <remarks>
-		/// Measured in the portion of the bordure width.
-		/// </remarks>
-		const float thicknessTolerance = 0.3f;
 		// Debug colors.
 		private readonly
 			Color blastoColor = Color.red,
@@ -43,49 +27,72 @@ namespace NaniCore.Bordure {
 		private bool validated = false;
 		private bool visible = false;
 		private IEnumerable<Renderer> childRenderers;
+		private Coroutine validatingCoroutine;
 		#endregion
 
 		#region Functions
+		protected static GameSettings GameSettings => GameManager.Instance?.Settings;
+
 		protected override bool Validate() => isActiveAndEnabled && validated;
 
-		private bool PerformValidation() {
-			if(!visible || gastro == null || !isActiveAndEnabled || !gastro.activeInHierarchy)
-				return false;
+		private IEnumerator PerformValidationCoroutine(System.Action<bool> continuation) {
+			if(!visible || gastro == null || !isActiveAndEnabled || !gastro.activeInHierarchy) {
+				continuation(false);
+				yield break;
+			}
 
 			// Rough, geometry-based invalidation.
 
 			if(gastro != null) {
 				// Invalidate if not focusing on the gastro or the blasto (self).
 				var lookingAtObject = GameManager.Instance?.Protagonist?.LookingAtObject;
-				if(lookingAtObject == null || !(lookingAtObject.IsChildOf(gastro) || lookingAtObject.IsChildOf(gameObject)))
-					return false;
+				if(lookingAtObject == null || !(lookingAtObject.IsChildOf(gastro) || lookingAtObject.IsChildOf(gameObject))) {
+					continuation(false);
+					yield break;
+				}
 			}
 
 			// Real optical validation.
-			Vector2Int validationSize = (new Vector2(Screen.width / Screen.height, 1) * standardHeight).Floor();
+			Vector2Int validationSize = (new Vector2(Screen.width / Screen.height, 1) * GameSettings.standardHeight).Floor();
 
 			// Render masks
+			Camera mainCamera = GameManager.Instance?.MainCamera;
+			if(mainCamera == null) {
+				continuation(false);
+				yield break;
+			}
 			RenderTexture
 				blastoMask = RenderUtility.CreateRT(validationSize),
 				gastroMask = RenderUtility.CreateRT(validationSize);
-			blastoMask.RenderMask(gameObject, GameManager.Instance?.MainCamera);
+			yield return WaitForMaskRenderingOpportunity();
+			blastoMask.RenderMask(gameObject, mainCamera);
 			blastoMask.DenoiseMask();
-			gastroMask.RenderMask(gastro, GameManager.Instance?.MainCamera);
+			yield return WaitForMaskRenderingOpportunity();
+			gastroMask.RenderMask(gastro, mainCamera);
 			gastroMask.InfectByValue(Color.white, 2);
+			yield return WaitForMaskRenderingOpportunity();
 
 			float bordureWidth;
 			{
 				Vector2Int loopshapeBound = Vector2.Scale(ViewportBoundOfGameObject(gameObject).size, blastoMask.Size()).Ceil();
 				int loopshapeSize = Mathf.Min(loopshapeBound.x, loopshapeBound.y);
-				loopshapeSize = Mathf.Min(loopshapeSize, standardHeight);
-				bordureWidth = loopshapeSize * thickness;
+				loopshapeSize = Mathf.Min(loopshapeSize, GameSettings.standardHeight);
+				bordureWidth = loopshapeSize * GameSettings.bordureThicknessRatio;
 			}
 			bool validated = ValidateByMask(blastoMask, gastroMask, bordureWidth);
 
 			blastoMask.Destroy();
 			gastroMask.Destroy();
 
-			return validated;
+			continuation(validated);
+		}
+
+		private static CustomYieldInstruction WaitForMaskRenderingOpportunity() {
+			float start = Time.time;
+			return new WaitUntil(() => {
+				float timePassed = Time.time - start;
+				return timePassed >= GameSettings.desiredOpticalValidationInterval;
+			});
 		}
 
 		private bool ValidateByMask(RenderTexture blastoMask, RenderTexture gastroMask, float bordureWidth) {
@@ -111,7 +118,7 @@ namespace NaniCore.Bordure {
 			validationMask.Difference(gastroMask);
 			// One last shrink.
 			// If the loopshape is good, there shall be no more non-clear pixels.
-			validationMask.InfectByValue(Color.clear, bordureWidth * thicknessTolerance);
+			validationMask.InfectByValue(Color.clear, bordureWidth * GameSettings.bordureThicknessTolerance);
 
 			var validation = !validationMask.HasValue(Color.white);
 
@@ -156,6 +163,17 @@ namespace NaniCore.Bordure {
 			});
 			return MathUtility.MakeRect(screenPoints.ToArray());
 		}
+
+		private void FinishValidation(bool result) {
+			if(result != validated) {
+				if(result)
+					Debug.Log($"{Loopshape.name} is validated.", Loopshape);
+				else
+					Debug.Log($"{Loopshape.name} is invalidated.", Loopshape);
+			}
+			validated = result;
+			validatingCoroutine = null;
+		}
 		#endregion
 
 		#region Life cycle
@@ -168,7 +186,9 @@ namespace NaniCore.Bordure {
 			base.Update();
 
 			visible = childRenderers.Any(r => r.isVisible);
-			validated = PerformValidation();
+			if(validatingCoroutine == null) {
+				validatingCoroutine = StartCoroutine(PerformValidationCoroutine(FinishValidation));
+			}
 		}
 		#endregion
 	}
