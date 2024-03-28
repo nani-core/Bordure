@@ -52,6 +52,7 @@ namespace NaniCore.Bordure {
 #endif
 			FinalizeDebugUi();
 			RenderUtility.ReleasePooledResources();
+			ReleaseAllTemporaryResources();
 		}
 		#endregion
 	}

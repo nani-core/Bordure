@@ -119,7 +119,9 @@ namespace NaniCore.Bordure {
 		protected void FixedUpdate() {
 			// Remove all invalidated targets.
 
-			var collidersToBeRemoved = colliderContacts.Keys.Where(collider => collider == null);
+			var collidersToBeRemoved = colliderContacts.Keys
+				.Where(collider => collider == null)
+				.ToArray();
 			foreach(var removee in collidersToBeRemoved)
 				colliderContacts.Remove(removee);
 
