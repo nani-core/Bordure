@@ -1,12 +1,12 @@
 using UnityEngine;
 using NaughtyAttributes;
 
-namespace NaniCore.Loopool {
+namespace NaniCore.Bordure {
 	[ExecuteInEditMode]
 	public partial class GameManager : MonoBehaviour {
 		#region Serialized fields
 		[SerializeField][Expandable] private GameSettings settings;
-		[SerializeField] private Transform spawnPoint;
+		[SerializeField] private Level startLevel;
 		#endregion
 
 		#region Interfaces
@@ -22,8 +22,16 @@ namespace NaniCore.Loopool {
 			if(!EnsureSingleton())
 				return;
 
+			Initialize();
+		}
+
+		protected void Initialize() {
+			InitializeConstants();
+			InitializeLevel();
+			InitializeRigidbody();
+			InitializeAudio();
 			protagonist = InitializeProtagonist();
-			StartDebugUi();
+			InitializeDebugUi();
 		}
 
 		protected void Update() {
@@ -33,6 +41,7 @@ namespace NaniCore.Loopool {
 				return;
 			}
 #endif
+			UpdateLoopShape();
 			UpdateDebugUi();
 		}
 
@@ -41,7 +50,7 @@ namespace NaniCore.Loopool {
 			if(!Application.isPlaying)
 				return;
 #endif
-			EndDebugUi();
+			FinalizeDebugUi();
 			RenderUtility.ReleasePooledResources();
 		}
 		#endregion

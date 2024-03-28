@@ -1,7 +1,7 @@
 using UnityEngine;
 using NaughtyAttributes;
 
-namespace NaniCore.Loopool {
+namespace NaniCore.Bordure {
 	[ExecuteInEditMode]
 	public partial class Protagonist : MonoBehaviour {
 		#region Serialized fields
@@ -29,25 +29,17 @@ namespace NaniCore.Loopool {
 
 		#region Functions
 		public void Cheat() {
-			if(Raycast(out RaycastHit hitInfo)) {
-				for(var target = hitInfo.transform; target != null; target = target.parent) {
+			if(LookingAtObject != null) {
+				for(var target = LookingAtObject.transform; target != null; target = target.parent) {
 					bool acted = false;
 					foreach(var component in target.GetComponents<Component>()) {
 						switch(component) {
-							case DtCarrier door:
-								door.ToggleOpeningState();
-								acted = true;
-								break;
 							case PressurePlate plate:
 								plate.Pressed = !plate.Pressed;
 								acted = true;
 								break;
-							case OpticalLoopShape opticalLoopShape:
-								opticalLoopShape.SendMessage("OnLoopShapeOpen", SendMessageOptions.DontRequireReceiver);
-								break;
-							case Interactable interactable:
-								interactable.SendMessage("OnInteract", SendMessageOptions.DontRequireReceiver);
-								acted = true;
+							case Loopshape loopshape:
+								loopshape.Open();
 								break;
 						}
 					}
@@ -71,9 +63,9 @@ namespace NaniCore.Loopool {
 				return;
 			}
 
-			StartControl();
-			StartInteraction();
-			StartAudio();
+			InitializeAudio();
+			InitializeControl();
+			InitializeInteraction();
 		}
 
 		protected void Update() {
@@ -83,6 +75,7 @@ namespace NaniCore.Loopool {
 				return;
 			}
 #endif
+			UpdateInteraction();
 		}
 
 #if UNITY_EDITOR
@@ -93,16 +86,6 @@ namespace NaniCore.Loopool {
 
 		protected void FixedUpdate() {
 			FixedUpdateControl();
-		}
-
-		protected void LateUpdate() {
-#if UNITY_EDITOR
-			if(!Application.isPlaying) {
-				return;
-			}
-#endif
-			LateUpdateControl();
-			LateUpdateInteraction();
 		}
 		#endregion
 	}

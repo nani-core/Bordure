@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace NaniCore {
 	public static class RenderUtility {
-		private static Dictionary<string, Shader> shaderPool = new Dictionary<string, Shader>();
+		private static readonly Dictionary<string, Shader> shaderPool = new();
 		public static Shader GetPoolShader(string name) {
 			Shader shader = null;
 			if(shaderPool.ContainsKey(name))
@@ -15,17 +15,17 @@ namespace NaniCore {
 			return shader;
 		}
 
-		private static Dictionary<string, Material> materialPool = new Dictionary<string, Material>();
+		private static readonly Dictionary<string, Material> materialPool = new();
 		public static Material GetPooledMaterial(string shaderName) {
 			if(materialPool.ContainsKey(shaderName)) {
 				var pooledMat = materialPool[shaderName];
-				if(pooledMat != null && pooledMat.shader?.name == shaderName)
+				if(pooledMat != null && pooledMat.shader != null && pooledMat.shader.name == shaderName)
 					return pooledMat;
 			}
 			Shader shader = GetPoolShader(shaderName);
 			if(shader == null)
 				return null;
-			Material mat = new Material(shader);
+			Material mat = new(shader);
 			materialPool.Add(shaderName, mat);
 			return mat;
 		}
@@ -55,14 +55,27 @@ namespace NaniCore {
 			return new Material(shader);
 		}
 
-		public static RenderTexture CreateScreenSizedRT(RenderTextureFormat format = RenderTextureFormat.ARGBFloat) {
-			return RenderTexture.GetTemporary(Screen.width, Screen.height, 0, format);
+		public static RenderTexture CreateRT(int width, int height, RenderTextureFormat format = RenderTextureFormat.ARGBFloat) {
+			var texture = RenderTexture.GetTemporary(width, height, 0, format);
+			texture.Clear();
+			return texture;
 		}
+		public static RenderTexture CreateRT(Vector2Int size, RenderTextureFormat format = RenderTextureFormat.ARGBFloat)
+			=> CreateRT(size.x, size.y, format);
+		public static RenderTexture CreateScreenSizedRT(RenderTextureFormat format = RenderTextureFormat.ARGBFloat)
+			=> CreateRT(Screen.width, Screen.height);
 
 		public static Vector2Int Size(this RenderTexture texture) {
 			if(texture == null)
 				return Vector2Int.zero;
 			return new Vector2Int(texture.width, texture.height);
+		}
+		public static void Resize(this RenderTexture texture, Vector2Int size) {
+			var resampled = texture.Resample(size);
+			texture.width = size.x;
+			texture.height = size.y;
+			Graphics.Blit(resampled, texture);
+			resampled.Destroy();
 		}
 
 		public static RenderTexture Duplicate(this RenderTexture texture) {
@@ -104,6 +117,7 @@ namespace NaniCore {
 			mat.SetColor("_Value", value);
 			texture.Apply(mat);
 		}
+		public static void Clear(this RenderTexture texture) => texture.SetValue(Color.clear);
 
 		public static void RenderObject(this RenderTexture texture, GameObject gameObject, Camera camera, Material material = null, bool disregardDepth = false) {
 			if(texture == null)
@@ -211,7 +225,7 @@ namespace NaniCore {
 
 		/// <remarks>Remember to destroy the Texture2D after use.</remarks>
 		public static Texture2D CreateTexture2D(this RenderTexture texture) {
-			Texture2D t2d = new Texture2D(texture.width, texture.height);
+			Texture2D t2d = new(texture.width, texture.height);
 			RenderTexture.active = texture;
 			t2d.ReadPixels(new Rect(0, 0, texture.width, texture.height), 0, 0);
 			return t2d;
@@ -221,10 +235,10 @@ namespace NaniCore {
 			value = default;
 			if(texture == null)
 				return false;
-			Rect bounds = new Rect(Vector2.zero, texture.Size());
+			Rect bounds = new(Vector2.zero, texture.Size());
 			if(!bounds.Contains(position))
 				return false;
-			Texture2D t2d = new Texture2D(1, 1);
+			Texture2D t2d = new(1, 1);
 			RenderTexture.active = texture;
 			t2d.ReadPixels(new Rect(position.x, position.y, 1, 1), 0, 0);
 			value = t2d.GetPixel(0, 0);
@@ -259,22 +273,26 @@ namespace NaniCore {
 		public static void InfectByValue(this RenderTexture texture, Color value, float radius, float tolerance = 1f)
 			=> InfectByValue(texture, value, Vector2.one * radius, tolerance);
 
+		public static void DenoiseMask(this RenderTexture texture, float radius = 2f) {
+			texture.InfectByValue(Color.white, radius);
+			texture.InfectByValue(Color.clear, radius);
+		}
+
 		public static bool HasValue(this RenderTexture texture, Color value, int stepRadius = 4, float tolerance = 1f) {
 			if(texture == null)
 				return false;
 			stepRadius = Mathf.Max(stepRadius, 2);
 			RenderTexture a = texture.Duplicate(), b;
-			while(a.Size().magnitude > stepRadius * 1.414f) {
+			while(a.width > stepRadius || a.height > stepRadius) {
 				a.InfectByValue(value, stepRadius);
 				b = a.Resample(((Vector2)a.Size() / stepRadius).Ceil());
 				a.Destroy();
 				a = b;
 			}
 			a.InfectByValue(value, stepRadius);
-			a.ReadValueAt(new Vector2Int(0, 0), out Color oneValue);
+			a.ReadValueAt(new(0, 0), out Color oneValue);
 			a.Destroy();
-			float distance = Vector4.Distance(value, oneValue);
-			return distance < tolerance / 256;
+			return ((value - oneValue) / tolerance).IsClear();
 		}
 
 		private static bool ChunkTexture(RenderTexture texture, int chunkSize, out List<RectInt> chunks) {
@@ -332,8 +350,7 @@ namespace NaniCore {
 
 			var downsampleSize = (Vector2)texture.Size() * sampleRate;
 			var downsample = texture.Resample(new Vector2Int((int)downsampleSize.x, (int)downsampleSize.y));
-			Vector2Int downsampledPosition;
-			if(!FindAnyPositionOfValueNoDownSample(downsample, value, 1, out downsampledPosition)) {
+			if(!FindAnyPositionOfValueNoDownSample(downsample, value, 1, out Vector2Int downsampledPosition)) {
 				downsample.Destroy();
 				return false;
 			}

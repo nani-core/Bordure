@@ -5,16 +5,23 @@ using System.Linq;
 namespace NaniCore {
 	public class MeshTile : ArchitectureGenerator {
 		#region Serialized fields
-		public GameObject tile;
+		public GameObject[] tiles = new GameObject[0];
 		public Vector3 i = Vector3.right, j = Vector3.up, k = Vector3.forward;
 		public Vector3Int count = Vector3Int.one;
 		public Vector3 uvw = Vector3.one * .5f;
 		public List<GameObject> hollowObjects = new List<GameObject>();
 		#endregion
 
+		#region Interfaces
+		public GameObject[] UsableTiles => tiles.Where(tile => tile != null).ToArray();
+		#endregion
+
 		#region Functions
+		protected override string GizmozRootName => "$MeshTileGizmosRoot";
+
 		protected override void Construct(Transform under, Instantiator instantiator) {
-			if(tile == null)
+			var usableTiles = UsableTiles;
+			if(usableTiles.Length <= 0)
 				return;
 			if(under == null) {
 				Debug.LogWarning("Base transform is null.");
@@ -28,8 +35,12 @@ namespace NaniCore {
 						Vector3 worldPosition = under.localToWorldMatrix.MultiplyPoint(localPosition);
 						if(hollowObjects.Any(o => CheckIfPointIsIn(worldPosition, o)))
 							continue;
+
+						var index = HashUtility.Hash(seed, ix, iy, iz) % usableTiles.Length;
+						var tile = usableTiles[index];
 						var instance = instantiator(tile, under).transform;
 						instance.localPosition = localPosition;
+						instance.gameObject.isStatic = gameObject.isStatic;
 					}
 				}
 			}
@@ -67,9 +78,5 @@ namespace NaniCore {
 			}
 		}
 		#endregion
-
-#if UNITY_EDITOR
-		protected override string GizmozRootName => "$MeshTileGizmosRoot";
-#endif
 	}
 }

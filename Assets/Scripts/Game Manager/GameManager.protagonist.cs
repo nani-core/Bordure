@@ -3,7 +3,7 @@ using System.Linq;
 using System.Reflection;
 using System.Collections.Generic;
 
-namespace NaniCore.Loopool {
+namespace NaniCore.Bordure {
 	public partial class GameManager : MonoBehaviour {
 		#region Fields
 		private Protagonist protagonist;
@@ -20,6 +20,10 @@ namespace NaniCore.Loopool {
 			}
 		}
 		public Camera MainCamera => Protagonist?.Camera;
+
+		public void DestroyProtagonist() {
+			FinalizeProtagonist();
+		}
 		#endregion
 
 		#region Functions
@@ -33,7 +37,7 @@ namespace NaniCore.Loopool {
 				}
 				existingProtagonists = runtime.ToList();
 			}
-			if(spawnPoint != null) {
+			if(startLevel != null) {
 				Protagonist target;
 
 				// Locate the target.
@@ -67,8 +71,9 @@ namespace NaniCore.Loopool {
 				// Assign the transform.
 				{
 					target.transform.SetParent(transform, true);
-					target.transform.position = spawnPoint.position;
-					target.transform.rotation = Quaternion.LookRotation(spawnPoint.forward);
+					SpawnPoint spawnPoint = startLevel.DebugSpawnPoint;
+					target.transform.position = spawnPoint.transform.position;
+					target.transform.rotation = Quaternion.LookRotation(spawnPoint.transform.forward);
 
 					target.gameObject.name = "Protagonist";
 					if(!Application.isPlaying)
@@ -92,13 +97,19 @@ namespace NaniCore.Loopool {
 			}
 			else {
 				if(existingProtagonists.Count > 0) {
-					Debug.LogWarning("Warning: No spawn point assigned, removing existing protagonists.");
+					Debug.LogWarning("Warning: No start level assigned, removing existing protagonists.");
 					foreach(var existing in existingProtagonists) {
 						DestroyImmediate(existing.gameObject);
 					}
 				}
 				return null;
 			}
+		}
+
+		private void FinalizeProtagonist() {
+			Destroy(Protagonist);
+			protagonist = null;
+			AudioListener = null;
 		}
 		#endregion
 	}

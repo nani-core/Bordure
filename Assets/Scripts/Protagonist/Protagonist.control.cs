@@ -1,7 +1,7 @@
 using UnityEngine;
-using System.Collections;
 
-namespace NaniCore.Loopool {
+namespace NaniCore.Bordure {
+	[RequireComponent(typeof(RigidbodyAgent))]
 	public partial class Protagonist : MonoBehaviour {
 		#region Serialized fields
 		[SerializeField] private new Camera camera;
@@ -12,13 +12,16 @@ namespace NaniCore.Loopool {
 		#region Fields
 		private CapsuleCollider capsuleCollider;
 		private new Rigidbody rigidbody;
+		private RigidbodyAgent rigidbodyAgent;
 		private bool isOnGround = false;
 		private bool hasJustMoved = false;
 		private bool isWalking = false;
 		private bool isSprinting = false;
-		private bool isJumping = false;
-		private Vector2 bufferedMovementDelta, bufferedMovementVelocity;
-		private Vector3 desiredMovementVelocity;
+		private bool isInWater = false;
+		/// <summary>The 2D movement input during this frame, in operation space.</summary>
+		private Vector3 bufferedMovement;
+		/// <summary>The target velocity due to movement, in world space.</summary>
+		private Vector3 desiredHorizontalMovement;
 		#endregion
 
 		#region Properties
@@ -26,16 +29,18 @@ namespace NaniCore.Loopool {
 		public Camera Camera => camera;
 		public Vector3 Upward => transform.up;
 
-		public bool IsOnGround => isOnGround;
-		public bool IsWalking => isWalking;
+		public Ray EyeRay => camera.ViewportPointToRay(new Vector2(.5f, .5f));
 
+		public bool IsInWater => isInWater;
+		public bool IsOnGround => isOnGround;
+		/// <summary>True when moving on ground.</summary>
+		public bool IsWalking => isWalking;
 		public bool IsSprinting {
 			get => isSprinting;
 			set => isSprinting = value;
 		}
-		public bool IsJumping => isJumping;
 
-		private float MovingSpeed => IsSprinting ? profile.sprintingSpeed : profile.walkingSpeed;
+		private float WalkingSpeed => IsSprinting ? Profile.sprintingSpeed : Profile.walkingSpeed;
 
 		/// <summary>
 		/// What direction is the protagonist looking at, in rad.
@@ -77,19 +82,25 @@ namespace NaniCore.Loopool {
 		#endregion
 
 		#region Life cycle
-		protected void StartControl() {
+		protected void InitializeControl() {
 			if(Profile == null)
 				return;
 
 			ApplyGeometry();
 
 			if(eye == null) {
-				eye = transform.Find("Eye") ?? new GameObject("Eye").transform;
-				eye.SetParent(transform, false);
+				eye = transform.Find("Eye");
+				if(eye == null)
+					eye = new GameObject("Eye").transform;
 			}
-			eye.localPosition = Vector3.up * (profile.height - profile.eyeHanging);
-			eye.localRotation = Quaternion.identity;
+			eye.SetParent(transform, false);
+			eye.SetLocalPositionAndRotation(
+				Vector3.up * (Profile.height - Profile.eyeHanging),
+				Quaternion.identity
+			);
 			eye.localScale = Vector3.one;
+
+			rigidbodyAgent = GetComponent<RigidbodyAgent>();
 		}
 
 #if UNITY_EDITOR
@@ -99,137 +110,148 @@ namespace NaniCore.Loopool {
 #endif
 
 		protected void FixedUpdateControl() {
-			ValidateGround();
-			UpdateDesiredMovementVelocity(Time.fixedDeltaTime);
-			ApplyBufferedMovement(Time.fixedDeltaTime);
-			UpdateWalkingState();
-		}
+			ValidateMovementConditions();
 
-		protected void LateUpdateControl() {
-			if(isJumping || desiredMovementVelocity.magnitude == 0f)
-				return;
+			if(!IsInWater) {
+				// Walking.
 
-			var originalPosition = rigidbody.position;
-			var offset = desiredMovementVelocity.normalized * profile.skinDepth;
-			rigidbody.position += offset;
-			var isHit = SweepTest(-Upward, out RaycastHit stepHitInfo, profile.stepHeight * 2f, .5f);
-			rigidbody.position = originalPosition;
-			if(!isHit)
-				return;
-			var deltaY = Vector3.Dot(stepHitInfo.point - rigidbody.position, Upward);
-			if(Mathf.Abs(deltaY) < .1f)
-				return;
-			// Teleport to desired position.
-			var desiredPosition = originalPosition + (stepHitInfo.point - offset - originalPosition).ProjectOntoAxis(Upward);
-			rigidbody.MovePosition(desiredPosition);
-			// Grant helper velocity.
-			var minimumHelperVelocity = desiredMovementVelocity.normalized * (MovingSpeed * .5f);
-			var helperSpeed = Vector3.Dot(minimumHelperVelocity, desiredMovementVelocity.normalized);
-			helperSpeed = Mathf.Max(0, helperSpeed);
-			var trimmedHelperVelocity = desiredMovementVelocity.normalized * helperSpeed;
-			rigidbody.AddForce(trimmedHelperVelocity, ForceMode.VelocityChange);
-			rigidbody.velocity = rigidbody.velocity.ProjectOntoPlane(Upward);
+				desiredHorizontalMovement = eye.transform.right * bufferedMovement.x + transform.forward * bufferedMovement.z;
+				desiredHorizontalMovement *= WalkingSpeed;
+				if(!IsOnGround)
+					desiredHorizontalMovement *= Profile.midAirAttenuation;
+
+				var deltaVelocity = (desiredHorizontalMovement - rigidbody.velocity) * Profile.acceleration;
+				// Only taking horizontal movement into account.
+				deltaVelocity = deltaVelocity.ProjectOntoPlane(Upward);
+				rigidbody.AddForce(deltaVelocity, ForceMode.VelocityChange);
+			}
+			else {
+				// Swimming.
+
+				// Extract vertical movement.
+				var verticalMovement = bufferedMovement.y;
+				bufferedMovement.y = 0;
+
+				// Apply horizontal movement.
+				desiredHorizontalMovement = eye.transform.localToWorldMatrix.MultiplyVector(bufferedMovement) * Profile.swimmingSpeed;
+				Vector3 deltaVelovity = desiredHorizontalMovement - rigidbody.velocity;
+				if(desiredHorizontalMovement.magnitude > .1f)
+					deltaVelovity = deltaVelovity.ProjectOntoAxis(desiredHorizontalMovement);
+				else
+					deltaVelovity = -rigidbody.velocity.ProjectOntoPlane(Upward);
+				rigidbody.AddForce(deltaVelovity * Profile.acceleration, ForceMode.VelocityChange);
+
+				// Apply vertical movement.
+				if(Mathf.Abs(verticalMovement) > .1f) {
+					float verticalForce = verticalMovement * Profile.swimmingSpeed - Vector3.Dot(rigidbody.velocity, Upward);
+					rigidbody.AddForce(Upward * (verticalForce * Profile.acceleration), ForceMode.VelocityChange);
+				}
+
+				// Apply friction.
+				rigidbody.AddForce(-rigidbody.velocity * .08f, ForceMode.VelocityChange);
+				// Apply buoyancy.
+				rigidbody.AddForce(-Physics.gravity * (.3f * rigidbody.mass), ForceMode.Force);
+			}
+
+			if(IsOnGround && hasJustMoved && !IsInWater)
+				DealStepping(Time.fixedDeltaTime);
+
+			UpdateMovingAnimation();
+
+			bufferedMovement = Vector3.zero;
 		}
 		#endregion
 
 		#region Functions
+		private bool SweepTestGround(out RaycastHit hit, float distance, float backUpRatio = .5f, Vector3 offset = default) {
+			var direction = -Upward;
+			var hits = rigidbody.SweepTestAll(direction, distance, backUpRatio, offset, GameManager.Instance.GroundLayerMask);
+
+			foreach(var candidate in hits) {
+				// Check if the step is too sloped.
+				float maxGroundingAngle = Mathf.Deg2Rad * Profile.maxGroundingAngle;
+				float angle = Mathf.Deg2Rad * Vector3.Angle(-direction, candidate.normal);
+				if(angle > maxGroundingAngle)
+					continue;
+
+				hit = candidate;
+				return true;
+			}
+
+			hit = default;
+			return false;
+		}
+
 		private void ApplyGeometry() {
 			if(Profile == null)
 				return;
 
 			capsuleCollider = gameObject.EnsureComponent<CapsuleCollider>();
-			capsuleCollider.height = profile.height;
-			capsuleCollider.center = Vector3.up * (profile.height * .5f);
-			capsuleCollider.radius = profile.radius;
+			capsuleCollider.height = Profile.height;
+			capsuleCollider.center = Vector3.up * (Profile.height * .5f);
+			capsuleCollider.radius = Profile.radius;
 
 			rigidbody = gameObject.EnsureComponent<Rigidbody>();
 			rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
 		}
 
-		private bool SweepTest(Vector3 direction, out RaycastHit hitInfo, float distance, float backupRatio = 0, Vector3 offset = default) {
-			direction.Normalize();
-			var originalPos = rigidbody.position;
-			rigidbody.position += direction * (distance * backupRatio * -1) + offset;
-			bool result = rigidbody.SweepTest(direction, out hitInfo, distance);
-			if(result) {
-				int shouldExclude = hitInfo.collider.gameObject.layer & rigidbody.excludeLayers;
-				if(shouldExclude != 0)
-					result = false;
-			}
-			rigidbody.position = originalPos;
-			return result;
-		}
-
 		public void OrientDelta(Vector2 delta) {
-			delta *= profile.orientingSpeed;
+			delta *= Profile.orientingSpeed;
 			Azimuth += delta.x;
 			Zenith += delta.y;
 		}
 
-		public void MoveVelocity(Vector2 vXy) {
-			bufferedMovementVelocity += vXy;
-			hasJustMoved = hasJustMoved || vXy.magnitude > .01f;
+		public void MoveVelocity(Vector3 velocity) {
+			bufferedMovement += velocity;
+			hasJustMoved = hasJustMoved || velocity.magnitude > .01f;
 		}
 
-		public void MoveDelta(Vector2 dXy) {
-			bufferedMovementDelta += dXy;
-		}
-
-		public void Jump() {
+		public void Jump(float height) {
 			if(!IsOnGround)
 				return;
 
 			var gravity = -Vector3.Dot(Physics.gravity, Upward);
-			float speed = Mathf.Sqrt(2f * gravity * profile.jumpingHeight);
-			rigidbody.AddForce(Upward * speed, ForceMode.VelocityChange);
-			StartCoroutine(JumpCoroutine());
+			float desiredSpeed = Mathf.Sqrt(2f * gravity * height);
+			float actualSpeed = Vector3.Dot(rigidbody.velocity, Upward);
+			float deltaSpeed = desiredSpeed - actualSpeed;
+
+			rigidbody.AddForce(Upward * deltaSpeed, ForceMode.VelocityChange);
+		}
+		public void Jump() => Jump(Profile.jumpingHeight);
+
+		private void ValidateMovementConditions() {
+			isOnGround = SweepTestGround(out RaycastHit _, Profile.skinDepth);
+			isInWater = rigidbodyAgent.IsOverlappingWithLayers(1 << GameManager.Instance.WaterLayer);
 		}
 
-		private void ValidateGround() {
-			bool result = SweepTest(Physics.gravity, out RaycastHit hitInfo, profile.skinDepth, .5f);
-			// Cannot jump when stepping on movable foundation.
-			/*
-			var hitRb = hitInfo.rigidbody;
-			if(hitRb != null) {
-				if(hitRb.velocity.magnitude > .01f)
-					result = false;
-			}
-			*/
-			isOnGround = result;
+		private void DealStepping(float deltaTime) {
+			// Calculate the step horizontal offset.
+			// Don't use real horizontal velocity, or the cast won't succeed when touching walls.
+			Vector3 vx = desiredHorizontalMovement.ProjectOntoPlane(Upward);
+			Vector3 deltaX = vx * Mathf.Max(deltaTime, .1f);
+			// For greater moving speed, the offset is amplified to hitting the staircase.
+			if(deltaX.magnitude < Profile.stepDetectionDistance)
+				deltaX = deltaX.normalized * Profile.stepDetectionDistance;
+
+			// Perform the sweep cast and calculate vertical offset.
+			var isHit = SweepTestGround(out RaycastHit hit, Profile.stepHeight * 2, .5f, deltaX);
+			if(!isHit)
+				return;
+			float deltaY = Vector3.Dot(hit.point - rigidbody.position, Upward);
+
+			// Don't do downward steppings.
+			if(deltaY < 1e-1f)
+				return;
+			Jump(deltaY);
 		}
 
-		private IEnumerator JumpCoroutine() {
-			isJumping = true;
-			yield return new WaitForSeconds(.1f);
-			yield return new WaitUntil(() => IsOnGround);
-			isJumping = false;
-		}
-
-		private void UpdateDesiredMovementVelocity(float deltaTime) {
-			var bufferedDelta = bufferedMovementDelta + bufferedMovementVelocity * deltaTime;
-			bufferedMovementDelta = Vector3.zero;
-			bufferedMovementVelocity = Vector3.zero;
-			desiredMovementVelocity = eye.transform.right * bufferedDelta.x + transform.forward * bufferedDelta.y;
-			desiredMovementVelocity *= MovingSpeed / deltaTime;
-			if(!IsOnGround) {
-				desiredMovementVelocity *= profile.midAirAttenuation;
-			}
-		}
-
-		private void ApplyBufferedMovement(float deltaTime) {
-			var targetVelocity = desiredMovementVelocity;
-
-			var velocityDifference = targetVelocity - rigidbody.velocity;
-			// Only taking horizontal movement into account.
-			var force = velocityDifference.ProjectOntoPlane(Upward) * profile.acceleration;
-			rigidbody.AddForce(force, ForceMode.VelocityChange);
-		}
-
-		private void UpdateWalkingState() {
-			isWalking = IsOnGround && hasJustMoved;
+		private void UpdateMovingAnimation() {
+			isWalking = !IsInWater && IsOnGround && hasJustMoved;
 			hasJustMoved = false;
-			animator?.SetBool("Walking", isWalking);
-			animator?.SetBool("Sprinting", IsSprinting);
+			if(animator != null) {
+				animator.SetBool("Walking", isWalking);
+				animator.SetBool("Sprinting", IsSprinting);
+			}
 		}
 		#endregion
 	}
