@@ -50,7 +50,7 @@ MonoBehaviour:
   cpuSimulation: 0
   cpuFullResolution: 0
   cpuEvaluateRipples: 0
-  timeMultiplier: 1
+  timeMultiplier: 0.5
   repetitionSize: 500
   largeWindSpeed: 30
   largeWindOrientationValue: 0
@@ -66,7 +66,7 @@ MonoBehaviour:
   largeBand1FadeStart: 300
   largeBand1FadeDistance: 800
   ripples: 1
-  ripplesWindSpeed: 3
+  ripplesWindSpeed: 2.5
   ripplesWindOrientationMode: 0
   ripplesWindOrientationValue: 0
   ripplesCurrentMode: 0
@@ -81,7 +81,7 @@ MonoBehaviour:
   endSmoothness: 0.85
   smoothnessFadeStart: 100
   smoothnessFadeDistance: 500
-  refractionColor: {r: 0, g: 0.45, b: 0.65, a: 1}
+  refractionColor: {r: 0.3254902, g: 0.5509804, b: 0.6509804, a: 1}
   maxRefractionDistance: 1
   absorptionDistance: 5
   scatteringColor: {r: 0, g: 0.27, b: 0.23, a: 1}
@@ -228,4 +228,4 @@ MonoBehaviour:
   surface: {fileID: 4587080032160770358}
   height: 1
   speed: 1
-  resistance: 0.1
+  profile: {fileID: 11400000, guid: 8aeab9a16c4671b49b0c1f011afcc944, type: 2}

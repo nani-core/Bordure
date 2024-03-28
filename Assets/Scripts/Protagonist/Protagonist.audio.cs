@@ -1,15 +1,16 @@
 using UnityEngine;
 
-namespace NaniCore.Loopool {
+namespace NaniCore.Bordure {
 	public partial class Protagonist : MonoBehaviour {
 		#region Fields
-		private AudioSource sfxAudioSource;
-		private AudioSource footAudioSource;
+		[SerializeField] private AudioListener audioListener;
+		[SerializeField] private AudioSource sfxAudioSource;
+		[SerializeField] private AudioSource footAudioSource;
 		#endregion
 
 		#region Functions
 		public void PlayFootstepSound() {
-			footAudioSource.PlayOneShot(profile.stepAudioClips.PickRandom());
+			footAudioSource.PlayOneShot(Profile.stepAudioClips.PickRandom());
 		}
 
 		private void PlaySfx(AudioClip clip) {
@@ -20,11 +21,8 @@ namespace NaniCore.Loopool {
 		#endregion
 
 		#region Life cycle
-		protected void StartAudio() {
-			sfxAudioSource = Eye.gameObject.EnsureComponent<AudioSource>();
-			sfxAudioSource.playOnAwake = false;
-			footAudioSource = gameObject.EnsureComponent<AudioSource>();
-			footAudioSource.playOnAwake = false;
+		protected void InitializeAudio() {
+			GameManager.Instance.AudioListener = audioListener;
 		}
 		#endregion
 	}

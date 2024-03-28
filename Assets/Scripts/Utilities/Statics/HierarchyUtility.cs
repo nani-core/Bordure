@@ -1,6 +1,8 @@
-using UnityEditor;
-#if UNITY_EDITOR
 using UnityEngine;
+using Unity.VisualScripting;
+
+#if UNITY_EDITOR
+using UnityEditor;
 #endif
 using System.Collections.Generic;
 
@@ -8,14 +10,13 @@ namespace NaniCore {
 	public static class HierarchyUtility {
 		#region Component
 		public static T EnsureComponent<T>(this GameObject gameObject) where T : Component {
-			var existing = gameObject.GetComponent<T>();
-			if(existing != null)
+			if(gameObject.TryGetComponent<T>(out var existing))
 				return existing;
 			return gameObject.AddComponent<T>();
 		}
 
 		public static T EnsureComponent<T>(this Component target) where T : Component
-			=> target.gameObject.GetComponent<T>();
+			=> target.gameObject.EnsureComponent<T>();
 		#endregion
 
 		#region Prefab
@@ -81,8 +82,7 @@ namespace NaniCore {
 #if UNITY_EDITOR
 			if(!Application.isPlaying) {
 				foreach(Transform child in root.transform) {
-					var here = child.GetComponent<T>();
-					if(here != null)
+					if(child.TryGetComponent<T>(out var here))
 						yield return here;
 					foreach(var grandchild in child.gameObject.FindAllComponentsInEditor<T>(includeInactive))
 						yield return grandchild;
@@ -92,6 +92,65 @@ namespace NaniCore {
 #endif
 			foreach(var component in root.GetComponentsInChildren<T>(includeInactive))
 				yield return component;
+		}
+		#endregion
+
+		#region Hierarchical
+		public static bool IsChildOf(this GameObject a, GameObject b) {
+			if(a == null)
+				return false;
+			if(b == null)
+				return true;
+			return a.transform.IsChildOf(b.transform);
+		}
+		public static bool IsChildOf(this Transform a, GameObject b) => a?.gameObject.IsChildOf(b) ?? false;
+		public static bool IsChildOf(this GameObject a, Transform b) => a.IsChildOf(b?.gameObject);
+
+		public static Transform[] Children(this Transform parent) {
+			Transform[] children = new Transform[parent.childCount];
+			for(int i = 0; i < parent.childCount; ++i)
+				children[i] = parent.GetChild(i);
+			return children;
+		}
+
+		public static void Destroy(this Object target) {
+#if UNITY_EDITOR
+			if(Application.isPlaying)
+				Object.Destroy(target);
+			else
+				Object.DestroyImmediate(target);
+#else
+			Object.Destroy(target);
+#endif
+		}
+
+		public static void DestroyAllChildren(this Transform parent) {
+			foreach(var child in parent.Children())
+				Destroy(child.gameObject);
+		}
+
+		public static void RotateAlong(this Transform target, Vector3 pivot, Quaternion rotation) {
+			Transform pivotTransform = new GameObject().transform;
+			pivotTransform.position = pivot;
+			var parent = target.parent;
+			target.SetParent(pivotTransform, true);
+			pivotTransform.rotation = rotation;
+			target.SetParent(parent, true);
+			Object.Destroy(pivotTransform.gameObject);
+		}
+
+		/// <param name="target">The GameObject to ge aligned in space.</param>
+		/// <param name="reference">What to align by.</param>
+		/// <param name="alignment">What to align to.</param>
+		public static void AlignWith(this Transform target, Transform reference, Transform alignment) {
+			Vector3 movement = alignment.position - reference.position;
+			Quaternion rotation = alignment.rotation * Quaternion.Inverse(reference.rotation);
+
+			target.RotateAlong(reference.position, rotation);
+			target.position += movement;
+		}
+		public static void AlignWith(this Transform target, Transform alignment) {
+			target.SetPositionAndRotation(alignment.position, alignment.rotation);
 		}
 		#endregion
 	}
