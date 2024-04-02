@@ -114,6 +114,16 @@ namespace NaniCore {
 		}
 
 		protected override void Construct(Transform under, Instantiator instantiator) {
+			bool shouldGenerateConcrete = true;
+#if DEBUG && UNITY_EDITOR
+			if(!Application.isPlaying) {
+				var manager = FindObjectOfType<Bordure.GameManager>(true);
+				if(manager?.Settings != null) {
+					shouldGenerateConcrete = manager.Settings.generateConcreteInEditMode;
+				}
+			}
+#endif
+
 			foreach(var face in Faces) {
 				var faceObj = new GameObject($"{gameObject.name} (wall {face.name})");
 				faceObj.isStatic = gameObject.isStatic;
@@ -150,7 +160,7 @@ namespace NaniCore {
 				meshTile.Construct();
 
 				// Generate concrete.
-				{
+				if(shouldGenerateConcrete) {
 					var concreteObj = GameObject.CreatePrimitive(PrimitiveType.Cube);
 					concreteObj.name = $"{gameObject.name} (concrete {face.name})";
 					concreteObj.isStatic = gameObject.isStatic;
