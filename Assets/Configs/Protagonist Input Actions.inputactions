@@ -127,11 +127,33 @@
                 },
                 {
                     "name": "",
+                    "id": "16af39b2-1969-44c0-a130-39eb1a09eb13",
+                    "path": "<Gamepad>/leftStick",
+                    "interactions": "",
+                    "processors": "NormalizeVector2",
+                    "groups": "Gamepad",
+                    "action": "Move Velocity",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "65e71a65-679b-467d-b0f9-dff64627c0a2",
                     "path": "<Mouse>/delta",
                     "interactions": "",
                     "processors": "InvertVector2(invertX=false,invertY=false),ScaleVector2(x=0.004,y=0.004)",
                     "groups": "PC",
+                    "action": "Orient Delta",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ac435a0d-d56d-4d38-bf11-172258664b5c",
+                    "path": "<Gamepad>/rightStick",
+                    "interactions": "",
+                    "processors": "ScaleVector2(x=0.1,y=0.1)",
+                    "groups": "Gamepad",
                     "action": "Orient Delta",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -149,11 +171,33 @@
                 },
                 {
                     "name": "",
+                    "id": "93b13147-a684-4363-a700-8309dffae127",
+                    "path": "<Gamepad>/leftShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Set Sprinting",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "951a717f-e32d-4e2e-a2e2-847160c60864",
                     "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "PC",
+                    "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b5549af2-6e73-499d-af53-52976d5a4f87",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
                     "action": "Interact",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -182,11 +226,33 @@
                 },
                 {
                     "name": "",
+                    "id": "a68e803a-fe08-4cbf-9894-2196a7d1c76f",
+                    "path": "<Gamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "7ed37dd9-d4d6-499a-b687-d0bed989804a",
                     "path": "<Keyboard>/ctrl",
                     "interactions": "",
                     "processors": "",
                     "groups": "PC",
+                    "action": "Crouch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "543ee5cc-c9c6-4a79-8e5f-5a86f99ee2a1",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
                     "action": "Crouch",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -230,11 +296,33 @@
                 },
                 {
                     "name": "",
+                    "id": "d1839021-203c-4e7e-9c45-181a6de17f40",
+                    "path": "<Gamepad>/rightShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Set Grabbing Orienting",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "aa10239e-ed8f-484f-bf17-82be6785ab60",
                     "path": "<Mouse>/middleButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "PC",
+                    "action": "Reset Grabbing Transform",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ad1e4dde-3b50-4f2d-8ed0-6885499c9e2f",
+                    "path": "<Gamepad>/buttonNorth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
                     "action": "Reset Grabbing Transform",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -254,6 +342,17 @@
                 },
                 {
                     "devicePath": "<Mouse>",
+                    "isOptional": false,
+                    "isOR": false
+                }
+            ]
+        },
+        {
+            "name": "Gamepad",
+            "bindingGroup": "Gamepad",
+            "devices": [
+                {
+                    "devicePath": "<Gamepad>",
                     "isOptional": false,
                     "isOR": false
                 }
