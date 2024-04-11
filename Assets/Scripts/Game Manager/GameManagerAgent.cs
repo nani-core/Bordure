@@ -18,8 +18,8 @@ namespace NaniCore.Bordure {
 			Instance.MoveProtagonistToSpawnPoint(spawnPoint);
 		}
 
-		public void MoveProtagonistTo(Transform point) {
-			Instance.MoveProtagonistTo(point);
+		public void MoveProtagonistToSpawnPointByName(string name) {
+			Instance.MoveProtagonistToSpawnPointByName(name);
 		}
 		#endregion
 
@@ -34,12 +34,8 @@ namespace NaniCore.Bordure {
 			Instance.LoadLevel(template);
 		}
 
-		public void UnloadLevel(string levelName) {
-			Instance.UnloadLevel(levelName);
-		}
-
-		public void UnloadLevel(Level level) {
-			Instance.UnloadLevel(level);
+		public void UnloadLevelByName(string levelName) {
+			Instance.UnloadLevelByName(levelName);
 		}
 		#endregion
 

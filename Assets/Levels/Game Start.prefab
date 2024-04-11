@@ -1562,13 +1562,25 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 11400000, guid: b2f1048833879fd4eb780ed41474578f, type: 2}
         m_TargetAssemblyTypeName: NaniCore.Bordure.GameManagerAgent, Assembly-CSharp
-        m_MethodName: UnloadLevel
-        m_Mode: 2
+        m_MethodName: MoveProtagonistToSpawnPointByName
+        m_Mode: 5
         m_Arguments:
-          m_ObjectArgument: {fileID: 2875993723796713050}
-          m_ObjectArgumentAssemblyTypeName: NaniCore.Bordure.Level, Assembly-CSharp
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: Chapter 1 Room 1 Spawn Point
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 11400000, guid: b2f1048833879fd4eb780ed41474578f, type: 2}
+        m_TargetAssemblyTypeName: NaniCore.Bordure.GameManagerAgent, Assembly-CSharp
+        m_MethodName: UnloadLevelByName
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Game Start
           m_BoolArgument: 0
         m_CallState: 2
