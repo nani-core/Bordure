@@ -4,7 +4,6 @@ namespace NaniCore.Bordure {
 	[RequireComponent(typeof(RigidbodyAgent))]
 	public partial class Protagonist : MonoBehaviour {
 		#region Serialized fields
-		[SerializeField] private new Camera camera;
 		[SerializeField] private Animator animator;
 		[SerializeField] private Transform eye;
 		#endregion
@@ -26,10 +25,9 @@ namespace NaniCore.Bordure {
 
 		#region Properties
 		public Transform Eye => eye;
-		public Camera Camera => camera;
 		public Vector3 Upward => transform.up;
 
-		public Ray EyeRay => camera.ViewportPointToRay(new Vector2(.5f, .5f));
+		public Ray EyeRay => GameManager.Instance.MainCamera.ViewportPointToRay(new Vector2(.5f, .5f));
 
 		public bool IsInWater => isInWater;
 		public bool IsOnGround => isOnGround;

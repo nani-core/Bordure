@@ -63,7 +63,6 @@ namespace NaniCore.Bordure {
 				return;
 			}
 
-			InitializeAudio();
 			InitializeControl();
 			InitializeInteraction();
 		}

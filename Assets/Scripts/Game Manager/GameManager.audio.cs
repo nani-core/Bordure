@@ -3,36 +3,13 @@ using UnityEngine;
 namespace NaniCore.Bordure {
 	public partial class GameManager : MonoBehaviour {
 		#region Fields
-		private AudioListener audioListener;
+		[SerializeField] private AudioListener audioListener;
+		[SerializeField] private AudioSource sfxAudioSource;
 		#endregion
 
 		#region Interfaces
-		public AudioListener AudioListener {
-			get => audioListener;
-			set {
-				if(value == null)
-					value = null;
-				if(audioListener != null && value == audioListener)
-					return;
-
-				if(audioListener != null) {
-#if UNITY_EDITOR
-					if(Application.isPlaying)
-						DestroyImmediate(audioListener);
-					else
-						Destroy(audioListener);
-#else
-					Destroy(audioListener);
-#endif
-				}
-
-				audioListener = value;
-
-				if(audioListener == null) {
-					audioListener = gameObject.EnsureComponent<AudioListener>();
-				}
-			}
-		}
+		public AudioListener AudioListener => audioListener;
+		public AudioSource SfxAudioSource => sfxAudioSource;
 
 		public void PlayPhysicalSound(AudioClip sound, Vector3 position, Transform under, float strength) {
 			float maxGain = Settings.maxPhysicalSoundGain;
@@ -64,12 +41,6 @@ namespace NaniCore.Bordure {
 			}
 
 			PlayPhysicalSound(sound, rb.position, rb.transform, strength);
-		}
-		#endregion
-
-		#region Life cycle
-		protected void InitializeAudio() {
-			AudioListener = AudioListener;
 		}
 		#endregion
 	}

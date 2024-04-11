@@ -2,11 +2,13 @@ using UnityEngine;
 using System.Linq;
 using System.Reflection;
 using System.Collections.Generic;
+using NaughtyAttributes;
 
 namespace NaniCore.Bordure {
 	public partial class GameManager : MonoBehaviour {
 		#region Fields
 		private Protagonist protagonist;
+		[SerializeField][Label("Uses Protagonist at Start")] private bool usesProtagonist = true;
 		#endregion
 
 		#region Interfaces
@@ -19,15 +21,44 @@ namespace NaniCore.Bordure {
 				return protagonist;
 			}
 		}
-		public Camera MainCamera => Protagonist?.Camera;
 
-		public void DestroyProtagonist() {
-			FinalizeProtagonist();
+		public bool UsesProtagonist {
+			get => usesProtagonist;
+			set {
+				if(usesProtagonist == value)
+					return;
+			}
+		}
+		#endregion
+
+		#region Life cycles
+		private void InitializeProtagonist() {
+			protagonist = CreateProtagonist();
+			if(true) {
+				AttachCameraTo(Protagonist.Eye);
+			}
+		}
+
+#if UNITY_EDITOR
+		private void InitializeProtagonistInEditMode() {
+			if(HierarchyUtility.IsInPrefabMode())
+				return;
+
+			MainCamera.transform.AlignWith(transform);
+			protagonist = CreateProtagonist();
+			if(Protagonist) {
+				MainCamera.transform.AlignWith(Protagonist.Eye);
+			}
+		}
+#endif
+
+		private void FinalizeProtagonist() {
+			DestroyProtagonist();
 		}
 		#endregion
 
 		#region Functions
-		private Protagonist InitializeProtagonist() {
+		private Protagonist CreateProtagonist() {
 			List<Protagonist> existingProtagonists;
 			{
 				var runtime = new HashSet<Protagonist>(FindObjectsOfType<Protagonist>(true));
@@ -53,8 +84,7 @@ namespace NaniCore.Bordure {
 					}
 					else if(Settings.protagonist != null) {
 						var newInstance = Settings.protagonist.gameObject.InstantiatePrefab();
-						target = newInstance.GetComponent<Protagonist>();
-						if(target == null) {
+						if(!newInstance.TryGetComponent(out target)) {
 							Debug.LogWarning("Warning: There is no component of type Protagonist on the protagonist prefab.", Settings.protagonist);
 							DestroyImmediate(newInstance);
 						}
@@ -72,8 +102,10 @@ namespace NaniCore.Bordure {
 				{
 					target.transform.SetParent(transform, true);
 					SpawnPoint spawnPoint = startLevel.DebugSpawnPoint;
-					target.transform.position = spawnPoint.transform.position;
-					target.transform.rotation = Quaternion.LookRotation(spawnPoint.transform.forward);
+					target.transform.SetPositionAndRotation(
+						spawnPoint.transform.position,
+						Quaternion.LookRotation(spawnPoint.transform.forward)
+					);
 
 					target.gameObject.name = "Protagonist";
 					if(!Application.isPlaying)
@@ -106,10 +138,18 @@ namespace NaniCore.Bordure {
 			}
 		}
 
-		private void FinalizeProtagonist() {
+		private void DestroyProtagonist() {
+			if(Protagonist == null)
+				return;
+			try {
+				// An exception might be raised on game exiting, as the game
+				// manager which is the parent of the protaginst could be
+				// pending to be destroyed.
+				if(MainCamera.transform.IsChildOf(Protagonist.transform))
+					RetrieveCameraHierarchy();
+			} catch { }
 			Destroy(Protagonist);
 			protagonist = null;
-			AudioListener = null;
 		}
 		#endregion
 	}

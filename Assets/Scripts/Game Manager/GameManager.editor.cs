@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
 using UnityEngine;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 
 namespace NaniCore.Bordure {
 	public partial class GameManager : MonoBehaviour {
@@ -9,7 +10,7 @@ namespace NaniCore.Bordure {
 			if(Application.isPlaying || this == null)
 				return;
 
-			protagonist = InitializeProtagonist();
+			InitializeProtagonistInEditMode();
 		}
 
 		protected void OnValidate() {

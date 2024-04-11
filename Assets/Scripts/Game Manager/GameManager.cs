@@ -29,8 +29,7 @@ namespace NaniCore.Bordure {
 			InitializeConstants();
 			InitializeLevel();
 			InitializeRigidbody();
-			InitializeAudio();
-			protagonist = InitializeProtagonist();
+			InitializeProtagonist();
 			InitializeDebugUi();
 		}
 
@@ -50,6 +49,7 @@ namespace NaniCore.Bordure {
 			if(!Application.isPlaying)
 				return;
 #endif
+			FinalizeProtagonist();
 			FinalizeDebugUi();
 			RenderUtility.ReleasePooledResources();
 			ReleaseAllTemporaryResources();

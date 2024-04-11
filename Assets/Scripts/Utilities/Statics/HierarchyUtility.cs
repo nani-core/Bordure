@@ -1,5 +1,6 @@
 using UnityEngine;
-using Unity.VisualScripting;
+using UnityEditor.SceneManagement;
+
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -42,6 +43,10 @@ namespace NaniCore {
 				return;
 			PrefabUtility.RevertPrefabInstance(target, InteractionMode.AutomatedAction);
 #endif
+		}
+
+		public static bool IsInPrefabMode() {
+			return PrefabStageUtility.GetCurrentPrefabStage() != null;
 		}
 		#endregion
 
