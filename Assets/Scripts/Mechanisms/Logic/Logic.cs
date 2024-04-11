@@ -1,9 +1,16 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace NaniCore {
-	public abstract class Logic : MonoBehaviour {
+	public class Logic : MonoBehaviour {
+		#region Serialized fields
+		public UnityEvent callback;
+		#endregion
+
 		#region Interfaces
-		public abstract void Invoke();
+		public virtual void Invoke() {
+			callback?.Invoke();
+		}
 		#endregion
 	}
 }

@@ -25,11 +25,16 @@ namespace NaniCore.Bordure {
 			return level;
 		}
 
-		public void DestroyLevel(string levelName) {
-			if(!loadedLevels.ContainsKey(levelName))
+		public void UnloadLevelByName(string levelName) {
+			if(!loadedLevels.ContainsKey(levelName)) {
+				Debug.LogWarning($"Warning: Cannot unload level \"${levelName}\" as it doesn't exist.");
+				Debug.Log("Current loaded levels: " + string.Join(", ", loadedLevels.Keys));
 				return;
-			Destroy(loadedLevels[levelName]);
+			}
+			Level level = loadedLevels[levelName];
+			UnloadLevel(level);
 		}
+
 		#endregion
 
 		#region Life cycle
@@ -42,8 +47,8 @@ namespace NaniCore.Bordure {
 
 		#region Functions
 		private void TakeCareOfLevel(Level level) {
-			level.onLoaded += OnLevelLoaded;
-			level.onUnloaded += OnLevelUnloaded;
+			level.OnLoaded += () => OnLevelLoaded(level);
+			level.OnUnloaded += () => OnLevelUnloaded(level);
 		}
 
 		private void OnLevelLoaded(Level level) {
@@ -60,6 +65,11 @@ namespace NaniCore.Bordure {
 			TakeCareOfLevel(level);
 
 			return level;
+		}
+
+		private void UnloadLevel(Level level) {
+			level.gameObject.SetActive(false);
+			//HierarchyUtility.Destroy(level);
 		}
 		#endregion
 	}

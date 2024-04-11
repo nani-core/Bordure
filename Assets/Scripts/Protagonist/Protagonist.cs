@@ -62,8 +62,6 @@ namespace NaniCore.Bordure {
 				Debug.LogWarning("No profile is configured for the protagonist.", this);
 				return;
 			}
-
-			InitializeAudio();
 			InitializeControl();
 			InitializeInteraction();
 		}

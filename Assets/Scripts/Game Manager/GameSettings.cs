@@ -56,5 +56,10 @@ namespace NaniCore.Bordure {
 		/// at the meantime the performance cost will be higher.
 		/// </remarks>
 		[Min(1)] public int standardHeight = 216;
+
+		#if DEBUG && UNITY_EDITOR
+		[Header("Architecture Generation")]
+		public bool generateConcreteInEditMode = true;
+		#endif
 	}
 }

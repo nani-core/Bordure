@@ -176,6 +176,7 @@ MonoBehaviour:
   count: {x: 10, y: 7, z: 1}
   uvw: {x: 0.5, y: 0.5, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1001 &34703923
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -348,6 +349,7 @@ MonoBehaviour:
   uvw: {x: 0.25, y: 0.25, z: 0.25}
   hollowObjects:
   - {fileID: 1411382101}
+  batch: 1
 --- !u!1001 &70613043
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -520,6 +522,7 @@ MonoBehaviour:
   uvw: {x: 0.25, y: 0.25, z: 0.5}
   hollowObjects:
   - {fileID: 1901129404}
+  batch: 1
 --- !u!1001 &94253725
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -742,6 +745,7 @@ MonoBehaviour:
   count: {x: 10, y: 14, z: 1}
   uvw: {x: 0.5, y: 0.5, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1 &124739117
 GameObject:
   m_ObjectHideFlags: 0
@@ -795,6 +799,7 @@ MonoBehaviour:
   count: {x: 10, y: 17, z: 1}
   uvw: {x: 0.5, y: 0.5, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1 &128542147
 GameObject:
   m_ObjectHideFlags: 0
@@ -1102,9 +1107,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   loopshape: {fileID: 182701642}
   gastro: {fileID: 376953119}
-  thickness: 0.05
-  thicknessTolerance: 0.01
-  validationTolerance: 2
   showDebugLayer: 0
   debugLayerOpacity: 1
 --- !u!114 &182701642
@@ -1121,6 +1123,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   oneTime: 0
   onOpen:
+    m_PersistentCalls:
+      m_Calls: []
+  onValidated:
+    m_PersistentCalls:
+      m_Calls: []
+  onInvalidated:
     m_PersistentCalls:
       m_Calls: []
 --- !u!1 &229546329
@@ -1176,6 +1184,7 @@ MonoBehaviour:
   count: {x: 1, y: 6, z: 1}
   uvw: {x: 0.5, y: 0, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1 &231625276
 GameObject:
   m_ObjectHideFlags: 0
@@ -1229,6 +1238,7 @@ MonoBehaviour:
   count: {x: 10, y: 6, z: 1}
   uvw: {x: 0.5, y: 0, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1001 &236004450
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1517,6 +1527,7 @@ MonoBehaviour:
   count: {x: 10, y: 5, z: 1}
   uvw: {x: 0.5, y: 0.5, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1 &264823048
 GameObject:
   m_ObjectHideFlags: 0
@@ -1570,6 +1581,7 @@ MonoBehaviour:
   count: {x: 2, y: 19, z: 1}
   uvw: {x: 0.5, y: 0.5, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1 &273885916
 GameObject:
   m_ObjectHideFlags: 0
@@ -1842,6 +1854,7 @@ MonoBehaviour:
   hollowObjects:
   - {fileID: 768532152}
   - {fileID: 1848489677}
+  batch: 1
 --- !u!1 &283398587
 GameObject:
   m_ObjectHideFlags: 0
@@ -2514,6 +2527,7 @@ MonoBehaviour:
   uvw: {x: 0.5, y: 0.5, z: 0.5}
   hollowObjects:
   - {fileID: 2083139671}
+  batch: 1
 --- !u!1001 &399672755
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2768,6 +2782,7 @@ MonoBehaviour:
   count: {x: 14, y: 1, z: 1}
   uvw: {x: 0.5, y: 0.5, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1 &430722454
 GameObject:
   m_ObjectHideFlags: 0
@@ -2821,6 +2836,7 @@ MonoBehaviour:
   count: {x: 3, y: 5, z: 1}
   uvw: {x: 0.5, y: 0.5, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1 &434675634
 GameObject:
   m_ObjectHideFlags: 0
@@ -2876,6 +2892,7 @@ MonoBehaviour:
   hollowObjects:
   - {fileID: 8017863964078793326}
   - {fileID: 795705601}
+  batch: 1
 --- !u!1 &436193225
 GameObject:
   m_ObjectHideFlags: 0
@@ -2930,6 +2947,7 @@ MonoBehaviour:
   uvw: {x: 0.5, y: 0, z: 0.5}
   hollowObjects:
   - {fileID: 8017863964078793326}
+  batch: 1
 --- !u!1 &436511580
 GameObject:
   m_ObjectHideFlags: 0
@@ -3243,6 +3261,7 @@ MonoBehaviour:
   uvw: {x: 0.5, y: 0, z: 0.5}
   hollowObjects:
   - {fileID: 399672757}
+  batch: 1
 --- !u!1 &450484677
 GameObject:
   m_ObjectHideFlags: 0
@@ -3296,6 +3315,7 @@ MonoBehaviour:
   count: {x: 2, y: 3, z: 1}
   uvw: {x: 0.5, y: 0.5, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1 &450548189
 GameObject:
   m_ObjectHideFlags: 0
@@ -3347,9 +3367,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   loopshape: {fileID: 450548192}
   gastro: {fileID: 577852288}
-  thickness: 0.05
-  thicknessTolerance: 0.01
-  validationTolerance: 2
   showDebugLayer: 0
   debugLayerOpacity: 1
 --- !u!114 &450548192
@@ -3366,6 +3383,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   oneTime: 0
   onOpen:
+    m_PersistentCalls:
+      m_Calls: []
+  onValidated:
+    m_PersistentCalls:
+      m_Calls: []
+  onInvalidated:
     m_PersistentCalls:
       m_Calls: []
 --- !u!1001 &456855855
@@ -4615,6 +4638,7 @@ MonoBehaviour:
   count: {x: 18, y: 10, z: 1}
   uvw: {x: 0.5, y: 1, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1 &612862985
 GameObject:
   m_ObjectHideFlags: 0
@@ -4668,6 +4692,7 @@ MonoBehaviour:
   count: {x: 5, y: 1, z: 20}
   uvw: {x: 0.5, y: 0.5, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1 &613149055
 GameObject:
   m_ObjectHideFlags: 0
@@ -4721,6 +4746,7 @@ MonoBehaviour:
   count: {x: 10, y: 6, z: 1}
   uvw: {x: 0.5, y: 0, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1 &624659062
 GameObject:
   m_ObjectHideFlags: 0
@@ -4772,9 +4798,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   loopshape: {fileID: 624659065}
   gastro: {fileID: 1470337193}
-  thickness: 0.05
-  thicknessTolerance: 0.01
-  validationTolerance: 2
   showDebugLayer: 0
   debugLayerOpacity: 1
 --- !u!114 &624659065
@@ -4791,6 +4814,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   oneTime: 0
   onOpen:
+    m_PersistentCalls:
+      m_Calls: []
+  onValidated:
+    m_PersistentCalls:
+      m_Calls: []
+  onInvalidated:
     m_PersistentCalls:
       m_Calls: []
 --- !u!1 &629570193
@@ -5384,6 +5413,7 @@ MonoBehaviour:
   count: {x: 10, y: 14, z: 1}
   uvw: {x: 0.5, y: 0.5, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!4 &662084900 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4854208274278712131, guid: 0fa3d05cd47ef98478a38372a14fd5ff, type: 3}
@@ -5509,6 +5539,7 @@ MonoBehaviour:
   count: {x: 2, y: 3, z: 1}
   uvw: {x: 0.5, y: 0.5, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1 &673890835
 GameObject:
   m_ObjectHideFlags: 0
@@ -5562,6 +5593,7 @@ MonoBehaviour:
   count: {x: 10, y: 14, z: 1}
   uvw: {x: 0.5, y: 0.5, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1 &700343006
 GameObject:
   m_ObjectHideFlags: 0
@@ -5763,6 +5795,7 @@ MonoBehaviour:
   count: {x: 2, y: 5, z: 1}
   uvw: {x: 0.5, y: 0.5, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!114 &717304681 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3302798307610408548, guid: 0fa3d05cd47ef98478a38372a14fd5ff, type: 3}
@@ -5834,6 +5867,7 @@ MonoBehaviour:
   hollowObjects:
   - {fileID: 834744741}
   - {fileID: 700495378}
+  batch: 1
 --- !u!1 &732994707
 GameObject:
   m_ObjectHideFlags: 0
@@ -5923,6 +5957,7 @@ MonoBehaviour:
   count: {x: 20, y: 20, z: 1}
   uvw: {x: 0.5, y: 1, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1 &747740972
 GameObject:
   m_ObjectHideFlags: 0
@@ -5976,6 +6011,7 @@ MonoBehaviour:
   count: {x: 18, y: 10, z: 1}
   uvw: {x: 0.5, y: 1, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1001 &768532151
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6114,6 +6150,7 @@ MonoBehaviour:
   count: {x: 14, y: 1, z: 1}
   uvw: {x: 0.5, y: 0.5, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1 &795705601
 GameObject:
   m_ObjectHideFlags: 0
@@ -6351,6 +6388,7 @@ MonoBehaviour:
   count: {x: 2, y: 5, z: 1}
   uvw: {x: 0.5, y: 0, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1 &813480786
 GameObject:
   m_ObjectHideFlags: 0
@@ -6404,6 +6442,7 @@ MonoBehaviour:
   count: {x: 2, y: 5, z: 1}
   uvw: {x: 0.5, y: 0, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1 &818913282
 GameObject:
   m_ObjectHideFlags: 0
@@ -6644,6 +6683,7 @@ MonoBehaviour:
   count: {x: 5, y: 8, z: 1}
   uvw: {x: 0.5, y: 0.5, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1 &884686417
 GameObject:
   m_ObjectHideFlags: 0
@@ -6699,6 +6739,7 @@ MonoBehaviour:
   uvw: {x: 0.5, y: 0.5, z: 0.5}
   hollowObjects:
   - {fileID: 1033908027}
+  batch: 1
 --- !u!1 &894864582
 GameObject:
   m_ObjectHideFlags: 0
@@ -6752,6 +6793,7 @@ MonoBehaviour:
   count: {x: 2, y: 1, z: 20}
   uvw: {x: 0.5, y: 0.5, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1 &911010017
 GameObject:
   m_ObjectHideFlags: 0
@@ -6805,6 +6847,7 @@ MonoBehaviour:
   count: {x: 32, y: 32, z: 1}
   uvw: {x: 0.5, y: 0.5, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1001 &912033360
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6961,6 +7004,7 @@ MonoBehaviour:
   count: {x: 10, y: 8, z: 1}
   uvw: {x: 0.5, y: 0, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1 &915263421
 GameObject:
   m_ObjectHideFlags: 0
@@ -7231,6 +7275,7 @@ MonoBehaviour:
   count: {x: 10, y: 8, z: 1}
   uvw: {x: 0.5, y: 0, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1 &937708776
 GameObject:
   m_ObjectHideFlags: 0
@@ -7541,6 +7586,7 @@ MonoBehaviour:
   uvw: {x: 0.25, y: 0.25, z: 0.25}
   hollowObjects:
   - {fileID: 1310363890}
+  batch: 1
 --- !u!1 &956778504
 GameObject:
   m_ObjectHideFlags: 0
@@ -7940,6 +7986,7 @@ MonoBehaviour:
   count: {x: 10, y: 14, z: 1}
   uvw: {x: 0.5, y: 0.5, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1001 &1025461353
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8110,6 +8157,7 @@ MonoBehaviour:
   uvw: {x: 0.5, y: 0.5, z: 0.5}
   hollowObjects:
   - {fileID: 1302755802}
+  batch: 1
 --- !u!1 &1033908027
 GameObject:
   m_ObjectHideFlags: 0
@@ -8505,6 +8553,7 @@ MonoBehaviour:
   count: {x: 10, y: 20, z: 1}
   uvw: {x: 0.5, y: 0, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1 &1088260194
 GameObject:
   m_ObjectHideFlags: 0
@@ -8621,6 +8670,7 @@ MonoBehaviour:
   count: {x: 5, y: 20, z: 1}
   uvw: {x: 0.5, y: 0.5, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1 &1112063939
 GameObject:
   m_ObjectHideFlags: 0
@@ -8674,6 +8724,7 @@ MonoBehaviour:
   count: {x: 18, y: 10, z: 1}
   uvw: {x: 0.5, y: 1, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1 &1122925151
 GameObject:
   m_ObjectHideFlags: 0
@@ -8727,6 +8778,7 @@ MonoBehaviour:
   count: {x: 10, y: 17, z: 1}
   uvw: {x: 0.5, y: 0.5, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1 &1126645612
 GameObject:
   m_ObjectHideFlags: 0
@@ -8820,6 +8872,7 @@ MonoBehaviour:
   count: {x: 10, y: 5, z: 1}
   uvw: {x: 0.5, y: 0.5, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1 &1132935232
 GameObject:
   m_ObjectHideFlags: 0
@@ -8876,6 +8929,7 @@ MonoBehaviour:
   hollowObjects:
   - {fileID: 768532152}
   - {fileID: 1848489677}
+  batch: 1
 --- !u!1 &1135225941
 GameObject:
   m_ObjectHideFlags: 0
@@ -8929,6 +8983,7 @@ MonoBehaviour:
   count: {x: 10, y: 7, z: 1}
   uvw: {x: 0.5, y: 0.5, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1 &1136971437
 GameObject:
   m_ObjectHideFlags: 0
@@ -9017,6 +9072,7 @@ MonoBehaviour:
   count: {x: 1, y: 6, z: 1}
   uvw: {x: 0.5, y: 0, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1 &1161870675
 GameObject:
   m_ObjectHideFlags: 0
@@ -9070,6 +9126,7 @@ MonoBehaviour:
   count: {x: 10, y: 6, z: 1}
   uvw: {x: 0.5, y: 0, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1001 &1177315950
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9206,6 +9263,7 @@ MonoBehaviour:
   count: {x: 10, y: 8, z: 1}
   uvw: {x: 0.5, y: 0, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1 &1189155348
 GameObject:
   m_ObjectHideFlags: 0
@@ -9261,6 +9319,7 @@ MonoBehaviour:
   hollowObjects:
   - {fileID: 1177315952}
   - {fileID: 297706187}
+  batch: 1
 --- !u!1 &1189417150
 GameObject:
   m_ObjectHideFlags: 0
@@ -9315,6 +9374,7 @@ MonoBehaviour:
   uvw: {x: 0.5, y: 0, z: 0.5}
   hollowObjects:
   - {fileID: 399672757}
+  batch: 1
 --- !u!1 &1190812364
 GameObject:
   m_ObjectHideFlags: 0
@@ -9368,6 +9428,7 @@ MonoBehaviour:
   count: {x: 14, y: 1, z: 1}
   uvw: {x: 0.5, y: 0.5, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1 &1197332805
 GameObject:
   m_ObjectHideFlags: 0
@@ -9499,6 +9560,7 @@ MonoBehaviour:
   count: {x: 2, y: 12, z: 1}
   uvw: {x: 0.5, y: 0.5, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1 &1248410236
 GameObject:
   m_ObjectHideFlags: 0
@@ -9552,6 +9614,7 @@ MonoBehaviour:
   count: {x: 10, y: 7, z: 1}
   uvw: {x: 0.5, y: 0.5, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1 &1251113650
 GameObject:
   m_ObjectHideFlags: 0
@@ -9607,6 +9670,7 @@ MonoBehaviour:
   hollowObjects:
   - {fileID: 1177315952}
   - {fileID: 297706187}
+  batch: 1
 --- !u!1 &1286142198
 GameObject:
   m_ObjectHideFlags: 0
@@ -9660,6 +9724,7 @@ MonoBehaviour:
   count: {x: 2, y: 12, z: 1}
   uvw: {x: 0.5, y: 0.5, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1 &1302755802
 GameObject:
   m_ObjectHideFlags: 0
@@ -10032,6 +10097,7 @@ MonoBehaviour:
   count: {x: 10, y: 5, z: 1}
   uvw: {x: 0.5, y: 0.5, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1001 &1310363888
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10198,9 +10264,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   loopshape: {fileID: 1316292699}
   gastro: {fileID: 521507739}
-  thickness: 0.05
-  thicknessTolerance: 0.01
-  validationTolerance: 2
   showDebugLayer: 0
   debugLayerOpacity: 1
 --- !u!114 &1316292699
@@ -10217,6 +10280,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   oneTime: 0
   onOpen:
+    m_PersistentCalls:
+      m_Calls: []
+  onValidated:
+    m_PersistentCalls:
+      m_Calls: []
+  onInvalidated:
     m_PersistentCalls:
       m_Calls: []
 --- !u!1 &1326242192
@@ -10347,6 +10416,7 @@ MonoBehaviour:
   uvw: {x: 0.5, y: 0, z: 0.5}
   hollowObjects:
   - {fileID: 1987232504}
+  batch: 1
 --- !u!1 &1352549275
 GameObject:
   m_ObjectHideFlags: 0
@@ -10437,6 +10507,7 @@ MonoBehaviour:
   hollowObjects:
   - {fileID: 1987232504}
   - {fileID: 1419754119}
+  batch: 1
 --- !u!4 &1359236466 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6854925346726116478, guid: 1ff4e18eec5fdd548bca1b5db0d56393, type: 3}
@@ -10899,6 +10970,7 @@ MonoBehaviour:
   count: {x: 10, y: 5, z: 1}
   uvw: {x: 0.5, y: 0.5, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1 &1433824571
 GameObject:
   m_ObjectHideFlags: 0
@@ -11022,6 +11094,7 @@ MonoBehaviour:
   hollowObjects:
   - {fileID: 834744741}
   - {fileID: 700495378}
+  batch: 1
 --- !u!1001 &1470337191
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11184,6 +11257,7 @@ MonoBehaviour:
   uvw: {x: 0.25, y: 0.25, z: 0.25}
   hollowObjects:
   - {fileID: 1025461355}
+  batch: 1
 --- !u!1 &1472143878
 GameObject:
   m_ObjectHideFlags: 0
@@ -11268,6 +11342,7 @@ MonoBehaviour:
   count: {x: 10, y: 6, z: 1}
   uvw: {x: 0.5, y: 0, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1 &1508302066
 GameObject:
   m_ObjectHideFlags: 0
@@ -11323,6 +11398,7 @@ MonoBehaviour:
   uvw: {x: 0.5, y: 0.5, z: 0.5}
   hollowObjects:
   - {fileID: 1701869658}
+  batch: 1
 --- !u!1 &1516798165
 GameObject:
   m_ObjectHideFlags: 0
@@ -11723,6 +11799,7 @@ MonoBehaviour:
   uvw: {x: 0.5, y: 0, z: 0.5}
   hollowObjects:
   - {fileID: 795705601}
+  batch: 1
 --- !u!1 &1559261217
 GameObject:
   m_ObjectHideFlags: 0
@@ -11776,6 +11853,7 @@ MonoBehaviour:
   count: {x: 14, y: 6, z: 1}
   uvw: {x: 0.5, y: 0, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1 &1569062527
 GameObject:
   m_ObjectHideFlags: 0
@@ -12119,6 +12197,7 @@ MonoBehaviour:
   count: {x: 18, y: 18, z: 1}
   uvw: {x: 0.5, y: 0.5, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1001 &1630064336
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12239,6 +12318,7 @@ MonoBehaviour:
   uvw: {x: 0.25, y: 0.25, z: 0.25}
   hollowObjects:
   - {fileID: 405417741}
+  batch: 1
 --- !u!1 &1650713226
 GameObject:
   m_ObjectHideFlags: 0
@@ -12328,6 +12408,7 @@ MonoBehaviour:
   uvw: {x: 0.5, y: 0, z: 0.5}
   hollowObjects:
   - {fileID: 2083139671}
+  batch: 1
 --- !u!1 &1681658997
 GameObject:
   m_ObjectHideFlags: 0
@@ -12598,6 +12679,7 @@ MonoBehaviour:
   count: {x: 14, y: 1, z: 1}
   uvw: {x: 0.5, y: 0.5, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1 &1701869658
 GameObject:
   m_ObjectHideFlags: 0
@@ -12795,6 +12877,7 @@ MonoBehaviour:
   count: {x: 2, y: 10, z: 1}
   uvw: {x: 0.5, y: 0, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1 &1732815295
 GameObject:
   m_ObjectHideFlags: 0
@@ -12848,6 +12931,7 @@ MonoBehaviour:
   count: {x: 10, y: 5, z: 1}
   uvw: {x: 0.5, y: 0.5, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1 &1733754871
 GameObject:
   m_ObjectHideFlags: 0
@@ -12899,8 +12983,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b806f3635d0fb94faf0c4f1687afc39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnPoint: {fileID: 1843351037}
-  debugSpawnPoint: {fileID: 0}
+  onLoaded:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: b2f1048833879fd4eb780ed41474578f, type: 2}
+        m_TargetAssemblyTypeName: NaniCore.Bordure.GameManagerAgent, Assembly-CSharp
+        m_MethodName: StartUsingProtagonist
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 11400000, guid: b2f1048833879fd4eb780ed41474578f, type: 2}
+        m_TargetAssemblyTypeName: NaniCore.Bordure.GameManagerAgent, Assembly-CSharp
+        m_MethodName: MoveProtagonistToSpawnPoint
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 1843351037}
+          m_ObjectArgumentAssemblyTypeName: NaniCore.Bordure.SpawnPoint, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1737643680
 GameObject:
   m_ObjectHideFlags: 0
@@ -12940,6 +13049,7 @@ MonoBehaviour:
   uvw: {x: 0.5, y: 0.5, z: 0.5}
   hollowObjects:
   - {fileID: 2141055002}
+  batch: 1
 --- !u!4 &1737643682
 Transform:
   m_ObjectHideFlags: 0
@@ -13009,6 +13119,7 @@ MonoBehaviour:
   count: {x: 10, y: 14, z: 1}
   uvw: {x: 0.5, y: 0.5, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1 &1740355884
 GameObject:
   m_ObjectHideFlags: 0
@@ -13279,6 +13390,7 @@ MonoBehaviour:
   count: {x: 20, y: 40, z: 1}
   uvw: {x: 0.5, y: 1, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1 &1752348624
 GameObject:
   m_ObjectHideFlags: 0
@@ -13332,6 +13444,7 @@ MonoBehaviour:
   count: {x: 10, y: 14, z: 1}
   uvw: {x: 0.5, y: 0.5, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1 &1765338939
 GameObject:
   m_ObjectHideFlags: 0
@@ -13732,6 +13845,7 @@ MonoBehaviour:
   count: {x: 2, y: 1, z: 20}
   uvw: {x: 0.5, y: 0.5, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1 &1803515772
 GameObject:
   m_ObjectHideFlags: 0
@@ -13785,6 +13899,7 @@ MonoBehaviour:
   count: {x: 1, y: 6, z: 1}
   uvw: {x: 0.5, y: 0, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1 &1820074971
 GameObject:
   m_ObjectHideFlags: 0
@@ -13838,6 +13953,7 @@ MonoBehaviour:
   count: {x: 10, y: 5, z: 1}
   uvw: {x: 0.5, y: 0.5, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1 &1837825811
 GameObject:
   m_ObjectHideFlags: 0
@@ -13891,6 +14007,7 @@ MonoBehaviour:
   count: {x: 5, y: 1, z: 20}
   uvw: {x: 0.5, y: 0.5, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1 &1840684049
 GameObject:
   m_ObjectHideFlags: 0
@@ -13944,6 +14061,7 @@ MonoBehaviour:
   count: {x: 1, y: 6, z: 1}
   uvw: {x: 0.5, y: 0, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1 &1843351035
 GameObject:
   m_ObjectHideFlags: 0
@@ -14296,6 +14414,7 @@ MonoBehaviour:
   count: {x: 2, y: 5, z: 1}
   uvw: {x: 0.5, y: 0.5, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1 &1876843916
 GameObject:
   m_ObjectHideFlags: 0
@@ -14566,6 +14685,7 @@ MonoBehaviour:
   count: {x: 18, y: 10, z: 1}
   uvw: {x: 0.5, y: 1, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1 &1880923117
 GameObject:
   m_ObjectHideFlags: 0
@@ -14620,6 +14740,7 @@ MonoBehaviour:
   uvw: {x: 0.5, y: 0.5, z: 0.5}
   hollowObjects:
   - {fileID: 912033362}
+  batch: 1
 --- !u!1001 &1901129402
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14776,6 +14897,7 @@ MonoBehaviour:
   count: {x: 14, y: 6, z: 1}
   uvw: {x: 0.5, y: 0, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1 &1917457264
 GameObject:
   m_ObjectHideFlags: 0
@@ -14936,6 +15058,7 @@ MonoBehaviour:
   count: {x: 12, y: 10, z: 1}
   uvw: {x: 0.5, y: 0, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1 &1929827149
 GameObject:
   m_ObjectHideFlags: 0
@@ -14990,6 +15113,7 @@ MonoBehaviour:
   uvw: {x: 0.25, y: 0.25, z: 0.25}
   hollowObjects:
   - {fileID: 456855857}
+  batch: 1
 --- !u!1 &1930050580
 GameObject:
   m_ObjectHideFlags: 0
@@ -15043,6 +15167,7 @@ MonoBehaviour:
   count: {x: 10, y: 6, z: 1}
   uvw: {x: 0.5, y: 0, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1 &1945995901
 GameObject:
   m_ObjectHideFlags: 0
@@ -15096,6 +15221,7 @@ MonoBehaviour:
   count: {x: 10, y: 6, z: 1}
   uvw: {x: 0.5, y: 0, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1 &1970655599
 GameObject:
   m_ObjectHideFlags: 0
@@ -15149,6 +15275,7 @@ MonoBehaviour:
   count: {x: 5, y: 20, z: 1}
   uvw: {x: 0.5, y: 0.5, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1 &1977078274
 GameObject:
   m_ObjectHideFlags: 0
@@ -15202,6 +15329,7 @@ MonoBehaviour:
   count: {x: 10, y: 17, z: 1}
   uvw: {x: 0.5, y: 0.5, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1 &1980873662
 GameObject:
   m_ObjectHideFlags: 0
@@ -15899,6 +16027,7 @@ MonoBehaviour:
   count: {x: 14, y: 6, z: 1}
   uvw: {x: 0.5, y: 0, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1 &2017587868
 GameObject:
   m_ObjectHideFlags: 0
@@ -15952,6 +16081,7 @@ MonoBehaviour:
   count: {x: 2, y: 19, z: 1}
   uvw: {x: 0.5, y: 0.5, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1 &2022341060
 GameObject:
   m_ObjectHideFlags: 0
@@ -16037,6 +16167,7 @@ MonoBehaviour:
   count: {x: 12, y: 10, z: 1}
   uvw: {x: 0.5, y: 0, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1 &2041870776
 GameObject:
   m_ObjectHideFlags: 0
@@ -16308,6 +16439,7 @@ MonoBehaviour:
   uvw: {x: 0.5, y: 0, z: 0.5}
   hollowObjects:
   - {fileID: 1419754119}
+  batch: 1
 --- !u!1 &2064907428
 GameObject:
   m_ObjectHideFlags: 0
@@ -16362,6 +16494,7 @@ MonoBehaviour:
   uvw: {x: 0.25, y: 0.25, z: 0.25}
   hollowObjects:
   - {fileID: 1365849984}
+  batch: 1
 --- !u!1001 &2065298385
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -17048,9 +17181,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   loopshape: {fileID: 2115685218}
   gastro: {fileID: 1362987203}
-  thickness: 0.05
-  thicknessTolerance: 0.01
-  validationTolerance: 2
   showDebugLayer: 0
   debugLayerOpacity: 1
 --- !u!114 &2115685218
@@ -17067,6 +17197,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   oneTime: 0
   onOpen:
+    m_PersistentCalls:
+      m_Calls: []
+  onValidated:
+    m_PersistentCalls:
+      m_Calls: []
+  onInvalidated:
     m_PersistentCalls:
       m_Calls: []
 --- !u!1 &2119268083
@@ -17122,6 +17258,7 @@ MonoBehaviour:
   count: {x: 2, y: 10, z: 1}
   uvw: {x: 0.5, y: 0, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1 &2141055002
 GameObject:
   m_ObjectHideFlags: 0
@@ -17278,6 +17415,7 @@ MonoBehaviour:
   count: {x: 14, y: 1, z: 1}
   uvw: {x: 0.5, y: 0.5, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!65 &2355136866110114569
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -17350,6 +17488,7 @@ MonoBehaviour:
   count: {x: 1, y: 6, z: 1}
   uvw: {x: 0.5, y: 0, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!4 &3565923413512330869
 Transform:
   m_ObjectHideFlags: 0
@@ -17386,6 +17525,7 @@ MonoBehaviour:
   count: {x: 14, y: 1, z: 1}
   uvw: {x: 0.5, y: 0.5, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!4 &6406227755498592411
 Transform:
   m_ObjectHideFlags: 0
@@ -17442,6 +17582,7 @@ MonoBehaviour:
   count: {x: 1, y: 6, z: 1}
   uvw: {x: 0.5, y: 0, z: 0.5}
   hollowObjects: []
+  batch: 1
 --- !u!1 &7755323467789082217
 GameObject:
   m_ObjectHideFlags: 0

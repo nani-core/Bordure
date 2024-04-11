@@ -3,8 +3,6 @@ using UnityEngine;
 namespace NaniCore.Bordure {
 	public partial class Protagonist : MonoBehaviour {
 		#region Fields
-		[SerializeField] private AudioListener audioListener;
-		[SerializeField] private AudioSource sfxAudioSource;
 		[SerializeField] private AudioSource footAudioSource;
 		#endregion
 
@@ -16,13 +14,7 @@ namespace NaniCore.Bordure {
 		private void PlaySfx(AudioClip clip) {
 			if(clip == null)
 				return;
-			sfxAudioSource.PlayOneShot(clip);
-		}
-		#endregion
-
-		#region Life cycle
-		protected void InitializeAudio() {
-			GameManager.Instance.AudioListener = audioListener;
+			GameManager.Instance.SfxAudioSource.PlayOneShot(clip);
 		}
 		#endregion
 	}
