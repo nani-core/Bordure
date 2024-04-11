@@ -25,7 +25,7 @@ namespace NaniCore.Bordure {
 				if(value) {
 					protagonist = GetProtagonistSingleton();
 					Protagonist.gameObject.SetActive(true);
-					AttachCameraTo(Protagonist.Eye);
+					AttachCameraTo(Protagonist.Eye, true);
 				}
 				else {
 					if(Protagonist == null)

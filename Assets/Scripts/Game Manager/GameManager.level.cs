@@ -25,10 +25,14 @@ namespace NaniCore.Bordure {
 			return level;
 		}
 
-		public void DestroyLevel(string levelName) {
+		public void UnloadLevel(string levelName) {
 			if(!loadedLevels.ContainsKey(levelName))
 				return;
 			Destroy(loadedLevels[levelName]);
+		}
+
+		public void UnloadLevel(Level level) {
+			Destroy(level);
 		}
 		#endregion
 
@@ -48,6 +52,10 @@ namespace NaniCore.Bordure {
 
 		private void OnLevelLoaded(Level level) {
 			loadedLevels.Add(level.name, level);
+
+			if(level.SpawnPoint != null) {
+				AlignCameraTo(level.SpawnPoint.transform);
+			}
 		}
 
 		private void OnLevelUnloaded(Level level) {

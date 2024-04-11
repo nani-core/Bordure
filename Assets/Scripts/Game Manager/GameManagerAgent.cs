@@ -14,5 +14,31 @@ namespace NaniCore.Bordure {
 			Instance.IsUsingProtagonist = false;
 		}
 		#endregion
+
+		#region Camera
+		public void AlignCameraTo(Transform transform) {
+			Instance.AlignCameraTo(transform);
+		}
+		#endregion
+
+		#region Level
+		public void LoadLevel(Level template) {
+			Instance.LoadLevel(template);
+		}
+
+		public void UnloadLevel(string levelName) {
+			Instance.UnloadLevel(levelName);
+		}
+
+		public void UnloadLevel(Level level) {
+			Instance.UnloadLevel(level);
+		}
+		#endregion
+
+		#region Game
+		public void QuitGame() {
+			Instance.QuitGame();
+		}
+		#endregion
 	}
 }
