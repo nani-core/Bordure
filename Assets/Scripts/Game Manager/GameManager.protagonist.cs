@@ -34,15 +34,17 @@ namespace NaniCore.Bordure {
 				}
 			}
 		}
-		#endregion
 
-		#region Life cycles
-		private void InitializeProtagonist() {
-			IsUsingProtagonist = startLevel.spawnProtagonistAtStart;
+		public void MoveProtagonistToSpawnPoint(SpawnPoint spawnPoint) {
+			MoveProtagonistTo(spawnPoint.transform);
 		}
 
-		private void FinalizeProtagonist() {
-			DestroyProtagonist();
+		public void MoveProtagonistTo(Transform point) {
+			if(!IsUsingProtagonist) {
+				Debug.LogWarning("Warning: Cannot move the protagonist as we are not controlling it.");
+				return;
+			}
+			Protagonist.transform.AlignWith(point);
 		}
 		#endregion
 
@@ -55,6 +57,7 @@ namespace NaniCore.Bordure {
 				return null;
 			}
 			prefabInstance.name = "Protagonist";
+			prefabInstance.transform.SetParent(transform);
 
 			// Assign the profile.
 			if(Settings.protagonistProfile == null) {
@@ -64,16 +67,6 @@ namespace NaniCore.Bordure {
 			// Make untouchable.
 			if(!Application.isPlaying)
 				newProtagonist.gameObject.MakeUntouchable();
-
-			// Move to the spawn point.
-			if(startLevel != null) {
-				newProtagonist.transform.SetParent(transform, true);
-				SpawnPoint spawnPoint = startLevel.DebugSpawnPoint;
-				newProtagonist.transform.SetPositionAndRotation(
-					spawnPoint.transform.position,
-					Quaternion.LookRotation(spawnPoint.transform.forward)
-				);
-			}
 
 			return newProtagonist;
 		}
@@ -86,20 +79,6 @@ namespace NaniCore.Bordure {
 				protagonist = CreateProtagonist();
 
 			return protagonist;
-		}
-
-		private void DestroyProtagonist() {
-			if(Protagonist == null)
-				return;
-			if(!IsBeingDestroyed) {
-				// An exception might be raised on game exiting, as the game
-				// manager which is the parent of the protaginst could be
-				// pending to be destroyed.
-				if(MainCamera.transform.IsChildOf(Protagonist.transform))
-					RetrieveCameraHierarchy();
-			}
-			HierarchyUtility.Destroy(Protagonist);
-			protagonist = null;
 		}
 		#endregion
 	}

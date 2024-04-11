@@ -13,6 +13,14 @@ namespace NaniCore.Bordure {
 		public void StopUsingProtagonist() {
 			Instance.IsUsingProtagonist = false;
 		}
+
+		public void MoveProtagonistToSpawnPoint(SpawnPoint spawnPoint) {
+			Instance.MoveProtagonistToSpawnPoint(spawnPoint);
+		}
+
+		public void MoveProtagonistTo(Transform point) {
+			Instance.MoveProtagonistTo(point);
+		}
 		#endregion
 
 		#region Camera

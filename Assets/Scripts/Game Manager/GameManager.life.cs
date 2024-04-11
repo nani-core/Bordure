@@ -28,17 +28,17 @@ namespace NaniCore.Bordure {
 			InitializeConstants();
 			InitializeLevel();
 			InitializeRigidbody();
-			InitializeProtagonist();
 			InitializeDebugUi();
 		}
 
+#pragma warning disable CS0465
 		protected void Finalize() {
 			isBeingDestroyed = true;
-			FinalizeProtagonist();
 			FinalizeDebugUi();
 			RenderUtility.ReleasePooledResources();
 			ReleaseAllTemporaryResources();
 		}
+#pragma warning restore
 		#endregion
 	}
 }

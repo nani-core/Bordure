@@ -52,10 +52,6 @@ namespace NaniCore.Bordure {
 
 		private void OnLevelLoaded(Level level) {
 			loadedLevels.Add(level.name, level);
-
-			if(level.SpawnPoint != null) {
-				AlignCameraTo(level.SpawnPoint.transform);
-			}
 		}
 
 		private void OnLevelUnloaded(Level level) {
