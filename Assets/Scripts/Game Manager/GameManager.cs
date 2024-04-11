@@ -2,15 +2,19 @@ using UnityEngine;
 using NaughtyAttributes;
 
 namespace NaniCore.Bordure {
-	[ExecuteInEditMode]
 	public partial class GameManager : MonoBehaviour {
 		#region Serialized fields
 		[SerializeField][Expandable] private GameSettings settings;
 		[SerializeField] private Level startLevel;
 		#endregion
 
+		#region Fields
+		private bool isBeingDestroyed = false;
+		#endregion
+
 		#region Interfaces
 		public GameSettings Settings => settings;
+		public bool IsBeingDestroyed => isBeingDestroyed;
 		#endregion
 
 		#region Life cycle
@@ -34,21 +38,12 @@ namespace NaniCore.Bordure {
 		}
 
 		protected void Update() {
-#if UNITY_EDITOR
-			if(!Application.isPlaying) {
-				OnEditUpdate();
-				return;
-			}
-#endif
 			UpdateLoopShape();
 			UpdateDebugUi();
 		}
 
 		protected void OnDestroy() {
-#if UNITY_EDITOR
-			if(!Application.isPlaying)
-				return;
-#endif
+			isBeingDestroyed = true;
 			FinalizeProtagonist();
 			FinalizeDebugUi();
 			RenderUtility.ReleasePooledResources();

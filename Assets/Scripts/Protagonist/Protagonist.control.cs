@@ -24,6 +24,19 @@ namespace NaniCore.Bordure {
 		#endregion
 
 		#region Properties
+		public bool IsControlEnabled {
+			get {
+				if(!TryGetComponent(out ProtagonistInputHandler inputHandler))
+					return false;
+				return inputHandler.isActiveAndEnabled;
+			}
+			set {
+				if(!TryGetComponent(out ProtagonistInputHandler inputHandler))
+					return;
+				inputHandler.enabled = value;
+			}
+		}
+
 		public Transform Eye => eye;
 		public Vector3 Upward => transform.up;
 

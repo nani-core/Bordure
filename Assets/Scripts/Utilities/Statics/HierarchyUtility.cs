@@ -1,7 +1,5 @@
 using UnityEngine;
 using UnityEditor.SceneManagement;
-
-
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -81,22 +79,6 @@ namespace NaniCore {
 			if(hideInEditor)
 				hideFlags |= HideFlags.HideInInspector | HideFlags.HideInHierarchy;
 			realTarget.hideFlags = hideFlags;
-		}
-
-		public static IEnumerable<T> FindAllComponentsInEditor<T>(this GameObject root, bool includeInactive = false) where T : Component {
-#if UNITY_EDITOR
-			if(!Application.isPlaying) {
-				foreach(Transform child in root.transform) {
-					if(child.TryGetComponent<T>(out var here))
-						yield return here;
-					foreach(var grandchild in child.gameObject.FindAllComponentsInEditor<T>(includeInactive))
-						yield return grandchild;
-				}
-				yield break;
-			}
-#endif
-			foreach(var component in root.GetComponentsInChildren<T>(includeInactive))
-				yield return component;
 		}
 		#endregion
 
