@@ -1,11 +1,9 @@
 using UnityEngine;
-using System.Reflection;
 
 namespace NaniCore.Bordure {
 	public partial class GameManager : MonoBehaviour {
 		#region Fields
 		private Protagonist protagonist;
-		[SerializeField] private bool spawnProtagonistAtStart = true;
 		#endregion
 
 		#region Interfaces
@@ -19,9 +17,11 @@ namespace NaniCore.Bordure {
 			}
 		}
 
-		public bool UsesProtagonist {
-			get => Protagonist.isActiveAndEnabled;
+		public bool IsUsingProtagonist {
+			get => Protagonist != null && Protagonist.isActiveAndEnabled;
 			set {
+				if(value == IsUsingProtagonist)
+					return;
 				if(value) {
 					protagonist = GetProtagonistSingleton();
 					Protagonist.gameObject.SetActive(true);
@@ -38,7 +38,7 @@ namespace NaniCore.Bordure {
 
 		#region Life cycles
 		private void InitializeProtagonist() {
-			UsesProtagonist = spawnProtagonistAtStart;
+			IsUsingProtagonist = startLevel.spawnProtagonistAtStart;
 		}
 
 		private void FinalizeProtagonist() {
@@ -59,12 +59,6 @@ namespace NaniCore.Bordure {
 			// Assign the profile.
 			if(Settings.protagonistProfile == null) {
 				Debug.LogWarning("Warning: No protagonist profile is assigned.", Settings);
-			}
-			else {
-				FieldInfo setter = typeof(Protagonist).GetField("profile",
-					BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public
-				);
-				setter.SetValue(newProtagonist, Settings.protagonistProfile);
 			}
 
 			// Make untouchable.

@@ -1,17 +1,20 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace NaniCore.Bordure {
 	public class Level : MonoBehaviour {
 		#region Serialized fields
+		public bool spawnProtagonistAtStart = true;
 		[SerializeField] private SpawnPoint spawnPoint;
 #if DEBUG
 		[SerializeField] private SpawnPoint debugSpawnPoint;
 #endif
+
+		[SerializeField] private UnityEvent onLoaded;
 		#endregion
 
 		#region Interfaces
-		public delegate void LevelCallback(Level self);
-		public LevelCallback onLoaded, onUnloaded;
+		public System.Action OnLoaded, OnUnloaded;
 
 		public SpawnPoint SpawnPoint => spawnPoint;
 
@@ -28,11 +31,12 @@ namespace NaniCore.Bordure {
 
 		#region Life cycle
 		protected void Start() {
-			onLoaded?.Invoke(this);
+			OnLoaded += onLoaded.Invoke;
+			OnLoaded?.Invoke();
 		}
 
 		protected void OnDestroy() {
-			onUnloaded?.Invoke(this);
+			OnUnloaded?.Invoke();
 		}
 		#endregion
 	}

@@ -42,8 +42,8 @@ namespace NaniCore.Bordure {
 
 		#region Functions
 		private void TakeCareOfLevel(Level level) {
-			level.onLoaded += OnLevelLoaded;
-			level.onUnloaded += OnLevelUnloaded;
+			level.OnLoaded += () => OnLevelLoaded(level);
+			level.OnUnloaded += () => OnLevelUnloaded(level);
 		}
 
 		private void OnLevelLoaded(Level level) {
