@@ -99,12 +99,6 @@ namespace NaniCore.Bordure {
 
 			ApplyGeometry();
 
-			if(eye == null) {
-				eye = transform.Find("Eye");
-				if(eye == null)
-					eye = new GameObject("Eye").transform;
-			}
-			eye.SetParent(transform, false);
 			eye.SetLocalPositionAndRotation(
 				Vector3.up * (Profile.height - Profile.eyeHanging),
 				Quaternion.identity
@@ -113,12 +107,6 @@ namespace NaniCore.Bordure {
 
 			rigidbodyAgent = GetComponent<RigidbodyAgent>();
 		}
-
-#if UNITY_EDITOR
-		protected void ValidateControl() {
-			ApplyGeometry();
-		}
-#endif
 
 		protected void FixedUpdateControl() {
 			ValidateMovementConditions();

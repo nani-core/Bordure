@@ -23,13 +23,22 @@ namespace NaniCore.Bordure {
 				if(value == IsUsingProtagonist)
 					return;
 				if(value) {
+					// Spawn the temporary camera anchor.
+					var anchor = new GameObject().transform;
+					anchor.SetParent(MainCamera.transform, false);
+					anchor.SetParent(null, true);
+
 					protagonist = GetProtagonistSingleton();
 					Protagonist.gameObject.SetActive(true);
 					AttachCameraTo(Protagonist.Eye, true);
+					AlignCameraTo(anchor);
+
+					Destroy(anchor.gameObject);
 				}
 				else {
 					if(Protagonist == null)
 						return;
+					RetrieveCameraHierarchy();
 					Protagonist.gameObject.SetActive(false);
 				}
 			}
