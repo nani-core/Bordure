@@ -105,6 +105,7 @@ namespace NaniCore.Bordure {
 			StartCoroutine(TransitCameraToCoroutine(seat.transform, 1f));
 
 			currentSeat = seat;
+			currentSeat.SendMessage("OnSitOn", SendMessageOptions.DontRequireReceiver);
 		}
 
 		public void ProtagonistLeaveSeat() {
@@ -115,6 +116,7 @@ namespace NaniCore.Bordure {
 			UsesProtagonistMovement = true;
 			UsesProtagonistOrientation = true;
 
+			currentSeat.SendMessage("OnLeft", SendMessageOptions.DontRequireReceiver);
 			currentSeat = null;
 		}
 		#endregion
