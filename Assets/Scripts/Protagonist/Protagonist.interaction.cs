@@ -39,7 +39,7 @@ namespace NaniCore.Bordure {
 					grabbingObject.transform.SetParent(eye.transform, true);
 				}
 
-				inputHandler.SetGrabbingActionEnabled(grabbingObject != null);
+				InputHandler.UsesGrabbing = grabbingObject != null;
 			}
 		}
 
@@ -68,14 +68,6 @@ namespace NaniCore.Bordure {
 		#endregion
 
 		#region Life cycle
-		private void InitializeInteraction() {
-			inputHandler = gameObject.EnsureComponent<ProtagonistInputHandler>();
-
-			if(focus == null) {
-				Debug.LogWarning("No FocusUi component found in the protagonist interaction UI prefab.", this);
-			}
-		}
-
 		private void UpdateInteraction() {
 			bool hasHit = EyeCast(out lookingHit);
 			lookingAtObject = hasHit ? lookingHit.transform.gameObject : null;

@@ -7,7 +7,6 @@ namespace NaniCore.Bordure {
 		#region Fields
 		protected Protagonist protagonist;
 		protected PlayerInput playerInput;
-		private InputActionMap grabbingActionMap;
 
 		protected Vector3 moveVelocity;
 		protected float floating = 0f, sinking = 0f;
@@ -21,15 +20,9 @@ namespace NaniCore.Bordure {
 			playerInput.notificationBehavior = PlayerNotifications.SendMessages;
 			playerInput.actions.FindActionMap("Normal").Enable();
 
-			grabbingActionMap = playerInput.actions.FindActionMap("Grabbing");
-		}
-
-		protected void OnEnable() {
-			Cursor.lockState = CursorLockMode.Locked;
-		}
-
-		protected void OnDisable() {
-			Cursor.lockState = CursorLockMode.None;
+			SetInputMapActivity("Normal", true);
+			UsesMovement = true;
+			UsesOrientation = true;
 		}
 
 		protected void FixedUpdate() {
@@ -42,28 +35,65 @@ namespace NaniCore.Bordure {
 		}
 		#endregion
 
+		#region Interfaces
+		public bool UsesMovement {
+			get => GetInputMapActivity("Movement");
+			set => SetInputMapActivity("Movement", value);
+		}
+		public bool UsesOrientation {
+			get => GetInputMapActivity("Orientation");
+			set => SetInputMapActivity("Orientation", value);
+		}
+		public bool UsesGrabbing {
+			get => GetInputMapActivity("Grabbing");
+			set => SetInputMapActivity("Grabbing", value);
+		}
+		#endregion
+
 		#region Functions
-		public void SetGrabbingActionEnabled(bool enabled) {
-			if(enabled)
-				grabbingActionMap.Enable();
+		private InputActionMap FindInputMap(string mapName) {
+			var map = playerInput.actions.FindActionMap(mapName);
+			if(map == null)
+				Debug.LogWarning($"Warning: Cannot find the protagonist input map \"{mapName}\".");
+			return map;
+		}
+
+		private void SetInputMapActivity(string mapName, bool isActive) {
+			var map = FindInputMap(mapName);
+			if(map == null)
+				return;
+			if(isActive)
+				map.Enable();
 			else
-				grabbingActionMap.Disable();
+				map.Disable();
+		}
+
+		private bool GetInputMapActivity(string mapName) {
+			return FindInputMap(mapName)?.enabled ?? false;
 		}
 		#endregion
 
 		#region Handlers
+		// Normal
+
+		protected void OnInteract() {
+			protagonist.Interact();
+		}
+
+		protected void OnCheat() => protagonist?.Cheat();
+
+		protected void OnLeave() {
+			GameManager game = GameManager.Instance;
+			if(game.CurrentSeat?.canLeaveManually ?? false)
+				game.ProtagonistLeaveSeat();
+		}
+
+		// Movement
+
 		protected void OnMoveVelocity(InputValue value) {
 			var raw = value.Get<Vector2>();
 			moveVelocity.x = raw.x;
 			moveVelocity.z = raw.y;
-		}
-
-		protected void OnOrientDelta(InputValue value) {
-			Vector2 raw = value.Get<Vector2>();
-			if(!protagonist.GrabbingOrienting)
-				protagonist.OrientDelta(raw);
-			else
-				protagonist.GrabbingOrientDelta(-raw.x);
 		}
 
 		protected void OnSetSprinting(InputValue value) {
@@ -85,11 +115,17 @@ namespace NaniCore.Bordure {
 			sinking = raw;
 		}
 
-		protected void OnInteract() {
-			protagonist.Interact();
+		// Orientation
+
+		protected void OnOrientDelta(InputValue value) {
+			Vector2 raw = value.Get<Vector2>();
+			if(!protagonist.GrabbingOrienting)
+				protagonist.OrientDelta(raw);
+			else
+				protagonist.GrabbingOrientDelta(-raw.x);
 		}
 
-		protected void OnCheat() => protagonist?.Cheat();
+		// Grabbing
 
 		protected void OnSetGrabbingOrienting(InputValue value) {
 			bool raw = value.Get<float>() > .5f;

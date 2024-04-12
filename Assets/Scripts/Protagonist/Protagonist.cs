@@ -9,7 +9,6 @@ namespace NaniCore.Bordure {
 
 		#region Fields
 		private bool isProfileDuplicated = false;
-		private ProtagonistInputHandler inputHandler;
 		#endregion
 
 		#region Properties
@@ -56,7 +55,6 @@ namespace NaniCore.Bordure {
 				return;
 			}
 			InitializeControl();
-			InitializeInteraction();
 		}
 
 		protected void Update() {
@@ -65,6 +63,14 @@ namespace NaniCore.Bordure {
 
 		protected void FixedUpdate() {
 			FixedUpdateControl();
+		}
+
+		protected void OnEnable() {
+			IsControlEnabled = true;
+		}
+
+		protected void OnDisable() {
+			IsControlEnabled = false;
 		}
 		#endregion
 	}

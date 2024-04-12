@@ -14,7 +14,7 @@ namespace NaniCore.Bordure {
 		/// target transform.
 		/// </summary>
 		public void AlignCameraTo(Transform target) {
-			if(IsUsingProtagonist) {
+			if(UsesProtagonist) {
 				Protagonist.transform.position = target.position - (Protagonist.Eye.position - Protagonist.transform.position);
 				Vector3 euler = target.rotation.eulerAngles * Mathf.Deg2Rad;
 				Protagonist.Azimuth = euler.y;
@@ -24,10 +24,6 @@ namespace NaniCore.Bordure {
 				AttachCameraTo(target, true);
 				RetrieveCameraHierarchy();
 			}
-		}
-
-		public void LerpCameraTo(Transform target) {
-			StartCoroutine(LerpCameraToCoroutine(target, 1f));
 		}
 		#endregion
 
@@ -46,30 +42,49 @@ namespace NaniCore.Bordure {
 			mainCamera.transform.SetParent(transform, true);
 		}
 
-		private System.Collections.IEnumerator LerpCameraToCoroutine(
+		private System.Collections.IEnumerator TransitCameraToCoroutine(
 			Transform target,
 			float duration,
 			float easingFactor = 0.0f
 		) {
-			Transform
-				start = new GameObject("Lerp Start").transform,
-				end = new GameObject("Lerp End").transform,
-				anchor = new GameObject("Lerp Anchor").transform;
-			start.AlignWith(MainCamera.transform);
-			end.AlignWith(target);
+			// Record protagonist control state before moving.
+			bool usesMovement = false, usesOrientation = false;
+			if(UsesProtagonist) {
+				usesMovement = Protagonist.UsesMovement;
+				usesOrientation = Protagonist.UsesOrientation;
+				Protagonist.UsesMovement = false;
+				Protagonist.UsesOrientation = false;
+				Protagonist.IsKinematic = true;
+			}
 
-			yield return MathUtility.ProgressCoroutine(
-				duration,
-				progress => {
-					anchor.Lerp(start, end, progress);
-					AlignCameraTo(anchor);
-				},
-				easingFactor
-			);
+			// The moving process.
+			{
+				Transform
+					start = new GameObject("Lerp Start").transform,
+					end = new GameObject("Lerp End").transform,
+					anchor = new GameObject("Lerp Anchor").transform;
+				start.AlignWith(MainCamera.transform);
+				end.AlignWith(target);
 
-			Destroy(start.gameObject);
-			Destroy(end.gameObject);
-			Destroy(anchor.gameObject);
+				yield return MathUtility.ProgressCoroutine(
+					duration,
+					progress => {
+						anchor.Lerp(start, end, progress);
+						AlignCameraTo(anchor);
+					},
+					easingFactor
+				);
+
+				Destroy(start.gameObject);
+				Destroy(end.gameObject);
+				Destroy(anchor.gameObject);
+			}
+
+			// Restore protagonist control state after moving.
+			if(UsesProtagonist) {
+				Protagonist.UsesMovement = usesMovement;
+				Protagonist.UsesOrientation = usesOrientation;
+			}
 		}
 		#endregion
 	}

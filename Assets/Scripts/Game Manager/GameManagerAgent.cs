@@ -7,11 +7,11 @@ namespace NaniCore.Bordure {
 	public class GameManagerAgent : ScriptableObject {
 		#region Protagonist
 		public void StartUsingProtagonist() {
-			Instance.IsUsingProtagonist = true;
+			Instance.UsesProtagonist = true;
 		}
 
 		public void StopUsingProtagonist() {
-			Instance.IsUsingProtagonist = false;
+			Instance.UsesProtagonist = false;
 		}
 
 		public void MoveProtagonistToSpawnPoint(SpawnPoint spawnPoint) {
@@ -21,15 +21,34 @@ namespace NaniCore.Bordure {
 		public void MoveProtagonistToSpawnPointByName(string name) {
 			Instance.MoveProtagonistToSpawnPointByName(name);
 		}
+
+		public bool UsesProtagonistMovement {
+			get => Instance.UsesProtagonistMovement;
+			set => Instance.UsesProtagonistMovement = value;
+		}
+
+		public bool UsesProtagonistOrientation {
+			get => Instance.UsesProtagonistOrientation;
+			set => Instance.UsesProtagonistOrientation = value;
+		}
+
+		public bool ProtagonistIsKinematic {
+			get => Instance.ProtagonistIsKinematic;
+			set => Instance.ProtagonistIsKinematic = value;
+		}
+
+		public void ProtagonistSitOn(Seat seat) {
+			Instance.ProtagonistSitOn(seat);
+		}
+
+		public void ProtagonistLeaveSeat() {
+			Instance.ProtagonistLeaveSeat();
+		}
 		#endregion
 
 		#region Camera
 		public void AlignCameraTo(Transform target) {
 			Instance.AlignCameraTo(target);
-		}
-
-		public void LerpCameraTo(Transform target) {
-			Instance.LerpCameraTo(target);
 		}
 		#endregion
 
