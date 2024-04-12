@@ -24,8 +24,12 @@ namespace NaniCore.Bordure {
 		#endregion
 
 		#region Camera
-		public void AlignCameraTo(Transform transform) {
-			Instance.AlignCameraTo(transform);
+		public void AlignCameraTo(Transform target) {
+			Instance.AlignCameraTo(target);
+		}
+
+		public void LerpCameraTo(Transform target) {
+			Instance.LerpCameraTo(target);
 		}
 		#endregion
 
