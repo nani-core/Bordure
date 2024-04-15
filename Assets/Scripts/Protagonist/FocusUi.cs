@@ -2,7 +2,6 @@ using UnityEngine;
 using System;
 using System.Collections;
 using UnityEngine.UI;
-using static UnityEditor.Experimental.GraphView.Port;
 
 namespace NaniCore.Bordure {
 	public class FocusUi : MonoBehaviour {

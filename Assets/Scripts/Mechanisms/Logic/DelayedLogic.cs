@@ -1,11 +1,11 @@
 using UnityEngine;
-using UnityEngine.Events;
 using System.Collections;
 
 namespace NaniCore {
 	public class DelayedLogic : Logic {
+		#region Serialized fields
 		[Min(0)] public float delayTime;
-		public UnityEvent callback;
+		#endregion
 
 		private IEnumerator InvokingCoroutine() {
 			yield return new WaitForSeconds(delayTime);

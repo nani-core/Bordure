@@ -10,17 +10,21 @@ namespace NaniCore {
 	public partial class DtCarrier : Carrier {
 		#region Serialized fields
 		/// <remarks>Not yet implemented.</remarks>
-		[SerializeField] private AudioClip movingSound;
-		[SerializeField] private AudioClip onClosedSound;
-		[SerializeField] private Transform closedTransform;
-		[SerializeField] private AudioClip onOpenedSound;
-		[SerializeField] private Transform openedTransform;
-		[SerializeField] private bool isOpened = false;
-		[SerializeField][Min(0)] private float openingDuration = 1f;
+		public AudioClip movingSound;
+		public AudioClip onClosedSound;
+		public Transform closedTransform;
+		public AudioClip onOpenedSound;
+		public Transform openedTransform;
+		/// <summary>
+		/// Whether or not the carrier is opened before SPAWNING.
+		/// </summary>
+		public bool isOpened = false;
+		[Min(0)] public float openingDuration = 1.0f;
+		public float easingFactor = 0.0f;
 
-		[SerializeField] private UnityEvent onOpened;
-		[SerializeField] private UnityEvent onClosed;
-		[SerializeField] private UnityEvent onToggled;
+		public UnityEvent onOpened;
+		public UnityEvent onClosed;
+		public UnityEvent onToggled;
 		#endregion
 
 		#region Fields
@@ -57,17 +61,7 @@ namespace NaniCore {
 
 				progress = value;
 
-				Vector3 newPosition = Vector3.Lerp(closedTransform.position, openedTransform.position, progress);
-				Quaternion newOrientation = Quaternion.Slerp(closedTransform.rotation, openedTransform.rotation, progress);
-
-				if(Rigidbody != null) {
-					Rigidbody.MovePosition(newPosition);
-					Rigidbody.MoveRotation(newOrientation);
-				}
-				else {
-					Target.transform.position = newPosition;
-					Target.transform.rotation = newOrientation;
-				}
+				Target.Lerp(closedTransform, openedTransform, progress);
 			}
 		}
 
@@ -81,7 +75,15 @@ namespace NaniCore {
 		private IEnumerator SetOpeningStateCoroutine(bool targetOpened, float duration) {
 			if(targetOpened == true && isOpened == false)
 				StartCoroutine(AudioUtility.PlayOneShotAtCoroutine(onOpenedSound, transform.position, transform));
-			yield return EaseProgressCoroutine(targetOpened ? 1f : 0f, duration);
+
+			float startProgress = progress, endProgress = targetOpened ? 1.0f : 0.0f;
+			duration *= Mathf.Abs(startProgress - endProgress);
+			yield return MathUtility.ProgressCoroutine(
+				duration,
+				progress => Progress = Mathf.Lerp(startProgress, endProgress, progress),
+				easingFactor
+			);
+			
 			if(targetOpened == false && isOpened == true)
 				StartCoroutine(AudioUtility.PlayOneShotAtCoroutine(onClosedSound, transform.position, transform));
 			isOpened = targetOpened;
@@ -89,17 +91,6 @@ namespace NaniCore {
 				onOpened.Invoke();
 			else
 				onClosed.Invoke();
-		}
-
-		private IEnumerator EaseProgressCoroutine(float targetProgress, float duration) {
-			float oldProgress = progress;
-			duration *= Mathf.Abs(oldProgress - targetProgress);
-			float startTime = Time.time;
-			for(float time; (time = Time.time - startTime) < duration;) {
-				Progress = Mathf.Lerp(oldProgress, targetProgress, time / duration);
-				yield return new WaitForFixedUpdate();
-			}
-			Progress = targetProgress;
 		}
 		#endregion
 

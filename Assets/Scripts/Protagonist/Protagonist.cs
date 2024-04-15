@@ -2,7 +2,6 @@ using UnityEngine;
 using NaughtyAttributes;
 
 namespace NaniCore.Bordure {
-	[ExecuteInEditMode]
 	public partial class Protagonist : MonoBehaviour {
 		#region Serialized fields
 		[SerializeField][Expandable] private ProtagonistProfile profile;
@@ -10,7 +9,6 @@ namespace NaniCore.Bordure {
 
 		#region Fields
 		private bool isProfileDuplicated = false;
-		private ProtagonistInputHandler inputHandler;
 		#endregion
 
 		#region Properties
@@ -52,39 +50,27 @@ namespace NaniCore.Bordure {
 
 		#region Life cycle
 		protected void Start() {
-#if UNITY_EDITOR
-			if(!Application.isPlaying) {
-				return;
-			}
-#endif
-
 			if(Profile == null) {
 				Debug.LogWarning("No profile is configured for the protagonist.", this);
 				return;
 			}
-
 			InitializeControl();
-			InitializeInteraction();
 		}
 
 		protected void Update() {
-#if UNITY_EDITOR
-			if(!Application.isPlaying) {
-				OnValidate();
-				return;
-			}
-#endif
 			UpdateInteraction();
 		}
 
-#if UNITY_EDITOR
-		protected void OnValidate() {
-			ValidateControl();
-		}
-#endif
-
 		protected void FixedUpdate() {
 			FixedUpdateControl();
+		}
+
+		protected void OnEnable() {
+			IsControlEnabled = true;
+		}
+
+		protected void OnDisable() {
+			IsControlEnabled = false;
 		}
 		#endregion
 	}
