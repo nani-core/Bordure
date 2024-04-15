@@ -33,13 +33,13 @@ namespace NaniCore.Bordure {
 			if(!Grabbable.IsGrabbed)
 				return false;
 			var protagonist = GameManager.Instance.Protagonist;
-			Vector3 origin = protagonist.Eye.position, position = Grabbable.transform.position;
+			Vector3 origin = protagonist.Eye.position, position = Target.transform.position;
 			Ray ray = new(origin, position - origin);
 			bool hasHit = PhysicsUtility.Raycast(ray, out RaycastHit hitInfo, protagonist.Profile.maxInteractionDistance, GameManager.Instance.GrabbingLayerMask, false);
 			bool isNotOccluded = !hasHit
 				// Often times the hit will lag a little.
 				|| Vector3.Distance(origin, hitInfo.point) >= Vector3.Distance(origin, position)
-				|| hitInfo.transform.IsChildOf(Grabbable.transform);
+				|| hitInfo.transform.IsChildOf(Target.transform);
 			return !isNotOccluded;
 		}
 		#endregion
