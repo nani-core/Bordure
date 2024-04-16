@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-6453003541533073902
+--- !u!114 &-7704739659877904634
 MonoBehaviour:
   m_ObjectHideFlags: 3
   m_CorrespondingSourceObject: {fileID: 0}
@@ -9,43 +9,227 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 24f077503be6ae942a1e1245dbd53ea9, type: 3}
-  m_Name: Bloom
+  m_Script: {fileID: 11500000, guid: efd4f2a752f876740a55e3c7139496e5, type: 3}
+  m_Name: VHSPro
   m_EditorClassIdentifier: 
   active: 1
-  quality:
-    m_OverrideState: 1
-    m_Value: 1
-  threshold:
+  g_pixel: 1
+  g_color: 1
+  g_palette: 1
+  g_crt: 1
+  g_noise: 1
+  g_jitter: 1
+  g_signal: 1
+  g_feedback: 0
+  g_extra: 0
+  g_bypass: 0
+  pixelOn:
     m_OverrideState: 0
     m_Value: 0
-  intensity:
-    m_OverrideState: 1
-    m_Value: 0.746
-  scatter:
-    m_OverrideState: 1
-    m_Value: 0.717
-  tint:
+  screenResPresetId:
+    m_OverrideState: 0
+    m_Value: 2
+  screenWidth:
+    m_OverrideState: 0
+    m_Value: 640
+  screenHeight:
+    m_OverrideState: 0
+    m_Value: 480
+  colorOn:
+    m_OverrideState: 0
+    m_Value: 0
+  colorMode:
+    m_OverrideState: 0
+    m_Value: 2
+  colorSyncedOn:
+    m_OverrideState: 0
+    m_Value: 1
+  bitsR:
+    m_OverrideState: 0
+    m_Value: 2
+  bitsG:
+    m_OverrideState: 0
+    m_Value: 2
+  bitsB:
+    m_OverrideState: 0
+    m_Value: 2
+  bitsSynced:
+    m_OverrideState: 0
+    m_Value: 2
+  bitsGray:
+    m_OverrideState: 0
+    m_Value: 1
+  grayscaleColor:
     m_OverrideState: 0
     m_Value: {r: 1, g: 1, b: 1, a: 1}
-  dirtTexture:
+  ditherOn:
+    m_OverrideState: 0
+    m_Value: 1
+  ditherMode:
+    m_OverrideState: 0
+    m_Value: 3
+  ditherAmount:
+    m_OverrideState: 0
+    m_Value: 1
+  paletteOn:
+    m_OverrideState: 0
+    m_Value: 1
+  paletteId:
+    m_OverrideState: 1
+    m_Value: 13
+  paletteDelta:
+    m_OverrideState: 1
+    m_Value: 5
+  paletteTex:
     m_OverrideState: 0
     m_Value: {fileID: 0}
-  dirtIntensity:
+    dimension: 1
+  bleedOn:
+    m_OverrideState: 1
+    m_Value: 1
+  crtMode:
     m_OverrideState: 0
     m_Value: 0
-  anamorphic:
+  bleedAmount:
+    m_OverrideState: 1
+    m_Value: 1.5
+  noiseResGlobal:
     m_OverrideState: 0
     m_Value: 1
-  m_Resolution:
+  noiseResWidth:
+    m_OverrideState: 0
+    m_Value: 640
+  noiseResHeight:
+    m_OverrideState: 0
+    m_Value: 480
+  filmgrainOn:
     m_OverrideState: 1
+    m_Value: 1
+  filmGrainAmount:
+    m_OverrideState: 1
+    m_Value: 0.118
+  signalNoiseOn:
+    m_OverrideState: 1
+    m_Value: 1
+  signalNoiseAmount:
+    m_OverrideState: 1
+    m_Value: 0.379
+  signalNoisePower:
+    m_OverrideState: 1
+    m_Value: 0.793
+  lineNoiseOn:
+    m_OverrideState: 0
+    m_Value: 1
+  lineNoiseAmount:
+    m_OverrideState: 0
+    m_Value: 1
+  lineNoiseSpeed:
+    m_OverrideState: 0
+    m_Value: 5
+  tapeNoiseOn:
+    m_OverrideState: 1
+    m_Value: 1
+  tapeNoiseTH:
+    m_OverrideState: 1
+    m_Value: 1.3
+  tapeNoiseAmount:
+    m_OverrideState: 1
+    m_Value: 0.5
+  tapeNoiseSpeed:
+    m_OverrideState: 1
+    m_Value: 1.5
+  scanLinesOn:
+    m_OverrideState: 1
+    m_Value: 1
+  scanLineWidth:
+    m_OverrideState: 1
+    m_Value: 20
+  linesFloatOn:
+    m_OverrideState: 0
+    m_Value: 1
+  linesFloatSpeed:
+    m_OverrideState: 0
+    m_Value: 1
+  stretchOn:
+    m_OverrideState: 0
+    m_Value: 1
+  jitterHOn:
+    m_OverrideState: 0
+    m_Value: 0
+  jitterHAmount:
+    m_OverrideState: 0
+    m_Value: 0.5
+  jitterVOn:
+    m_OverrideState: 0
+    m_Value: 1
+  jitterVAmount:
+    m_OverrideState: 0
+    m_Value: 1
+  jitterVSpeed:
+    m_OverrideState: 0
+    m_Value: 1
+  twitchHOn:
+    m_OverrideState: 0
+    m_Value: 1
+  twitchHFreq:
+    m_OverrideState: 0
+    m_Value: 5
+  twitchVOn:
+    m_OverrideState: 0
+    m_Value: 0
+  twitchVFreq:
+    m_OverrideState: 0
+    m_Value: 1
+  signalTweakOn:
+    m_OverrideState: 0
+    m_Value: 0
+  signalAdjustY:
+    m_OverrideState: 0
+    m_Value: 0
+  signalAdjustI:
+    m_OverrideState: 0
+    m_Value: 0
+  signalAdjustQ:
+    m_OverrideState: 0
+    m_Value: 0
+  signalShiftY:
+    m_OverrideState: 0
+    m_Value: 1
+  signalShiftI:
+    m_OverrideState: 0
+    m_Value: 1
+  signalShiftQ:
+    m_OverrideState: 0
+    m_Value: 1
+  feedbackOn:
+    m_OverrideState: 0
+    m_Value: 0
+  feedbackThresh:
+    m_OverrideState: 0
+    m_Value: 0.1
+  feedbackAmount:
+    m_OverrideState: 0
     m_Value: 2
-  m_HighQualityPrefiltering:
-    m_OverrideState: 1
+  feedbackFade:
+    m_OverrideState: 0
+    m_Value: 0.82
+  feedbackColor:
+    m_OverrideState: 0
+    m_Value: {r: 1, g: 0.5, b: 0, a: 1}
+  feedbackDebugOn:
+    m_OverrideState: 0
     m_Value: 0
-  m_HighQualityFiltering:
-    m_OverrideState: 1
-    m_Value: 1
+  feedbackMode: 0
+  independentTimeOn:
+    m_OverrideState: 0
+    m_Value: 0
+  bypassOn:
+    m_OverrideState: 0
+    m_Value: 0
+  bypassTex:
+    m_OverrideState: 0
+    m_Value: {fileID: 0}
+    dimension: 1
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -59,4 +243,4 @@ MonoBehaviour:
   m_Name: Post Processing Volume Profile
   m_EditorClassIdentifier: 
   components:
-  - {fileID: -6453003541533073902}
+  - {fileID: -7704739659877904634}
