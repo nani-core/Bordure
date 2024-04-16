@@ -100,16 +100,17 @@ namespace NaniCore.Bordure {
 						maxCastDistance = Mathf.Min(maxCastDistance, fv.MaxDistance);
 					}
 				}
-				focus.Opacity = 1 - Mathf.Clamp01(effectiveCastDistance / maxCastDistance);
+				// focus.Opacity = 1 - Mathf.Clamp01(effectiveCastDistance / maxCastDistance);
 			}
 			else if(!GrabbingObject) {
 				focus.CurrentStatus = FocusUi.Status.Normal;
-				focus.Opacity = 1 - Mathf.Clamp01(effectiveCastDistance / Profile.maxInteractionDistance);
+				// focus.Opacity = 1 - Mathf.Clamp01(effectiveCastDistance / Profile.maxInteractionDistance);
 			}
 			else {
 				focus.CurrentStatus = FocusUi.Status.Grabbing;
-				focus.Opacity = 1f;
+				// focus.Opacity = 1f;
 			}
+			// focus.Opacity = 1f;
 		}
 
 		private IEnumerator GrabCoroutine(Transform target) {
