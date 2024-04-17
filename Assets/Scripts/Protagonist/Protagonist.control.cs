@@ -21,19 +21,37 @@ namespace NaniCore.Bordure {
 		private Vector3 bufferedMovement;
 		/// <summary>The target velocity due to movement, in world space.</summary>
 		private Vector3 desiredHorizontalMovement;
+		private ProtagonistInputHandler inputHandler;
 		#endregion
 
 		#region Properties
+		private ProtagonistInputHandler InputHandler {
+			get {
+				if(inputHandler != null)
+					return inputHandler;
+				inputHandler = transform.GetComponent<ProtagonistInputHandler>();
+				return inputHandler;
+			}
+		}
+
 		public bool IsControlEnabled {
 			get {
-				if(!TryGetComponent(out ProtagonistInputHandler inputHandler))
+				if(InputHandler == null)
 					return false;
-				return inputHandler.isActiveAndEnabled;
+				return InputHandler.isActiveAndEnabled;
 			}
 			set {
-				if(!TryGetComponent(out ProtagonistInputHandler inputHandler))
+				if(InputHandler == null)
 					return;
-				inputHandler.enabled = value;
+
+				InputHandler.enabled = value;
+
+				if(value) {
+					Cursor.lockState = CursorLockMode.Locked;
+				}
+				else {
+					Cursor.lockState = CursorLockMode.None;
+				}
 			}
 		}
 
@@ -90,6 +108,25 @@ namespace NaniCore.Bordure {
 				eye.localRotation = Quaternion.Euler(-degree, 0, 0);
 			}
 		}
+
+		public bool UsesMovement {
+			get => InputHandler.UsesMovement;
+			set {
+				if(value)
+					IsKinematic = false;
+				InputHandler.UsesMovement = value;
+			}
+		}
+
+		public bool UsesOrientation {
+			get => InputHandler.UsesOrientation;
+			set => InputHandler.UsesOrientation = value;
+		}
+
+		public bool IsKinematic {
+			get => rigidbody.isKinematic;
+			set => rigidbody.isKinematic = value;
+		}
 		#endregion
 
 		#region Life cycle
@@ -99,12 +136,6 @@ namespace NaniCore.Bordure {
 
 			ApplyGeometry();
 
-			if(eye == null) {
-				eye = transform.Find("Eye");
-				if(eye == null)
-					eye = new GameObject("Eye").transform;
-			}
-			eye.SetParent(transform, false);
 			eye.SetLocalPositionAndRotation(
 				Vector3.up * (Profile.height - Profile.eyeHanging),
 				Quaternion.identity
@@ -113,12 +144,6 @@ namespace NaniCore.Bordure {
 
 			rigidbodyAgent = GetComponent<RigidbodyAgent>();
 		}
-
-#if UNITY_EDITOR
-		protected void ValidateControl() {
-			ApplyGeometry();
-		}
-#endif
 
 		protected void FixedUpdateControl() {
 			ValidateMovementConditions();

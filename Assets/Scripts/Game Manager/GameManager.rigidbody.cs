@@ -22,6 +22,11 @@ namespace NaniCore.Bordure {
 		}
 
 		private void OnRigidbodyCollided(RigidbodyAgent a, RigidbodyAgent b, Collision collision) {
+			if(a == null) {
+				Debug.LogWarning("Warning: Cannot play the requested collision sound as all RB agents are null.");
+				return;
+			}
+
 			float impulse = collision.impulse.magnitude;
 			float minImpulse = Settings.minPhysicalSoundImpulse;
 			if(impulse < minImpulse)

@@ -6,33 +6,6 @@
             "id": "836effa2-4650-4bf8-b92f-02ee47a5b648",
             "actions": [
                 {
-                    "name": "Move Velocity",
-                    "type": "Value",
-                    "id": "1fb07ab1-2e47-443b-9b4f-c45e64e350ce",
-                    "expectedControlType": "Vector2",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                },
-                {
-                    "name": "Orient Delta",
-                    "type": "Value",
-                    "id": "6979c56e-1a1e-41ba-ba4b-dd9f2ffbed92",
-                    "expectedControlType": "Vector2",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                },
-                {
-                    "name": "Set Sprinting",
-                    "type": "Button",
-                    "id": "33a43011-a3c7-4907-8472-8f0dc8fe6ab0",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "Press(behavior=2)",
-                    "initialStateCheck": true
-                },
-                {
                     "name": "Interact",
                     "type": "Button",
                     "id": "81417e00-f0c2-463e-a098-1ba9859ee677",
@@ -51,18 +24,9 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Jump",
+                    "name": "Leave",
                     "type": "Button",
-                    "id": "59812ff0-8bce-43d4-8b6a-54b72a25dd7e",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "Press(behavior=2)",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Crouch",
-                    "type": "Button",
-                    "id": "96a8c709-045a-42c4-ba67-15911b365aa2",
+                    "id": "7993ccf8-9cc9-42f0-bd21-040b8fbdb174",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "Press(behavior=2)",
@@ -70,116 +34,6 @@
                 }
             ],
             "bindings": [
-                {
-                    "name": "WASD",
-                    "id": "f15d1c45-1745-4b8f-97ba-bf4bc5d36dd6",
-                    "path": "2DVector",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Move Velocity",
-                    "isComposite": true,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "up",
-                    "id": "94e518b6-7205-4193-a805-7653cf5c0545",
-                    "path": "<Keyboard>/w",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "PC",
-                    "action": "Move Velocity",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "down",
-                    "id": "09649d8c-8dc3-455b-b3fa-867337ac664c",
-                    "path": "<Keyboard>/s",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "PC",
-                    "action": "Move Velocity",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "left",
-                    "id": "9f1cc7f3-2a72-49f1-8249-02edb6fab87b",
-                    "path": "<Keyboard>/a",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "PC",
-                    "action": "Move Velocity",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "right",
-                    "id": "9b22f9b2-22e8-4b30-ab9c-ec7b4e22d3ae",
-                    "path": "<Keyboard>/d",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "PC",
-                    "action": "Move Velocity",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "",
-                    "id": "16af39b2-1969-44c0-a130-39eb1a09eb13",
-                    "path": "<Gamepad>/leftStick",
-                    "interactions": "",
-                    "processors": "NormalizeVector2",
-                    "groups": "Gamepad",
-                    "action": "Move Velocity",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "65e71a65-679b-467d-b0f9-dff64627c0a2",
-                    "path": "<Mouse>/delta",
-                    "interactions": "",
-                    "processors": "InvertVector2(invertX=false,invertY=false),ScaleVector2(x=0.004,y=0.004)",
-                    "groups": "PC",
-                    "action": "Orient Delta",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "ac435a0d-d56d-4d38-bf11-172258664b5c",
-                    "path": "<Gamepad>/rightStick",
-                    "interactions": "",
-                    "processors": "ScaleVector2(x=0.1,y=0.1)",
-                    "groups": "Gamepad",
-                    "action": "Orient Delta",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "e387ccc3-e5ec-4ebe-aeec-73145a2349fe",
-                    "path": "<Keyboard>/leftShift",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "PC",
-                    "action": "Set Sprinting",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "93b13147-a684-4363-a700-8309dffae127",
-                    "path": "<Gamepad>/leftShoulder",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "Set Sprinting",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
                 {
                     "name": "",
                     "id": "951a717f-e32d-4e2e-a2e2-847160c60864",
@@ -215,7 +69,161 @@
                 },
                 {
                     "name": "",
-                    "id": "78e9e418-0afc-48eb-b69d-73ab11c5194b",
+                    "id": "b5fade40-4962-4c9e-8aa3-64ce5a97b3f3",
+                    "path": "<Keyboard>/ctrl",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PC",
+                    "action": "Leave",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ba840fd1-30dc-4fae-9b48-6ba4e46a88a2",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Leave",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Movement",
+            "id": "eb0732e3-98f1-40b5-953f-632e279b428e",
+            "actions": [
+                {
+                    "name": "Move Velocity",
+                    "type": "Value",
+                    "id": "66b22158-1c82-4650-9329-ef03ab219322",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Set Sprinting",
+                    "type": "Button",
+                    "id": "ae4c4832-5413-4f34-a371-503227a94df6",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press(behavior=2)",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Jump",
+                    "type": "Button",
+                    "id": "2e1998dd-62fb-4f1c-9e7b-65c030cdc052",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press(behavior=2)",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Crouch",
+                    "type": "Button",
+                    "id": "b8fada5d-d013-4a39-9570-3eff4a353cd4",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press(behavior=2)",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "WASD",
+                    "id": "ea14a245-5287-419f-a087-7b579cbf94bd",
+                    "path": "2DVector",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move Velocity",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "up",
+                    "id": "a6ec3f5c-dd69-4d8b-aa64-2a7d119272ad",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PC",
+                    "action": "Move Velocity",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "down",
+                    "id": "ef027bc7-3148-4820-b9e6-519501af3d4f",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PC",
+                    "action": "Move Velocity",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "left",
+                    "id": "1814ec62-147c-4043-8492-a3b4f70bb3a4",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PC",
+                    "action": "Move Velocity",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "right",
+                    "id": "47c09733-be07-4dde-8fcb-47b5d3561db6",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PC",
+                    "action": "Move Velocity",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "eab385ba-8664-41a7-bdd6-3a6e963931bc",
+                    "path": "<Gamepad>/leftStick",
+                    "interactions": "",
+                    "processors": "NormalizeVector2",
+                    "groups": "Gamepad",
+                    "action": "Move Velocity",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3ecd67af-7542-4e13-bafd-5b715a68e9cb",
+                    "path": "<Keyboard>/leftShift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PC",
+                    "action": "Set Sprinting",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7c87d06f-7b3a-46a4-bf2e-199a8146a252",
+                    "path": "<Gamepad>/leftShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Set Sprinting",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7e34ca73-cc19-4377-9cc6-5e47feff364b",
                     "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
@@ -226,7 +234,7 @@
                 },
                 {
                     "name": "",
-                    "id": "a68e803a-fe08-4cbf-9894-2196a7d1c76f",
+                    "id": "58001d94-43be-44b8-9083-6b407fb6cb10",
                     "path": "<Gamepad>/buttonWest",
                     "interactions": "",
                     "processors": "",
@@ -237,7 +245,7 @@
                 },
                 {
                     "name": "",
-                    "id": "7ed37dd9-d4d6-499a-b687-d0bed989804a",
+                    "id": "5e151e13-bb96-47db-8c52-3f38dcb10fe3",
                     "path": "<Keyboard>/ctrl",
                     "interactions": "",
                     "processors": "",
@@ -248,12 +256,51 @@
                 },
                 {
                     "name": "",
-                    "id": "543ee5cc-c9c6-4a79-8e5f-5a86f99ee2a1",
+                    "id": "cdaa3378-5ce8-49bb-a8f9-83084029de94",
                     "path": "<Gamepad>/buttonSouth",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "Crouch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Orientation",
+            "id": "d8dd8bea-35f0-4aaa-8ce3-1cf770512c96",
+            "actions": [
+                {
+                    "name": "Orient Delta",
+                    "type": "Value",
+                    "id": "cf36a29c-89ad-4e0e-a219-a4de971680c9",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "1d06db07-e29b-43f7-b177-ce2aaafcbe3f",
+                    "path": "<Mouse>/delta",
+                    "interactions": "",
+                    "processors": "InvertVector2(invertX=false,invertY=false),ScaleVector2(x=0.004,y=0.004)",
+                    "groups": "PC",
+                    "action": "Orient Delta",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "422220a1-7b9c-499c-84b6-ab9cdadfb00c",
+                    "path": "<Gamepad>/rightStick",
+                    "interactions": "",
+                    "processors": "ScaleVector2(x=0.1,y=0.1)",
+                    "groups": "Gamepad",
+                    "action": "Orient Delta",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

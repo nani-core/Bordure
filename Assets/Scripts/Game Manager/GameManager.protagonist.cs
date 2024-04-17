@@ -4,6 +4,7 @@ namespace NaniCore.Bordure {
 	public partial class GameManager : MonoBehaviour {
 		#region Fields
 		private Protagonist protagonist;
+		private Seat currentSeat;
 		#endregion
 
 		#region Interfaces
@@ -17,26 +18,35 @@ namespace NaniCore.Bordure {
 			}
 		}
 
-		public bool IsUsingProtagonist {
+		public bool UsesProtagonist {
 			get => Protagonist != null && Protagonist.isActiveAndEnabled;
 			set {
-				if(value == IsUsingProtagonist)
+				if(value == UsesProtagonist)
 					return;
 				if(value) {
+					// Spawn the temporary camera anchor.
+					var anchor = new GameObject().transform;
+					anchor.SetParent(MainCamera.transform, false);
+					anchor.SetParent(null, true);
+
 					protagonist = GetProtagonistSingleton();
 					Protagonist.gameObject.SetActive(true);
 					AttachCameraTo(Protagonist.Eye, true);
+					AlignCameraTo(anchor);
+
+					Destroy(anchor.gameObject);
 				}
 				else {
 					if(Protagonist == null)
 						return;
+					RetrieveCameraHierarchy();
 					Protagonist.gameObject.SetActive(false);
 				}
 			}
 		}
 
 		public void MoveProtagonistToSpawnPoint(SpawnPoint spawnPoint) {
-			if(!IsUsingProtagonist) {
+			if(!UsesProtagonist) {
 				Debug.LogWarning("Warning: Cannot move the protagonist as we are not controlling it.");
 				return;
 			}
@@ -44,14 +54,68 @@ namespace NaniCore.Bordure {
 		}
 
 		public void MoveProtagonistToSpawnPointByName(string name) {
-			var spawnPoints = FindObjectsByType<SpawnPoint>(FindObjectsSortMode.None);
-			foreach(var spawnPoint in spawnPoints) {
-				if(spawnPoint.gameObject.name != name)
-					continue;
-				MoveProtagonistToSpawnPoint(spawnPoint);
+			var spawnPoint = FindSpawnPointByName(name);
+			if(spawnPoint == null) {
+				Debug.LogWarning($"Warning: Cannot move the protagonist as the desired spawn point \"{name}\" does not exist.");
 				return;
 			}
-			Debug.LogWarning($"Warning: Cannot move the protagonist as the desired spawn point \"{name}\" does not exist.");
+			MoveProtagonistToSpawnPoint(spawnPoint);
+		}
+
+		public bool UsesProtagonistMovement {
+			get => Protagonist?.UsesMovement ?? false;
+			set {
+				if(Protagonist == null)
+					return;
+				Protagonist.UsesMovement = value;
+			}
+		}
+
+		public bool UsesProtagonistOrientation {
+			get => Protagonist?.UsesOrientation ?? false;
+			set {
+				if(Protagonist == null)
+					return;
+				Protagonist.UsesOrientation = value;
+			}
+		}
+
+		public bool ProtagonistIsKinematic {
+			get => Protagonist?.IsKinematic ?? false;
+			set {
+				if(Protagonist == null)
+					return;
+
+				Protagonist.IsKinematic = value;
+			}
+		}
+
+		public Seat CurrentSeat => currentSeat;
+
+		public void ProtagonistSitOn(Seat seat) {
+			if(seat == null)
+				return;
+
+			ProtagonistIsKinematic = true;
+			UsesProtagonistMovement = false;
+			UsesProtagonistOrientation = seat.canOrient;
+
+			StartCoroutine(TransitCameraToCoroutine(seat.transform, 1f));
+
+			currentSeat = seat;
+			currentSeat.SendMessage("OnSitOn", SendMessageOptions.DontRequireReceiver);
+		}
+
+		public void ProtagonistLeaveSeat() {
+			if(currentSeat == null)
+				return;
+
+			ProtagonistIsKinematic = false;
+			UsesProtagonistMovement = true;
+			UsesProtagonistOrientation = true;
+
+			currentSeat.SendMessage("OnLeft", SendMessageOptions.DontRequireReceiver);
+			currentSeat = null;
 		}
 		#endregion
 

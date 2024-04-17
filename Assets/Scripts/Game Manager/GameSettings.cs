@@ -60,6 +60,9 @@ namespace NaniCore.Bordure {
 		#if DEBUG && UNITY_EDITOR
 		[Header("Architecture Generation")]
 		public bool generateConcreteInEditMode = true;
-		#endif
+#endif
+
+		[Header("Level")]
+		public Level[] levelTemplates;
 	}
 }
