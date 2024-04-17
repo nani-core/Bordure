@@ -50,6 +50,18 @@ namespace NaniCore.Bordure {
 		public void AlignCameraTo(Transform target) {
 			Instance.AlignCameraTo(target);
 		}
+
+		public void AttachCameraTo(Transform transform) {
+			Instance.AttachCameraTo(transform);
+		}
+
+		public void HardAttachCameraTo(Transform transform) {
+			Instance.AttachCameraTo(transform, true);
+		}
+
+		public void RetrieveCameraHierarchy() {
+			Instance.RetrieveCameraHierarchy();
+		}
 		#endregion
 
 		#region Level

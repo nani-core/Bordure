@@ -25,10 +25,8 @@ namespace NaniCore.Bordure {
 				RetrieveCameraHierarchy();
 			}
 		}
-		#endregion
 
-		#region Functions
-		private void AttachCameraTo(Transform transform, bool resetLocalTransforms = false) {
+		public void AttachCameraTo(Transform transform, bool resetLocalTransforms = false) {
 			mainCamera.transform.SetParent(transform, true);
 			if(resetLocalTransforms) {
 				mainCamera.transform.SetLocalPositionAndRotation(
@@ -38,10 +36,12 @@ namespace NaniCore.Bordure {
 			}
 		}
 
-		private void RetrieveCameraHierarchy() {
+		public void RetrieveCameraHierarchy() {
 			mainCamera.transform.SetParent(transform, true);
 		}
+		#endregion
 
+		#region Functions
 		private System.Collections.IEnumerator TransitCameraToCoroutine(
 			Transform target,
 			float duration,
