@@ -1,14 +1,15 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace NaniCore.Bordure {
 	public partial class GameManager : MonoBehaviour {
 		#region Fields
-		private readonly Dictionary<string, Level> loadedLevels = new();
+		private readonly List<Level> loadedLevels = new();
 		#endregion
 
 		#region Interfaces
-		public IEnumerable<Level> LoadedLevels => loadedLevels.Values;
+		public IEnumerable<Level> LoadedLevels => loadedLevels;
 
 		public Level LoadLevelByName(string name) {
 			Level level = FindLoadedLevelOfName(name);
@@ -18,22 +19,31 @@ namespace NaniCore.Bordure {
 					Debug.LogWarning($"Warning: Cannot find level template of name \"{name}\".");
 					return null;
 				}
-				level = InstantiateLevelTemplate(name, template);
+				level = InstantiateLevelTemplate(template);
 			}
 			level.gameObject.SetActive(true);
 			return level;
 		}
 
-		public void UnloadLevelByName(string levelName) {
-			if(!loadedLevels.ContainsKey(levelName)) {
-				Debug.LogWarning($"Warning: Cannot unload level \"{levelName}\" as it doesn't exist.");
-				Debug.Log("Current loaded levels: " + string.Join(", ", loadedLevels.Keys));
+		public void HideLevelByName(string name) {
+			var level = FindLoadedLevelOfName(name);
+			if(level == null) {
+				Debug.LogWarning($"Warning: Cannot hide level \"{name}\" as it doesn't exist.");
+				Debug.Log("Current loaded levels: " + string.Join(", ", loadedLevels.Select(level => level.Name)));
 				return;
 			}
-			Level level = loadedLevels[levelName];
-			UnloadLevel(level);
+			HideLevel(level);
 		}
 
+		public void UnloadLevelByName(string name) {
+			var level = FindLoadedLevelOfName(name);
+			if(level == null) {
+				Debug.LogWarning($"Warning: Cannot unload level \"{name}\" as it doesn't exist.");
+				Debug.Log("Current loaded levels: " + string.Join(", ", loadedLevels.Select(level => level.Name)));
+				return;
+			}
+			UnloadLevel(level);
+		}
 		#endregion
 
 		#region Life cycle
@@ -51,38 +61,53 @@ namespace NaniCore.Bordure {
 		}
 
 		private void OnLevelLoaded(Level level) {
-			loadedLevels.Add(level.name, level);
+			loadedLevels.Add(level);
 		}
 
 		private void OnLevelUnloaded(Level level) {
-			loadedLevels.Remove(level.name);
+			loadedLevels.Remove(level);
 		}
 
-		private Level InstantiateLevelTemplate(string name, Level template) {
+		private Level InstantiateLevelTemplate(Level template) {
 			var level = Instantiate(template.gameObject).GetComponent<Level>();
-			level.name = name;
 			TakeCareOfLevel(level);
 
 			return level;
 		}
 
 		private Level FindLevelTemplateByName(string name) {
-			foreach(var entry in Settings.levelTemplates) {
-				if(entry.name == name)
-					return entry.level;
+			foreach(var level in Settings.levelTemplates) {
+				if(level == null)
+					continue;
+				if(level.Name == name)
+					return level;
 			}
 			return null;
 		}
 
-		private Level FindLoadedLevelOfName(string levelName) {
-			if(!loadedLevels.ContainsKey(levelName))
-				return null;
-			return loadedLevels[levelName];
+		private Level FindLoadedLevelOfName(string name) {
+			foreach(var level in loadedLevels) {
+				if(level == null)
+					continue;
+				if(level.Name != name)
+					continue;
+				return level;
+			}
+			return null;
+		}
+
+		private void HideLevel(Level level) {
+			level.gameObject.SetActive(false);
 		}
 
 		private void UnloadLevel(Level level) {
-			level.gameObject.SetActive(false);
-			//HierarchyUtility.Destroy(level);
+			StartCoroutine(UnloadLevelInNextFrameCoroutine(level));
+		}
+
+		private System.Collections.IEnumerator UnloadLevelInNextFrameCoroutine(Level level) {
+			HideLevel(level);
+			yield return new WaitForEndOfFrame();
+			HierarchyUtility.Destroy(level);
 		}
 		#endregion
 	}

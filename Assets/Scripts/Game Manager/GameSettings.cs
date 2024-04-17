@@ -62,12 +62,7 @@ namespace NaniCore.Bordure {
 		public bool generateConcreteInEditMode = true;
 #endif
 
-		[System.Serializable]
-		public struct LevelEntry {
-			public string name;
-			public Level level;
-		}
 		[Header("Level")]
-		public LevelEntry[] levelTemplates;
+		public Level[] levelTemplates;
 	}
 }

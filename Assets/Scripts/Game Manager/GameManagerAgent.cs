@@ -57,8 +57,12 @@ namespace NaniCore.Bordure {
 			Instance.LoadLevelByName(name);
 		}
 
-		public void UnloadLevelByName(string levelName) {
-			Instance.UnloadLevelByName(levelName);
+		public void HideLevelByName(string name) {
+			Instance.HideLevelByName(name);
+		}
+
+		public void UnloadLevelByName(string name) {
+			Instance.UnloadLevelByName(name);
 		}
 		#endregion
 
