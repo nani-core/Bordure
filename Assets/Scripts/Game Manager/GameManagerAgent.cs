@@ -53,8 +53,8 @@ namespace NaniCore.Bordure {
 		#endregion
 
 		#region Level
-		public void LoadLevel(Level template) {
-			Instance.LoadLevel(template);
+		public void LoadLevelByName(string name) {
+			Instance.LoadLevelByName(name);
 		}
 
 		public void UnloadLevelByName(string levelName) {

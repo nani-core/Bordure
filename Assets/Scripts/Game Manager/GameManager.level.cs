@@ -10,24 +10,23 @@ namespace NaniCore.Bordure {
 		#region Interfaces
 		public IEnumerable<Level> LoadedLevels => loadedLevels.Values;
 
-		public Level FindLoadedLevelOfName(string levelName) {
-			if(!loadedLevels.ContainsKey(levelName))
-				return null;
-			return loadedLevels[levelName];
-		}
-
-		public Level LoadLevel(Level template) {
-			Level level = FindLoadedLevelOfName(template.name);
-			if(level == null)
-				level = InstantiateLevel(template);
-
+		public Level LoadLevelByName(string name) {
+			Level level = FindLoadedLevelOfName(name);
+			if(level == null) {
+				Level template = FindLevelTemplateByName(name);
+				if(template == null) {
+					Debug.LogWarning($"Warning: Cannot find level template of name \"{name}\".");
+					return null;
+				}
+				level = InstantiateLevelTemplate(name, template);
+			}
 			level.gameObject.SetActive(true);
 			return level;
 		}
 
 		public void UnloadLevelByName(string levelName) {
 			if(!loadedLevels.ContainsKey(levelName)) {
-				Debug.LogWarning($"Warning: Cannot unload level \"${levelName}\" as it doesn't exist.");
+				Debug.LogWarning($"Warning: Cannot unload level \"{levelName}\" as it doesn't exist.");
 				Debug.Log("Current loaded levels: " + string.Join(", ", loadedLevels.Keys));
 				return;
 			}
@@ -59,12 +58,26 @@ namespace NaniCore.Bordure {
 			loadedLevels.Remove(level.name);
 		}
 
-		private Level InstantiateLevel(Level template) {
+		private Level InstantiateLevelTemplate(string name, Level template) {
 			var level = Instantiate(template.gameObject).GetComponent<Level>();
-			level.name = template.name;
+			level.name = name;
 			TakeCareOfLevel(level);
 
 			return level;
+		}
+
+		private Level FindLevelTemplateByName(string name) {
+			foreach(var entry in Settings.levelTemplates) {
+				if(entry.name == name)
+					return entry.level;
+			}
+			return null;
+		}
+
+		private Level FindLoadedLevelOfName(string levelName) {
+			if(!loadedLevels.ContainsKey(levelName))
+				return null;
+			return loadedLevels[levelName];
 		}
 
 		private void UnloadLevel(Level level) {

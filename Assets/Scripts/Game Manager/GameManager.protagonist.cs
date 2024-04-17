@@ -54,7 +54,7 @@ namespace NaniCore.Bordure {
 		}
 
 		public void MoveProtagonistToSpawnPointByName(string name) {
-			var spawnPoints = FindObjectsByType<SpawnPoint>(FindObjectsSortMode.None);
+			var spawnPoints = FindObjectsByType<SpawnPoint>(FindObjectsInactive.Include, FindObjectsSortMode.None);
 			foreach(var spawnPoint in spawnPoints) {
 				if(spawnPoint.gameObject.name != name)
 					continue;
