@@ -64,6 +64,10 @@ namespace NaniCore.Bordure {
 		public void UnloadLevelByName(string name) {
 			Instance.UnloadLevelByName(name);
 		}
+
+		public void AlignSpawnPoints(string names) {
+			Instance.AlignSpawnPoints(names);
+		}
 		#endregion
 
 		#region Game

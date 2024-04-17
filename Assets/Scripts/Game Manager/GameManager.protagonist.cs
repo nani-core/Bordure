@@ -54,14 +54,12 @@ namespace NaniCore.Bordure {
 		}
 
 		public void MoveProtagonistToSpawnPointByName(string name) {
-			var spawnPoints = FindObjectsByType<SpawnPoint>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-			foreach(var spawnPoint in spawnPoints) {
-				if(spawnPoint.gameObject.name != name)
-					continue;
-				MoveProtagonistToSpawnPoint(spawnPoint);
+			var spawnPoint = FindSpawnPointByName(name);
+			if(spawnPoint == null) {
+				Debug.LogWarning($"Warning: Cannot move the protagonist as the desired spawn point \"{name}\" does not exist.");
 				return;
 			}
-			Debug.LogWarning($"Warning: Cannot move the protagonist as the desired spawn point \"{name}\" does not exist.");
+			MoveProtagonistToSpawnPoint(spawnPoint);
 		}
 
 		public bool UsesProtagonistMovement {

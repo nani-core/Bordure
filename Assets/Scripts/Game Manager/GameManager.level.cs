@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine.UIElements;
 
 namespace NaniCore.Bordure {
 	public partial class GameManager : MonoBehaviour {
@@ -43,6 +44,52 @@ namespace NaniCore.Bordure {
 				return;
 			}
 			UnloadLevel(level);
+		}
+
+		public SpawnPoint FindSpawnPointByName(string name) {
+			var spawnPoints = FindObjectsByType<SpawnPoint>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+			foreach(var spawnPoint in spawnPoints) {
+				if(spawnPoint.Name != name)
+					continue;
+				return spawnPoint;
+			}
+			return null;
+		}
+
+		public void AlignSpawnPoints(string names) {
+			var nameArr = names.Split(';');
+			if(nameArr.Length <= 1)
+				return;
+			var anchor = FindSpawnPointByName(nameArr[0]);
+			if(anchor == null) {
+				Debug.LogWarning($"Warning: Cannot align spawn points to \"{nameArr[0]}\", as the target can't be found.");
+				return;
+			}
+			for(int i = 1; i < nameArr.Length; ++i) {
+				var name = nameArr[i];
+				var alignee = FindSpawnPointByName(name);
+				if(alignee == null) {
+					Debug.LogWarning($"Warning: Cannot align spawn point \"{name}\" to {anchor}, as it can't be found.");
+					continue;
+				}
+				AlignSpawnPoints(anchor, alignee);
+			}
+		}
+
+		public void AlignSpawnPoints(string anchor, string alignee) {
+			AlignSpawnPoints(FindSpawnPointByName(anchor), FindSpawnPointByName(alignee));
+		}
+
+		public void AlignSpawnPoints(SpawnPoint anchor, SpawnPoint alignee) {
+			Debug.Log($"Aligning spawn point {anchor} to {alignee}.");
+			if(anchor == null || alignee == null)
+				return;
+
+			var level = alignee.Level;
+			Vector3 deltaPosition = anchor.transform.position - alignee.transform.position;
+			level.transform.Translate(deltaPosition);
+			Quaternion deltaOrientation = anchor.transform.rotation * Quaternion.Inverse(alignee.transform.rotation);
+			level.transform.RotateAlong(alignee.transform.position, deltaOrientation);
 		}
 		#endregion
 

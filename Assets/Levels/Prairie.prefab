@@ -1,5 +1,49 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &699950200342591643
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6194235723581266025}
+  - component: {fileID: 5428428775996614692}
+  m_Layer: 0
+  m_Name: Prairie House Entrance Spawn Point
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 2147483647
+  m_IsActive: 1
+--- !u!4 &6194235723581266025
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 699950200342591643}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.000000119209275, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0.1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 3502840776131988006}
+  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
+--- !u!114 &5428428775996614692
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 699950200342591643}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f93d73c3d716d4a47a38ba7cd6a67865, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &714480938959306599
 GameObject:
   m_ObjectHideFlags: 0
@@ -15,7 +59,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &4793788341558189039
 Transform:
@@ -28,7 +72,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0.70710677, z: -0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 1.75}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 8884311691236572929}
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
@@ -58,7 +102,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1366940036049732346
 Transform:
@@ -435,6 +479,78 @@ MonoBehaviour:
   blendDistance: 0
   weight: 1
   sharedProfile: {fileID: 11400000, guid: 275f06ef0887b1e48930d1da46165be6, type: 2}
+--- !u!1 &4150413322716032031
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8861166809186115495}
+  - component: {fileID: 5024633690677092420}
+  m_Layer: 0
+  m_Name: Load Genkan Logic
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 2147483647
+  m_IsActive: 1
+--- !u!4 &8861166809186115495
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4150413322716032031}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 8884311691236572929}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5024633690677092420
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4150413322716032031}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b16aa584a7908c4d8df8d00ab279e35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  callback:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: b2f1048833879fd4eb780ed41474578f, type: 2}
+        m_TargetAssemblyTypeName: NaniCore.Bordure.GameManagerAgent, Assembly-CSharp
+        m_MethodName: LoadLevelByName
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Genkan
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 11400000, guid: b2f1048833879fd4eb780ed41474578f, type: 2}
+        m_TargetAssemblyTypeName: NaniCore.Bordure.GameManagerAgent, Assembly-CSharp
+        m_MethodName: AlignSpawnPoints
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Prairie House Entrance Spawn Point;Genkan Entrance Spawn
+            Point
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &5338144434079649941
 GameObject:
   m_ObjectHideFlags: 0
@@ -469,6 +585,7 @@ Transform:
   - {fileID: 4793788341558189039}
   - {fileID: 1366940036049732346}
   - {fileID: 7725109025179432973}
+  - {fileID: 8861166809186115495}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1322255789301731063
@@ -640,7 +757,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3483928828658016914, guid: 78a769c0a30e0444cbf9901fecb2b50f, type: 3}
       propertyPath: m_ConnectedAnchor.x
-      value: -0.08999845
+      value: -0.090000026
       objectReference: {fileID: 0}
     - target: {fileID: 3483928828658016914, guid: 78a769c0a30e0444cbf9901fecb2b50f, type: 3}
       propertyPath: m_ConnectedAnchor.y
@@ -684,18 +801,30 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9069698035221976526, guid: 78a769c0a30e0444cbf9901fecb2b50f, type: 3}
       propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.size
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 9069698035221976526, guid: 78a769c0a30e0444cbf9901fecb2b50f, type: 3}
       propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.data[2].m_Mode
       value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 9069698035221976526, guid: 78a769c0a30e0444cbf9901fecb2b50f, type: 3}
+      propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.data[3].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9069698035221976526, guid: 78a769c0a30e0444cbf9901fecb2b50f, type: 3}
       propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.data[2].m_Target
       value: 
       objectReference: {fileID: 7700825291519845916}
     - target: {fileID: 9069698035221976526, guid: 78a769c0a30e0444cbf9901fecb2b50f, type: 3}
+      propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.data[3].m_Target
+      value: 
+      objectReference: {fileID: 5024633690677092420}
+    - target: {fileID: 9069698035221976526, guid: 78a769c0a30e0444cbf9901fecb2b50f, type: 3}
       propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.data[2].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9069698035221976526, guid: 78a769c0a30e0444cbf9901fecb2b50f, type: 3}
+      propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.data[3].m_CallState
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 9069698035221976526, guid: 78a769c0a30e0444cbf9901fecb2b50f, type: 3}
@@ -703,8 +832,16 @@ PrefabInstance:
       value: set_isKinematic
       objectReference: {fileID: 0}
     - target: {fileID: 9069698035221976526, guid: 78a769c0a30e0444cbf9901fecb2b50f, type: 3}
+      propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.data[3].m_MethodName
+      value: Invoke
+      objectReference: {fileID: 0}
+    - target: {fileID: 9069698035221976526, guid: 78a769c0a30e0444cbf9901fecb2b50f, type: 3}
       propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.data[2].m_TargetAssemblyTypeName
       value: UnityEngine.Rigidbody, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 9069698035221976526, guid: 78a769c0a30e0444cbf9901fecb2b50f, type: 3}
+      propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.data[3].m_TargetAssemblyTypeName
+      value: NaniCore.Logic, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 9069698035221976526, guid: 78a769c0a30e0444cbf9901fecb2b50f, type: 3}
       propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_BoolArgument
@@ -714,9 +851,16 @@ PrefabInstance:
       propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 9069698035221976526, guid: 78a769c0a30e0444cbf9901fecb2b50f, type: 3}
+      propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.data[3].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 2847083168691723837, guid: 78a769c0a30e0444cbf9901fecb2b50f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6194235723581266025}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 78a769c0a30e0444cbf9901fecb2b50f, type: 3}
 --- !u!4 &3502840776131988006 stripped
@@ -800,6 +944,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 91fc7c4f71780ef42a58804675367c82, type: 3}
       propertyPath: m_Name
       value: HouseFront
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 91fc7c4f71780ef42a58804675367c82, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
