@@ -116,8 +116,17 @@ namespace NaniCore.Bordure {
 		}
 
 		private Level InstantiateLevelTemplate(Level template) {
+			// Temporarily disables protagonist input when loading the level, or else the stuck
+			// would cause bad experience.
+			bool movement = UsesProtagonistMovement, orientation = UsesProtagonistOrientation;
+			UsesProtagonistMovement = false;
+			UsesProtagonistOrientation = false;
+
 			var level = Instantiate(template.gameObject).GetComponent<Level>();
 			TakeCareOfLevel(level);
+
+			UsesProtagonistMovement = movement;
+			UsesProtagonistOrientation = orientation;
 
 			return level;
 		}
