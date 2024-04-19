@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace NaniCore.Bordure {
@@ -54,7 +53,7 @@ namespace NaniCore.Bordure {
 			return StartCoroutine(BlendToCameraCoroutine(target, duration));
 		}
 		public Coroutine BlendToCamera(Camera target) => BlendToCamera(target, 1.0f);
-		public Coroutine BlendToCamera(string name) {
+		public Coroutine BlendToCameraByName(string name) {
 			Camera target = HierarchyUtility.FindObjectByName<Camera>(name, true);
 			if(target == null) {
 				Debug.LogWarning($"Warning: Cannot find the target blending camera (\"{name}\").");

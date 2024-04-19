@@ -270,9 +270,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4432644321857919301}
   - component: {fileID: 2953638291988679819}
-  - component: {fileID: 113428485381849613}
+  - component: {fileID: 814606198783493513}
   m_Layer: 0
-  m_Name: Blend Camera (dummy)
+  m_Name: Open Ophthalmology View
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -310,17 +310,29 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 11400000, guid: b2f1048833879fd4eb780ed41474578f, type: 2}
         m_TargetAssemblyTypeName: NaniCore.Bordure.GameManagerAgent, Assembly-CSharp
-        m_MethodName: BlendToCamera
-        m_Mode: 2
+        m_MethodName: LoadLevelByName
+        m_Mode: 5
         m_Arguments:
-          m_ObjectArgument: {fileID: 1486711537466058500}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Camera, UnityEngine
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: Ophthalmology
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 113428485381849613}
+      - m_Target: {fileID: 11400000, guid: b2f1048833879fd4eb780ed41474578f, type: 2}
+        m_TargetAssemblyTypeName: NaniCore.Bordure.GameManagerAgent, Assembly-CSharp
+        m_MethodName: BlendToCameraByName
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Ophthalmology Anchoring Camera
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 814606198783493513}
         m_TargetAssemblyTypeName: NaniCore.DelayedLogic, Assembly-CSharp
         m_MethodName: Invoke
         m_Mode: 1
@@ -332,7 +344,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &113428485381849613
+--- !u!114 &814606198783493513
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -347,7 +359,7 @@ MonoBehaviour:
   callback:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8042624156984363296}
+      - m_Target: {fileID: 1155456254312096321}
         m_TargetAssemblyTypeName: NaniCore.Logic, Assembly-CSharp
         m_MethodName: Invoke
         m_Mode: 1
@@ -360,6 +372,65 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   delayTime: 1.01
+--- !u!1 &1854972200196798878
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2575658717255363607}
+  - component: {fileID: 1155456254312096321}
+  m_Layer: 0
+  m_Name: Unload Clinic
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2575658717255363607
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1854972200196798878}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 5092832023144048168}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1155456254312096321
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1854972200196798878}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b16aa584a7908c4d8df8d00ab279e35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  callback:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: b2f1048833879fd4eb780ed41474578f, type: 2}
+        m_TargetAssemblyTypeName: NaniCore.Bordure.GameManagerAgent, Assembly-CSharp
+        m_MethodName: UnloadLevelByName
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Clinic
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1945499225135728808
 GameObject:
   m_ObjectHideFlags: 0
@@ -1733,6 +1804,7 @@ Transform:
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 4432644321857919301}
+  - {fileID: 2575658717255363607}
   - {fileID: 7910315887207590}
   m_Father: {fileID: 5271188367537926904}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

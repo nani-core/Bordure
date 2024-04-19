@@ -123,17 +123,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!114 &592860055 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4240967177393312577, guid: 4059f0b8bc3088d489223fbf0968adad, type: 3}
-  m_PrefabInstance: {fileID: 674813050}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b16aa584a7908c4d8df8d00ab279e35, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &674813050
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -184,15 +173,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5316346739057990350, guid: 4059f0b8bc3088d489223fbf0968adad, type: 3}
       propertyPath: onLoaded.m_PersistentCalls.m_Calls.Array.size
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5316346739057990350, guid: 4059f0b8bc3088d489223fbf0968adad, type: 3}
       propertyPath: onLoaded.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 1
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 5316346739057990350, guid: 4059f0b8bc3088d489223fbf0968adad, type: 3}
       propertyPath: onLoaded.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
-      value: 1
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 5316346739057990350, guid: 4059f0b8bc3088d489223fbf0968adad, type: 3}
       propertyPath: onLoaded.m_PersistentCalls.m_Calls.Array.data[2].m_Mode
@@ -201,7 +190,7 @@ PrefabInstance:
     - target: {fileID: 5316346739057990350, guid: 4059f0b8bc3088d489223fbf0968adad, type: 3}
       propertyPath: onLoaded.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 592860055}
+      objectReference: {fileID: 11400000, guid: b2f1048833879fd4eb780ed41474578f, type: 2}
     - target: {fileID: 5316346739057990350, guid: 4059f0b8bc3088d489223fbf0968adad, type: 3}
       propertyPath: onLoaded.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
@@ -224,11 +213,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5316346739057990350, guid: 4059f0b8bc3088d489223fbf0968adad, type: 3}
       propertyPath: onLoaded.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: Invoke
+      value: MoveProtagonistToSpawnPointByName
       objectReference: {fileID: 0}
     - target: {fileID: 5316346739057990350, guid: 4059f0b8bc3088d489223fbf0968adad, type: 3}
       propertyPath: onLoaded.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
-      value: StartUsingProtagonist
+      value: MoveProtagonistToSpawnPointByName
       objectReference: {fileID: 0}
     - target: {fileID: 5316346739057990350, guid: 4059f0b8bc3088d489223fbf0968adad, type: 3}
       propertyPath: onLoaded.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
@@ -236,7 +225,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5316346739057990350, guid: 4059f0b8bc3088d489223fbf0968adad, type: 3}
       propertyPath: onLoaded.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: NaniCore.Logic, Assembly-CSharp
+      value: NaniCore.Bordure.GameManagerAgent, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 5316346739057990350, guid: 4059f0b8bc3088d489223fbf0968adad, type: 3}
       propertyPath: onLoaded.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
@@ -252,11 +241,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5316346739057990350, guid: 4059f0b8bc3088d489223fbf0968adad, type: 3}
       propertyPath: onLoaded.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
-      value: 
+      value: Prairie Spawn Point
       objectReference: {fileID: 0}
     - target: {fileID: 5316346739057990350, guid: 4059f0b8bc3088d489223fbf0968adad, type: 3}
       propertyPath: onLoaded.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgument
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5316346739057990350, guid: 4059f0b8bc3088d489223fbf0968adad, type: 3}
+      propertyPath: onLoaded.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_StringArgument
+      value: Prairie Spawn Point
       objectReference: {fileID: 0}
     - target: {fileID: 5316346739057990350, guid: 4059f0b8bc3088d489223fbf0968adad, type: 3}
       propertyPath: onLoaded.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_StringArgument
