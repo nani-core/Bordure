@@ -62,6 +62,14 @@ namespace NaniCore.Bordure {
 		public void RetrieveCameraHierarchy() {
 			Instance.RetrieveCameraHierarchy();
 		}
+
+		public void TransitCameraTo(Transform target) {
+			Instance.TransitCameraTo(target);
+		}
+
+		public void BlendToCamera(Camera target) {
+			Instance.BlendToCamera(target);
+		}
 		#endregion
 
 		#region Level

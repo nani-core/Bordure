@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace NaniCore.Bordure {
@@ -39,13 +40,23 @@ namespace NaniCore.Bordure {
 		public void RetrieveCameraHierarchy() {
 			mainCameraManager.transform.SetParent(transform, true);
 		}
+
+		public Coroutine TransitCameraTo(Transform target, float duration, float easingFactor) {
+			return StartCoroutine(TransitCameraToCoroutine(target, duration, easingFactor));
+		}
+		public Coroutine TransitCameraTo(Transform target) => TransitCameraTo(target, 1.0f, 0.0f);
+
+		public Coroutine BlendToCamera(Camera target, float duration) {
+			return StartCoroutine(BlendToCameraCoroutine(target, duration));
+		}
+		public Coroutine BlendToCamera(Camera target) => BlendToCamera(target, 1.0f);
 		#endregion
 
 		#region Functions
 		private System.Collections.IEnumerator TransitCameraToCoroutine(
 			Transform target,
 			float duration,
-			float easingFactor = 0.0f
+			float easingFactor
 		) {
 			// Record protagonist control state before moving.
 			bool usesMovement = false, usesOrientation = false;
@@ -85,6 +96,41 @@ namespace NaniCore.Bordure {
 				Protagonist.UsesMovement = usesMovement;
 				Protagonist.UsesOrientation = usesOrientation;
 			}
+		}
+
+		private System.Collections.IEnumerator BlendToCameraCoroutine(
+			Camera target,
+			float duration
+		) {
+			Debug.Log($"Start blending the camera to {target.name}.", target);
+			#region Initialize
+			var blendTexture = RenderUtility.CreateScreenSizedRT();
+			var targetRT = target.EnsureComponent<CameraRenderingTarget>();
+			target.gameObject.SetActive(true);
+			var startTime = Time.time;
+			#endregion
+
+			#region Progress
+			void renderingFinishingContinuation(RenderTexture result) {
+				var progress = (Time.time - startTime) / duration;
+				result.Overlay(targetRT.OutputTexture, progress);
+			}
+			mainCameraManager.onRenderingFinished += renderingFinishingContinuation;
+			yield return new WaitForSeconds(duration);
+			mainCameraManager.onRenderingFinished -= renderingFinishingContinuation;
+			#endregion
+
+			#region Post process
+			AlignCameraTo(target.transform);
+			yield return new WaitForEndOfFrame();
+			#endregion
+
+			#region Finalize
+			blendTexture.Destroy();
+			HierarchyUtility.Destroy(targetRT);	// Could be commented out.
+			target.gameObject.SetActive(false);
+			Debug.Log($"Finished camera blending.", target);
+			#endregion
 		}
 		#endregion
 	}

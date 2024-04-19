@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Rendering;
 
 namespace NaniCore.Bordure {
 	[RequireComponent(typeof(Camera))]
@@ -10,7 +9,8 @@ namespace NaniCore.Bordure {
 
 		#region Fields
 		private new Camera camera;
-		private RenderTexture renderOutputTexture;
+		private CameraRenderingTarget renderingTarget;
+		public System.Action<RenderTexture> onRenderingFinished;
 		#endregion
 
 		#region Properties
@@ -20,47 +20,16 @@ namespace NaniCore.Bordure {
 		#region Life cycle
 		protected void Start() {
 			camera = GetComponent<Camera>();
-			SetupAndUpdateRenderOutputTexture();
-			RenderPipelineManager.beginCameraRendering += OnSRPCameraPreRender;
-			RenderPipelineManager.endCameraRendering += OnSRPCameraPostRender;
-		}
 
-		protected void OnPreRender() {
-			SetupAndUpdateRenderOutputTexture();
-		}
-
-		protected void OnPostRender() {
-			//
+			renderingTarget = transform.EnsureComponent<CameraRenderingTarget>();
+			renderingTarget.onTextureChanged = texture => renderOutputImage.texture = texture;
+			renderingTarget.onRenderingFinished += OnRenderingFinished;
 		}
 		#endregion
 
-		#region SRP event handlers
-		private void OnSRPCameraPreRender(ScriptableRenderContext context, Camera camera) {
-			if(camera != Camera)
-				return;
-			OnPreRender();
-		}
-
-		private void OnSRPCameraPostRender(ScriptableRenderContext context, Camera camera) {
-			if(camera != Camera)
-				return;
-			OnPostRender();
-		}
-		#endregion
-
-		#region Functions
-		private void SetupAndUpdateRenderOutputTexture() {
-			bool needsRedirecting = false;
-			if(renderOutputTexture == null) {
-				renderOutputTexture = RenderUtility.CreateScreenSizedRT(RenderTextureFormat.Default);
-				needsRedirecting = true;
-			}
-			else if(RenderUtility.Resize(ref renderOutputTexture, RenderUtility.ScreenSize))
-				needsRedirecting = true;
-			if(needsRedirecting) {
-				camera.targetTexture = renderOutputTexture;
-				renderOutputImage.texture = renderOutputTexture;
-			}
+		#region Event handlers
+		private void OnRenderingFinished(RenderTexture result) {
+			onRenderingFinished?.Invoke(result);
 		}
 		#endregion
 	}

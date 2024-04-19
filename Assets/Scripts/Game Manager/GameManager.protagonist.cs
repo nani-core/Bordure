@@ -100,7 +100,7 @@ namespace NaniCore.Bordure {
 			UsesProtagonistMovement = false;
 			UsesProtagonistOrientation = seat.canOrient;
 
-			StartCoroutine(TransitCameraToCoroutine(seat.transform, 1f));
+			TransitCameraTo(seat.transform);
 
 			currentSeat = seat;
 			currentSeat.SendMessage("OnSitOn", SendMessageOptions.DontRequireReceiver);
