@@ -940,6 +940,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+      - m_Target: {fileID: 1250005282490942822}
+        m_TargetAssemblyTypeName: NaniCore.Bordure.ModelHighlighter, Assembly-CSharp
+        m_MethodName: Highlight
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 11400000, guid: b2f1048833879fd4eb780ed41474578f, type: 2}
         m_TargetAssemblyTypeName: NaniCore.Bordure.GameManagerAgent, Assembly-CSharp
         m_MethodName: StartUsingProtagonist
@@ -1140,8 +1152,30 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4331617649249371651, guid: a71e4a7a8742369409b7919e0d458958, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1250005282490942822}
   m_SourcePrefab: {fileID: 100100000, guid: a71e4a7a8742369409b7919e0d458958, type: 3}
+--- !u!1 &5727106249901538148 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4331617649249371651, guid: a71e4a7a8742369409b7919e0d458958, type: 3}
+  m_PrefabInstance: {fileID: 8315399213632372071}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1250005282490942822
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5727106249901538148}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3252e05ce982e1428962f17b570e27b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  selectiveSubmesh: 1
+  submeshIndices: 01000000
 --- !u!4 &8425253014643923596 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: a71e4a7a8742369409b7919e0d458958, type: 3}
