@@ -47,9 +47,21 @@ namespace NaniCore.Bordure {
 		public Coroutine TransitCameraTo(Transform target) => TransitCameraTo(target, 1.0f, 0.0f);
 
 		public Coroutine BlendToCamera(Camera target, float duration) {
+			if(target == null) {
+				Debug.LogWarning("Warning: The target blending camera is null.");
+				return null;
+			}
 			return StartCoroutine(BlendToCameraCoroutine(target, duration));
 		}
 		public Coroutine BlendToCamera(Camera target) => BlendToCamera(target, 1.0f);
+		public Coroutine BlendToCamera(string name) {
+			Camera target = HierarchyUtility.FindObjectByName<Camera>(name, true);
+			if(target == null) {
+				Debug.LogWarning($"Warning: Cannot find the target blending camera (\"{name}\").");
+				return null;
+			}
+			return BlendToCamera(target);
+		}
 		#endregion
 
 		#region Functions

@@ -70,6 +70,10 @@ namespace NaniCore.Bordure {
 		public void BlendToCamera(Camera target) {
 			Instance.BlendToCamera(target);
 		}
+
+		public void BlendToCamera(string name) {
+			Instance.BlendToCamera(name);
+		}
 		#endregion
 
 		#region Level

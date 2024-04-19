@@ -47,13 +47,7 @@ namespace NaniCore.Bordure {
 		}
 
 		public SpawnPoint FindSpawnPointByName(string name) {
-			var spawnPoints = FindObjectsByType<SpawnPoint>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-			foreach(var spawnPoint in spawnPoints) {
-				if(spawnPoint.Name != name)
-					continue;
-				return spawnPoint;
-			}
-			return null;
+			return HierarchyUtility.FindObjectByName<SpawnPoint>(name, true);
 		}
 
 		public void AlignSpawnPoints(string names) {
@@ -81,7 +75,7 @@ namespace NaniCore.Bordure {
 		}
 
 		public void AlignSpawnPoints(SpawnPoint anchor, SpawnPoint alignee) {
-			Debug.Log($"Aligning spawn point {anchor} to {alignee}.");
+			Debug.Log($"Aligning spawn point {alignee} to {anchor}.");
 			if(anchor == null || alignee == null)
 				return;
 
