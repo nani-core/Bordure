@@ -3,11 +3,11 @@ using UnityEngine;
 namespace NaniCore.Bordure {
 	public partial class GameManager : MonoBehaviour {
 		#region Fields
-		[SerializeField] private Camera mainCamera;
+		[SerializeField] private MainCameraManager mainCameraManager;
 		#endregion
 
 		#region Interfaces
-		public Camera MainCamera => mainCamera;
+		public Camera MainCamera => mainCameraManager.Camera;
 
 		/// <summary>
 		/// Align the camera, along with the protagonist if it exists, to the
@@ -27,9 +27,9 @@ namespace NaniCore.Bordure {
 		}
 
 		public void AttachCameraTo(Transform transform, bool resetLocalTransforms = false) {
-			mainCamera.transform.SetParent(transform, true);
+			mainCameraManager.transform.SetParent(transform, true);
 			if(resetLocalTransforms) {
-				mainCamera.transform.SetLocalPositionAndRotation(
+				mainCameraManager.transform.SetLocalPositionAndRotation(
 					Vector3.zero,
 					Quaternion.identity
 				);
@@ -37,7 +37,7 @@ namespace NaniCore.Bordure {
 		}
 
 		public void RetrieveCameraHierarchy() {
-			mainCamera.transform.SetParent(transform, true);
+			mainCameraManager.transform.SetParent(transform, true);
 		}
 		#endregion
 

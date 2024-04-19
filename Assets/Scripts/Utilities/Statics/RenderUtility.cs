@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.Rendering;
 using System.Collections.Generic;
-using UnityEngine.UI;
 
 namespace NaniCore {
 	public static class RenderUtility {
@@ -55,27 +54,39 @@ namespace NaniCore {
 			return new Material(shader);
 		}
 
-		public static RenderTexture CreateRT(int width, int height, RenderTextureFormat format = RenderTextureFormat.ARGBFloat) {
-			var texture = RenderTexture.GetTemporary(width, height, 0, format);
+		public static RenderTexture CreateRT(Vector2Int size, RenderTextureFormat format = RenderTextureFormat.ARGBFloat) {
+			var texture = RenderTexture.GetTemporary(size.x, size.y, 0, format);
 			texture.Clear();
 			return texture;
 		}
-		public static RenderTexture CreateRT(Vector2Int size, RenderTextureFormat format = RenderTextureFormat.ARGBFloat)
-			=> CreateRT(size.x, size.y, format);
 		public static RenderTexture CreateScreenSizedRT(RenderTextureFormat format = RenderTextureFormat.ARGBFloat)
-			=> CreateRT(Screen.width, Screen.height);
+			=> CreateRT(ScreenSize, format);
+		public static Vector2Int ScreenSize => new(Screen.width, Screen.height);
 
 		public static Vector2Int Size(this RenderTexture texture) {
 			if(texture == null)
 				return Vector2Int.zero;
 			return new Vector2Int(texture.width, texture.height);
 		}
-		public static void Resize(this RenderTexture texture, Vector2Int size) {
+		/// <summary>
+		/// Resizes the texture to the specified size.
+		/// </summary>
+		/// <remarks>
+		/// The resizing will not take place if the texture is already of the specified size.
+		/// If it had taken place, all references to the original texture should be updated.
+		/// </remarks>
+		/// <returns>
+		/// If the resizing is successfully performed.
+		/// </returns>
+		public static bool Resize(ref RenderTexture texture, Vector2Int size) {
+			if(texture == null)
+				return false;
+			if(texture.Size() == size)
+				return false;
 			var resampled = texture.Resample(size);
-			texture.width = size.x;
-			texture.height = size.y;
-			Graphics.Blit(resampled, texture);
-			resampled.Destroy();
+			texture.Destroy();
+			texture = resampled;
+			return true;
 		}
 
 		public static RenderTexture Duplicate(this RenderTexture texture) {

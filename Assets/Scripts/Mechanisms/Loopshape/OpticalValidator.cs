@@ -134,7 +134,7 @@ namespace NaniCore.Bordure {
 				representative.Overlay(gastroMask);
 				representative.Overlay(validationMask);
 
-				GameManager.Instance.DrawDebugFrame(representative, debugLayerOpacity);
+				GameManager.Instance.DrawDebugOverlayFrame(representative, debugLayerOpacity);
 			}
 #endif
 
