@@ -33,6 +33,12 @@ namespace NaniCore.Bordure {
 
 			protagonist.MoveVelocity(moveVelocity);
 		}
+
+		protected void OnDisable() {
+			// Reset cached input values on disabling, or the protagonist would keep
+			// receiving false input when re-enabled.
+			moveVelocity = Vector3.zero;
+		}
 		#endregion
 
 		#region Interfaces

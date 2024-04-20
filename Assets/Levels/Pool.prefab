@@ -19003,6 +19003,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 72692829440398492}
   - {fileID: 3832708807699631691}
   - {fileID: 7595108268687645458}
   - {fileID: 3943771972721268010}
@@ -26477,6 +26478,50 @@ MonoBehaviour:
     hollowObjects: []
     preventOverlapping: 0
     forceFillCorner: 0
+--- !u!1 &4462787957157570338
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 72692829440398492}
+  - component: {fileID: 124307546942962604}
+  m_Layer: 0
+  m_Name: Pool Entrance Spawn Point
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 2147483647
+  m_IsActive: 1
+--- !u!4 &72692829440398492
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4462787957157570338}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.0000004768371, z: -0, w: 1}
+  m_LocalPosition: {x: -12.000002, y: 0, z: -7.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4669326698911048701}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &124307546942962604
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4462787957157570338}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f93d73c3d716d4a47a38ba7cd6a67865, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4470684415474144786
 GameObject:
   m_ObjectHideFlags: 0
@@ -54458,6 +54503,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4669326698911048701}
     m_Modifications:
+    - target: {fileID: 336818695286117687, guid: b0922d9a119f3264eb23ba2f357876e2, type: 3}
+      propertyPath: zm
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1416307740732916757, guid: b0922d9a119f3264eb23ba2f357876e2, type: 3}
       propertyPath: m_LocalPosition.x
       value: -11.999998
@@ -54501,6 +54550,26 @@ PrefabInstance:
     - target: {fileID: 1674707529257264965, guid: b0922d9a119f3264eb23ba2f357876e2, type: 3}
       propertyPath: m_Name
       value: Entrance
+      objectReference: {fileID: 0}
+    - target: {fileID: 2428900397042994204, guid: b0922d9a119f3264eb23ba2f357876e2, type: 3}
+      propertyPath: zm
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4375737152695917764, guid: b0922d9a119f3264eb23ba2f357876e2, type: 3}
+      propertyPath: zm
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4696222761717844492, guid: b0922d9a119f3264eb23ba2f357876e2, type: 3}
+      propertyPath: zm
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8241918879642115507, guid: b0922d9a119f3264eb23ba2f357876e2, type: 3}
+      propertyPath: zm
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8927148255436435430, guid: b0922d9a119f3264eb23ba2f357876e2, type: 3}
+      propertyPath: zm
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -47,13 +47,7 @@ namespace NaniCore.Bordure {
 		}
 
 		public SpawnPoint FindSpawnPointByName(string name) {
-			var spawnPoints = FindObjectsByType<SpawnPoint>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-			foreach(var spawnPoint in spawnPoints) {
-				if(spawnPoint.Name != name)
-					continue;
-				return spawnPoint;
-			}
-			return null;
+			return HierarchyUtility.FindObjectByName<SpawnPoint>(name, true);
 		}
 
 		public void AlignSpawnPoints(string names) {
@@ -81,7 +75,7 @@ namespace NaniCore.Bordure {
 		}
 
 		public void AlignSpawnPoints(SpawnPoint anchor, SpawnPoint alignee) {
-			Debug.Log($"Aligning spawn point {anchor} to {alignee}.");
+			Debug.Log($"Aligning spawn point {alignee} to {anchor}.");
 			if(anchor == null || alignee == null)
 				return;
 
@@ -116,8 +110,17 @@ namespace NaniCore.Bordure {
 		}
 
 		private Level InstantiateLevelTemplate(Level template) {
+			// Temporarily disables protagonist input when loading the level, or else the stuck
+			// would cause bad experience.
+			bool movement = UsesProtagonistMovement, orientation = UsesProtagonistOrientation;
+			UsesProtagonistMovement = false;
+			UsesProtagonistOrientation = false;
+
 			var level = Instantiate(template.gameObject).GetComponent<Level>();
 			TakeCareOfLevel(level);
+
+			UsesProtagonistMovement = movement;
+			UsesProtagonistOrientation = orientation;
 
 			return level;
 		}

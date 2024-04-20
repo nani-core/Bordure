@@ -91,6 +91,12 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+  onValidated:
+    m_PersistentCalls:
+      m_Calls: []
+  onInvalidated:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &3487588782582465966
 GameObject:
   m_ObjectHideFlags: 0
@@ -238,9 +244,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3252e05ce982e1428962f17b570e27b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  color: {r: 1, g: 1, b: 1, a: 1}
-  duration: 1
-  templateMaterial: {fileID: 2100000, guid: ca55a3d54ee73ab41beea79c7ba6cab1, type: 2}
+  selectiveSubmesh: 0
+  submeshIndices: 
 --- !u!1 &4249343865177233629
 GameObject:
   m_ObjectHideFlags: 0
@@ -405,7 +410,7 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0

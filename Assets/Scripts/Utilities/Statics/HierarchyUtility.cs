@@ -3,6 +3,8 @@ using UnityEngine;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 #endif
+using System.Collections.Generic;
+using System.Linq;
 
 namespace NaniCore {
 	public static class HierarchyUtility {
@@ -154,6 +156,16 @@ namespace NaniCore {
 			else {
 				target.SetPositionAndRotation(position, orientation);
 			}
+		}
+
+		public static IEnumerable<T> FindObjectsByName<T>(string name, bool includeInactive = false) where T : Component {
+			FindObjectsInactive includingFlag = includeInactive ? FindObjectsInactive.Include : FindObjectsInactive.Exclude;
+			var instances = Object.FindObjectsByType<T>(includingFlag, FindObjectsSortMode.None);
+			return instances.Where(i => i.name == name);
+		}
+
+		public static T FindObjectByName<T>(string name, bool includeInactive = false) where T : Component {
+			return FindObjectsByName<T>(name, includeInactive).FirstOrDefault();
 		}
 		#endregion
 	}

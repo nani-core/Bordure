@@ -3,11 +3,11 @@ using UnityEngine;
 namespace NaniCore.Bordure {
 	public partial class GameManager : MonoBehaviour {
 		#region Fields
-		[SerializeField] private Camera mainCamera;
+		[SerializeField] private MainCameraManager mainCameraManager;
 		#endregion
 
 		#region Interfaces
-		public Camera MainCamera => mainCamera;
+		public Camera MainCamera => mainCameraManager.Camera;
 
 		/// <summary>
 		/// Align the camera, along with the protagonist if it exists, to the
@@ -27,9 +27,9 @@ namespace NaniCore.Bordure {
 		}
 
 		public void AttachCameraTo(Transform transform, bool resetLocalTransforms = false) {
-			mainCamera.transform.SetParent(transform, true);
+			mainCameraManager.transform.SetParent(transform, true);
 			if(resetLocalTransforms) {
-				mainCamera.transform.SetLocalPositionAndRotation(
+				mainCameraManager.transform.SetLocalPositionAndRotation(
 					Vector3.zero,
 					Quaternion.identity
 				);
@@ -37,7 +37,29 @@ namespace NaniCore.Bordure {
 		}
 
 		public void RetrieveCameraHierarchy() {
-			mainCamera.transform.SetParent(transform, true);
+			mainCameraManager.transform.SetParent(transform, true);
+		}
+
+		public Coroutine TransitCameraTo(Transform target, float duration, float easingFactor) {
+			return StartCoroutine(TransitCameraToCoroutine(target, duration, easingFactor));
+		}
+		public Coroutine TransitCameraTo(Transform target) => TransitCameraTo(target, 1.0f, 0.0f);
+
+		public Coroutine BlendToCamera(Camera target, float duration) {
+			if(target == null) {
+				Debug.LogWarning("Warning: The target blending camera is null.");
+				return null;
+			}
+			return StartCoroutine(BlendToCameraCoroutine(target, duration));
+		}
+		public Coroutine BlendToCamera(Camera target) => BlendToCamera(target, 1.0f);
+		public Coroutine BlendToCameraByName(string name) {
+			Camera target = HierarchyUtility.FindObjectByName<Camera>(name, true);
+			if(target == null) {
+				Debug.LogWarning($"Warning: Cannot find the target blending camera (\"{name}\").");
+				return null;
+			}
+			return BlendToCamera(target);
 		}
 		#endregion
 
@@ -45,7 +67,7 @@ namespace NaniCore.Bordure {
 		private System.Collections.IEnumerator TransitCameraToCoroutine(
 			Transform target,
 			float duration,
-			float easingFactor = 0.0f
+			float easingFactor
 		) {
 			// Record protagonist control state before moving.
 			bool usesMovement = false, usesOrientation = false;
@@ -85,6 +107,41 @@ namespace NaniCore.Bordure {
 				Protagonist.UsesMovement = usesMovement;
 				Protagonist.UsesOrientation = usesOrientation;
 			}
+		}
+
+		private System.Collections.IEnumerator BlendToCameraCoroutine(
+			Camera target,
+			float duration
+		) {
+			Debug.Log($"Start blending the camera to {target.name}.", target);
+			#region Initialize
+			var blendTexture = RenderUtility.CreateScreenSizedRT();
+			var targetRT = target.EnsureComponent<CameraRenderingTarget>();
+			target.gameObject.SetActive(true);
+			var startTime = Time.time;
+			#endregion
+
+			#region Progress
+			void renderingFinishingContinuation(RenderTexture result) {
+				var progress = (Time.time - startTime) / duration;
+				result.Overlay(targetRT.OutputTexture, progress);
+			}
+			mainCameraManager.onRenderingFinished += renderingFinishingContinuation;
+			yield return new WaitForSeconds(duration);
+			mainCameraManager.onRenderingFinished -= renderingFinishingContinuation;
+			#endregion
+
+			#region Post process
+			AlignCameraTo(target.transform);
+			yield return new WaitForEndOfFrame();
+			#endregion
+
+			#region Finalize
+			blendTexture.Destroy();
+			HierarchyUtility.Destroy(targetRT);	// Could be commented out.
+			target.gameObject.SetActive(false);
+			Debug.Log($"Finished camera blending.", target);
+			#endregion
 		}
 		#endregion
 	}
