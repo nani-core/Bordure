@@ -10,10 +10,12 @@ namespace NaniCore.Bordure {
 				return;
 			var audio = GameManager.Instance.Settings.audio;
 			IList<AudioClip> sounds;
-			if(ground.TryGetComponent<RigidbodyAgent>(out var agent))
-				sounds = GameManager.Instance.GetSoundsSetByTier(audio.footstepSoundSets, audio.defaultFootstepSounds, agent.Tier);
-			else
-				sounds = audio.defaultFootstepSounds;
+			ground.TryGetComponent<RigidbodyAgent>(out var agent);
+			RigidbodyTier tier = agent == null ? RigidbodyTier.Default : agent.Tier;
+			sounds = GameManager.Instance.GetSoundsSetByTier(audio.footstepSoundSets, audio.defaultFootstepSounds, tier);
+#if DEBUG
+			Debug.Log($"Making footstep sound on {ground.name} (tier: {tier}).", ground);
+#endif
 			GameManager.Instance.PlayWorldSound(sounds.PickRandom(), foot.position, null, 1.0f);
 		}
 
