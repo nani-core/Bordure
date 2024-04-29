@@ -3,15 +3,7 @@ using System.Collections.Generic;
 
 namespace NaniCore.Bordure {
 	public partial class GameManager : MonoBehaviour {
-		#region Fields
-		[SerializeField] private AudioListener audioListener;
-		[SerializeField] private AudioSource sfxAudioSource;
-		#endregion
-
 		#region Interfaces
-		public AudioListener AudioListener => audioListener;
-		public AudioSource SfxAudioSource => sfxAudioSource;
-
 		public void PlayPhysicalSound(Rigidbody rb, float strength = 1.0f, Vector3? point = null) {
 			if(rb == null)
 				return;
@@ -32,7 +24,7 @@ namespace NaniCore.Bordure {
 			PlayWorldSound(sound, transform.position, transform.transform, strength);
 		}
 
-		public void PlayWorldSound(AudioClip sound, Vector3 position, Transform under, float strength) {
+		public void PlayWorldSound(AudioClip sound, Vector3 position, Transform under = null, float strength = 1.0f) {
 			if(sound == null)
 				return;
 

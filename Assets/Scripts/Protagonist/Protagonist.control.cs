@@ -5,7 +5,7 @@ namespace NaniCore.Bordure {
 	public partial class Protagonist : MonoBehaviour {
 		#region Serialized fields
 		[SerializeField] private Animator animator;
-		[SerializeField] private Transform eye;
+		[SerializeField] private Transform eye, foot;
 		#endregion
 
 		#region Fields
