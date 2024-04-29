@@ -38,21 +38,22 @@ namespace NaniCore.Bordure {
 				point += contact.point;
 			point /= collision.contacts.Length;
 
-			PlayPhysicalSound(Settings.audio.collisionSound, point, a.transform, hardness);
+			PlayPhysicalSound(a?.Rigidbody, hardness, point);
+			PlayPhysicalSound(b?.Rigidbody, hardness, point);
 		}
 
 		private void OnTriggerEnterCallback(Collider trigger, Rigidbody rigidbody) {
 			if(trigger.gameObject.layer != WaterLayer)
 				return;
 
-			PlayPhysicalSound(Settings.audio.enterWaterSound, rigidbody);
+			PlayWorldSound(Settings.audio.enterWaterSound, rigidbody.transform);
 		}
 
 		private void OnTriggerExitCallback(Collider trigger, Rigidbody rigidbody) {
 			if(trigger.gameObject.layer != WaterLayer)
 				return;
 
-			PlayPhysicalSound(Settings.audio.exitWaterSound, rigidbody);
+			PlayWorldSound(Settings.audio.exitWaterSound, rigidbody.transform);
 		}
 		#endregion
 

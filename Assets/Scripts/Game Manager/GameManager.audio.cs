@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 namespace NaniCore.Bordure {
 	public partial class GameManager : MonoBehaviour {
@@ -11,7 +12,27 @@ namespace NaniCore.Bordure {
 		public AudioListener AudioListener => audioListener;
 		public AudioSource SfxAudioSource => sfxAudioSource;
 
-		public void PlayPhysicalSound(AudioClip sound, Vector3 position, Transform under, float strength) {
+		public void PlayPhysicalSound(Rigidbody rb, float strength = 1.0f, Vector3? point = null) {
+			if(rb == null)
+				return;
+
+			if(point == null)
+				point = rb.worldCenterOfMass;
+
+			RigidbodyTier tier = rb.GetTier();
+			var sound = GetCollisionSoundsByTier(tier).PickRandom();
+
+#if DEBUG
+			Debug.Log($"{rb.name} (tier: {tier}) is making an collision sound.", rb);
+#endif
+			PlayWorldSound(sound, point.Value, rb.transform, strength);
+		}
+
+		public void PlayWorldSound(AudioClip sound, Transform transform, float strength = 1.0f) {
+			PlayWorldSound(sound, transform.position, transform.transform, strength);
+		}
+
+		public void PlayWorldSound(AudioClip sound, Vector3 position, Transform under, float strength) {
 			float maxGain = Settings.audio.maxPhysicalSoundGain;
 			float volume = (1f - 1f / (strength / maxGain + 1f)) * maxGain;
 			volume *= Settings.audio.physicalSoundBaseGain;
@@ -30,17 +51,41 @@ namespace NaniCore.Bordure {
 					spatialBlend = 1f,
 				}
 			);
+#if DEBUG
+			Debug.Log($"Sound \"{sound.name}\" is being played (strength: {strength}).", sound);
+#endif
 			Instance.StartCoroutine(coroutine);
 		}
+		#endregion
 
-		public void PlayPhysicalSound(AudioClip sound, Rigidbody rb) {
-			float strength = rb.mass;
-			if(!rb.isKinematic) {
-				if((rb.constraints | RigidbodyConstraints.FreezePosition) == 0)
-					strength *= rb.velocity.magnitude;
+		#region Functions
+		private IList<AudioClip> GetCollisionSoundsByTier(RigidbodyTier tier) {
+			if(Settings.audio == null)
+				return default;
+
+			if(tier == RigidbodyTier.Default)
+				return Settings.audio.defaultCollisionSounds;
+
+			var sets = Settings.audio.collisionSoundSets;
+			int bestIndex = -1;
+			RigidbodyTier bestTier = RigidbodyTier.Default;
+			for(int i = 0; i < sets.Count; ++i) {
+				var set = sets[i];
+				if(!tier.IsDerivedFromTier(set.tier))
+					continue;
+
+				// See if this tier is a better match.
+				bool isBetter = set.tier > bestTier;
+				if(!isBetter)
+					continue;
+
+				bestIndex = i;
+				bestTier = set.tier;
 			}
 
-			PlayPhysicalSound(sound, rb.position, rb.transform, strength);
+			if(bestIndex < 0)
+				return Settings.audio.defaultCollisionSounds;
+			return sets[bestIndex].audioClips;
 		}
 		#endregion
 	}

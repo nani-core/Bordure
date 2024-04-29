@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 namespace NaniCore.Bordure {
 	[CreateAssetMenu(menuName = "Nani Core/Audio Settings")]
@@ -10,10 +11,18 @@ namespace NaniCore.Bordure {
 		[Min(0)] public float physicalSoundAttenuation = 5f;
 		[Min(0)] public float minPhysicalSoundImpulse = 1f;
 
-		[Header("Rigidbody")]
-		// Only temporary.
+		[Header("Water")]
 		public AudioClip collisionSound;
 		public AudioClip enterWaterSound;
 		public AudioClip exitWaterSound;
+
+		[System.Serializable]
+		public struct CollisionSoundSet {
+			public RigidbodyTier tier;
+			public List<AudioClip> audioClips;
+		}
+		[Header("Collision")]
+		public List<AudioClip> defaultCollisionSounds;
+		public List<CollisionSoundSet> collisionSoundSets = new();
 	}
 }
