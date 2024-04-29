@@ -22913,6 +22913,7 @@ GameObject:
   - component: {fileID: 2548008804386382660}
   - component: {fileID: 6868645961718516011}
   - component: {fileID: 1008393445052716038}
+  - component: {fileID: 144764352557380988}
   m_Layer: 0
   m_Name: Manhole Cover
   m_TagString: Untagged
@@ -23051,6 +23052,19 @@ MonoBehaviour:
   onDetached:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &144764352557380988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3953460449574922395}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38c10526267b2fb4e900b5e19a2f9e65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tier: 24
 --- !u!1 &3955577970267815014
 GameObject:
   m_ObjectHideFlags: 0
@@ -57937,9 +57951,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 36a2aee2e8a8fc74895aaa15eb38a1a3, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5308454881080743605}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 36a2aee2e8a8fc74895aaa15eb38a1a3, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 7328365014167989413}
   m_SourcePrefab: {fileID: 100100000, guid: 36a2aee2e8a8fc74895aaa15eb38a1a3, type: 3}
 --- !u!1 &4792458556549128984 stripped
 GameObject:
@@ -58045,19 +58056,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selectiveSubmesh: 0
   submeshIndices: 
---- !u!114 &7328365014167989413
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4792458556549128984}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 38c10526267b2fb4e900b5e19a2f9e65, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tier: 24
 --- !u!4 &5317039250340067746 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 36a2aee2e8a8fc74895aaa15eb38a1a3, type: 3}
