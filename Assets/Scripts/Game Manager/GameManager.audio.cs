@@ -12,14 +12,14 @@ namespace NaniCore.Bordure {
 		public AudioSource SfxAudioSource => sfxAudioSource;
 
 		public void PlayPhysicalSound(AudioClip sound, Vector3 position, Transform under, float strength) {
-			float maxGain = Settings.maxPhysicalSoundGain;
+			float maxGain = Settings.audio.maxPhysicalSoundGain;
 			float volume = (1f - 1f / (strength / maxGain + 1f)) * maxGain;
-			volume *= Settings.physicalSoundBaseGain;
+			volume *= Settings.audio.physicalSoundBaseGain;
 
 			// 这b玩意死活调不好，给我整红温了。
 			Vector2 range = Vector2.zero;
-			range.y = Settings.physicalSoundRange * strength;
-			range.x = range.y * Mathf.Exp(-Settings.physicalSoundAttenuation);
+			range.y = Settings.audio.physicalSoundRange * strength;
+			range.x = range.y * Mathf.Exp(-Settings.audio.physicalSoundAttenuation);
 			range.y *= strength;
 
 			var coroutine = AudioUtility.PlayOneShotAtCoroutine(

@@ -28,7 +28,7 @@ namespace NaniCore.Bordure {
 			}
 
 			float impulse = collision.impulse.magnitude;
-			float minImpulse = Settings.minPhysicalSoundImpulse;
+			float minImpulse = Settings.audio.minPhysicalSoundImpulse;
 			if(impulse < minImpulse)
 				return;
 			float hardness = impulse - minImpulse;
@@ -38,21 +38,21 @@ namespace NaniCore.Bordure {
 				point += contact.point;
 			point /= collision.contacts.Length;
 
-			PlayPhysicalSound(Settings.collisionSound, point, a.transform, hardness);
+			PlayPhysicalSound(Settings.audio.collisionSound, point, a.transform, hardness);
 		}
 
 		private void OnTriggerEnterCallback(Collider trigger, Rigidbody rigidbody) {
 			if(trigger.gameObject.layer != WaterLayer)
 				return;
 
-			PlayPhysicalSound(Settings.enterWaterSound, rigidbody);
+			PlayPhysicalSound(Settings.audio.enterWaterSound, rigidbody);
 		}
 
 		private void OnTriggerExitCallback(Collider trigger, Rigidbody rigidbody) {
 			if(trigger.gameObject.layer != WaterLayer)
 				return;
 
-			PlayPhysicalSound(Settings.exitWaterSound, rigidbody);
+			PlayPhysicalSound(Settings.audio.exitWaterSound, rigidbody);
 		}
 		#endregion
 
