@@ -27,11 +27,5 @@ namespace NaniCore.Bordure {
 		[Min(0)] public float maxInteractionDistance = 20f;
 		[Range(0, 1)] public float grabbingTransitionDuration = .2f;
 		[Range(0, 1)] public float grabbingEasingFactor = .3f;
-
-		[Header("Sound")]
-		public AudioClip onFocusSound;
-		public AudioClip onGrabSound;
-		public AudioClip onDropSound;
-		public List<AudioClip> stepAudioClips = new List<AudioClip>();
 	}
 }

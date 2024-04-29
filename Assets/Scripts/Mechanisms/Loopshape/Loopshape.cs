@@ -25,6 +25,7 @@ namespace NaniCore.Bordure {
 		public void Open() {
 			Debug.Log($"{name} is opened.", this);
 			onOpen?.Invoke();
+			GameManager.Instance.PlayWorldSound(GameManager.Instance.Settings.audio.onOpenedSound, transform);
 
 			if(oneTime)
 				enabled = false;
@@ -43,12 +44,19 @@ namespace NaniCore.Bordure {
 		}
 
 		public void OnValidatorUpdate(LoopshapeValidator validator) {
+			var game = GameManager.Instance;
+			var audio = game.Settings.audio;
+			bool isOptical = validator is OpticalValidator;
 			// Update valid state.
 			if(wasValid != IsValid) {
-				if(wasValid = IsValid)
+				if(wasValid = IsValid) {
 					onValidated.Invoke();
-				else
+					game.PlayWorldSound(isOptical ? audio.onOpticalValidatedSound : audio.onValidatedSound, transform);
+				}
+				else {
 					onInvalidated.Invoke();
+					game.PlayWorldSound(isOptical ? audio.onOpticalInvalidatedSound : audio.onInvalidatedSound, transform);
+				}
 			}
 		}
 		#endregion

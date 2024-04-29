@@ -27,7 +27,7 @@ namespace NaniCore.Bordure {
 				if(grabbingObject != null) {
 					grabbingObject.transform.SetParent(null, true);
 					grabbingObject.SendMessage("OnGrabEnd");
-					PlaySfx(Profile.onDropSound);
+					PlaySfx(GameManager.Instance.Settings.audio.onDropSound);
 					Debug.Log($"{grabbingObject} is dropped.", grabbingObject);
 				}
 
@@ -35,7 +35,7 @@ namespace NaniCore.Bordure {
 
 				if(grabbingObject != null) {
 					grabbingObject.SendMessage("OnGrabBegin");
-					PlaySfx(Profile.onGrabSound);
+					PlaySfx(GameManager.Instance.Settings.audio.onGrabSound);
 
 					grabbingObject.transform.SetParent(eye.transform, true);
 					Debug.Log($"{grabbingObject} is grabbed.", grabbingObject);

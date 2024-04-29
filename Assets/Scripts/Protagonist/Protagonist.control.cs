@@ -5,7 +5,7 @@ namespace NaniCore.Bordure {
 	public partial class Protagonist : MonoBehaviour {
 		#region Serialized fields
 		[SerializeField] private Animator animator;
-		[SerializeField] private Transform eye;
+		[SerializeField] private Transform eye, foot;
 		#endregion
 
 		#region Fields
@@ -13,6 +13,7 @@ namespace NaniCore.Bordure {
 		private new Rigidbody rigidbody;
 		private RigidbodyAgent rigidbodyAgent;
 		private bool isOnGround = false;
+		private RaycastHit steppingGround = default;
 		private bool hasJustMoved = false;
 		private bool isWalking = false;
 		private bool isSprinting = false;
@@ -256,7 +257,7 @@ namespace NaniCore.Bordure {
 		public void Jump() => Jump(Profile.jumpingHeight);
 
 		private void ValidateMovementConditions() {
-			isOnGround = SweepTestGround(out RaycastHit _, Profile.skinDepth);
+			isOnGround = SweepTestGround(out steppingGround, Profile.skinDepth);
 			isInWater = rigidbodyAgent.IsOverlappingWithLayers(1 << GameManager.Instance.WaterLayer);
 		}
 
