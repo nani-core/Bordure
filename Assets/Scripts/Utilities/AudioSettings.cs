@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Serialization;
 using System.Collections.Generic;
 
 namespace NaniCore.Bordure {
@@ -19,13 +18,13 @@ namespace NaniCore.Bordure {
 		[System.Serializable]
 		public struct SoundSet {
 			public RigidbodyTier tier;
-			[FormerlySerializedAs("audioClips")] public List<AudioClip> sounds;
+			public List<AudioClip> sounds;
 		}
 		[Header("Collision")]
 		public List<AudioClip> defaultCollisionSounds;
 		public List<SoundSet> collisionSoundSets = new();
 
-		[Header("Interaction")]
+		[Header("Grabbing")]
 		public AudioClip onFocusSound;
 		public AudioClip onGrabSound;
 		public AudioClip onDropSound;
@@ -33,5 +32,12 @@ namespace NaniCore.Bordure {
 		[Header("Footsteps")]
 		public List<AudioClip> defaultFootstepSounds;
 		public List<SoundSet> footstepSoundSets = new();
+
+		[Header("Loopshape")]
+		public AudioClip onValidatedSound;
+		public AudioClip onOpticalValidatedSound;
+		public AudioClip onInvalidatedSound;
+		public AudioClip onOpticalInvalidatedSound;
+		public AudioClip onOpenedSound;
 	}
 }
