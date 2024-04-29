@@ -4,20 +4,45 @@ using System.Collections.Generic;
 namespace NaniCore.Bordure {
 	public partial class GameManager : MonoBehaviour {
 		#region Interfaces
-		public void PlayPhysicalSound(Rigidbody rb, float strength = 1.0f, Vector3? point = null) {
-			if(rb == null)
+		public void PlayPhysicalSound(RigidbodyAgent agent, float strength = 1.0f, Vector3? point = null) {
+			if(agent == null && point == null)
 				return;
 
-			if(point == null)
-				point = rb.worldCenterOfMass;
+			if(agent == null) {
+				// Ensure it's a real null instead of an invalidated object.
+				agent = null;
+			}
 
-			RigidbodyTier tier = rb.GetTier();
-			var sound = GetCollisionSoundsByTier(tier).PickRandom();
+			if(point == null) {
+				point = agent?.Rigidbody?.worldCenterOfMass;
+				point ??= agent?.transform?.position;
+				point ??= Protagonist.Eye.position;
+			}
+
+			RigidbodyTier tier = agent?.Tier ?? RigidbodyTier.Default;
+			var audio = Settings.audio;
+			var soundSet = GetSoundsSetByTier(audio.collisionSoundSets, audio.defaultCollisionSounds, tier);
+			var sound = soundSet.PickRandom();
 
 #if DEBUG
-			Debug.Log($"{rb.name} (tier: {tier}) is making an collision sound.", rb);
+			if(agent != null)
+				Debug.Log($"{agent.name} (tier: {tier}) is making an collision sound.", agent);
 #endif
-			PlayWorldSound(sound, point.Value, rb.transform, strength);
+			PlayWorldSound(sound, point.Value, agent?.transform, strength);
+		}
+
+		public void PlayPhysicalSound(Collider collider, float strength = 1.0f, Vector3? point = null) {
+			if(collider == null)
+				return;
+
+			if(collider.transform.TryGetComponent<RigidbodyAgent>(out var agent)) {
+				PlayPhysicalSound(agent, strength, point);
+				return;
+			}
+
+			if(point == null)
+				point = collider.transform.position;
+			PlayPhysicalSound(agent, strength, point);
 		}
 
 		public void PlayWorldSound(AudioClip sound, Transform transform, float strength = 1.0f) {
@@ -49,21 +74,19 @@ namespace NaniCore.Bordure {
 #endif
 			Instance.StartCoroutine(coroutine);
 		}
-		#endregion
 
-		#region Functions
-		private IList<AudioClip> GetCollisionSoundsByTier(RigidbodyTier tier) {
-			if(Settings.audio == null)
-				return default;
-
+		public IList<AudioClip> GetSoundsSetByTier(
+			IList<AudioSettings.SoundSet> soundSets,
+			IList<AudioClip> defaultSet,
+			RigidbodyTier tier
+		) {
 			if(tier == RigidbodyTier.Default)
-				return Settings.audio.defaultCollisionSounds;
+				return defaultSet;
 
-			var sets = Settings.audio.collisionSoundSets;
 			int bestIndex = -1;
 			RigidbodyTier bestTier = RigidbodyTier.Default;
-			for(int i = 0; i < sets.Count; ++i) {
-				var set = sets[i];
+			for(int i = 0; i < soundSets.Count; ++i) {
+				var set = soundSets[i];
 				if(!tier.IsDerivedFromTier(set.tier))
 					continue;
 
@@ -77,8 +100,8 @@ namespace NaniCore.Bordure {
 			}
 
 			if(bestIndex < 0)
-				return Settings.audio.defaultCollisionSounds;
-			return sets[bestIndex].sounds;
+				return defaultSet;
+			return soundSets[bestIndex].sounds;
 		}
 		#endregion
 	}

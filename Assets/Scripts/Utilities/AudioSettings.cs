@@ -17,13 +17,13 @@ namespace NaniCore.Bordure {
 		public AudioClip[] exitWaterSounds;
 
 		[System.Serializable]
-		public struct CollisionSoundSet {
+		public struct SoundSet {
 			public RigidbodyTier tier;
 			[FormerlySerializedAs("audioClips")] public List<AudioClip> sounds;
 		}
 		[Header("Collision")]
 		public List<AudioClip> defaultCollisionSounds;
-		public List<CollisionSoundSet> collisionSoundSets = new();
+		public List<SoundSet> collisionSoundSets = new();
 
 		[Header("Interaction")]
 		public AudioClip onFocusSound;
@@ -32,6 +32,6 @@ namespace NaniCore.Bordure {
 
 		[Header("Footsteps")]
 		public List<AudioClip> defaultFootstepSounds;
-		public List<CollisionSoundSet> footstepSoundSets = new();
+		public List<SoundSet> footstepSoundSets = new();
 	}
 }

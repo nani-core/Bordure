@@ -38,8 +38,8 @@ namespace NaniCore.Bordure {
 				point += contact.point;
 			point /= collision.contacts.Length;
 
-			PlayPhysicalSound(a?.Rigidbody, hardness, point);
-			PlayPhysicalSound(b?.Rigidbody, hardness, point);
+			PlayPhysicalSound(a, hardness, point);
+			PlayPhysicalSound(b, hardness, point);
 		}
 
 		private void OnTriggerEnterCallback(Collider trigger, Rigidbody rigidbody) {
