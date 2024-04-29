@@ -78,7 +78,7 @@ namespace NaniCore.Bordure {
 
 			if(bestIndex < 0)
 				return Settings.audio.defaultCollisionSounds;
-			return sets[bestIndex].audioClips;
+			return sets[bestIndex].sounds;
 		}
 		#endregion
 	}

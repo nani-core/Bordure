@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 using System.Collections.Generic;
 
 namespace NaniCore.Bordure {
@@ -18,7 +19,7 @@ namespace NaniCore.Bordure {
 		[System.Serializable]
 		public struct CollisionSoundSet {
 			public RigidbodyTier tier;
-			public List<AudioClip> audioClips;
+			[FormerlySerializedAs("audioClips")] public List<AudioClip> sounds;
 		}
 		[Header("Collision")]
 		public List<AudioClip> defaultCollisionSounds;
