@@ -91,6 +91,12 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  onValidated:
+    m_PersistentCalls:
+      m_Calls: []
+  onInvalidated:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1001 &999299487800007247
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -226,6 +232,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7026343843153984662, guid: f1d35fe74de349945acd1257a5fbebe7, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4471579020131763329}
+    - targetCorrespondingSourceObject: {fileID: 7026343843153984662, guid: f1d35fe74de349945acd1257a5fbebe7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8015035490776011616}
   m_SourcePrefab: {fileID: 100100000, guid: f1d35fe74de349945acd1257a5fbebe7, type: 3}
 --- !u!4 &744361587580730788 stripped
 Transform:
@@ -271,9 +280,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3252e05ce982e1428962f17b570e27b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  color: {r: 1, g: 1, b: 1, a: 1}
-  duration: 1
-  templateMaterial: {fileID: 2100000, guid: ca55a3d54ee73ab41beea79c7ba6cab1, type: 2}
+  selectiveSubmesh: 0
+  submeshIndices: 
 --- !u!1 &7808309271270958809 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7026343843153984662, guid: f1d35fe74de349945acd1257a5fbebe7, type: 3}
@@ -345,3 +353,16 @@ MonoBehaviour:
   onDetached:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &8015035490776011616
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7808309271270958809}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38c10526267b2fb4e900b5e19a2f9e65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tier: 2

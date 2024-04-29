@@ -26,5 +26,7 @@ namespace NaniCore.Bordure {
 
 		Carpet = 0x20,
 		Rug = 0x20 | 0x40,
+
+		Character = 0x40000000,
 	}
 }

@@ -7,25 +7,12 @@ namespace NaniCore.Bordure {
 			if(collision == null || collision.contactCount == 0)
 				return;
 
-			ContactPoint contactPoint;
-			{
-				ContactPoint[] contactPoints = new ContactPoint[1];
-				collision.GetContacts(contactPoints);
-				contactPoint = contactPoints[0];
-			}
-			var (a, b) = (
-				contactPoint.thisCollider.GetComponent<RigidbodyAgent>(),
-				contactPoint.otherCollider.GetComponent<RigidbodyAgent>()
-			);
-
-			OnRigidbodyCollided(a, b, collision);
+			OnBodiesCollided(collision);
 		}
 
-		private void OnRigidbodyCollided(RigidbodyAgent a, RigidbodyAgent b, Collision collision) {
-			if(a == null) {
-				Debug.LogWarning("Warning: Cannot play the requested collision sound as all RB agents are null.");
+		private void OnBodiesCollided(Collision collision) {
+			if(collision?.collider == null)
 				return;
-			}
 
 			float impulse = collision.impulse.magnitude;
 			float minImpulse = Settings.audio.minPhysicalSoundImpulse;
@@ -38,8 +25,7 @@ namespace NaniCore.Bordure {
 				point += contact.point;
 			point /= collision.contacts.Length;
 
-			PlayPhysicalSound(a, hardness, point);
-			PlayPhysicalSound(b, hardness, point);
+			PlayPhysicalSound(collision.collider, hardness, point);
 		}
 
 		private void OnTriggerEnterCallback(Collider trigger, Rigidbody rigidbody) {

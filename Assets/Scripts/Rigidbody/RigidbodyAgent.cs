@@ -16,7 +16,10 @@ namespace NaniCore.Bordure {
 
 		#region Interfaces
 		public Rigidbody Rigidbody => rigidbody;
-		public RigidbodyTier Tier => tier;
+		public RigidbodyTier Tier {
+			get => tier;
+			set => tier = value;
+		}
 
 		public Dictionary<Collider, ContactPoint[]> ColliderContacts => colliderContacts;
 		public HashSet<Collider> OverlappingTriggers => overlappingTriggers;

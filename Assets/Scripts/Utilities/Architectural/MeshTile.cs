@@ -135,6 +135,12 @@ namespace NaniCore {
 			under.gameObject.AddComponent<MeshFilter>().sharedMesh = sumMesh;
 			under.gameObject.AddComponent<MeshRenderer>().sharedMaterials = materials.ToArray();
 			under.gameObject.AddComponent<MeshCollider>();
+
+			// Generate the agent
+			if(tiles[0].TryGetComponent<RigidbodyAgent>(out var agent)) {
+				var newAgent = under.gameObject.AddComponent<RigidbodyAgent>();
+				newAgent.Tier = agent.Tier;
+			}
 		}
 
 		private static void AddToMeshEx(MeshEx destination, MeshEx add, int subMeshOffset, Matrix4x4 transformation) {

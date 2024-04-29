@@ -24,6 +24,8 @@ namespace NaniCore.Bordure {
 			var soundSet = GetSoundsSetByTier(audio.collisionSoundSets, audio.defaultCollisionSounds, tier);
 			var sound = soundSet.PickRandom();
 
+			if(sound == null)
+				return;
 #if DEBUG
 			if(agent != null)
 				Debug.Log($"{agent.name} (tier: {tier}) is making an collision sound.", agent);
@@ -42,7 +44,10 @@ namespace NaniCore.Bordure {
 
 			if(point == null)
 				point = collider.transform.position;
-			PlayPhysicalSound(agent, strength, point);
+#if DEBUG
+			Debug.Log($"{collider.name} is making an collision sound.", agent);
+#endif
+			PlayPhysicalSound(null as RigidbodyAgent, strength, point);
 		}
 
 		public void PlayWorldSound(AudioClip sound, Transform transform, float strength = 1.0f) {
@@ -70,7 +75,7 @@ namespace NaniCore.Bordure {
 				}
 			);
 #if DEBUG
-			Debug.Log($"Sound \"{sound.name}\" is being played (strength: {strength}).", sound);
+			Debug.Log($"Sound \"{sound.name}\" is played (strength: {strength}).", sound);
 #endif
 			Instance.StartCoroutine(coroutine);
 		}
@@ -99,9 +104,6 @@ namespace NaniCore.Bordure {
 				bestTier = set.tier;
 			}
 
-			if(tier == RigidbodyTier.Grass) {
-				int a = 1;
-			}
 			if(bestIndex < 0)
 				return defaultSet;
 			return soundSets[bestIndex].sounds;
