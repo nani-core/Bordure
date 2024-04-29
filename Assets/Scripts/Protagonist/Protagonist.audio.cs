@@ -8,7 +8,9 @@ namespace NaniCore.Bordure {
 
 		#region Functions
 		public void PlayFootstepSound() {
-			footAudioSource.PlayOneShot(Profile.stepAudioClips.PickRandom());
+			// TODO: Detect walking surface tier.
+			var sound = GameManager.Instance.Settings.audio.defaultFootstepSounds.PickRandom();
+			footAudioSource.PlayOneShot(sound);
 		}
 
 		private void PlaySfx(AudioClip clip) {

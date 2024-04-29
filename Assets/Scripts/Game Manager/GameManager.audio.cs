@@ -33,21 +33,22 @@ namespace NaniCore.Bordure {
 		}
 
 		public void PlayWorldSound(AudioClip sound, Vector3 position, Transform under, float strength) {
+			if(sound == null)
+				return;
+
 			float maxGain = Settings.audio.maxPhysicalSoundGain;
 			float volume = (1f - 1f / (strength / maxGain + 1f)) * maxGain;
 			volume *= Settings.audio.physicalSoundBaseGain;
 
 			// 这b玩意死活调不好，给我整红温了。
-			Vector2 range = Vector2.zero;
-			range.y = Settings.audio.physicalSoundRange * strength;
-			range.x = range.y * Mathf.Exp(-Settings.audio.physicalSoundAttenuation);
-			range.y *= strength;
+			float rangeMin = Settings.audio.physicalSoundRange * Mathf.Pow(strength, 2.0f);
+			float rangeMax = Settings.audio.physicalSoundRange * Mathf.Pow(strength, 1.0f) * Mathf.Exp(-Settings.audio.physicalSoundAttenuation);
 
 			var coroutine = AudioUtility.PlayOneShotAtCoroutine(
 				sound, position, under,
 				new() {
 					volume = volume,
-					range = range,
+					range = new(rangeMin, rangeMax),
 					spatialBlend = 1f,
 				}
 			);

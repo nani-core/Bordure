@@ -12,9 +12,8 @@ namespace NaniCore.Bordure {
 		[Min(0)] public float minPhysicalSoundImpulse = 1f;
 
 		[Header("Water")]
-		public AudioClip collisionSound;
-		public AudioClip enterWaterSound;
-		public AudioClip exitWaterSound;
+		public AudioClip[] enterWaterSounds;
+		public AudioClip[] exitWaterSounds;
 
 		[System.Serializable]
 		public struct CollisionSoundSet {
@@ -24,5 +23,14 @@ namespace NaniCore.Bordure {
 		[Header("Collision")]
 		public List<AudioClip> defaultCollisionSounds;
 		public List<CollisionSoundSet> collisionSoundSets = new();
+
+		[Header("Interaction")]
+		public AudioClip onFocusSound;
+		public AudioClip onGrabSound;
+		public AudioClip onDropSound;
+
+		[Header("Footsteps")]
+		public List<AudioClip> defaultFootstepSounds;
+		public List<CollisionSoundSet> footstepSoundSets = new();
 	}
 }

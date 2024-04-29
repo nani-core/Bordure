@@ -17,12 +17,24 @@ MonoBehaviour:
   physicalSoundRange: 10
   physicalSoundAttenuation: 5
   minPhysicalSoundImpulse: 4
-  collisionSound: {fileID: 0}
-  enterWaterSound: {fileID: 8300000, guid: cc51fed85a51b584a95717d21814b3b6, type: 3}
-  exitWaterSound: {fileID: 8300000, guid: 287e873048cfe41409e9f781794af12e, type: 3}
+  enterWaterSounds:
+  - {fileID: 8300000, guid: cc51fed85a51b584a95717d21814b3b6, type: 3}
+  exitWaterSounds:
+  - {fileID: 8300000, guid: 287e873048cfe41409e9f781794af12e, type: 3}
   defaultCollisionSounds:
   - {fileID: 8300000, guid: 3842f42f23be5f442bba8b5a7e809fd9, type: 3}
   collisionSoundSets:
   - tier: 12
     audioClips:
     - {fileID: 8300000, guid: bd830fa227840a04ea42f5c06f0a181f, type: 3}
+  onFocusSound: {fileID: 0}
+  onGrabSound: {fileID: 8300000, guid: e3fdd399d297bf54db52fbc9cfa3fc37, type: 3}
+  onDropSound: {fileID: 0}
+  defaultFootstepSounds: []
+  footstepSoundSets:
+  - tier: 1
+    audioClips:
+    - {fileID: 8300000, guid: 33ff0753bafb1854ebc8ad310d2a4e7f, type: 3}
+    - {fileID: 8300000, guid: 87cd2b0354c1174469269306bb1c6cba, type: 3}
+    - {fileID: 8300000, guid: a9d5885db0364fa4a85929cbb6777396, type: 3}
+    - {fileID: 8300000, guid: c0fb6f8f870d0394e927bb212d17b934, type: 3}
