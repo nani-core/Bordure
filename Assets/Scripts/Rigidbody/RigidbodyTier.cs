@@ -1,5 +1,3 @@
-using UnityEngine;
-
 namespace NaniCore.Bordure {
 	/**
 	 * For two tiers to be belonging to the same parent tier, they must share
@@ -20,5 +18,13 @@ namespace NaniCore.Bordure {
 
 		Metal = 0x8,
 		Steel = 0x8 | 0x10,
+
+		Dirt = 0x10,
+		Mud = 0x10 | 0x20,
+		Gravel = 0x10 | 0x30,
+		Grass = 0x10 | 0x40,
+
+		Carpet = 0x20,
+		Rug = 0x20 | 0x40,
 	}
 }

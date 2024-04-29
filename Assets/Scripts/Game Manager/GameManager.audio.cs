@@ -99,6 +99,9 @@ namespace NaniCore.Bordure {
 				bestTier = set.tier;
 			}
 
+			if(tier == RigidbodyTier.Grass) {
+				int a = 1;
+			}
 			if(bestIndex < 0)
 				return defaultSet;
 			return soundSets[bestIndex].sounds;
