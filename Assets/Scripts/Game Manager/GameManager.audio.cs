@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace NaniCore.Bordure {
 	public partial class GameManager : MonoBehaviour {
 		#region Interfaces
-		public void PlayPhysicalSound(RigidbodyAgent agent, float strength = 1.0f, Vector3? point = null) {
+		public void PlayCollisionSound(RigidbodyAgent agent, float volume = 1.0f, Vector3? point = null) {
 			if(agent == null && point == null)
 				return;
 
@@ -30,15 +30,16 @@ namespace NaniCore.Bordure {
 			if(agent != null)
 				Debug.Log($"{agent.name} (tier: {tier}) is making an collision sound.", agent);
 #endif
-			PlayWorldSound(sound, point.Value, agent?.transform, strength);
+
+			PlayWorldSound(sound, point.Value, agent?.transform, volume);
 		}
 
-		public void PlayPhysicalSound(Collider collider, float strength = 1.0f, Vector3? point = null) {
+		public void PlayCollisionSound(Collider collider, float volume = 1.0f, Vector3? point = null) {
 			if(collider == null)
 				return;
 
 			if(collider.transform.TryGetComponent<RigidbodyAgent>(out var agent)) {
-				PlayPhysicalSound(agent, strength, point);
+				PlayCollisionSound(agent, volume, point);
 				return;
 			}
 
@@ -47,35 +48,20 @@ namespace NaniCore.Bordure {
 #if DEBUG
 			Debug.Log($"{collider.name} is making an collision sound.", agent);
 #endif
-			PlayPhysicalSound(null as RigidbodyAgent, strength, point);
+			PlayCollisionSound(null as RigidbodyAgent, volume, point);
 		}
 
-		public void PlayWorldSound(AudioClip sound, Transform transform, float strength = 1.0f) {
-			PlayWorldSound(sound, transform.position, transform.transform, strength);
+		public void PlayWorldSound(AudioClip sound, Transform transform, float volume = 1.0f) {
+			PlayWorldSound(sound, transform.position, transform.transform, volume);
 		}
 
-		public void PlayWorldSound(AudioClip sound, Vector3 position, Transform under = null, float strength = 1.0f) {
+		public void PlayWorldSound(AudioClip sound, Vector3 position, Transform under = null, float volume = 1.0f) {
 			if(sound == null)
 				return;
 
-			float maxGain = Settings.audio.maxPhysicalSoundGain;
-			float volume = (1f - 1f / (strength / maxGain + 1f)) * maxGain;
-			volume *= Settings.audio.physicalSoundBaseGain;
-
-			// 这b玩意死活调不好，给我整红温了。
-			float rangeMin = Settings.audio.physicalSoundRange * Mathf.Pow(strength, 2.0f);
-			float rangeMax = Settings.audio.physicalSoundRange * Mathf.Pow(strength, 1.0f) * Mathf.Exp(-Settings.audio.physicalSoundAttenuation);
-
-			var coroutine = AudioUtility.PlayOneShotAtCoroutine(
-				sound, position, under,
-				new() {
-					volume = volume,
-					range = new(rangeMin, rangeMax),
-					spatialBlend = 1f,
-				}
-			);
+			var coroutine = AudioUtility.PlayOneShotAtCoroutine(sound, position, under, volume);
 #if DEBUG
-			Debug.Log($"Sound \"{sound.name}\" is played (strength: {strength}).", sound);
+			Debug.Log($"Sound \"{sound.name}\" is played (volume: {volume}).", sound);
 #endif
 			Instance.StartCoroutine(coroutine);
 		}

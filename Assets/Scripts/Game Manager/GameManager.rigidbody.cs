@@ -11,21 +11,39 @@ namespace NaniCore.Bordure {
 		}
 
 		private void OnBodiesCollided(Collision collision) {
-			if(collision?.collider == null)
+			if(collision == null)
 				return;
 
+			float energy = CalculateCollisionSoundEnergy(collision);
+			float volume = energy * Settings.audio.collisionSoundGain;
+			Vector3 point = FindAverageCollisionPoint(collision);
+
+			PlayCollisionSound(collision.collider, volume, point);
+		}
+
+		// TODO: Implement a more reasonable algorithm.
+		private float CalculateCollisionSoundEnergy(Collision collision) {
+			if(collision == null)
+				return default;
+
 			float impulse = collision.impulse.magnitude;
-			float minImpulse = Settings.audio.minPhysicalSoundImpulse;
+			float minImpulse = Settings.audio.minCollisionImpulse;
 			if(impulse < minImpulse)
-				return;
+				return default;
 			float hardness = impulse - minImpulse;
+			return hardness;
+		}
+
+		private Vector3 FindAverageCollisionPoint(Collision collision) {
+			if(collision == null)
+				return default;
 
 			Vector3 point = Vector3.zero;
 			foreach(var contact in collision.contacts)
 				point += contact.point;
 			point /= collision.contacts.Length;
 
-			PlayPhysicalSound(collision.collider, hardness, point);
+			return point;
 		}
 
 		private void OnTriggerEnterCallback(Collider trigger, Rigidbody rigidbody) {
