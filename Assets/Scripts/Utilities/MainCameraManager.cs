@@ -14,13 +14,17 @@ namespace NaniCore.Bordure {
 		#endregion
 
 		#region Properties
-		public Camera Camera => camera;
+		public Camera Camera {
+			get {
+				if(camera == null)
+					camera = GetComponent<Camera>();
+				return camera;
+			}
+		}
 		#endregion
 
 		#region Life cycle
 		protected void Start() {
-			camera = GetComponent<Camera>();
-
 			renderingTarget = transform.EnsureComponent<CameraRenderingTarget>();
 			renderingTarget.onTextureChanged = texture => renderOutputImage.texture = texture;
 			renderingTarget.onRenderingFinished += OnRenderingFinished;
