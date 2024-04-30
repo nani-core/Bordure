@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace NaniCore.Bordure {
 	public partial class GameManager : MonoBehaviour {
 		#region Interfaces
-		public void PlayPhysicalSound(RigidbodyAgent agent, float strength = 1.0f, Vector3? point = null) {
+		public void PlayCollisionSound(RigidbodyAgent agent, float energy, Vector3 point) {
 			if(agent == null && point == null)
 				return;
 
@@ -13,65 +13,60 @@ namespace NaniCore.Bordure {
 				agent = null;
 			}
 
-			if(point == null) {
-				point = agent?.Rigidbody?.worldCenterOfMass;
-				point ??= agent?.transform?.position;
-				point ??= Protagonist.Eye.position;
-			}
-
 			RigidbodyTier tier = agent?.Tier ?? RigidbodyTier.Default;
 			var audio = Settings.audio;
 			var soundSet = GetSoundsSetByTier(audio.collisionSoundSets, audio.defaultCollisionSounds, tier);
 			var sound = soundSet.PickRandom();
+			if(sound == null)
+				return;
+			float soundEnergy = sound.CalculateTotalEnergy();
+			float theoreticalVolume = energy / soundEnergy;
+			float playingVolume = Mathf.Min(theoreticalVolume, audio.maxVolume);
 
-#if DEBUG
-			if(agent != null)
+			if(Settings.makeAudioLogs && agent != null) {
 				Debug.Log($"{agent.name} (tier: {tier}) is making an collision sound.", agent);
-#endif
-			PlayWorldSound(sound, point.Value, agent?.transform, strength);
+				Debug.Log(
+					string.Join(", ", new string[] {
+						$"desired energy = {energy}",
+						$"actual enery of {sound.name} = {soundEnergy}",
+						$"volume = {theoreticalVolume}" + (playingVolume == theoreticalVolume ? "" : " (clippped)")
+					}),
+					sound
+				);
+			}
+			PlayWorldSound(sound, point, agent?.transform, playingVolume);
 		}
 
-		public void PlayPhysicalSound(Collider collider, float strength = 1.0f, Vector3? point = null) {
+		public void PlayCollisionSound(Collider collider, float energy, Vector3 point) {
 			if(collider == null)
 				return;
 
 			if(collider.transform.TryGetComponent<RigidbodyAgent>(out var agent)) {
-				PlayPhysicalSound(agent, strength, point);
+				PlayCollisionSound(agent, energy, point);
 				return;
 			}
 
 			if(point == null)
 				point = collider.transform.position;
-			PlayPhysicalSound(agent, strength, point);
+			if(Settings.makeAudioLogs) {
+				Debug.Log($"{collider.name} is making an collision sound.", agent);
+			}
+			PlayCollisionSound(null as RigidbodyAgent, energy, point);
 		}
 
-		public void PlayWorldSound(AudioClip sound, Transform transform, float strength = 1.0f) {
-			PlayWorldSound(sound, transform.position, transform.transform, strength);
+		public void PlayWorldSound(AudioClip sound, Transform transform, float volume = 1.0f) {
+			PlayWorldSound(sound, transform.position, transform.transform, volume);
 		}
 
-		public void PlayWorldSound(AudioClip sound, Vector3 position, Transform under = null, float strength = 1.0f) {
+		public void PlayWorldSound(AudioClip sound, Vector3 position, Transform under = null, float volume = 1.0f) {
 			if(sound == null)
 				return;
 
-			float maxGain = Settings.audio.maxPhysicalSoundGain;
-			float volume = (1f - 1f / (strength / maxGain + 1f)) * maxGain;
-			volume *= Settings.audio.physicalSoundBaseGain;
+			var coroutine = AudioUtility.PlayOneShotAtCoroutine(sound, position, under, volume);
 
-			// 这b玩意死活调不好，给我整红温了。
-			float rangeMin = Settings.audio.physicalSoundRange * Mathf.Pow(strength, 2.0f);
-			float rangeMax = Settings.audio.physicalSoundRange * Mathf.Pow(strength, 1.0f) * Mathf.Exp(-Settings.audio.physicalSoundAttenuation);
-
-			var coroutine = AudioUtility.PlayOneShotAtCoroutine(
-				sound, position, under,
-				new() {
-					volume = volume,
-					range = new(rangeMin, rangeMax),
-					spatialBlend = 1f,
-				}
-			);
-#if DEBUG
-			Debug.Log($"Sound \"{sound.name}\" is being played (strength: {strength}).", sound);
-#endif
+			if(Settings.makeAudioLogs) {
+				Debug.Log($"Sound \"{sound.name}\" is played (volume: {volume}).", sound);
+			}
 			Instance.StartCoroutine(coroutine);
 		}
 
@@ -99,9 +94,6 @@ namespace NaniCore.Bordure {
 				bestTier = set.tier;
 			}
 
-			if(tier == RigidbodyTier.Grass) {
-				int a = 1;
-			}
 			if(bestIndex < 0)
 				return defaultSet;
 			return soundSets[bestIndex].sounds;

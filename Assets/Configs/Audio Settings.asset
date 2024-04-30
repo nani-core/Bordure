@@ -12,11 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 685fbe3ab45874142b7b7363d35d8a1e, type: 3}
   m_Name: Audio Settings
   m_EditorClassIdentifier: 
-  physicalSoundBaseGain: 1
-  maxPhysicalSoundGain: 5
-  physicalSoundRange: 10
-  physicalSoundAttenuation: 5
-  minPhysicalSoundImpulse: 4
   enterWaterSounds:
   - {fileID: 8300000, guid: 7f5b1f76d0c380549a767231ee0f7db6, type: 3}
   - {fileID: 8300000, guid: dfa47fe971ffd5d4aa3344257c8bf3e1, type: 3}
@@ -27,6 +22,8 @@ MonoBehaviour:
   - {fileID: 8300000, guid: d986f10b5b4e26b489201af456f20a5b, type: 3}
   - {fileID: 8300000, guid: 251f4d0bc48513347aa7c937f5392a95, type: 3}
   - {fileID: 8300000, guid: dccad6bd2c564af4890f36d4bd7c974d, type: 3}
+  collisionSoundEnergyConversionRateLog: -3
+  maxVolume: 5
   defaultCollisionSounds:
   - {fileID: 8300000, guid: 0da3ee51c5e1846acb1cdd20188907bb, type: 3}
   - {fileID: 8300000, guid: 19938b7ef661147ed8e117478fb73884, type: 3}
@@ -35,6 +32,8 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 81d5aeb0476a8419a81145eccdf2d509, type: 3}
   - {fileID: 8300000, guid: 745dffa9d924c4ed297bdd9e699124ff, type: 3}
   collisionSoundSets:
+  - tier: 1073741824
+    sounds: []
   - tier: 12
     sounds:
     - {fileID: 8300000, guid: f8788a07668144992879ae306d836a03, type: 3}
@@ -48,40 +47,21 @@ MonoBehaviour:
     - {fileID: 8300000, guid: 745dffa9d924c4ed297bdd9e699124ff, type: 3}
   - tier: 8
     sounds:
-    - {fileID: 8300000, guid: 6937fd1413150db4aae95adb04c8c54d, type: 3}
     - {fileID: 8300000, guid: 6ed092c3187eae34188773a6f05f55cd, type: 3}
     - {fileID: 8300000, guid: 020cb8989a3779847a83c2eecc1cf2be, type: 3}
     - {fileID: 8300000, guid: 9c9c370f671de3b4e9a51ce22258d1b7, type: 3}
-    - {fileID: 8300000, guid: 847238ffc56f0b044ae74e7d2507e1b2, type: 3}
-    - {fileID: 8300000, guid: a25b7f86a538161459956af4126673b7, type: 3}
-    - {fileID: 8300000, guid: 6e8b7dbc6cda1354099404749cd0396f, type: 3}
-    - {fileID: 8300000, guid: e8dbbdc41591c7f49bc4679fb6c6f456, type: 3}
-    - {fileID: 8300000, guid: c2157bd9f0b2a264ba7fbd2611b7b649, type: 3}
-    - {fileID: 8300000, guid: a7a281d67fc9bfb478364c0df90d09dc, type: 3}
-    - {fileID: 8300000, guid: e7263061f9743be4caec7edf5bd637cc, type: 3}
-    - {fileID: 8300000, guid: d215cef1336d5c9498909249ff0d2419, type: 3}
-    - {fileID: 8300000, guid: f69f43c329145f7468fe20f5bfc0d666, type: 3}
-    - {fileID: 8300000, guid: cbf30cd7b06776746ad0b4e910577a31, type: 3}
-    - {fileID: 8300000, guid: f03a3a35f65f17c4a800326861d2601c, type: 3}
-    - {fileID: 8300000, guid: 21b14cecb93a5cf4bac317590b9f7e8d, type: 3}
-    - {fileID: 8300000, guid: e2b27e21bc8145243bcb42598caff57a, type: 3}
-    - {fileID: 8300000, guid: 22cf4fafe64dc2d4db3dc2696617f1d0, type: 3}
-    - {fileID: 8300000, guid: 3bd04f7f8f35ab145be14ce71bd54fd7, type: 3}
-    - {fileID: 8300000, guid: 4d9565253d52f744e8407d17979fd66b, type: 3}
-    - {fileID: 8300000, guid: 27ef940cfc8fdc04a9ef14bb30d2627d, type: 3}
-    - {fileID: 8300000, guid: 1069307f26ea11744b2c7424c452e313, type: 3}
-    - {fileID: 8300000, guid: d9995080f8e129544ae02a253bcc9567, type: 3}
     - {fileID: 8300000, guid: 0d6c76f1ee179af4481e1bf573d099b3, type: 3}
     - {fileID: 8300000, guid: 8ffdc84a7316b1741906147997b2d266, type: 3}
     - {fileID: 8300000, guid: d708c138a8830044989205a1ee75ea11, type: 3}
-    - {fileID: 8300000, guid: 0fdf260f46a2d464b941f1fb67c730eb, type: 3}
-    - {fileID: 8300000, guid: be59fc8f4949930449f4b7343b40fcc9, type: 3}
-    - {fileID: 8300000, guid: 441d5c8d3187ef842ab69a392afa7141, type: 3}
-    - {fileID: 8300000, guid: 64b85f6ff8eb8ba4c826f38938a08cb7, type: 3}
-    - {fileID: 8300000, guid: bb39524b4acbaac4d855700c614babaf, type: 3}
-    - {fileID: 8300000, guid: 7b0d08f2963b53d48a488888e4de1248, type: 3}
-    - {fileID: 8300000, guid: c7bfdd243d8377645acecadae8e17646, type: 3}
   - tier: 1
+    sounds:
+    - {fileID: 8300000, guid: 5b05d9d73d45cc040b54eb8058c908a5, type: 3}
+    - {fileID: 8300000, guid: d4e72157cdfe76c4097726c9b2edb0bd, type: 3}
+    - {fileID: 8300000, guid: 78b93b6dd31fed64dae010c50467788a, type: 3}
+    - {fileID: 8300000, guid: d2bdf7549ef9e2d408d1ac07f395d641, type: 3}
+    - {fileID: 8300000, guid: 04a1453f2b9887f44a584ee9f3098abb, type: 3}
+    - {fileID: 8300000, guid: 5691e21312518054a91677669a81f8f6, type: 3}
+  - tier: 4
     sounds:
     - {fileID: 8300000, guid: 5b05d9d73d45cc040b54eb8058c908a5, type: 3}
     - {fileID: 8300000, guid: d4e72157cdfe76c4097726c9b2edb0bd, type: 3}

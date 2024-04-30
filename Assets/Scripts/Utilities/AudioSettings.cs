@@ -4,13 +4,6 @@ using System.Collections.Generic;
 namespace NaniCore.Bordure {
 	[CreateAssetMenu(menuName = "Nani Core/Audio Settings")]
 	public class AudioSettings : ScriptableObject {
-		[Header("Physical parameters")]
-		[Min(0)] public float physicalSoundBaseGain = .1f;
-		[Min(0)] public float maxPhysicalSoundGain = 5f;
-		[Min(0)] public float physicalSoundRange = 10f;
-		[Min(0)] public float physicalSoundAttenuation = 5f;
-		[Min(0)] public float minPhysicalSoundImpulse = 1f;
-
 		[Header("Water")]
 		public AudioClip[] enterWaterSounds;
 		public AudioClip[] exitWaterSounds;
@@ -21,6 +14,12 @@ namespace NaniCore.Bordure {
 			public List<AudioClip> sounds;
 		}
 		[Header("Collision")]
+		[Tooltip("How much portion of the enery lost due to collision will be transfered into sound. Measured in logarithm in 10.")]
+		[NaughtyAttributes.Label("Energy Conversion Rate (log 10)")]
+		[Range(-10, 0)][SerializeField] private float collisionSoundEnergyConversionRateLog = -3f;
+		public float CollisionSoundEnergyConversionRate => Mathf.Pow(10, collisionSoundEnergyConversionRateLog);
+		[Tooltip("How strongly can collision sounds be played at maximum. This is to prevent a too-loud sound from being played.")]
+		[Range(0, 10)] public float maxVolume = 1.0f;
 		public List<AudioClip> defaultCollisionSounds;
 		public List<SoundSet> collisionSoundSets = new();
 

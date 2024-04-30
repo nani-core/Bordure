@@ -15,13 +15,15 @@ namespace NaniCore.Bordure {
 			foreach(var reference in temporaryResources) {
 				if(!reference.TryGetTarget(out var resource))
 					continue;
+				if(resource == null)
+					continue;
 				Debug.Log($"Release temporary resource {resource}");
 				ReleaseResource(resource);
 			}
 			temporaryResources.Clear();
 		}
 
-		private static void ReleaseResource(Object resource) {
+		public void ReleaseResource(Object resource) {
 			if(resource == null)
 				return;
 			switch(resource) {

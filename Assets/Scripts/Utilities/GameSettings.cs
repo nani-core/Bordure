@@ -9,6 +9,7 @@ namespace NaniCore.Bordure {
 
 		[Header("Audio")]
 		[NaughtyAttributes.Expandable] public AudioSettings audio;
+		public bool makeAudioLogs = false;
 
 		[Header("Water")]
 		public Material waterStreamMaterial;
