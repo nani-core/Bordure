@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace NaniCore.Bordure {
 	public partial class GameManager : MonoBehaviour {
 		#region Interfaces
-		public void PlayCollisionSound(RigidbodyAgent agent, float volume = 1.0f, Vector3? point = null) {
+		public void PlayCollisionSound(RigidbodyAgent agent, float energy, Vector3 point) {
 			if(agent == null && point == null)
 				return;
 
@@ -13,42 +13,45 @@ namespace NaniCore.Bordure {
 				agent = null;
 			}
 
-			if(point == null) {
-				point = agent?.Rigidbody?.worldCenterOfMass;
-				point ??= agent?.transform?.position;
-				point ??= Protagonist.Eye.position;
-			}
-
 			RigidbodyTier tier = agent?.Tier ?? RigidbodyTier.Default;
 			var audio = Settings.audio;
 			var soundSet = GetSoundsSetByTier(audio.collisionSoundSets, audio.defaultCollisionSounds, tier);
 			var sound = soundSet.PickRandom();
-
 			if(sound == null)
 				return;
-#if DEBUG
-			if(agent != null)
-				Debug.Log($"{agent.name} (tier: {tier}) is making an collision sound.", agent);
-#endif
+			float soundEnergy = sound.CalculateTotalEnergy();
+			float theoreticalVolume = energy / soundEnergy;
+			float playingVolume = Mathf.Min(theoreticalVolume, audio.maxVolume);
 
-			PlayWorldSound(sound, point.Value, agent?.transform, volume);
+			if(Settings.makeAudioLogs && agent != null) {
+				Debug.Log($"{agent.name} (tier: {tier}) is making an collision sound.", agent);
+				Debug.Log(
+					string.Join(", ", new string[] {
+						$"desired energy = {energy}",
+						$"actual enery of {sound.name} = {soundEnergy}",
+						$"volume = {theoreticalVolume}" + (playingVolume == theoreticalVolume ? "" : " (clippped)")
+					}),
+					sound
+				);
+			}
+			PlayWorldSound(sound, point, agent?.transform, playingVolume);
 		}
 
-		public void PlayCollisionSound(Collider collider, float volume = 1.0f, Vector3? point = null) {
+		public void PlayCollisionSound(Collider collider, float energy, Vector3 point) {
 			if(collider == null)
 				return;
 
 			if(collider.transform.TryGetComponent<RigidbodyAgent>(out var agent)) {
-				PlayCollisionSound(agent, volume, point);
+				PlayCollisionSound(agent, energy, point);
 				return;
 			}
 
 			if(point == null)
 				point = collider.transform.position;
-#if DEBUG
-			Debug.Log($"{collider.name} is making an collision sound.", agent);
-#endif
-			PlayCollisionSound(null as RigidbodyAgent, volume, point);
+			if(Settings.makeAudioLogs) {
+				Debug.Log($"{collider.name} is making an collision sound.", agent);
+			}
+			PlayCollisionSound(null as RigidbodyAgent, energy, point);
 		}
 
 		public void PlayWorldSound(AudioClip sound, Transform transform, float volume = 1.0f) {
@@ -60,9 +63,10 @@ namespace NaniCore.Bordure {
 				return;
 
 			var coroutine = AudioUtility.PlayOneShotAtCoroutine(sound, position, under, volume);
-#if DEBUG
-			Debug.Log($"Sound \"{sound.name}\" is played (volume: {volume}).", sound);
-#endif
+
+			if(Settings.makeAudioLogs) {
+				Debug.Log($"Sound \"{sound.name}\" is played (volume: {volume}).", sound);
+			}
 			Instance.StartCoroutine(coroutine);
 		}
 

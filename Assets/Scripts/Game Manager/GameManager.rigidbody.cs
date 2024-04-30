@@ -14,24 +14,35 @@ namespace NaniCore.Bordure {
 			if(collision == null)
 				return;
 
-			float energy = CalculateCollisionSoundEnergy(collision);
-			float volume = energy * Settings.audio.collisionSoundGain;
+			float fullEnergy = CalculateCollisionSoundEnergy(collision);
+			float energy = fullEnergy * Settings.audio.CollisionSoundEnergyConversionRate;
 			Vector3 point = FindAverageCollisionPoint(collision);
 
-			PlayCollisionSound(collision.collider, volume, point);
+			PlayCollisionSound(collision.contacts[0].thisCollider, energy, point);
 		}
 
-		// TODO: Implement a more reasonable algorithm.
 		private float CalculateCollisionSoundEnergy(Collision collision) {
 			if(collision == null)
 				return default;
 
-			float impulse = collision.impulse.magnitude;
-			float minImpulse = Settings.audio.minCollisionImpulse;
-			if(impulse < minImpulse)
-				return default;
-			float hardness = impulse - minImpulse;
-			return hardness;
+			Collider a = collision.contacts[0].thisCollider, b = collision.contacts[0].otherCollider;
+			float ma = GetEquivalentMass(a), mb = GetEquivalentMass(b);
+
+			float totalEnergy = Mathf.Pow(collision.impulse.magnitude, 2) * (1 / ma + 1 / mb) * 0.5f;
+
+			return totalEnergy * 0.5f;
+		}
+
+		private float GetEquivalentMass(Collider collider) {
+			if(collider == null)
+				return Mathf.Infinity;
+			if(!collider.TryGetComponent<Rigidbody>(out var rb))
+				return Mathf.Infinity;
+			if(rb.isKinematic)
+				return Mathf.Infinity;
+			if(rb.constraints == RigidbodyConstraints.FreezePosition)
+				return Mathf.Infinity;
+			return rb.mass;
 		}
 
 		private Vector3 FindAverageCollisionPoint(Collision collision) {

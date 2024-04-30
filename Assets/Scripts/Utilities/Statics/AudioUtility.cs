@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections;
-using NaniCore.Bordure;
 
 namespace NaniCore {
 	public static class AudioUtility {
@@ -47,7 +46,7 @@ namespace NaniCore {
 			// If volume is greater than 1.0f, we need to create a level-gained version of the clip at runtime.
 			if(needToGainClipAtRuntime) {
 				var copy = AudioClip.Create($"{clip.name} (gained)", clip.samples, clip.channels, clip.frequency, false);
-				GameManager.Instance.RegisterTemporaryResource(copy);
+				Bordure.GameManager.Instance.RegisterTemporaryResource(copy);
 				float[] data = new float[clip.samples];
 				try {
 					clip.GetData(data, 0);
@@ -82,8 +81,32 @@ namespace NaniCore {
 
 			Object.Destroy(player);
 			if(needToGainClipAtRuntime) {
-				GameManager.Instance.ReleaseResource(clip);
+				Bordure.GameManager.Instance.ReleaseResource(clip);
 			}
+		}
+
+		public static float CalculateTotalEnergy(this AudioClip clip) {
+			if(clip == null)
+				return default;
+
+			float[] samples = new float[clip.samples];
+			try {
+				clip.GetData(samples, 0);
+			}
+			catch(System.Exception err) {
+				Debug.LogWarning($"Cannot calculate the total energy of {clip} as its data cannot be read.");
+				Debug.LogError(err);
+				return default;
+			}
+
+			float sum = 0.0f;
+			float timeFactor = Mathf.Pow(1.0f / clip.frequency, 1);
+			for(int i = 0; i < samples.Length; ++i) {
+				float sample = Mathf.Abs(samples[i]);
+				sum += sample * timeFactor;
+			}
+
+			return sum;
 		}
 	}
 }

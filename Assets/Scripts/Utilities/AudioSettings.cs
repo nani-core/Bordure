@@ -14,8 +14,12 @@ namespace NaniCore.Bordure {
 			public List<AudioClip> sounds;
 		}
 		[Header("Collision")]
-		[Min(0)] public float collisionSoundGain = 1f;
-		[Min(0)] public float minCollisionImpulse = 0.1f;
+		[Tooltip("How much portion of the enery lost due to collision will be transfered into sound. Measured in logarithm in 10.")]
+		[NaughtyAttributes.Label("Energy Conversion Rate (log 10)")]
+		[Range(-10, 0)][SerializeField] private float collisionSoundEnergyConversionRateLog = -3f;
+		public float CollisionSoundEnergyConversionRate => Mathf.Pow(10, collisionSoundEnergyConversionRateLog);
+		[Tooltip("How strongly can collision sounds be played at maximum. This is to prevent a too-loud sound from being played.")]
+		[Range(0, 10)] public float maxVolume = 1.0f;
 		public List<AudioClip> defaultCollisionSounds;
 		public List<SoundSet> collisionSoundSets = new();
 
