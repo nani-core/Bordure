@@ -34,7 +34,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d7593b3a9277ac4696b20006c21dde2, type: 3}
   m_Name: VisualEnvironment
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   skyType:
     m_OverrideState: 1
     m_Value: 1
@@ -65,7 +65,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 384c4d03a551c44448145f4093304119, type: 3}
   m_Name: ScreenSpaceReflection
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   quality:
     m_OverrideState: 1
     m_Value: 3
@@ -80,12 +80,12 @@ MonoBehaviour:
     m_Value: 2
   m_MinSmoothness:
     m_OverrideState: 1
-    m_Value: 0.9
+    m_Value: 0
   m_SmoothnessFadeStart:
     m_OverrideState: 1
-    m_Value: 0.9
+    m_Value: 0
   reflectSky:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 0
   usedAlgorithm:
     m_OverrideState: 1
@@ -133,7 +133,7 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 1
   layerMask:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value:
       serializedVersion: 2
       m_Bits: 4294967295
@@ -141,26 +141,26 @@ MonoBehaviour:
     m_OverrideState: 1
     m_Value: 5
   m_RayLength:
-    m_OverrideState: 0
-    m_Value: 50
+    m_OverrideState: 1
+    m_Value: 25
   m_ClampValue:
-    m_OverrideState: 0
-    m_Value: 1
+    m_OverrideState: 1
+    m_Value: 0.2
   m_Denoise:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 1
   m_DenoiserRadius:
-    m_OverrideState: 0
-    m_Value: 8
+    m_OverrideState: 1
+    m_Value: 16
   m_AffectSmoothSurfaces:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 0
   mode:
     m_OverrideState: 0
     m_Value: 2
   m_FullResolution:
-    m_OverrideState: 0
-    m_Value: 0
+    m_OverrideState: 1
+    m_Value: 1
   sampleCount:
     m_OverrideState: 0
     m_Value: 1
@@ -169,7 +169,7 @@ MonoBehaviour:
     m_Value: 1
   m_RayMaxIterationsRT:
     m_OverrideState: 0
-    m_Value: 48
+    m_Value: 1
 --- !u!114 &-3171981195844040586
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -386,7 +386,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59b6606ef2548734bb6d11b9d160bc7e, type: 3}
   m_Name: HDRISky
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   rotation:
     m_OverrideState: 0
     m_Value: 0
@@ -777,7 +777,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 953beb541740ddc499d005ee80c9ff29, type: 3}
   m_Name: Fog
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   quality:
     m_OverrideState: 1
     m_Value: 2
@@ -813,7 +813,7 @@ MonoBehaviour:
     m_Value: 50
   meanFreePath:
     m_OverrideState: 1
-    m_Value: 150
+    m_Value: 50
   enableVolumetricFog:
     m_OverrideState: 1
     m_Value: 1
