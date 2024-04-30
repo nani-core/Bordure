@@ -1,6 +1,7 @@
 using UnityEngine;
 
 namespace NaniCore {
+	[ExecuteInEditMode]
 	public abstract class ArchitectureGenerator : MonoBehaviour {
 		#region Serialized fields
 		[SerializeField] public int seed;
@@ -13,6 +14,12 @@ namespace NaniCore {
 
 		#region Life cycle
 		protected void Start() {
+#if UNITY_EDITOR
+			if(!Application.isPlaying) {
+				RegenerateInEditMode();
+				return;
+			}
+#endif
 			Construct();
 		}
 
