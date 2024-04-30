@@ -77,9 +77,15 @@ namespace NaniCore {
 
 			source.PlayOneShot(clip);
 
-			yield return new WaitUntil(() => !source.isPlaying);
+			// The AudioSource instance might be destroyed during playing.
+			yield return new WaitUntil(() => {
+				if(source == null)
+					return true;
+				return !source.isPlaying;
+			});
 
-			Object.Destroy(player);
+			if(player != null)
+				Object.Destroy(player);
 			if(needToGainClipAtRuntime) {
 				Bordure.GameManager.Instance.ReleaseResource(clip);
 			}
