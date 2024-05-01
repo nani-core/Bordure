@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace NaniCore {
 	public static class AudioUtility {
@@ -85,9 +86,13 @@ namespace NaniCore {
 			return PlayOneShotAtCoroutine(clip, worldPosition, under, config);
 		}
 
+		private static readonly Dictionary<AudioClip, float> cachedAudioClipEnergy = new();
 		public static float CalculateTotalEnergy(this AudioClip clip) {
 			if(clip == null)
 				return default;
+
+			if(cachedAudioClipEnergy.ContainsKey(clip))
+				return cachedAudioClipEnergy[clip];
 
 			float[] samples = new float[clip.samples];
 			try {
@@ -105,6 +110,8 @@ namespace NaniCore {
 				float sample = Mathf.Abs(samples[i]);
 				sum += sample * timeFactor;
 			}
+
+			cachedAudioClipEnergy.Add(clip, sum);
 
 			return sum;
 		}
