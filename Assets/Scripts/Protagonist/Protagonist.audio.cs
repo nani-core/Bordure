@@ -14,7 +14,9 @@ namespace NaniCore.Bordure {
 			RigidbodyTier tier = agent == null ? RigidbodyTier.Default : agent.Tier;
 			sounds = GameManager.Instance.GetSoundsSetByTier(audio.footstepSoundSets, audio.defaultFootstepSounds, tier);
 #if DEBUG
-			Debug.Log($"Making footstep sound on {ground.name} (tier: {tier}).", ground);
+			if(GameManager.Instance.Settings.makeAudioLogs) {
+				Debug.Log($"Making footstep sound on {ground.name} (tier: {tier}).", ground);
+			}
 #endif
 			GameManager.Instance.PlayWorldSound(sounds.PickRandom(), foot.position, null, 1.0f);
 		}

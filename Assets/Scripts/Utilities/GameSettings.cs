@@ -5,7 +5,7 @@ namespace NaniCore.Bordure {
 	public class GameSettings : ScriptableObject {
 		[Header("Protagonist")]
 		public Protagonist protagonist;
-		public ProtagonistProfile protagonistProfile;
+		[NaughtyAttributes.Expandable] public ProtagonistProfile protagonistProfile;
 
 		[Header("Audio")]
 		[NaughtyAttributes.Expandable] public AudioSettings audio;

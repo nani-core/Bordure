@@ -13,6 +13,8 @@ namespace NaniCore.Bordure {
 		private new Rigidbody rigidbody;
 		private RigidbodyAgent rigidbodyAgent;
 		private bool isOnGround = false;
+		private float coyoteTimer = 0f;
+		private bool isJumping = false;
 		private RaycastHit steppingGround = default;
 		private bool hasJustMoved = false;
 		private bool isWalking = false;
@@ -146,16 +148,18 @@ namespace NaniCore.Bordure {
 			rigidbodyAgent = GetComponent<RigidbodyAgent>();
 		}
 
-		protected void FixedUpdateControl() {
+		protected void FixedUpdateControl(float dt) {
 			ValidateMovementConditions();
 
+			// Check & update movement state.
 			if(!IsInWater) {
 				// Walking.
 
 				desiredHorizontalMovement = eye.transform.right * bufferedMovement.x + transform.forward * bufferedMovement.z;
 				desiredHorizontalMovement *= WalkingSpeed;
-				if(!IsOnGround)
+				if(!IsOnGround) {
 					desiredHorizontalMovement *= Profile.midAirAttenuation;
+				}
 
 				var deltaVelocity = (desiredHorizontalMovement - rigidbody.velocity) * Profile.acceleration;
 				// Only taking horizontal movement into account.
@@ -190,11 +194,30 @@ namespace NaniCore.Bordure {
 				rigidbody.AddForce(-Physics.gravity * (.3f * rigidbody.mass), ForceMode.Force);
 			}
 
+			// Stepping.
 			if(IsOnGround && hasJustMoved && !IsInWater)
-				DealStepping(Time.fixedDeltaTime);
+				DealStepping(dt);
 
+			// Jumping.
+			if(isJumping) {
+				// Don't update coyote time on the frame of jumping.
+				if(IsOnGround)
+					isJumping = false;
+			}
+			else {
+				if(IsOnGround) {
+					coyoteTimer = Profile.coyoteTime;
+				}
+				else {
+					if(coyoteTimer > 0.0f)
+						coyoteTimer -= dt;
+				}
+			}
+
+			// Animate.
 			UpdateMovingAnimation();
 
+			// Clear state.
 			bufferedMovement = Vector3.zero;
 		}
 		#endregion
@@ -243,9 +266,21 @@ namespace NaniCore.Bordure {
 			hasJustMoved = hasJustMoved || velocity.magnitude > .01f;
 		}
 
-		public void Jump(float height) {
-			if(!IsOnGround)
+		public void Jump(float height, bool resetCoyote = true) {
+			if(IsInWater)
 				return;
+
+			if(coyoteTimer <= 0.0f)
+				return;
+#if DEBUG
+			if(!IsOnGround) {
+				Debug.Log($"Jump is successful due to coyote time ({coyoteTimer}).");
+			}
+#endif
+			if(resetCoyote) {
+				isJumping = true;
+				coyoteTimer = 0.0f;
+			}
 
 			var gravity = -Vector3.Dot(Physics.gravity, Upward);
 			float desiredSpeed = Mathf.Sqrt(2f * gravity * height);
@@ -279,7 +314,7 @@ namespace NaniCore.Bordure {
 			// Don't do downward steppings.
 			if(deltaY < 1e-1f)
 				return;
-			Jump(deltaY);
+			Jump(deltaY, false);
 		}
 
 		private void UpdateMovingAnimation() {
@@ -290,6 +325,6 @@ namespace NaniCore.Bordure {
 				animator.SetBool("Sprinting", IsSprinting);
 			}
 		}
-		#endregion
+#endregion
 	}
 }
