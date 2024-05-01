@@ -5,6 +5,8 @@ namespace NaniCore.Bordure {
 	[CreateAssetMenu(menuName = "Nani Core/Audio Settings")]
 	public class AudioSettings : ScriptableObject {
 		[Header("Water")]
+		[Range(-10, 0)][SerializeField] private float waterSoundEnergyConversionRateLog10 = -3.0f;
+		public float WaterSoundEnergyConversionRate => Mathf.Pow(10, waterSoundEnergyConversionRateLog10);
 		public AudioClip[] enterWaterSounds;
 		public AudioClip[] exitWaterSounds;
 
@@ -15,9 +17,8 @@ namespace NaniCore.Bordure {
 		}
 		[Header("Collision")]
 		[Tooltip("How much portion of the enery lost due to collision will be transfered into sound. Measured in logarithm in 10.")]
-		[NaughtyAttributes.Label("Energy Conversion Rate (log 10)")]
-		[Range(-10, 0)][SerializeField] private float collisionSoundEnergyConversionRateLog = -3.0f;
-		public float CollisionSoundEnergyConversionRate => Mathf.Pow(10, collisionSoundEnergyConversionRateLog);
+		[Range(-10, 0)][SerializeField] private float collisionSoundEnergyConversionRateLog10 = -3.0f;
+		public float CollisionSoundEnergyConversionRate => Mathf.Pow(10, collisionSoundEnergyConversionRateLog10);
 		[Range(0, 10)] public float rangeFactorA = 2.0f;
 		[Range(1, 5)] public float rangeExponentialBase = 3.0f;
 		[Range(0, 10)] public float rangeFactorB = 3.0f;

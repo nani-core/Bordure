@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 685fbe3ab45874142b7b7363d35d8a1e, type: 3}
   m_Name: Audio Settings
   m_EditorClassIdentifier: 
+  waterSoundEnergyConversionRateLog10: -1.5
   enterWaterSounds:
   - {fileID: 8300000, guid: 7f5b1f76d0c380549a767231ee0f7db6, type: 3}
   - {fileID: 8300000, guid: dfa47fe971ffd5d4aa3344257c8bf3e1, type: 3}
@@ -22,8 +23,10 @@ MonoBehaviour:
   - {fileID: 8300000, guid: d986f10b5b4e26b489201af456f20a5b, type: 3}
   - {fileID: 8300000, guid: 251f4d0bc48513347aa7c937f5392a95, type: 3}
   - {fileID: 8300000, guid: dccad6bd2c564af4890f36d4bd7c974d, type: 3}
-  collisionSoundEnergyConversionRateLog: -3
-  collisionSoundVolumeRangeRatio: 5
+  collisionSoundEnergyConversionRateLog10: -3
+  rangeFactorA: 2
+  rangeExponentialBase: 3
+  rangeFactorB: 3
   maxVolume: 2
   defaultCollisionSounds:
   - {fileID: 8300000, guid: 0da3ee51c5e1846acb1cdd20188907bb, type: 3}
