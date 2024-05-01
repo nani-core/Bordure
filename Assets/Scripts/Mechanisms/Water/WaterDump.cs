@@ -21,7 +21,8 @@ namespace NaniCore.Bordure {
 		}
 
 		private void UpdateVisualFrame() {
-			swirl.transform.rotation *= Quaternion.Euler(0, Time.fixedDeltaTime * 360 * 2, 0);
+			float angle = Time.fixedDeltaTime * 360 * 2;
+			swirl.transform.rotation *= Quaternion.Euler(Vector3.forward * angle);
 		}
 		#endregion
 
