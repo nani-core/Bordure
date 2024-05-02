@@ -1,7 +1,7 @@
 using UnityEngine;
 
 namespace NaniCore.Bordure {
-	public partial class GameManager : MonoBehaviour {
+	public partial class GameManager {
 		#region Fields
 		[SerializeField] private MainCameraManager mainCameraManager;
 		#endregion
@@ -60,6 +60,11 @@ namespace NaniCore.Bordure {
 				return null;
 			}
 			return BlendToCamera(target);
+		}
+		public void HardLookAt(Transform target) {
+			if(UsesProtagonist)
+				throw new System.Exception("Not supported.");
+			MainCamera.transform.LookAt(target);
 		}
 		#endregion
 

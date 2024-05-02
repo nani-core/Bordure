@@ -27,6 +27,21 @@ namespace NaniCore.Bordure {
 		}
 
 		public float WaterTouchingTime => TimeInHeight(transform.position.y - Water.WorldHeight);
+
+		protected override void Activate() {
+			Water.OnWaterletEnabled(this);
+
+			// Generate new water stream.
+			var waterStream = Instantiate(waterStreamTemplate.gameObject, pivot).GetComponent<WaterStream>();
+			waterStream.pump = this;
+			lastWaterStream = waterStream;
+		}
+
+		protected override void Deactivate() {
+			if(lastWaterStream != null) {
+				lastWaterStream.isFlowing = false;
+			}
+		}
 		#endregion
 
 		#region Message handler
@@ -42,28 +57,6 @@ namespace NaniCore.Bordure {
 				return;
 
 			Water.TargetHeight = Water.Height;
-		}
-		#endregion
-
-		#region Life cycle
-		protected new void OnEnable() {
-			base.OnEnable();
-
-			if(IsSatisfied)
-				return;
-
-			Water.OnWaterletEnabled(this);
-
-			// Generate new water stream.
-			var waterStream = Instantiate(waterStreamTemplate.gameObject, pivot).GetComponent<WaterStream>();
-			waterStream.pump = this;
-			lastWaterStream = waterStream;
-		}
-
-		protected void OnDisable() {
-			if(lastWaterStream != null) {
-				lastWaterStream.isFlowing = false;
-			}
 		}
 		#endregion
 	}

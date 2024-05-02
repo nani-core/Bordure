@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine.UIElements;
 
 namespace NaniCore.Bordure {
-	public partial class GameManager : MonoBehaviour {
+	public partial class GameManager {
 		#region Fields
 		private readonly List<Level> loadedLevels = new();
 		#endregion
@@ -47,7 +47,7 @@ namespace NaniCore.Bordure {
 		}
 
 		public SpawnPoint FindSpawnPointByName(string name) {
-			return HierarchyUtility.FindObjectByName<SpawnPoint>(name, true);
+			return HierarchyUtility.FindObjectByName<SpawnPoint>(name);
 		}
 
 		public void AlignSpawnPoints(string names) {
@@ -75,13 +75,17 @@ namespace NaniCore.Bordure {
 		}
 
 		public void AlignSpawnPoints(SpawnPoint anchor, SpawnPoint alignee) {
-			Debug.Log($"Aligning spawn point {alignee} to {anchor}.");
+			Debug.Log($"Aligning spawn point {alignee} to {anchor}.", anchor);
 			if(anchor == null || alignee == null)
 				return;
 
 			var level = alignee.Level;
+			if(level == null) {
+				Debug.LogWarning($"Warning: Cannot get the containing level of {alignee}, aborting aligning spawn points.", alignee);
+				return;
+			}
 			Vector3 deltaPosition = anchor.transform.position - alignee.transform.position;
-			level.transform.Translate(deltaPosition);
+			level.transform.position += deltaPosition;
 			Quaternion deltaOrientation = anchor.transform.rotation * Quaternion.Inverse(alignee.transform.rotation);
 			level.transform.RotateAlong(alignee.transform.position, deltaOrientation);
 		}
@@ -103,6 +107,7 @@ namespace NaniCore.Bordure {
 
 		private void OnLevelLoaded(Level level) {
 			loadedLevels.Add(level);
+			Debug.Log($"Level {level.name} loaded.", level);
 		}
 
 		private void OnLevelUnloaded(Level level) {
@@ -110,6 +115,8 @@ namespace NaniCore.Bordure {
 		}
 
 		private Level InstantiateLevelTemplate(Level template) {
+			Debug.Log($"Instantiating and loading level from template {template}.", template);
+
 			// Temporarily disables protagonist input when loading the level, or else the stuck
 			// would cause bad experience.
 			bool movement = UsesProtagonistMovement, orientation = UsesProtagonistOrientation;
@@ -117,6 +124,7 @@ namespace NaniCore.Bordure {
 			UsesProtagonistOrientation = false;
 
 			var level = Instantiate(template.gameObject).GetComponent<Level>();
+			level.gameObject.name = template.name;
 			TakeCareOfLevel(level);
 
 			UsesProtagonistMovement = movement;
@@ -151,13 +159,9 @@ namespace NaniCore.Bordure {
 		}
 
 		private void UnloadLevel(Level level) {
-			StartCoroutine(UnloadLevelInNextFrameCoroutine(level));
-		}
-
-		private System.Collections.IEnumerator UnloadLevelInNextFrameCoroutine(Level level) {
 			HideLevel(level);
-			yield return new WaitForEndOfFrame();
-			HierarchyUtility.Destroy(level);
+			Destroy(level.gameObject);
+			Debug.Log($"Level {level.name} unloaded.", level);
 		}
 		#endregion
 	}

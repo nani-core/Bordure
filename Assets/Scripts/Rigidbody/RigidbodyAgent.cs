@@ -25,7 +25,11 @@ namespace NaniCore.Bordure {
 		public HashSet<Collider> OverlappingTriggers => overlappingTriggers;
 
 		public bool IsOverlappingWithLayers(LayerMask layerMask) {
-			return overlappingTriggers.Any(trigger => ((1 << trigger.gameObject.layer) & layerMask) != 0);
+			return overlappingTriggers.Any(trigger => {
+				if(trigger == null)
+					return false;
+				return ((1 << trigger.gameObject.layer) & layerMask) != 0;
+			});
 		}
 		#endregion
 

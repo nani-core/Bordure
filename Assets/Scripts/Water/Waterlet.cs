@@ -27,6 +27,14 @@ namespace NaniCore.Bordure {
 				return pivotRelativePosition.y;
 			}
 		}
+
+		protected abstract void Activate();
+
+		protected abstract void Deactivate();
+
+		public void ForceWaterLevel() {
+			Water.TargetHeight = Height;
+		}
 		#endregion
 
 		#region Message handlers
@@ -39,10 +47,18 @@ namespace NaniCore.Bordure {
 		#region Life cycle
 		protected void OnEnable() {
 			water?.AddWaterlet(this);
+
+			if(!IsSatisfied)
+				Activate();
+		}
+
+		protected void OnDisable() {
+			Deactivate();
 		}
 
 		protected void OnDestroy() {
 			water?.RemoveWaterlet(this);
+			Deactivate();
 		}
 		#endregion
 	}

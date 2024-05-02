@@ -74,6 +74,10 @@ namespace NaniCore.Bordure {
 		public void BlendToCameraByName(string name) {
 			Instance.BlendToCameraByName(name);
 		}
+
+		public void HardLookAt(Transform target) {
+			Instance.HardLookAt(target);
+		}
 		#endregion
 
 		#region Level
@@ -97,6 +101,12 @@ namespace NaniCore.Bordure {
 		#region Game
 		public void QuitGame() {
 			Instance.QuitGame();
+		}
+		#endregion
+
+		#region Log
+		public void PrintLog(string message) {
+			Debug.Log(message);
 		}
 		#endregion
 	}
