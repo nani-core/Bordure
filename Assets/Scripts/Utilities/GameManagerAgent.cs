@@ -99,5 +99,11 @@ namespace NaniCore.Bordure {
 			Instance.QuitGame();
 		}
 		#endregion
+
+		#region Log
+		public void PrintLog(string message) {
+			Debug.Log(message);
+		}
+		#endregion
 	}
 }

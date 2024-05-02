@@ -65,7 +65,7 @@ namespace NaniCore.Bordure {
 		}
 
 		public bool EyeCast(out RaycastHit hit) {
-			return PhysicsUtility.Raycast(EyeRay, out hit, Profile.maxInteractionDistance, GameManager.Instance.GrabbingLayerMask, false);
+			return PhysicsUtility.Raycast(EyeRay, out hit, Profile.maxInteractionDistance, GameManager.Instance.InteractionLayerMask, false);
 		}
 		#endregion
 

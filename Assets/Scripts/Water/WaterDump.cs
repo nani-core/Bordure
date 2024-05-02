@@ -33,21 +33,14 @@ namespace NaniCore.Bordure {
 			//float angle = Time.fixedDeltaTime * 360 * 2;
 			//swirl.transform.rotation *= Quaternion.Euler(Vector3.forward * angle);
 		}
-		#endregion
 
-		#region Life cycle
-		protected new void OnEnable() {
-			base.OnEnable();
-
-			if(IsSatisfied)
-				return;
-
+		public override void Activate() {
 			UpdateVisualState();
 			Water.OnWaterletEnabled(this);
 			Water.TargetHeight = Height;
 		}
 
-		protected void OnDisable() {
+		public override void Deactivate() {
 			UpdateVisualState();
 			Water.TargetHeight = Water.Height;
 		}

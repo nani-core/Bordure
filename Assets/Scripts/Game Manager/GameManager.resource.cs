@@ -17,7 +17,9 @@ namespace NaniCore.Bordure {
 					continue;
 				if(resource == null)
 					continue;
+#if DEBUG && false
 				Debug.Log($"Release temporary resource {resource}");
+#endif
 				ReleaseResource(resource);
 			}
 			temporaryResources.Clear();
