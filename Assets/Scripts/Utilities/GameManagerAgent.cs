@@ -74,6 +74,10 @@ namespace NaniCore.Bordure {
 		public void BlendToCameraByName(string name) {
 			Instance.BlendToCameraByName(name);
 		}
+
+		public void HardLookAt(Transform target) {
+			Instance.HardLookAt(target);
+		}
 		#endregion
 
 		#region Level

@@ -61,6 +61,11 @@ namespace NaniCore.Bordure {
 			}
 			return BlendToCamera(target);
 		}
+		public void HardLookAt(Transform target) {
+			if(UsesProtagonist)
+				throw new System.Exception("Not supported.");
+			MainCamera.transform.LookAt(target);
+		}
 		#endregion
 
 		#region Functions
