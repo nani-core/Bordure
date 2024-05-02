@@ -107,6 +107,7 @@ namespace NaniCore.Bordure {
 
 		private void OnLevelLoaded(Level level) {
 			loadedLevels.Add(level);
+			Debug.Log($"Level {level.name} loaded.", level);
 		}
 
 		private void OnLevelUnloaded(Level level) {
@@ -114,6 +115,8 @@ namespace NaniCore.Bordure {
 		}
 
 		private Level InstantiateLevelTemplate(Level template) {
+			Debug.Log($"Instantiating and loading level from template {template}.", template);
+
 			// Temporarily disables protagonist input when loading the level, or else the stuck
 			// would cause bad experience.
 			bool movement = UsesProtagonistMovement, orientation = UsesProtagonistOrientation;
@@ -121,6 +124,7 @@ namespace NaniCore.Bordure {
 			UsesProtagonistOrientation = false;
 
 			var level = Instantiate(template.gameObject).GetComponent<Level>();
+			level.gameObject.name = template.name;
 			TakeCareOfLevel(level);
 
 			UsesProtagonistMovement = movement;
@@ -156,11 +160,8 @@ namespace NaniCore.Bordure {
 
 		private void UnloadLevel(Level level) {
 			HideLevel(level);
-			Debug.Log($"Unloading {level}.", level);
-			Destroy(level);
-			if(level != null) {
-				Debug.LogWarning($"Warning: Unloading {level} failed.");
-			}
+			Destroy(level.gameObject);
+			Debug.Log($"Level {level.name} unloaded.", level);
 		}
 		#endregion
 	}
