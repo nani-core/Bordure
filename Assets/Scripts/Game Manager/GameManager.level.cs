@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine.UIElements;
 
 namespace NaniCore.Bordure {
-	public partial class GameManager : MonoBehaviour {
+	public partial class GameManager {
 		#region Fields
 		private readonly List<Level> loadedLevels = new();
 		#endregion

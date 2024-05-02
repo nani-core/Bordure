@@ -1,7 +1,7 @@
 using UnityEngine;
 
 namespace NaniCore.Bordure {
-	public partial class GameManager : MonoBehaviour {
+	public partial class GameManager {
 		#region Serialized fields
 		[SerializeField] private UnityEngine.UI.RawImage debugOverlayImage;
 		#endregion

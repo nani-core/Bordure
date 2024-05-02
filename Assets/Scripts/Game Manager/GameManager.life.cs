@@ -4,7 +4,7 @@ using UnityEditor;
 #endif
 
 namespace NaniCore.Bordure {
-	public partial class GameManager : MonoBehaviour {
+	public partial class GameManager {
 		#region Fields
 		private bool isBeingDestroyed = false;
 		#endregion

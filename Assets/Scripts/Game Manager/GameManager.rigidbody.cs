@@ -1,7 +1,7 @@
 using UnityEngine;
 
 namespace NaniCore.Bordure {
-	public partial class GameManager : MonoBehaviour {
+	public partial class GameManager {
 		#region Functions
 		private void OnCollisionEnterCallback(Collision collision) {
 			if(collision == null || collision.contactCount == 0)

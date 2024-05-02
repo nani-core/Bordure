@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 
 namespace NaniCore.Bordure {
-	public partial class GameManager : MonoBehaviour {
+	public partial class GameManager {
 		#region Interfaces
 		public void PlayCollisionSound(RigidbodyAgent agent, float energy, Vector3 point) {
 			if(agent == null && point == null)

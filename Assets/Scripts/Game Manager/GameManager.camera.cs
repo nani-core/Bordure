@@ -1,7 +1,7 @@
 using UnityEngine;
 
 namespace NaniCore.Bordure {
-	public partial class GameManager : MonoBehaviour {
+	public partial class GameManager {
 		#region Fields
 		[SerializeField] private MainCameraManager mainCameraManager;
 		#endregion

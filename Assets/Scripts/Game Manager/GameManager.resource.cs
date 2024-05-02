@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 
 namespace NaniCore.Bordure {
-	public partial class GameManager : MonoBehaviour {
+	public partial class GameManager {
 		private List<System.WeakReference<Object>> temporaryResources = new();
 
 		public void RegisterTemporaryResource(Object resource) {
