@@ -8,6 +8,7 @@ namespace NaniCore {
 		[System.Serializable]
 		public struct FaceConfig {
 			public GameObject[] tiles;
+			public bool dontGenerateConcrete;
 			public Material concreteMaterial;
 			[Min(0)] public float concreteThickness;
 			[Min(0)] public float concreteDepth;
@@ -160,27 +161,29 @@ namespace NaniCore {
 				meshTile.Construct();
 
 				// Generate concrete.
-				if(shouldGenerateConcrete) {
-					var concreteObj = GameObject.CreatePrimitive(PrimitiveType.Cube);
-					concreteObj.name = $"{gameObject.name} (concrete {face.name})";
-					concreteObj.isStatic = gameObject.isStatic;
-					concreteObj.layer = LayerMask.NameToLayer("Concrete");
-					var concreteTransform = concreteObj.transform;
-					concreteTransform.SetParent(faceTransform, false);
+				if(!face.config.dontGenerateConcrete) {
+					if(shouldGenerateConcrete) {
+						var concreteObj = GameObject.CreatePrimitive(PrimitiveType.Cube);
+						concreteObj.name = $"{gameObject.name} (concrete {face.name})";
+						concreteObj.isStatic = gameObject.isStatic;
+						concreteObj.layer = LayerMask.NameToLayer("Concrete");
+						var concreteTransform = concreteObj.transform;
+						concreteTransform.SetParent(faceTransform, false);
 
-					concreteTransform.localPosition = Vector3.forward * (face.config.concreteThickness * .5f + face.config.concreteDepth);
+						concreteTransform.localPosition = Vector3.forward * (face.config.concreteThickness * .5f + face.config.concreteDepth);
 
-					var size = Vector3.one * face.config.concreteThickness;
-					var hSize = Vector3.Scale(count, spacing);
-					hSize += Vector3.one * ((inward && !face.config.preventOverlapping ? 1 : -1) * face.config.concreteDepth * 2);
-					if(inward && face.config.forceFillCorner)
-						hSize += spacing * 2;
-					size[0] = hSize[face.countDim.Item1];
-					size[1] = hSize[face.countDim.Item2];
-					concreteTransform.localScale = size;
+						var size = Vector3.one * face.config.concreteThickness;
+						var hSize = Vector3.Scale(count, spacing);
+						hSize += Vector3.one * ((inward && !face.config.preventOverlapping ? 1 : -1) * face.config.concreteDepth * 2);
+						if(inward && face.config.forceFillCorner)
+							hSize += spacing * 2;
+						size[0] = hSize[face.countDim.Item1];
+						size[1] = hSize[face.countDim.Item2];
+						concreteTransform.localScale = size;
 
-					if(face.config.concreteMaterial != null)
-						concreteObj.GetComponent<Renderer>().sharedMaterial = face.config.concreteMaterial;
+						if(face.config.concreteMaterial != null)
+							concreteObj.GetComponent<Renderer>().sharedMaterial = face.config.concreteMaterial;
+					}
 				}
 			}
 		}

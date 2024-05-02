@@ -40,8 +40,6 @@ namespace NaniCore.Bordure {
 					grabbingObject.transform.SetParent(eye.transform, true);
 					Debug.Log($"{grabbingObject} is grabbed.", grabbingObject);
 				}
-
-				InputHandler.UsesGrabbing = grabbingObject != null;
 			}
 		}
 

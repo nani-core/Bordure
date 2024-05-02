@@ -47,7 +47,7 @@ namespace NaniCore.Bordure {
 		}
 
 		public SpawnPoint FindSpawnPointByName(string name) {
-			return HierarchyUtility.FindObjectByName<SpawnPoint>(name, true);
+			return HierarchyUtility.FindObjectByName<SpawnPoint>(name);
 		}
 
 		public void AlignSpawnPoints(string names) {
@@ -80,6 +80,10 @@ namespace NaniCore.Bordure {
 				return;
 
 			var level = alignee.Level;
+			if(level == null) {
+				Debug.LogWarning($"Warning: Cannot get the containing level of {alignee}, aborting aligning spawn points.", alignee);
+				return;
+			}
 			Vector3 deltaPosition = anchor.transform.position - alignee.transform.position;
 			level.transform.Translate(deltaPosition);
 			Quaternion deltaOrientation = anchor.transform.rotation * Quaternion.Inverse(alignee.transform.rotation);
@@ -157,7 +161,11 @@ namespace NaniCore.Bordure {
 		private System.Collections.IEnumerator UnloadLevelInNextFrameCoroutine(Level level) {
 			HideLevel(level);
 			yield return new WaitForEndOfFrame();
-			HierarchyUtility.Destroy(level);
+			Debug.Log($"Unloading {level}.", level);
+			Destroy(level);
+			if(level != null) {
+				Debug.LogWarning($"Warning: Unloading {level} failed.");
+			}
 		}
 		#endregion
 	}

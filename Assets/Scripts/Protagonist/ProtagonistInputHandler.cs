@@ -18,64 +18,26 @@ namespace NaniCore.Bordure {
 
 			playerInput = gameObject.EnsureComponent<PlayerInput>();
 			playerInput.notificationBehavior = PlayerNotifications.SendMessages;
-			playerInput.actions.FindActionMap("Normal").Enable();
-
-			SetInputMapActivity("Normal", true);
-			UsesMovement = true;
-			UsesOrientation = true;
+			foreach(var map in playerInput.actions.actionMaps) {
+				map.Enable();
+			}
 		}
 
 		protected void FixedUpdate() {
-			if(!protagonist.IsInWater)
-				moveVelocity.y = 0;
-			else
-				moveVelocity.y = floating - sinking;
+			if(protagonist.UsesMovement) {
+				if(!protagonist.IsInWater)
+					moveVelocity.y = 0;
+				else
+					moveVelocity.y = floating - sinking;
 
-			protagonist.MoveVelocity(moveVelocity);
+				protagonist.MoveVelocity(moveVelocity);
+			}
 		}
 
 		protected void OnDisable() {
 			// Reset cached input values on disabling, or the protagonist would keep
 			// receiving false input when re-enabled.
 			moveVelocity = Vector3.zero;
-		}
-		#endregion
-
-		#region Interfaces
-		public bool UsesMovement {
-			get => GetInputMapActivity("Movement");
-			set => SetInputMapActivity("Movement", value);
-		}
-		public bool UsesOrientation {
-			get => GetInputMapActivity("Orientation");
-			set => SetInputMapActivity("Orientation", value);
-		}
-		public bool UsesGrabbing {
-			get => GetInputMapActivity("Grabbing");
-			set => SetInputMapActivity("Grabbing", value);
-		}
-		#endregion
-
-		#region Functions
-		private InputActionMap FindInputMap(string mapName) {
-			var map = playerInput.actions.FindActionMap(mapName);
-			if(map == null)
-				Debug.LogWarning($"Warning: Cannot find the protagonist input map \"{mapName}\".");
-			return map;
-		}
-
-		private void SetInputMapActivity(string mapName, bool isActive) {
-			var map = FindInputMap(mapName);
-			if(map == null)
-				return;
-			if(isActive)
-				map.Enable();
-			else
-				map.Disable();
-		}
-
-		private bool GetInputMapActivity(string mapName) {
-			return FindInputMap(mapName)?.enabled ?? false;
 		}
 		#endregion
 
@@ -124,10 +86,13 @@ namespace NaniCore.Bordure {
 
 		protected void OnOrientDelta(InputValue value) {
 			Vector2 raw = value.Get<Vector2>();
-			if(!protagonist.GrabbingOrienting)
-				protagonist.OrientDelta(raw);
-			else
+			if(!protagonist.GrabbingOrienting) {
+				if(protagonist.UsesOrientation)
+					protagonist.OrientDelta(raw);
+			}
+			else {
 				protagonist.GrabbingOrientDelta(-raw.x);
+			}
 		}
 
 		// Grabbing
