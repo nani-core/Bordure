@@ -4,6 +4,7 @@ namespace NaniCore.Bordure {
 	public class WaterDump : Waterlet {
 		#region Serialized fields
 		[SerializeField] private Renderer swirl;
+		[SerializeField] private ParticleSystem particles;
 		#endregion
 
 		#region Interfaces
@@ -16,13 +17,21 @@ namespace NaniCore.Bordure {
 			UpdateVisualFrame();
 		}
 
-		private void UpdateVisualState() {
-			swirl.enabled = enabled;
+		private void UpdateVisualState()
+		{
+			if (particles != null)
+			{
+				if(enabled)
+					particles.Play();
+				else
+					particles.Stop();
+			}
+			//swirl.enabled = enabled;
 		}
 
 		private void UpdateVisualFrame() {
-			float angle = Time.fixedDeltaTime * 360 * 2;
-			swirl.transform.rotation *= Quaternion.Euler(Vector3.forward * angle);
+			//float angle = Time.fixedDeltaTime * 360 * 2;
+			//swirl.transform.rotation *= Quaternion.Euler(Vector3.forward * angle);
 		}
 		#endregion
 
