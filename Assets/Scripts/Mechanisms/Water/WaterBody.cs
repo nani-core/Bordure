@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace NaniCore.Bordure {
 	[RequireComponent(typeof(BoxCollider))]
-	public partial class Water : MonoBehaviour {
+	public partial class WaterBody : MonoBehaviour {
 		#region Serialized fields
 		[SerializeField] private Transform surface;
 		[SerializeField][Min(0)] private float height = 1;

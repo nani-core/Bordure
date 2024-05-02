@@ -2,7 +2,7 @@
 using UnityEngine;
 
 namespace NaniCore.Bordure {
-	public partial class Water : MonoBehaviour {
+	public partial class WaterBody : MonoBehaviour {
 		#region Life cycle
 		protected void OnValidate() {
 			if(Application.isPlaying)

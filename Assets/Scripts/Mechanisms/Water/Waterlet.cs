@@ -3,12 +3,12 @@ using UnityEngine;
 namespace NaniCore.Bordure {
 	public abstract class Waterlet : MonoBehaviour {
 		#region Serialized fields
-		[SerializeField] protected Water water;
+		[SerializeField] protected WaterBody water;
 		[SerializeField] protected Transform pivot;
 		#endregion
 
 		#region Interfaces
-		public Water Water => water;
+		public WaterBody Water => water;
 
 		public abstract bool IsSatisfied { get; }
 
