@@ -28,7 +28,7 @@ namespace NaniCore.Bordure {
 
 		public float WaterTouchingTime => TimeInHeight(transform.position.y - Water.WorldHeight);
 
-		public override void Activate() {
+		protected override void Activate() {
 			Water.OnWaterletEnabled(this);
 
 			// Generate new water stream.
@@ -37,7 +37,7 @@ namespace NaniCore.Bordure {
 			lastWaterStream = waterStream;
 		}
 
-		public override void Deactivate() {
+		protected override void Deactivate() {
 			if(lastWaterStream != null) {
 				lastWaterStream.isFlowing = false;
 			}

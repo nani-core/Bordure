@@ -28,9 +28,9 @@ namespace NaniCore.Bordure {
 			}
 		}
 
-		public abstract void Activate();
+		protected abstract void Activate();
 
-		public abstract void Deactivate();
+		protected abstract void Deactivate();
 
 		public void ForceWaterLevel() {
 			Water.TargetHeight = Height;
@@ -50,6 +50,10 @@ namespace NaniCore.Bordure {
 
 			if(!IsSatisfied)
 				Activate();
+		}
+
+		protected void OnDisable() {
+			Deactivate();
 		}
 
 		protected void OnDestroy() {

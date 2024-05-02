@@ -34,13 +34,13 @@ namespace NaniCore.Bordure {
 			//swirl.transform.rotation *= Quaternion.Euler(Vector3.forward * angle);
 		}
 
-		public override void Activate() {
+		protected override void Activate() {
 			UpdateVisualState();
 			Water.OnWaterletEnabled(this);
 			Water.TargetHeight = Height;
 		}
 
-		public override void Deactivate() {
+		protected override void Deactivate() {
 			UpdateVisualState();
 			Water.TargetHeight = Water.Height;
 		}
