@@ -8,6 +8,7 @@ namespace NaniCore {
 		#endregion
 
 		#region Interfaces
+		[ContextMenu("Invoke")]
 		public virtual void Invoke() {
 			callback?.Invoke();
 		}

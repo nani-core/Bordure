@@ -75,7 +75,7 @@ namespace NaniCore.Bordure {
 		}
 
 		public void AlignSpawnPoints(SpawnPoint anchor, SpawnPoint alignee) {
-			Debug.Log($"Aligning spawn point {alignee} to {anchor}.");
+			Debug.Log($"Aligning spawn point {alignee} to {anchor}.", anchor);
 			if(anchor == null || alignee == null)
 				return;
 
@@ -85,7 +85,7 @@ namespace NaniCore.Bordure {
 				return;
 			}
 			Vector3 deltaPosition = anchor.transform.position - alignee.transform.position;
-			level.transform.Translate(deltaPosition);
+			level.transform.position += deltaPosition;
 			Quaternion deltaOrientation = anchor.transform.rotation * Quaternion.Inverse(alignee.transform.rotation);
 			level.transform.RotateAlong(alignee.transform.position, deltaOrientation);
 		}
@@ -155,12 +155,7 @@ namespace NaniCore.Bordure {
 		}
 
 		private void UnloadLevel(Level level) {
-			StartCoroutine(UnloadLevelInNextFrameCoroutine(level));
-		}
-
-		private System.Collections.IEnumerator UnloadLevelInNextFrameCoroutine(Level level) {
 			HideLevel(level);
-			yield return new WaitForEndOfFrame();
 			Debug.Log($"Unloading {level}.", level);
 			Destroy(level);
 			if(level != null) {
