@@ -26,8 +26,13 @@ namespace NaniCore.Bordure {
 			if(rigidbody == null)
 				rigidbody = GetComponent<Rigidbody>();
 
-			if(rigidbody.TryGetComponent<MeshCollider>(out var meshCollider))
+			if(rigidbody.TryGetComponent<MeshCollider>(out var meshCollider)) {
+				var mesh = meshCollider.sharedMesh;
+				if(!(mesh?.isReadable ?? false)) {
+					Debug.LogWarning($"Warning: {mesh} must be set to accessible in order to create a convex hull.", mesh);
+				}
 				meshCollider.convex = true;
+			}
 
 			Transform parent = transform.parent;
 			while(!parent.gameObject.isStatic) {
