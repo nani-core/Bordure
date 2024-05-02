@@ -61,14 +61,29 @@ namespace NaniCore.Bordure {
 			if(trigger.gameObject.layer != WaterLayer)
 				return;
 
-			PlayWorldSound(Settings.audio.enterWaterSounds.PickRandom(), rigidbody.transform);
+			PlayWaterSound(Settings?.audio?.enterWaterSounds?.PickRandom(), rigidbody);
 		}
 
 		private void OnTriggerExitCallback(Collider trigger, Rigidbody rigidbody) {
 			if(trigger.gameObject.layer != WaterLayer)
 				return;
 
-			PlayWorldSound(Settings.audio.exitWaterSounds.PickRandom(), rigidbody.transform);
+			PlayWaterSound(Settings?.audio?.exitWaterSounds?.PickRandom(), rigidbody);
+		}
+
+		private void PlayWaterSound(AudioClip sound, Rigidbody rigidbody) {
+			var audio = Settings?.audio;
+			if(sound == null || audio == null)
+				return;
+
+			var rate = audio.WaterSoundEnergyConversionRate;
+			float energy = 1.0f;
+			if(rigidbody != null) {
+				energy = 0.5f * Mathf.Pow(Mathf.Abs(rigidbody.velocity.y), 2) * rigidbody.mass;
+			}
+
+			float volume = Mathf.Min(energy * rate, audio.maxVolume);
+			PlayWorldSound(sound, rigidbody.transform, volume);
 		}
 		#endregion
 

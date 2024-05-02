@@ -62,7 +62,7 @@ namespace NaniCore.Bordure {
 		}
 
 		protected void FixedUpdate() {
-			FixedUpdateControl();
+			FixedUpdateControl(Time.fixedDeltaTime);
 		}
 
 		protected void OnEnable() {

@@ -111,8 +111,7 @@ namespace NaniCore.Bordure {
 			floating = raw;
 			if(raw > 0) {
 				// Can jump in water.
-				if(protagonist.IsOnGround)
-					protagonist.Jump();
+				protagonist.Jump();
 			}
 		}
 

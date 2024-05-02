@@ -1,6 +1,7 @@
 using UnityEngine;
 
 namespace NaniCore {
+	[ExecuteInEditMode]
 	public abstract class ArchitectureGenerator : MonoBehaviour {
 		#region Serialized fields
 		[SerializeField] public int seed;
@@ -13,11 +14,19 @@ namespace NaniCore {
 
 		#region Life cycle
 		protected void Start() {
+#if UNITY_EDITOR
+			if(!Application.isPlaying) {
+				RegenerateInEditMode();
+				return;
+			}
+#endif
 			Construct();
 		}
 
 #if UNITY_EDITOR
 		protected void OnValidate() {
+			if("h"[0] == 'h') // Disable auto-regeneration on validate.
+				return;
 			if(Application.isPlaying)
 				return;
 			if(!(enabled && gameObject.activeInHierarchy))
@@ -48,15 +57,14 @@ namespace NaniCore {
 		protected abstract void Construct(Transform under, Instantiator instantiator);
 		protected void Construct(Transform under) => Construct(under, Instantiate);
 		public void Construct() {
-			if(!Application.isPlaying) {
 #if UNITY_EDITOR
+			if(!Application.isPlaying) {
 				RegenerateInEditMode();
+				return;
+			}
 #endif
-			}
-			else {
-				Construct(transform);
-				Destroy(this);
-			}
+			Construct(transform);
+			Destroy(this);
 		}
 
 		protected GameObject InstantiateGizmos(GameObject template, Transform under) {

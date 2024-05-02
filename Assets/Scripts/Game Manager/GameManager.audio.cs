@@ -59,13 +59,21 @@ namespace NaniCore.Bordure {
 		}
 
 		public void PlayWorldSound(AudioClip sound, Vector3 position, Transform under = null, float volume = 1.0f) {
-			if(sound == null)
+			var audio = Settings?.audio;
+			if(sound == null || audio == null)
 				return;
 
-			var coroutine = AudioUtility.PlayOneShotAtCoroutine(sound, position, under, volume);
+			float maxRange = Mathf.Pow(audio.rangeExponentialBase, volume * audio.rangeFactorA) * audio.rangeFactorB;
+			AudioUtility.AudioPlayConfig config = new() {
+				volume = volume,
+				spatialBlend = 1.0f,
+				rolloffMode = AudioRolloffMode.Linear,
+				range = new Vector2(0.0f, maxRange),
+			};
+			var coroutine = AudioUtility.PlayOneShotAtCoroutine(sound, position, under, config);
 
 			if(Settings.makeAudioLogs) {
-				Debug.Log($"Sound \"{sound.name}\" is played (volume: {volume}).", sound);
+				Debug.Log($"Sound \"{sound.name}\" is played (volume: {volume}, range = {maxRange}).", sound);
 			}
 			Instance.StartCoroutine(coroutine);
 		}
