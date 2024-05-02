@@ -181,8 +181,11 @@ namespace NaniCore {
 						size[1] = hSize[face.countDim.Item2];
 						concreteTransform.localScale = size;
 
+						var renderer = concreteObj.GetComponent<Renderer>();
 						if(face.config.concreteMaterial != null)
-							concreteObj.GetComponent<Renderer>().sharedMaterial = face.config.concreteMaterial;
+							renderer.sharedMaterial = face.config.concreteMaterial;
+						else
+							renderer.sharedMaterials = new Material[0];
 					}
 				}
 			}
