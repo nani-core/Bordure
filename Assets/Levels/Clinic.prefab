@@ -890,7 +890,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   onLoaded:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 8261039161333423212}
+        m_TargetAssemblyTypeName: NaniCore.Logic, Assembly-CSharp
+        m_MethodName: Invoke
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   name: Clinic
 --- !u!1 &3854042624460674782
 GameObject:
@@ -1468,7 +1480,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   seed: 0
-  count: {x: 8, y: 4, z: 8}
+  count: {x: 1, y: 1, z: 1}
   spacing: {x: 1, y: 1, z: 1}
   inward: 1
   defaultConfig:
@@ -1518,7 +1530,7 @@ MonoBehaviour:
   ymOverride: 1
   ymConfig:
     tiles:
-    - {fileID: 7078305486055922736, guid: d4749246dcb4d01429a6ea6b326e13d2, type: 3}
+    - {fileID: 1701213973966381414, guid: 49aad0bd9c6285e4f8c70d42f6c0f315, type: 3}
     dontGenerateConcrete: 0
     concreteMaterial: {fileID: 0}
     concreteThickness: 1
