@@ -22,7 +22,7 @@ namespace NaniCore.Bordure {
 
 		protected void Update() {
 			UpdateLoopShape();
-			UpdateDebugUi();
+			UpdateUi();
 		}
 
 		protected void OnDestroy() {

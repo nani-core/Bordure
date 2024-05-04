@@ -41,6 +41,10 @@ namespace NaniCore.Bordure {
 		}
 		#endregion
 
+		#region Properties
+		private GameManager Game => GameManager.Instance;
+		#endregion
+
 		#region Handlers
 		// Normal
 
@@ -50,18 +54,20 @@ namespace NaniCore.Bordure {
 
 		protected void OnCheat() => protagonist?.Cheat();
 
-		protected void OnLeave() {
-			GameManager game = GameManager.Instance;
-			if(game.CurrentSeat?.canLeaveManually ?? false)
-				game.ProtagonistLeaveSeat();
-		}
-
 		// Movement
 
 		protected void OnMoveVelocity(InputValue value) {
 			var raw = value.Get<Vector2>();
-			moveVelocity.x = raw.x;
-			moveVelocity.z = raw.y;
+			if(Game.CurrentSeat == null) {
+				// Normal movement
+				moveVelocity.x = raw.x;
+				moveVelocity.z = raw.y;
+			}
+			else {
+				// Leave seat
+				if(raw.magnitude > 0.5f && Game.CurrentSeat.canLeaveManually)
+					Game.ProtagonistLeaveSeat();
+			}
 		}
 
 		protected void OnSetSprinting(InputValue value) {
