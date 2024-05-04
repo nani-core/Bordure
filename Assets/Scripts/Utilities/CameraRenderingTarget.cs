@@ -24,11 +24,15 @@ namespace NaniCore {
 			initialized = true;
 			camera = GetComponent<Camera>();
 			UpdateTextures();
+
 			RenderPipelineManager.beginCameraRendering += OnSRPCameraPreRender;
 			RenderPipelineManager.endCameraRendering += OnSRPCameraPostRender;
 		}
 
 		protected void OnDestroy() {
+			RenderPipelineManager.beginCameraRendering -= OnSRPCameraPreRender;
+			RenderPipelineManager.endCameraRendering -= OnSRPCameraPostRender;
+
 			camera.targetTexture = null;
 
 			targetTexture?.Destroy();
