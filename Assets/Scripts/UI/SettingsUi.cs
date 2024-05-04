@@ -15,7 +15,7 @@ namespace NaniCore.Bordure {
 
 		#region Input message handler
 		protected void OnPause() {
-			Game.SettingsUiIsOpen = false;
+			Game.CloseSettings();
 		}
 		#endregion
 

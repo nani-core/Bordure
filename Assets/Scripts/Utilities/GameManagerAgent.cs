@@ -99,24 +99,30 @@ namespace NaniCore.Bordure {
 		#endregion
 
 		#region Game
+		public void StartGame() {
+			Instance.StartGame();
+		}
+
 		public void QuitGame() {
 			Instance.QuitGame();
+		}
+
+		public void OpenStartMenu() {
+			Instance.OpenStartMenu();
+		}
+
+		public void OpenSettings() {
+			Instance.OpenSettings();
+		}
+
+		public void CloseSettings() {
+			Instance.CloseSettings();
 		}
 		#endregion
 
 		#region Log
 		public void PrintLog(string message) {
 			Debug.Log(message);
-		}
-		#endregion
-
-		#region UI
-		public void SetStartMenuUiIsOpen(bool value) {
-			Instance.StartMenuUiIsOpen = value;
-		}
-
-		public void SetSettingsUiIsOpen(bool value) {
-			Instance.SettingsUiIsOpen = value;
 		}
 		#endregion
 	}

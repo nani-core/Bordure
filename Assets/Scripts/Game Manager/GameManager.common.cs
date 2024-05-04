@@ -1,10 +1,6 @@
 using UnityEngine;
 
 namespace NaniCore.Bordure {
-	public enum GameState {
-		StartMenu, MainGame,
-	}
-
 	public partial class GameManager {
 		#region Fields
 		private LayerMask defaultLayer;

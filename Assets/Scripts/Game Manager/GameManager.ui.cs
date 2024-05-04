@@ -51,6 +51,8 @@ namespace NaniCore.Bordure {
 		#endregion
 
 		#region Interfaces
+		public UnityEngine.UI.RawImage RenderOutput => renderOutput;
+
 		public void DrawDebugOverlayFrame(Texture texture, float opacity = 1f) {
 			if(debugOverlayTexture == null)
 				return;
@@ -59,30 +61,12 @@ namespace NaniCore.Bordure {
 
 		public bool StartMenuUiIsOpen {
 			get => startMenuUi.gameObject.activeInHierarchy;
-			set {
-				if(value) {
-					startMenuUi.gameObject.SetActive(true);
-				}
-				else {
-					startMenuUi.gameObject.SetActive(false);
-				}
-			}
+			set => startMenuUi.gameObject.SetActive(value);
 		}
 
 		public bool SettingsUiIsOpen {
 			get => settingsUi.gameObject.activeInHierarchy;
-			set {
-				if(value) {
-					Protagonist.enabled = false;
-					TimeScale = 0.0f;
-					settingsUi.gameObject.SetActive(true);
-				}
-				else {
-					settingsUi.gameObject.SetActive(false);
-					TimeScale = 1.0f;
-					Protagonist.enabled = true;
-				}
-			}
+			set => settingsUi.gameObject.SetActive(value);
 		}
 		#endregion
 	}
