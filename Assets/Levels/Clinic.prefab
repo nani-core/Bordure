@@ -346,6 +346,50 @@ Transform:
   - {fileID: 3218616562896574}
   m_Father: {fileID: 1280229175210106463}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1100742349265728782
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4182346786747564566}
+  - component: {fileID: 8360565545964492098}
+  m_Layer: 0
+  m_Name: Wild Anchor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 2147483647
+  m_IsActive: 1
+--- !u!4 &4182346786747564566
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1100742349265728782}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 10}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 1280229175210106463}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8360565545964492098
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1100742349265728782}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f93d73c3d716d4a47a38ba7cd6a67865, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1195255849781242904
 GameObject:
   m_ObjectHideFlags: 0
@@ -356,7 +400,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4432644321857919301}
   - component: {fileID: 2953638291988679819}
-  - component: {fileID: 4289802104221133169}
+  - component: {fileID: 2118961943163715824}
   m_Layer: 0
   m_Name: Load Ophthalmology
   m_TagString: Untagged
@@ -408,6 +452,18 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 11400000, guid: b2f1048833879fd4eb780ed41474578f, type: 2}
         m_TargetAssemblyTypeName: NaniCore.Bordure.GameManagerAgent, Assembly-CSharp
+        m_MethodName: AlignSpawnPoints
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Wild Anchor;Foot Anchor
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 11400000, guid: b2f1048833879fd4eb780ed41474578f, type: 2}
+        m_TargetAssemblyTypeName: NaniCore.Bordure.GameManagerAgent, Assembly-CSharp
         m_MethodName: BlendToCameraByName
         m_Mode: 5
         m_Arguments:
@@ -418,7 +474,7 @@ MonoBehaviour:
           m_StringArgument: Ophthalmology Anchoring Camera
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 4289802104221133169}
+      - m_Target: {fileID: 2118961943163715824}
         m_TargetAssemblyTypeName: NaniCore.DelayedLogic, Assembly-CSharp
         m_MethodName: Invoke
         m_Mode: 1
@@ -430,7 +486,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &4289802104221133169
+--- !u!114 &2118961943163715824
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -445,16 +501,16 @@ MonoBehaviour:
   callback:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 11400000, guid: b2f1048833879fd4eb780ed41474578f, type: 2}
-        m_TargetAssemblyTypeName: NaniCore.Bordure.GameManagerAgent, Assembly-CSharp
-        m_MethodName: UnloadLevelByName
-        m_Mode: 5
+      - m_Target: {fileID: 7373584096537619698}
+        m_TargetAssemblyTypeName: NaniCore.Logic, Assembly-CSharp
+        m_MethodName: Invoke
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: Clinic
+          m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
   delayTime: 1.01
@@ -945,6 +1001,65 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!1 &2428192915114246681
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 734646497285956462}
+  - component: {fileID: 7373584096537619698}
+  m_Layer: 0
+  m_Name: Unload Ophthalmology
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &734646497285956462
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2428192915114246681}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 5092832023144048168}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7373584096537619698
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2428192915114246681}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b16aa584a7908c4d8df8d00ab279e35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  callback:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: b2f1048833879fd4eb780ed41474578f, type: 2}
+        m_TargetAssemblyTypeName: NaniCore.Bordure.GameManagerAgent, Assembly-CSharp
+        m_MethodName: UnloadLevelByName
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Clinic
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &2759267252558045578
 GameObject:
   m_ObjectHideFlags: 0
@@ -1110,6 +1225,7 @@ Transform:
   - {fileID: 3112037318646550551}
   - {fileID: 6801652711227965384}
   - {fileID: 5458767598690361790}
+  - {fileID: 4182346786747564566}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2875993723796713050
@@ -2671,7 +2787,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5092832023144048168}
   - component: {fileID: 5392041750731915106}
-  - component: {fileID: 6113526553634849730}
+  - component: {fileID: 1595873519009077015}
   m_Layer: 0
   m_Name: Use Instrument
   m_TagString: Untagged
@@ -2693,6 +2809,7 @@ Transform:
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 4432644321857919301}
+  - {fileID: 734646497285956462}
   m_Father: {fileID: 5271188367537926904}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5392041750731915106
@@ -2734,7 +2851,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 6113526553634849730}
+      - m_Target: {fileID: 1595873519009077015}
         m_TargetAssemblyTypeName: NaniCore.DelayedLogic, Assembly-CSharp
         m_MethodName: Invoke
         m_Mode: 1
@@ -2746,7 +2863,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &6113526553634849730
+--- !u!114 &1595873519009077015
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
