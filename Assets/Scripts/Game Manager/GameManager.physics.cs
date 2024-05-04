@@ -2,6 +2,21 @@ using UnityEngine;
 
 namespace NaniCore.Bordure {
 	public partial class GameManager {
+		#region Life cycle
+		protected void InitializePhysics() {
+			RigidbodyAgent.onColliderEnterStatic += OnCollisionEnterCallback;
+			RigidbodyAgent.onTriggerEnterStatic += OnTriggerEnterCallback;
+			RigidbodyAgent.onTriggerExitStatic += OnTriggerExitCallback;
+		}
+		#endregion
+
+		#region Interfaces
+		public float TimeScale {
+			get => Time.timeScale;
+			set => Time.timeScale = value;
+		}
+		#endregion
+
 		#region Functions
 		private void OnCollisionEnterCallback(Collision collision) {
 			if(collision == null || collision.contactCount == 0)
@@ -84,14 +99,6 @@ namespace NaniCore.Bordure {
 
 			float volume = Mathf.Min(energy * rate, audio.maxVolume);
 			PlayWorldSound(sound, rigidbody.transform, volume);
-		}
-		#endregion
-
-		#region Life cycle
-		protected void InitializeRigidbody() {
-			RigidbodyAgent.onColliderEnterStatic += OnCollisionEnterCallback;
-			RigidbodyAgent.onTriggerEnterStatic += OnTriggerEnterCallback;
-			RigidbodyAgent.onTriggerExitStatic += OnTriggerExitCallback;
 		}
 		#endregion
 	}

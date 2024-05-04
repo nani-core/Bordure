@@ -49,6 +49,22 @@ namespace NaniCore.Bordure {
 				return;
 			debugOverlayTexture.Overlay(texture, opacity);
 		}
+
+		public bool SettingsUiIsOpen {
+			get => settingsUi.gameObject.activeSelf;
+			set {
+				if(value) {
+					Protagonist.enabled = false;
+					TimeScale = 0.0f;
+					settingsUi.gameObject.SetActive(true);
+				}
+				else {
+					settingsUi.gameObject.SetActive(false);
+					TimeScale = 1.0f;
+					Protagonist.enabled = true;
+				}
+			}
+		}
 		#endregion
 	}
 }

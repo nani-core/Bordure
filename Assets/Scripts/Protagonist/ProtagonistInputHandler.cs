@@ -5,22 +5,19 @@ namespace NaniCore.Bordure {
 	[RequireComponent(typeof(Protagonist))]
 	public class ProtagonistInputHandler : MonoBehaviour {
 		#region Fields
-		protected Protagonist protagonist;
-		protected PlayerInput playerInput;
+		private Protagonist protagonist;
+		[SerializeField] private PlayerInput playerInput;
 
-		protected Vector3 moveVelocity;
-		protected float floating = 0f, sinking = 0f;
+		private Vector3 moveVelocity;
+		private float floating = 0f, sinking = 0f;
 		#endregion
 
 		#region Life cycle
 		protected void Start() {
 			protagonist = GetComponent<Protagonist>();
 
-			playerInput = gameObject.EnsureComponent<PlayerInput>();
-			playerInput.notificationBehavior = PlayerNotifications.SendMessages;
-			foreach(var map in playerInput.actions.actionMaps) {
+			foreach(var map in playerInput.actions.actionMaps)
 				map.Enable();
-			}
 		}
 
 		protected void FixedUpdate() {
@@ -34,10 +31,12 @@ namespace NaniCore.Bordure {
 			}
 		}
 
+		protected void OnEnable() {
+			playerInput.enabled = true;
+		}
+
 		protected void OnDisable() {
-			// Reset cached input values on disabling, or the protagonist would keep
-			// receiving false input when re-enabled.
-			moveVelocity = Vector3.zero;
+			playerInput.enabled = false;
 		}
 		#endregion
 
@@ -53,6 +52,10 @@ namespace NaniCore.Bordure {
 		}
 
 		protected void OnCheat() => protagonist?.Cheat();
+
+		protected void OnPause() {
+			Game.SettingsUiIsOpen = true;
+		}
 
 		// Movement
 

@@ -27,7 +27,7 @@ namespace NaniCore.Bordure {
 		protected void Initialize() {
 			InitializeConstants();
 			InitializeLevel();
-			InitializeRigidbody();
+			InitializePhysics();
 			InitializeUi();
 		}
 
