@@ -1,19 +1,23 @@
 using UnityEngine;
 
 namespace NaniCore.Bordure {
+	public enum GameState {
+		StartMenu, MainGame,
+	}
+
 	public partial class GameManager {
 		#region Fields
 		private LayerMask defaultLayer;
 		private LayerMask waterLayer;
 		private LayerMask concreteLayer;
-		private LayerMask gooseLayer;
-		private LayerMask noCollisionLayer;
+		private LayerMask noSelfCollisionLayer;
+		private LayerMask noCollisionSolidLayer;
 		#endregion
 
 		#region Interfaces
 		public LayerMask WaterLayer => waterLayer;
 		public LayerMask GroundLayerMask => ~((1 << waterLayer) | (1 << concreteLayer));
-		public LayerMask InteractionLayerMask => (1 << defaultLayer) | (1 << concreteLayer) | (1 << gooseLayer) | (1 << noCollisionLayer);
+		public LayerMask InteractionLayerMask => (1 << defaultLayer) | (1 << concreteLayer) | (1 << noSelfCollisionLayer) | (1 << noCollisionSolidLayer);
 		#endregion
 
 		#region Life cycle
@@ -21,8 +25,8 @@ namespace NaniCore.Bordure {
 			defaultLayer = LayerMask.NameToLayer("Default");
 			waterLayer = LayerMask.NameToLayer("Water");
 			concreteLayer = LayerMask.NameToLayer("Concrete");
-			gooseLayer = LayerMask.NameToLayer("Goose");
-			noCollisionLayer = LayerMask.NameToLayer("NoCollision");
+			noSelfCollisionLayer = LayerMask.NameToLayer("NoSelfCollidion");
+			noCollisionSolidLayer = LayerMask.NameToLayer("NoCollisionSolid");
 		}
 		#endregion
 	}
