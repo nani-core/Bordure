@@ -5,6 +5,7 @@ namespace NaniCore.Bordure {
 		#region Fields
 		private Protagonist protagonist;
 		private Seat currentSeat;
+		[System.NonSerialized] public float mouseSensitivityGain = 1.0f;
 		#endregion
 
 		#region Interfaces
@@ -116,6 +117,11 @@ namespace NaniCore.Bordure {
 
 			currentSeat.SendMessage("OnLeft", SendMessageOptions.DontRequireReceiver);
 			currentSeat = null;
+		}
+
+		public float MouseSensitivityGainInExponent {
+			get => Mathf.Log(mouseSensitivityGain);
+			set => mouseSensitivityGain = Mathf.Exp(value);
 		}
 		#endregion
 

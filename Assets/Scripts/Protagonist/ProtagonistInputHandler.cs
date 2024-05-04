@@ -40,7 +40,7 @@ namespace NaniCore.Bordure {
 		}
 		#endregion
 
-		#region Properties
+		#region Functions
 		private GameManager Game => GameManager.Instance;
 		#endregion
 
@@ -95,6 +95,7 @@ namespace NaniCore.Bordure {
 
 		protected void OnOrientDelta(InputValue value) {
 			Vector2 raw = value.Get<Vector2>();
+			raw *= Game.mouseSensitivityGain;
 			if(!protagonist.GrabbingOrienting) {
 				if(protagonist.UsesOrientation)
 					protagonist.OrientDelta(raw);
