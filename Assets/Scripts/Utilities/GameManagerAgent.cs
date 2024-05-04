@@ -109,5 +109,15 @@ namespace NaniCore.Bordure {
 			Debug.Log(message);
 		}
 		#endregion
+
+		#region UI
+		public void SetStartMenuUiIsOpen(bool value) {
+			Instance.StartMenuUiIsOpen = value;
+		}
+
+		public void SetSettingsUiIsOpen(bool value) {
+			Instance.SettingsUiIsOpen = value;
+		}
+		#endregion
 	}
 }

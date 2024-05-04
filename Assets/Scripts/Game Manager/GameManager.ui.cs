@@ -6,6 +6,7 @@ namespace NaniCore.Bordure {
 		[Header("UI")]
 		[SerializeField] private UnityEngine.UI.RawImage renderOutput;
 		[SerializeField] private UnityEngine.UI.RawImage debugOverlay;
+		[SerializeField] private RectTransform startMenuUi;
 		[SerializeField] private RectTransform settingsUi;
 		#endregion
 
@@ -23,6 +24,10 @@ namespace NaniCore.Bordure {
 				debugOverlay.gameObject.SetActive(true);
 				debugOverlay.texture = debugOverlayTexture = RenderUtility.CreateScreenSizedRT();
 				debugOverlayTexture.SetValue(Color.clear);
+			}
+
+			if(startMenuUi != null) {
+				startMenuUi.gameObject.SetActive(false);
 			}
 
 			if(settingsUi != null) {
@@ -50,8 +55,20 @@ namespace NaniCore.Bordure {
 			debugOverlayTexture.Overlay(texture, opacity);
 		}
 
+		public bool StartMenuUiIsOpen {
+			get => startMenuUi.gameObject.activeInHierarchy;
+			set {
+				if(value) {
+					startMenuUi.gameObject.SetActive(true);
+				}
+				else {
+					startMenuUi.gameObject.SetActive(false);
+				}
+			}
+		}
+
 		public bool SettingsUiIsOpen {
-			get => settingsUi.gameObject.activeSelf;
+			get => settingsUi.gameObject.activeInHierarchy;
 			set {
 				if(value) {
 					Protagonist.enabled = false;
