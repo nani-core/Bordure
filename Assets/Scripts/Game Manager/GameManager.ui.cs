@@ -3,9 +3,11 @@ using UnityEngine;
 namespace NaniCore.Bordure {
 	public partial class GameManager {
 		#region Serialized fields
-		[Header("UI")]
+		[Header("Screen")]
 		[SerializeField] private UnityEngine.UI.RawImage renderOutput;
 		[SerializeField] private UnityEngine.UI.RawImage debugOverlay;
+
+		[Header("UI")]
 		[SerializeField] private RectTransform startMenuUi;
 		[SerializeField] private RectTransform settingsUi;
 		#endregion
