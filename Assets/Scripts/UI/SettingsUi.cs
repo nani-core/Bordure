@@ -1,4 +1,3 @@
-using UnityEngine;
 using UnityEngine.UI;
 
 namespace NaniCore.Bordure {
@@ -9,24 +8,14 @@ namespace NaniCore.Bordure {
 
 		#region Life cycle
 		protected void OnEnable() {
-			mouseSensivity.value = Game.MouseSensitivityGainInExponent;
-		}
-		#endregion
-
-		#region Input message handler
-		protected void OnPause() {
-			Game.CloseLastUi();
+			mouseSensivity.value = GameManager.Instance.MouseSensitivityGainInExponent;
 		}
 		#endregion
 
 		#region Interfaces
 		public void OnMouseSensitivityValueChanged() {
-			Game.MouseSensitivityGainInExponent = mouseSensivity.value;
+			GameManager.Instance.MouseSensitivityGainInExponent = mouseSensivity.value;
 		}
-		#endregion
-
-		#region Functions
-		private GameManager Game => GameManager.Instance;
 		#endregion
 	}
 }

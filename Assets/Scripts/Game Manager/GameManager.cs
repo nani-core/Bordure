@@ -8,6 +8,10 @@ namespace NaniCore.Bordure {
 		[SerializeField] private Level startLevel;
 		#endregion
 
+		#region Fields
+		private bool gameStarted = false;
+		#endregion
+
 		#region Interfaces
 		public GameSettings Settings => settings;
 
@@ -29,6 +33,14 @@ namespace NaniCore.Bordure {
 				}
 			}
 		}
+
+		public void StartGame() {
+			gameStarted = true;
+			CloseLastUi();
+			UsesProtagonist = true;
+		}
+
+		public bool GameStarted => gameStarted;
 		#endregion
 
 		#region Life cycle

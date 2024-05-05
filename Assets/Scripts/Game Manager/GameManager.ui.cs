@@ -9,13 +9,14 @@ namespace NaniCore.Bordure {
 		[SerializeField] private UnityEngine.UI.RawImage debugOverlay;
 
 		[Header("UI")]
+		[SerializeField] private UiManager ui;
 		[SerializeField] private Ui startMenuUi;
 		[SerializeField] private Ui settingsUi;
 		#endregion
 
 		#region Fields
 		private RenderTexture debugOverlayTexture;
-		private List<Ui> uiEntries = new();
+		private readonly List<Ui> uiEntries = new();
 		private bool wasUsingProtagonist;
 		#endregion
 
@@ -54,6 +55,8 @@ namespace NaniCore.Bordure {
 		#endregion
 
 		#region Interfaces
+		public UiManager Ui => ui;
+
 		public UnityEngine.UI.RawImage RenderOutput => renderOutput;
 
 		public void DrawDebugOverlayFrame(Texture texture, float opacity = 1f) {
@@ -82,6 +85,8 @@ namespace NaniCore.Bordure {
 
 			if(uiEntries.Count > 0)
 				uiEntries[^1].OnShow();
+			else
+				ui.gameObject.SetActive(false);
 		}
 		#endregion
 
@@ -94,6 +99,8 @@ namespace NaniCore.Bordure {
 
 			if(uiEntries.Count > 0)
 				uiEntries[^1].OnHide();
+			else
+				ui.gameObject.SetActive(true);
 
 			uiEntries.Add(target);
 			target.OnEnter();
