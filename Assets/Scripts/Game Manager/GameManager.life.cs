@@ -29,6 +29,7 @@ namespace NaniCore.Bordure {
 			InitializeLevel();
 			InitializePhysics();
 			InitializeDebug();
+			Ui.OnLoaded += () => Ui.OpenStartMenu();
 		}
 
 #pragma warning disable CS0465
