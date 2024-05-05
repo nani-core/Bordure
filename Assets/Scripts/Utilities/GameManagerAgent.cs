@@ -99,14 +99,18 @@ namespace NaniCore.Bordure {
 		#endregion
 
 		#region Game
-		public void StartGame() {
-			Instance.StartGame();
-		}
-
 		public void QuitGame() {
 			Instance.QuitGame();
 		}
+		#endregion
 
+		#region Log
+		public void PrintLog(string message) {
+			Debug.Log(message);
+		}
+		#endregion
+
+		#region UI
 		public void OpenStartMenu() {
 			Instance.OpenStartMenu();
 		}
@@ -115,14 +119,8 @@ namespace NaniCore.Bordure {
 			Instance.OpenSettings();
 		}
 
-		public void CloseSettings() {
-			Instance.CloseSettings();
-		}
-		#endregion
-
-		#region Log
-		public void PrintLog(string message) {
-			Debug.Log(message);
+		public void CloseLastUi() {
+			Instance.CloseLastUi();
 		}
 		#endregion
 	}
