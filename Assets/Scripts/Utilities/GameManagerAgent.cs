@@ -116,15 +116,15 @@ namespace NaniCore.Bordure {
 
 		#region UI
 		public void OpenStartMenu() {
-			Instance.OpenStartMenu();
+			Instance.Ui.OpenStartMenu();
 		}
 
 		public void OpenSettings() {
-			Instance.OpenSettings();
+			Instance.Ui.OpenSettings();
 		}
 
 		public void CloseLastUi() {
-			Instance.CloseLastUi();
+			Instance.Ui.CloseLastUi();
 		}
 		#endregion
 	}
