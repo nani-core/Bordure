@@ -2,11 +2,6 @@ using UnityEngine;
 using System.Collections.Generic;
 
 namespace NaniCore.Bordure {
-	public struct UiEntry {
-		public System.Action onEnter, onExit;
-		public System.Action onShow, onHide;
-	}
-
 	public partial class GameManager {
 		#region Serialized fields
 		[Header("Screen")]
@@ -14,13 +9,13 @@ namespace NaniCore.Bordure {
 		[SerializeField] private UnityEngine.UI.RawImage debugOverlay;
 
 		[Header("UI")]
-		[SerializeField] private RectTransform startMenuUi;
-		[SerializeField] private RectTransform settingsUi;
+		[SerializeField] private Ui startMenuUi;
+		[SerializeField] private Ui settingsUi;
 		#endregion
 
 		#region Fields
 		private RenderTexture debugOverlayTexture;
-		private List<KeyValuePair<Object, UiEntry>> uiEntries = new();
+		private List<Ui> uiEntries = new();
 		private bool wasUsingProtagonist;
 		#endregion
 
@@ -68,31 +63,11 @@ namespace NaniCore.Bordure {
 		}
 
 		public void OpenStartMenu() {
-			OpenUi(startMenuUi, new UiEntry() {
-				onEnter = () => {
-					Paused = true;
-				},
-				onExit = () => {
-					Paused = false;
-				},
-				onShow = () => {
-					startMenuUi.gameObject.SetActive(true);
-				},
-				onHide = () => {
-					startMenuUi.gameObject.SetActive(false);
-				},
-			});
+			OpenUi(startMenuUi);
 		}
 
 		public void OpenSettings() {
-			OpenUi(settingsUi, new UiEntry() {
-				onShow = () => {
-					settingsUi.gameObject.SetActive(true);
-				},
-				onHide = () => {
-					settingsUi.gameObject.SetActive(false);
-				},
-			});
+			OpenUi(settingsUi);
 		}
 
 		public void CloseLastUi() {
@@ -102,46 +77,27 @@ namespace NaniCore.Bordure {
 			var lastUi = uiEntries[^1];
 			uiEntries.RemoveAt(uiEntries.Count - 1);
 
-			lastUi.Value.onHide?.Invoke();
-			lastUi.Value.onExit?.Invoke();
+			lastUi.OnHide();
+			lastUi.OnExit();
 
 			if(uiEntries.Count > 0)
-				uiEntries[^1].Value.onShow?.Invoke();
+				uiEntries[^1].OnShow();
 		}
 		#endregion
 
 		#region Functions
-		private bool Paused {
-			get => Time.timeScale > 0.0f;
-			set {
-				if(value) {
-					if(Protagonist != null) {
-						wasUsingProtagonist = UsesProtagonist;
-						Protagonist.enabled = false;
-					}
-					TimeScale = 0.0f;
-				}
-				else {
-					TimeScale = 1.0f;
-					if(Protagonist != null) {
-						Protagonist.enabled = wasUsingProtagonist;
-					}
-				}
-			}
-		}
-
-		private void OpenUi(Object target, UiEntry entry) {
+		private void OpenUi(Ui target) {
 			if(target == null) {
 				Debug.LogWarning("Warning: Cannot open empty UI.");
 				return;
 			}
 
 			if(uiEntries.Count > 0)
-				uiEntries[^1].Value.onHide.Invoke();
+				uiEntries[^1].OnHide();
 
-			uiEntries.Add(new(target, entry));
-			entry.onEnter?.Invoke();
-			entry.onShow?.Invoke();
+			uiEntries.Add(target);
+			target.OnEnter();
+			target.OnShow();
 		}
 		#endregion
 	}

@@ -10,6 +10,25 @@ namespace NaniCore.Bordure {
 
 		#region Interfaces
 		public GameSettings Settings => settings;
+
+		public bool Paused {
+			get => Time.timeScale > 0.0f;
+			set {
+				if(value) {
+					if(Protagonist != null) {
+						wasUsingProtagonist = UsesProtagonist;
+						Protagonist.enabled = false;
+					}
+					TimeScale = 0.0f;
+				}
+				else {
+					TimeScale = 1.0f;
+					if(Protagonist != null) {
+						Protagonist.enabled = wasUsingProtagonist;
+					}
+				}
+			}
+		}
 		#endregion
 
 		#region Life cycle
