@@ -28,13 +28,13 @@ namespace NaniCore.Bordure {
 			InitializeConstants();
 			InitializeLevel();
 			InitializePhysics();
-			InitializeUi();
+			InitializeDebug();
 		}
 
 #pragma warning disable CS0465
 		protected void Finalize() {
 			isBeingDestroyed = true;
-			FinalizeUi();
+			FinalizeDebug();
 			RenderUtility.ReleasePooledResources();
 			ReleaseAllTemporaryResources();
 		}
