@@ -66,7 +66,7 @@ namespace NaniCore {
 			Ungarrison();
 		}
 		[ContextMenu("Ungarrison")]
-		protected void Ungarrison() {
+		public void Ungarrison() {
 			Construct(transform);
 			HierarchyUtility.Destroy(this);
 		}
