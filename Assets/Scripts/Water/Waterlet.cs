@@ -35,6 +35,10 @@ namespace NaniCore.Bordure {
 		public void ForceWaterLevel() {
 			Water.TargetHeight = Height;
 		}
+
+		public void ForceWaterLevelInstant() {
+			Water.Height = Height;
+		}
 		#endregion
 
 		#region Message handlers
