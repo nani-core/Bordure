@@ -14,13 +14,14 @@ namespace NaniCore.Bordure {
 
 		#region Life cycle
 		protected void Start() {
-			if(startMenu != null) {
-				startMenu.gameObject.SetActive(false);
+			// Disable all UI.
+			foreach(var child in transform.Children()) {
+				if(!child.TryGetComponent<Ui>(out var ui))
+					continue;
+				ui.gameObject.SetActive(false);
 			}
 
-			if(settings != null) {
-				settings.gameObject.SetActive(false);
-			}
+			OnLoaded?.Invoke();
 		}
 		#endregion
 
@@ -36,6 +37,8 @@ namespace NaniCore.Bordure {
 		#endregion
 
 		#region Interfaces
+		public System.Action OnLoaded;
+
 		public Ui StartMenu => startMenu;
 		public Ui Settings => settings;
 
