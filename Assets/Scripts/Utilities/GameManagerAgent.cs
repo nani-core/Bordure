@@ -99,6 +99,10 @@ namespace NaniCore.Bordure {
 		#endregion
 
 		#region Game
+		public void StartGame() {
+			Instance.StartGame();
+		}
+
 		public void QuitGame() {
 			Instance.QuitGame();
 		}
