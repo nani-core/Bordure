@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 262.18533, g: 324.8582, b: 429.96686, a: 1}
+  m_IndirectSpecularColor: {r: 0.48519784, g: 0.5262194, b: 0.63519603, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -218,7 +218,7 @@ MonoBehaviour:
   m_Entries:
   - id: 0
     category: 0
-    gameObject: {fileID: 0}
+    gameObject: {fileID: 1455603150}
 --- !u!4 &1348826718
 Transform:
   m_ObjectHideFlags: 19
@@ -234,6 +234,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1455603150 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4543366751019051006, guid: 90d3392df1c24524f8a9a4df8dc279ef, type: 3}
+  m_PrefabInstance: {fileID: 3248636106551047695}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1826591701
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -360,22 +365,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6093052437589184864, guid: fb13aaa1cedc67c44817b32714caf339, type: 3}
       propertyPath: onAwake.m_PersistentCalls.m_Calls.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6093052437589184864, guid: fb13aaa1cedc67c44817b32714caf339, type: 3}
       propertyPath: onAwake.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 6093052437589184864, guid: fb13aaa1cedc67c44817b32714caf339, type: 3}
-      propertyPath: onAwake.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
-      value: 5
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6093052437589184864, guid: fb13aaa1cedc67c44817b32714caf339, type: 3}
       propertyPath: onAwake.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 11400000, guid: b2f1048833879fd4eb780ed41474578f, type: 2}
-    - target: {fileID: 6093052437589184864, guid: fb13aaa1cedc67c44817b32714caf339, type: 3}
-      propertyPath: onAwake.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
       objectReference: {fileID: 11400000, guid: b2f1048833879fd4eb780ed41474578f, type: 2}
     - target: {fileID: 6093052437589184864, guid: fb13aaa1cedc67c44817b32714caf339, type: 3}
@@ -383,40 +380,20 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6093052437589184864, guid: fb13aaa1cedc67c44817b32714caf339, type: 3}
-      propertyPath: onAwake.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 6093052437589184864, guid: fb13aaa1cedc67c44817b32714caf339, type: 3}
       propertyPath: onAwake.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: LoadLevelByName
-      objectReference: {fileID: 0}
-    - target: {fileID: 6093052437589184864, guid: fb13aaa1cedc67c44817b32714caf339, type: 3}
-      propertyPath: onAwake.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
-      value: MoveProtagonistToSpawnPointByName
+      value: MoveProtagonistToSpawnPoint
       objectReference: {fileID: 0}
     - target: {fileID: 6093052437589184864, guid: fb13aaa1cedc67c44817b32714caf339, type: 3}
       propertyPath: onAwake.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: NaniCore.Bordure.GameManagerAgent, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 6093052437589184864, guid: fb13aaa1cedc67c44817b32714caf339, type: 3}
-      propertyPath: onAwake.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
-      value: NaniCore.Bordure.GameManagerAgent, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 6093052437589184864, guid: fb13aaa1cedc67c44817b32714caf339, type: 3}
-      propertyPath: onAwake.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
-      value: Clinic
-      objectReference: {fileID: 0}
-    - target: {fileID: 6093052437589184864, guid: fb13aaa1cedc67c44817b32714caf339, type: 3}
-      propertyPath: onAwake.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_StringArgument
-      value: Game Spawn Point
-      objectReference: {fileID: 0}
+      propertyPath: onAwake.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
+      value: 
+      objectReference: {fileID: 3248636106551047696}
     - target: {fileID: 6093052437589184864, guid: fb13aaa1cedc67c44817b32714caf339, type: 3}
       propertyPath: onAwake.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
-    - target: {fileID: 6093052437589184864, guid: fb13aaa1cedc67c44817b32714caf339, type: 3}
-      propertyPath: onAwake.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
+      value: NaniCore.Bordure.SpawnPoint, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 6256483344439964521, guid: fb13aaa1cedc67c44817b32714caf339, type: 3}
       propertyPath: m_LocalPosition.x
@@ -523,10 +500,111 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fb13aaa1cedc67c44817b32714caf339, type: 3}
+--- !u!1001 &3248636106551047695
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1280229175210106463, guid: 90d3392df1c24524f8a9a4df8dc279ef, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1280229175210106463, guid: 90d3392df1c24524f8a9a4df8dc279ef, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1280229175210106463, guid: 90d3392df1c24524f8a9a4df8dc279ef, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1280229175210106463, guid: 90d3392df1c24524f8a9a4df8dc279ef, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1280229175210106463, guid: 90d3392df1c24524f8a9a4df8dc279ef, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1280229175210106463, guid: 90d3392df1c24524f8a9a4df8dc279ef, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1280229175210106463, guid: 90d3392df1c24524f8a9a4df8dc279ef, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1280229175210106463, guid: 90d3392df1c24524f8a9a4df8dc279ef, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1280229175210106463, guid: 90d3392df1c24524f8a9a4df8dc279ef, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1280229175210106463, guid: 90d3392df1c24524f8a9a4df8dc279ef, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2875993723796713050, guid: 90d3392df1c24524f8a9a4df8dc279ef, type: 3}
+      propertyPath: onLoaded.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2875993723796713050, guid: 90d3392df1c24524f8a9a4df8dc279ef, type: 3}
+      propertyPath: onLoaded.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2875993723796713050, guid: 90d3392df1c24524f8a9a4df8dc279ef, type: 3}
+      propertyPath: onLoaded.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 11400000, guid: b2f1048833879fd4eb780ed41474578f, type: 2}
+    - target: {fileID: 2875993723796713050, guid: 90d3392df1c24524f8a9a4df8dc279ef, type: 3}
+      propertyPath: onLoaded.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2875993723796713050, guid: 90d3392df1c24524f8a9a4df8dc279ef, type: 3}
+      propertyPath: onLoaded.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: AlignCameraTo
+      objectReference: {fileID: 0}
+    - target: {fileID: 2875993723796713050, guid: 90d3392df1c24524f8a9a4df8dc279ef, type: 3}
+      propertyPath: onLoaded.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: NaniCore.Bordure.GameManagerAgent, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 2875993723796713050, guid: 90d3392df1c24524f8a9a4df8dc279ef, type: 3}
+      propertyPath: onLoaded.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2875993723796713050, guid: 90d3392df1c24524f8a9a4df8dc279ef, type: 3}
+      propertyPath: onLoaded.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Transform, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 3381455351996839399, guid: 90d3392df1c24524f8a9a4df8dc279ef, type: 3}
+      propertyPath: m_Name
+      value: Clinic
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 90d3392df1c24524f8a9a4df8dc279ef, type: 3}
+--- !u!114 &3248636106551047696 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1937370339002650918, guid: 90d3392df1c24524f8a9a4df8dc279ef, type: 3}
+  m_PrefabInstance: {fileID: 3248636106551047695}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f93d73c3d716d4a47a38ba7cd6a67865, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 1826591701}
   - {fileID: 1007429107}
+  - {fileID: 3248636106551047695}
   - {fileID: 1348826718}
