@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using NaughtyAttributes;
 
 namespace NaniCore.Bordure {
@@ -6,6 +7,7 @@ namespace NaniCore.Bordure {
 		#region Serialized fields
 		[SerializeField][Expandable] private GameSettings settings;
 		[SerializeField] private UiManager ui;
+		[SerializeField] private EventSystem eventSystem;
 		#endregion
 
 		#region Interfaces
