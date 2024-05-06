@@ -18,14 +18,7 @@ namespace NaniCore.Bordure {
 
 		[MenuItem("Tools/Ungarrison All Architectures")]
 		public static void UngarrisonAllArchitectures() {
-			List<GameObject> dirtyObjects = new();
-
-			var boxes = Object.FindObjectsByType<ConcreteBox>(FindObjectsSortMode.None).ToArray();
-			dirtyObjects.AddRange(boxes.Select(box => box.gameObject));
-			var tiles = Object.FindObjectsByType<MeshTile>(FindObjectsSortMode.None).ToArray();
-			dirtyObjects.AddRange(tiles.Select(tile => tile.gameObject));
-
-			foreach(var box in boxes) {
+			foreach(var box in Object.FindObjectsByType<ConcreteBox>(FindObjectsSortMode.None).ToArray()) {
 				var boxObj = box.gameObject;
 				box.Ungarrison();
 				foreach(var subtile in boxObj.GetComponentsInChildren<MeshTile>().ToArray()) {
@@ -33,12 +26,11 @@ namespace NaniCore.Bordure {
 				}
 			}
 
-			foreach(var tile in tiles) {
-				var tileObj = tile.gameObject;
+			foreach(var tile in Object.FindObjectsByType<MeshTile>(FindObjectsSortMode.None).ToArray()) {
 				tile.Ungarrison();
 			}
 
-			Debug.Log($"Ungarrisoned {dirtyObjects.Count} architectures.");
+			Debug.Log($"Ungarrisoned all architectures.");
 			EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
 		}
 
