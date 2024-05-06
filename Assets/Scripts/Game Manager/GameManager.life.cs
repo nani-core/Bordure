@@ -66,6 +66,7 @@ namespace NaniCore.Bordure {
 			InitializePhysics();
 			InitializeDebug();
 			Ui.OnLoaded += () => Ui.OpenStartMenu();
+			Ui.gameObject.SetActive(true);
 			onAwake?.Invoke();
 		}
 

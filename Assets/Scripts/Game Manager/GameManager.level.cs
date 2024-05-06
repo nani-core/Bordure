@@ -18,21 +18,22 @@ namespace NaniCore.Bordure {
 	public partial class GameManager {
 		#region Fields
 		private readonly List<LoadedLevel> loadedLevels = new();
+		private readonly List<Logic> levelLoadCallbacks = new();
 		#endregion
 
 		#region Interfaces
-		public LoadedLevel? LoadLevelByName(string name) {
+		public void LoadLevelByName(string name) {
 			LoadedLevel? ll = FindLoadedLevelOfName(name);
 			if(ll != null) {
 				ll.Value.level.gameObject.SetActive(true);
-				return ll.Value;
+				return;
 			}
 			LevelScene? levelScene = FindLevelSceneByName(name);
 			if(levelScene == null) {
 				Debug.LogWarning($"Warning: Cannot find level template of name \"{name}\".");
-				return null;
+				return;
 			}
-			return LoadLevel(levelScene.Value);
+			LoadLevel(levelScene.Value);
 		}
 
 		public void UnloadLevelByName(string name) {
@@ -43,6 +44,18 @@ namespace NaniCore.Bordure {
 				return;
 			}
 			UnloadLevel(ll.Value);
+		}
+
+		public void AddLevelLoadCallback(Logic logic) {
+			if(logic == null) {
+				Debug.LogWarning("Warning: The level load callback logic to be added is null. Skipping.");
+				return;
+			}
+			levelLoadCallbacks.Add(logic);
+		}
+
+		public void DropLevelLoadCallbacks() {
+			levelLoadCallbacks.Clear();
 		}
 
 		public SpawnPoint FindSpawnPointByName(string name) {
@@ -106,13 +119,26 @@ namespace NaniCore.Bordure {
 
 		#region Functions
 		private void TakeCareOfLevel(LoadedLevel ll) {
-			ll.level.OnLoaded += () => OnLevelLoaded(ll);
+			if(ll.level == null)
+				return;
+
+			if(!ll.level.IsLoaded)
+				ll.level.OnLoaded += () => OnLevelLoaded(ll);
+			else
+				OnLevelLoaded(ll);
+
 			ll.level.OnUnloaded += () => OnLevelUnloaded(ll);
 		}
 
 		private void OnLevelLoaded(LoadedLevel ll) {
 			loadedLevels.Add(ll);
 			Debug.Log($"Level {ll.levelScene.name} loaded.", ll.level);
+			foreach(var cb in levelLoadCallbacks) {
+				if(cb == null || !cb.isActiveAndEnabled)
+					continue;
+				cb.Invoke();
+			}
+			DropLevelLoadCallbacks();
 		}
 
 		private void OnLevelUnloaded(LoadedLevel ll) {
@@ -127,21 +153,41 @@ namespace NaniCore.Bordure {
 			return null;
 		}
 
-		private LoadedLevel? LoadLevel(LevelScene ls) {
+		private void LoadLevel(LevelScene ls) {
+			StartCoroutine(LoadLevelCoroutine(ls));
+		}
+
+		private System.Collections.IEnumerator LoadLevelCoroutine(LevelScene ls) {
 			Debug.Log($"Loading level {ls.name}.");
-			var scene = SceneManager.LoadScene(ls.sceneIndex, new LoadSceneParameters {
-				loadSceneMode = LoadSceneMode.Additive,
-				localPhysicsMode = LocalPhysicsMode.Physics3D,
-			});
-			var level = scene.GetRootGameObjects().OfType<Level>().FirstOrDefault();
+
+			var loadOperation = SceneManager.LoadSceneAsync(ls.sceneIndex, LoadSceneMode.Additive);
+			yield return new WaitUntil(() => loadOperation.isDone);
+
+			Scene scene = SceneManager.GetSceneByBuildIndex(ls.sceneIndex);
+			if(!scene.IsValid()) {
+				Debug.LogWarning($"Failed to load level {ls.name}.");
+				yield break;
+			}
+
+			yield return new WaitUntil(() => scene.isLoaded);
+
+			var rootObjs = scene.GetRootGameObjects();
+			Level level = null;
+			foreach(var rootObj in rootObjs) {
+				if(!rootObj.TryGetComponent(out level))
+					continue;
+				break;
+			}
 			if(level == null) {
 				Debug.LogWarning($"Failed to load level {ls.name}.");
-				return null;
+				SceneManager.UnloadSceneAsync(scene);
+				yield break;
 			}
-			return new LoadedLevel {
+
+			TakeCareOfLevel(new() {
 				level = level,
 				levelScene = ls,
-			};
+			});
 		}
 
 		private LoadedLevel? FindLoadedLevelOfName(string name) {
@@ -156,9 +202,15 @@ namespace NaniCore.Bordure {
 		}
 
 		private void UnloadLevel(LoadedLevel ll) {
+			StartCoroutine(UnloadLevelCoroutine(ll));
+		}
+
+		private System.Collections.IEnumerator UnloadLevelCoroutine(LoadedLevel ll) {
+			Debug.Log($"Unloading level {ll.levelScene.name}.");
 			ll.level.gameObject.SetActive(false);
 			if(ll.levelScene.sceneIndex >= 0) {
-				SceneManager.UnloadSceneAsync(ll.levelScene.sceneIndex);
+				var operation = SceneManager.UnloadSceneAsync(ll.levelScene.sceneIndex);
+				yield return new WaitUntil(() => operation.isDone);
 			}
 			else {
 				Destroy(ll.level.gameObject);

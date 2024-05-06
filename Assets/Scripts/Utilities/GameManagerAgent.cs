@@ -92,6 +92,14 @@ namespace NaniCore.Bordure {
 		public void AlignSpawnPoints(string names) {
 			Instance.AlignSpawnPoints(names);
 		}
+
+		public void AddLevelLoadCallback(Logic logic) {
+			Instance.AddLevelLoadCallback(logic);
+		}
+
+		public void DropLevelLoadCallbacks() {
+			Instance.DropLevelLoadCallbacks();
+		}
 		#endregion
 
 		#region Game
