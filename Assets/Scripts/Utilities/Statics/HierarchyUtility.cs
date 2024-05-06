@@ -128,7 +128,7 @@ namespace NaniCore {
 			target.SetParent(pivotTransform, true);
 			pivotTransform.rotation = rotation;
 			target.SetParent(parent, true);
-			Object.Destroy(pivotTransform.gameObject);
+			Destroy(pivotTransform.gameObject);
 		}
 
 		/// <param name="target">The GameObject to ge aligned in space.</param>

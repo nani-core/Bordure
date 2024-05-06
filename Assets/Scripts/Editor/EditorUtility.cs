@@ -71,7 +71,7 @@ namespace NaniCore.Bordure {
 			anchor.transform.SetPositionAndRotation(aligningAnchor.GetPosition(), aligningAnchor.rotation);
 			level.transform.AlignWith(targetObj.transform, anchor.transform);
 			Debug.Log($"Aligned {level} to {anchor.transform.position} based on {targetObj}.");
-			Object.DestroyImmediate(anchor);
+			HierarchyUtility.Destroy(anchor);
 		}
 	}
 }
