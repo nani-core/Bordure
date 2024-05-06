@@ -91,7 +91,7 @@ namespace NaniCore.Bordure {
 			if(anchor == null || alignee == null)
 				return;
 
-			var level = alignee.Level;
+			var level = alignee.transform.GetLevel();
 			if(level == null) {
 				Debug.LogWarning($"Warning: Cannot get the containing level of {alignee}, aborting aligning spawn points.", alignee);
 				return;

@@ -97,5 +97,12 @@ namespace NaniCore {
 			}
 			continuation(1.0f);
 		}
+
+		public static Bounds BoundingUnion(Bounds a, Bounds b) {
+			return new() {
+				min = Vector3.Min(a.min, b.min),
+				max = Vector3.Max(a.max, b.max),
+			};
+		}
 	}
 }

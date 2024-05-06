@@ -1,9 +1,11 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 namespace NaniCore.Bordure {
 	public class Level : MonoBehaviour {
 		#region Serialized fields
 		[SerializeField] private new string name;
+		[SerializeField] private List<LevelSection> preloadedSections = new();
 		#endregion
 
 		#region Fields
@@ -18,6 +20,10 @@ namespace NaniCore.Bordure {
 
 		#region Life cycle
 		protected void Start() {
+			foreach(var section in preloadedSections) {
+				section.Load();
+			}
+
 			OnLoaded?.Invoke();
 			isLoaded = true;
 		}
@@ -26,5 +32,11 @@ namespace NaniCore.Bordure {
 			OnUnloaded?.Invoke();
 		}
 		#endregion
+	}
+
+	public static class LevelUtility {
+		public static Level GetLevel(this Transform target) {
+			return target.GetComponentInParent<Level>(true);
+		}
 	}
 }
