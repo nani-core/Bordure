@@ -1,10 +1,8 @@
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace NaniCore.Bordure {
 	public class Level : MonoBehaviour {
 		#region Serialized fields
-		[SerializeField] private UnityEvent onLoaded;
 		[SerializeField] private new string name;
 		#endregion
 
@@ -15,7 +13,6 @@ namespace NaniCore.Bordure {
 
 		#region Life cycle
 		protected void Start() {
-			OnLoaded += onLoaded.Invoke;
 			OnLoaded?.Invoke();
 		}
 
