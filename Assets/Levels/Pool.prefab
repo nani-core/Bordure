@@ -11274,6 +11274,7 @@ Transform:
   - {fileID: 8607795772103563120}
   - {fileID: 1872082120993814258}
   - {fileID: 8670429306947749727}
+  - {fileID: 50018764638481521}
   m_Father: {fileID: 7233253460784049290}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1833037116138629752
@@ -15374,7 +15375,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5501642014263162963}
-  - component: {fileID: 4779226651014026227}
+  - component: {fileID: 2948671690142547359}
   m_Layer: 0
   m_Name: Chunk0
   m_TagString: Untagged
@@ -15390,14 +15391,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2528361040796882076}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -3, z: 0}
+  m_LocalRotation: {x: -0.5, y: 0.5, z: 0.5, w: 0.5}
+  m_LocalPosition: {x: 0, y: -2.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4079704627039456829}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4779226651014026227
+  m_LocalEulerAnglesHint: {x: -90, y: 90, z: 0}
+--- !u!114 &2948671690142547359
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -15406,89 +15407,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 2528361040796882076}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca0cd791821133c4eb0996c1d849b682, type: 3}
+  m_Script: {fileID: 11500000, guid: e4a1df8fde466b44095b2e9a47bd1dd7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   seed: 0
-  count: {x: 5, y: 2, z: 1}
-  spacing: {x: 1, y: 1, z: 1}
-  inward: 0
-  defaultConfig:
-    tiles:
-    - {fileID: 1701213973966381414, guid: eccf19d6fc057a843ab42f936c399daa, type: 3}
-    dontGenerateConcrete: 0
-    concreteMaterial: {fileID: 0}
-    concreteThickness: 0.25
-    concreteDepth: 0.01
-    hollowObjects: []
-    preventOverlapping: 0
-    forceFillCorner: 0
-  xp: 0
-  xpOverride: 0
-  xpConfig:
-    tiles: []
-    dontGenerateConcrete: 0
-    concreteMaterial: {fileID: 0}
-    concreteThickness: 0
-    concreteDepth: 0
-    hollowObjects: []
-    preventOverlapping: 0
-    forceFillCorner: 0
-  xm: 0
-  xmOverride: 0
-  xmConfig:
-    tiles: []
-    dontGenerateConcrete: 0
-    concreteMaterial: {fileID: 0}
-    concreteThickness: 0
-    concreteDepth: 0
-    hollowObjects: []
-    preventOverlapping: 0
-    forceFillCorner: 0
-  yp: 1
-  ypOverride: 0
-  ypConfig:
-    tiles: []
-    dontGenerateConcrete: 0
-    concreteMaterial: {fileID: 0}
-    concreteThickness: 0
-    concreteDepth: 0
-    hollowObjects: []
-    preventOverlapping: 0
-    forceFillCorner: 0
-  ym: 0
-  ymOverride: 0
-  ymConfig:
-    tiles: []
-    dontGenerateConcrete: 0
-    concreteMaterial: {fileID: 0}
-    concreteThickness: 0
-    concreteDepth: 0
-    hollowObjects: []
-    preventOverlapping: 0
-    forceFillCorner: 0
-  zp: 1
-  zpOverride: 0
-  zpConfig:
-    tiles: []
-    dontGenerateConcrete: 0
-    concreteMaterial: {fileID: 0}
-    concreteThickness: 0
-    concreteDepth: 0
-    hollowObjects: []
-    preventOverlapping: 0
-    forceFillCorner: 0
-  zm: 0
-  zmOverride: 0
-  zmConfig:
-    tiles: []
-    dontGenerateConcrete: 0
-    concreteMaterial: {fileID: 0}
-    concreteThickness: 0
-    concreteDepth: 0
-    hollowObjects: []
-    preventOverlapping: 0
-    forceFillCorner: 0
+  tiles:
+  - {fileID: 4901582092285213303, guid: 3387795c7579d0242943780fc69f1b5f, type: 3}
+  i: {x: 1, y: 0, z: 0}
+  j: {x: 0, y: 1, z: 0}
+  k: {x: 0, y: 0, z: 1}
+  count: {x: 1, y: 5, z: 1}
+  uvw: {x: 0.5, y: 0.5, z: 0.5}
+  hollowObjects: []
+  batch: 1
 --- !u!1 &2532325618334071020
 GameObject:
   m_ObjectHideFlags: 0
@@ -29873,6 +29804,131 @@ Transform:
   - {fileID: 2914925913976906648}
   m_Father: {fileID: 6426470769344606717}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4634026023467525793
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2375574079145792268}
+  - component: {fileID: 6888614090353898744}
+  m_Layer: 0
+  m_Name: Chunk4
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2375574079145792268
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4634026023467525793}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -3, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6295528381681000812}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6888614090353898744
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4634026023467525793}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca0cd791821133c4eb0996c1d849b682, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  seed: 0
+  count: {x: 5, y: 2, z: 1}
+  spacing: {x: 1, y: 1, z: 1}
+  inward: 1
+  defaultConfig:
+    tiles:
+    - {fileID: 1701213973966381414, guid: eccf19d6fc057a843ab42f936c399daa, type: 3}
+    dontGenerateConcrete: 0
+    concreteMaterial: {fileID: 0}
+    concreteThickness: 0.25
+    concreteDepth: 0.01
+    hollowObjects: []
+    preventOverlapping: 0
+    forceFillCorner: 0
+  xp: 1
+  xpOverride: 0
+  xpConfig:
+    tiles: []
+    dontGenerateConcrete: 0
+    concreteMaterial: {fileID: 0}
+    concreteThickness: 0
+    concreteDepth: 0
+    hollowObjects: []
+    preventOverlapping: 0
+    forceFillCorner: 0
+  xm: 1
+  xmOverride: 0
+  xmConfig:
+    tiles: []
+    dontGenerateConcrete: 0
+    concreteMaterial: {fileID: 0}
+    concreteThickness: 0
+    concreteDepth: 0
+    hollowObjects: []
+    preventOverlapping: 0
+    forceFillCorner: 0
+  yp: 0
+  ypOverride: 0
+  ypConfig:
+    tiles: []
+    dontGenerateConcrete: 0
+    concreteMaterial: {fileID: 0}
+    concreteThickness: 0
+    concreteDepth: 0
+    hollowObjects: []
+    preventOverlapping: 0
+    forceFillCorner: 0
+  ym: 1
+  ymOverride: 1
+  ymConfig:
+    tiles:
+    - {fileID: 1701213973966381414, guid: 5bb8f70783a755f4ba5c462ddb90f434, type: 3}
+    dontGenerateConcrete: 0
+    concreteMaterial: {fileID: 0}
+    concreteThickness: 0
+    concreteDepth: 0
+    hollowObjects: []
+    preventOverlapping: 0
+    forceFillCorner: 0
+  zp: 1
+  zpOverride: 0
+  zpConfig:
+    tiles: []
+    dontGenerateConcrete: 0
+    concreteMaterial: {fileID: 0}
+    concreteThickness: 0
+    concreteDepth: 0
+    hollowObjects: []
+    preventOverlapping: 0
+    forceFillCorner: 0
+  zm: 0
+  zmOverride: 0
+  zmConfig:
+    tiles: []
+    dontGenerateConcrete: 0
+    concreteMaterial: {fileID: 0}
+    concreteThickness: 0
+    concreteDepth: 0
+    hollowObjects: []
+    preventOverlapping: 0
+    forceFillCorner: 0
 --- !u!1 &4636007691283209631
 GameObject:
   m_ObjectHideFlags: 0
@@ -40248,6 +40304,7 @@ Transform:
   - {fileID: 8008349107395255751}
   - {fileID: 8971412374555181090}
   - {fileID: 4736982497398076734}
+  - {fileID: 2375574079145792268}
   m_Father: {fileID: 7233253460784049290}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6477751647941651989
@@ -42703,7 +42760,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2866391472396834126}
-  - component: {fileID: 3359439227905566894}
+  - component: {fileID: 6374864459331067006}
   m_Layer: 0
   m_Name: Chunk0
   m_TagString: Untagged
@@ -42719,14 +42776,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7009443881151498705}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -3, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: -2.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6295528381681000812}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3359439227905566894
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
+--- !u!114 &6374864459331067006
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -42735,89 +42792,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 7009443881151498705}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca0cd791821133c4eb0996c1d849b682, type: 3}
+  m_Script: {fileID: 11500000, guid: e4a1df8fde466b44095b2e9a47bd1dd7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   seed: 0
-  count: {x: 5, y: 2, z: 1}
-  spacing: {x: 1, y: 1, z: 1}
-  inward: 0
-  defaultConfig:
-    tiles:
-    - {fileID: 1701213973966381414, guid: eccf19d6fc057a843ab42f936c399daa, type: 3}
-    dontGenerateConcrete: 0
-    concreteMaterial: {fileID: 0}
-    concreteThickness: 0.25
-    concreteDepth: 0.01
-    hollowObjects: []
-    preventOverlapping: 0
-    forceFillCorner: 0
-  xp: 0
-  xpOverride: 0
-  xpConfig:
-    tiles: []
-    dontGenerateConcrete: 0
-    concreteMaterial: {fileID: 0}
-    concreteThickness: 0
-    concreteDepth: 0
-    hollowObjects: []
-    preventOverlapping: 0
-    forceFillCorner: 0
-  xm: 0
-  xmOverride: 0
-  xmConfig:
-    tiles: []
-    dontGenerateConcrete: 0
-    concreteMaterial: {fileID: 0}
-    concreteThickness: 0
-    concreteDepth: 0
-    hollowObjects: []
-    preventOverlapping: 0
-    forceFillCorner: 0
-  yp: 1
-  ypOverride: 0
-  ypConfig:
-    tiles: []
-    dontGenerateConcrete: 0
-    concreteMaterial: {fileID: 0}
-    concreteThickness: 0
-    concreteDepth: 0
-    hollowObjects: []
-    preventOverlapping: 0
-    forceFillCorner: 0
-  ym: 0
-  ymOverride: 0
-  ymConfig:
-    tiles: []
-    dontGenerateConcrete: 0
-    concreteMaterial: {fileID: 0}
-    concreteThickness: 0
-    concreteDepth: 0
-    hollowObjects: []
-    preventOverlapping: 0
-    forceFillCorner: 0
-  zp: 0
-  zpOverride: 0
-  zpConfig:
-    tiles: []
-    dontGenerateConcrete: 0
-    concreteMaterial: {fileID: 0}
-    concreteThickness: 0
-    concreteDepth: 0
-    hollowObjects: []
-    preventOverlapping: 0
-    forceFillCorner: 0
-  zm: 1
-  zmOverride: 0
-  zmConfig:
-    tiles: []
-    dontGenerateConcrete: 0
-    concreteMaterial: {fileID: 0}
-    concreteThickness: 0
-    concreteDepth: 0
-    hollowObjects: []
-    preventOverlapping: 0
-    forceFillCorner: 0
+  tiles:
+  - {fileID: 4901582092285213303, guid: 3387795c7579d0242943780fc69f1b5f, type: 3}
+  i: {x: 1, y: 0, z: 0}
+  j: {x: 0, y: 1, z: 0}
+  k: {x: 0, y: 0, z: 1}
+  count: {x: 1, y: 5, z: 1}
+  uvw: {x: 0.5, y: 0.5, z: 0.5}
+  hollowObjects: []
+  batch: 1
 --- !u!1 &7013121993164970329
 GameObject:
   m_ObjectHideFlags: 0
@@ -53526,6 +53513,131 @@ MonoBehaviour:
     hollowObjects: []
     preventOverlapping: 0
     forceFillCorner: 0
+--- !u!1 &8479760154118588214
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 50018764638481521}
+  - component: {fileID: 3354293916559184859}
+  m_Layer: 0
+  m_Name: Chunk4
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &50018764638481521
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8479760154118588214}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -3, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4079704627039456829}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3354293916559184859
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8479760154118588214}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca0cd791821133c4eb0996c1d849b682, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  seed: 0
+  count: {x: 5, y: 2, z: 1}
+  spacing: {x: 1, y: 1, z: 1}
+  inward: 1
+  defaultConfig:
+    tiles:
+    - {fileID: 1701213973966381414, guid: eccf19d6fc057a843ab42f936c399daa, type: 3}
+    dontGenerateConcrete: 0
+    concreteMaterial: {fileID: 0}
+    concreteThickness: 0.25
+    concreteDepth: 0.01
+    hollowObjects: []
+    preventOverlapping: 0
+    forceFillCorner: 0
+  xp: 1
+  xpOverride: 0
+  xpConfig:
+    tiles: []
+    dontGenerateConcrete: 0
+    concreteMaterial: {fileID: 0}
+    concreteThickness: 0
+    concreteDepth: 0
+    hollowObjects: []
+    preventOverlapping: 0
+    forceFillCorner: 0
+  xm: 1
+  xmOverride: 0
+  xmConfig:
+    tiles: []
+    dontGenerateConcrete: 0
+    concreteMaterial: {fileID: 0}
+    concreteThickness: 0
+    concreteDepth: 0
+    hollowObjects: []
+    preventOverlapping: 0
+    forceFillCorner: 0
+  yp: 0
+  ypOverride: 0
+  ypConfig:
+    tiles: []
+    dontGenerateConcrete: 0
+    concreteMaterial: {fileID: 0}
+    concreteThickness: 0
+    concreteDepth: 0
+    hollowObjects: []
+    preventOverlapping: 0
+    forceFillCorner: 0
+  ym: 1
+  ymOverride: 1
+  ymConfig:
+    tiles:
+    - {fileID: 1701213973966381414, guid: 5bb8f70783a755f4ba5c462ddb90f434, type: 3}
+    dontGenerateConcrete: 0
+    concreteMaterial: {fileID: 0}
+    concreteThickness: 0
+    concreteDepth: 0
+    hollowObjects: []
+    preventOverlapping: 0
+    forceFillCorner: 0
+  zp: 0
+  zpOverride: 0
+  zpConfig:
+    tiles: []
+    dontGenerateConcrete: 0
+    concreteMaterial: {fileID: 0}
+    concreteThickness: 0
+    concreteDepth: 0
+    hollowObjects: []
+    preventOverlapping: 0
+    forceFillCorner: 0
+  zm: 1
+  zmOverride: 0
+  zmConfig:
+    tiles: []
+    dontGenerateConcrete: 0
+    concreteMaterial: {fileID: 0}
+    concreteThickness: 0
+    concreteDepth: 0
+    hollowObjects: []
+    preventOverlapping: 0
+    forceFillCorner: 0
 --- !u!1 &8556461452833239809
 GameObject:
   m_ObjectHideFlags: 0
@@ -62235,7 +62347,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4854208274278712131, guid: 0fa3d05cd47ef98478a38372a14fd5ff, type: 3}
       propertyPath: m_LocalScale.z
-      value: 20
+      value: 22
       objectReference: {fileID: 0}
     - target: {fileID: 4854208274278712131, guid: 0fa3d05cd47ef98478a38372a14fd5ff, type: 3}
       propertyPath: m_LocalPosition.x
