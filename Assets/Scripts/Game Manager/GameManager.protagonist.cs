@@ -47,11 +47,15 @@ namespace NaniCore.Bordure {
 		}
 
 		public void MoveProtagonistToSpawnPoint(SpawnPoint spawnPoint) {
-			if(!UsesProtagonist) {
-				Debug.LogWarning("Warning: Cannot move the protagonist as we are not controlling it.");
-				return;
+			if(UsesProtagonist) {
+				Protagonist.transform.AlignWith(spawnPoint.transform);
 			}
-			Protagonist.transform.AlignWith(spawnPoint.transform);
+			else {
+				AlignCameraTo(spawnPoint.transform);
+				var profile = Settings.protagonistProfile;
+				float dy = profile.height - profile.eyeHanging;
+				MainCamera.transform.Translate(Vector3.up * dy);
+			}
 		}
 
 		public void MoveProtagonistToSpawnPointByName(string name) {

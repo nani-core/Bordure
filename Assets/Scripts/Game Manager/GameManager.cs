@@ -6,7 +6,6 @@ namespace NaniCore.Bordure {
 		#region Serialized fields
 		[SerializeField][Expandable] private GameSettings settings;
 		[SerializeField] private UiManager ui;
-		[SerializeField] private Level startLevel;
 		#endregion
 
 		#region Interfaces

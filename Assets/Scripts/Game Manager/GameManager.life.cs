@@ -7,6 +7,7 @@ using UnityEditor;
 namespace NaniCore.Bordure {
 	public partial class GameManager {
 		#region Serialized fields
+		[SerializeField] private UnityEvent onAwake;
 		[SerializeField] private UnityEvent onStart;
 		#endregion
 
@@ -65,6 +66,7 @@ namespace NaniCore.Bordure {
 			InitializePhysics();
 			InitializeDebug();
 			Ui.OnLoaded += () => Ui.OpenStartMenu();
+			onAwake?.Invoke();
 		}
 
 #pragma warning disable CS0465

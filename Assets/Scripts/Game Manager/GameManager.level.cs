@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine.UIElements;
 
 namespace NaniCore.Bordure {
 	public partial class GameManager {
