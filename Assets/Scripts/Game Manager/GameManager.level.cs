@@ -105,15 +105,17 @@ namespace NaniCore.Bordure {
 
 		#region Life cycle
 		protected void InitializeLevel() {
+			var currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
 			// Take care of all already existing levels in the scene.
-			foreach(var level in FindObjectsOfType<Level>(true))
+			foreach(var level in FindObjectsOfType<Level>(true)) {
 				TakeCareOfLevel(new LoadedLevel {
 					level = level,
 					levelScene = new LevelScene {
 						name = level.name,
-						sceneIndex = -1,
+						sceneIndex = currentSceneIndex,
 					}
 				});
+			}
 		}
 		#endregion
 
