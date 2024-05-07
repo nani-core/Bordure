@@ -116,8 +116,10 @@ namespace NaniCore.Bordure {
 		public bool UsesMovement {
 			get => usesMovement;
 			set {
-				if(value)
-					IsKinematic = false;
+				if(value) {
+					if(GameManager.Instance.CurrentSeat == null)
+						IsKinematic = false;
+				}
 				usesMovement = value;
 			}
 		}

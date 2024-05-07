@@ -54,6 +54,6 @@ namespace NaniCore.Bordure {
 #endif
 
 		[Header("Level")]
-		public Level[] levelTemplates;
+		public LevelScene[] levelScenes;
 	}
 }

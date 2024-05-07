@@ -1,15 +1,18 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using NaughtyAttributes;
 
 namespace NaniCore.Bordure {
 	public partial class GameManager : MonoBehaviour {
 		#region Serialized fields
 		[SerializeField][Expandable] private GameSettings settings;
-		[SerializeField] private Level startLevel;
+		[SerializeField] private UiManager ui;
+		[SerializeField] private EventSystem eventSystem;
 		#endregion
 
 		#region Interfaces
 		public GameSettings Settings => settings;
+		public UiManager Ui => ui;
 		#endregion
 
 		#region Life cycle
@@ -22,7 +25,7 @@ namespace NaniCore.Bordure {
 
 		protected void Update() {
 			UpdateLoopShape();
-			UpdateDebugUi();
+			UpdateDebug();
 		}
 
 		protected void OnDestroy() {

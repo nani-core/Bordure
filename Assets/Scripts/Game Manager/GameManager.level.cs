@@ -1,49 +1,61 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine.UIElements;
 
 namespace NaniCore.Bordure {
+	[System.Serializable]
+	public struct LevelScene {
+		public string name;
+		[NaughtyAttributes.Scene] public int sceneIndex;
+	}
+
+	public struct LoadedLevel {
+		public Level level;
+		public LevelScene levelScene;
+	}
+
 	public partial class GameManager {
 		#region Fields
-		private readonly List<Level> loadedLevels = new();
+		private readonly List<LoadedLevel> loadedLevels = new();
+		private readonly List<Logic> levelLoadCallbacks = new();
 		#endregion
 
 		#region Interfaces
-		public IEnumerable<Level> LoadedLevels => loadedLevels;
-
-		public Level LoadLevelByName(string name) {
-			Level level = FindLoadedLevelOfName(name);
-			if(level == null) {
-				Level template = FindLevelTemplateByName(name);
-				if(template == null) {
-					Debug.LogWarning($"Warning: Cannot find level template of name \"{name}\".");
-					return null;
-				}
-				level = InstantiateLevelTemplate(template);
-			}
-			level.gameObject.SetActive(true);
-			return level;
-		}
-
-		public void HideLevelByName(string name) {
-			var level = FindLoadedLevelOfName(name);
-			if(level == null) {
-				Debug.LogWarning($"Warning: Cannot hide level \"{name}\" as it doesn't exist.");
-				Debug.Log("Current loaded levels: " + string.Join(", ", loadedLevels.Select(level => level.Name)));
+		public void LoadLevelByName(string name) {
+			LoadedLevel? ll = FindLoadedLevelOfName(name);
+			if(ll != null) {
+				ll.Value.level.gameObject.SetActive(true);
 				return;
 			}
-			HideLevel(level);
+			LevelScene? levelScene = FindLevelSceneByName(name);
+			if(levelScene == null) {
+				Debug.LogWarning($"Warning: Cannot find level template of name \"{name}\".");
+				return;
+			}
+			LoadLevel(levelScene.Value);
 		}
 
 		public void UnloadLevelByName(string name) {
-			var level = FindLoadedLevelOfName(name);
-			if(level == null) {
+			var ll = FindLoadedLevelOfName(name);
+			if(ll == null) {
 				Debug.LogWarning($"Warning: Cannot unload level \"{name}\" as it doesn't exist.");
-				Debug.Log("Current loaded levels: " + string.Join(", ", loadedLevels.Select(level => level.Name)));
+				Debug.Log("Currently loaded levels: " + string.Join(", ", loadedLevels.Select(ll => ll.level.Name)));
 				return;
 			}
-			UnloadLevel(level);
+			UnloadLevel(ll.Value);
+		}
+
+		public void AddLevelLoadCallback(Logic logic) {
+			if(logic == null) {
+				Debug.LogWarning("Warning: The level load callback logic to be added is null. Skipping.");
+				return;
+			}
+			levelLoadCallbacks.Add(logic);
+		}
+
+		public void DropLevelLoadCallbacks() {
+			levelLoadCallbacks.Clear();
 		}
 
 		public SpawnPoint FindSpawnPointByName(string name) {
@@ -79,7 +91,7 @@ namespace NaniCore.Bordure {
 			if(anchor == null || alignee == null)
 				return;
 
-			var level = alignee.Level;
+			var level = alignee.transform.GetLevel();
 			if(level == null) {
 				Debug.LogWarning($"Warning: Cannot get the containing level of {alignee}, aborting aligning spawn points.", alignee);
 				return;
@@ -95,73 +107,115 @@ namespace NaniCore.Bordure {
 		protected void InitializeLevel() {
 			// Take care of all already existing levels in the scene.
 			foreach(var level in FindObjectsOfType<Level>(true))
-				TakeCareOfLevel(level);
+				TakeCareOfLevel(new LoadedLevel {
+					level = level,
+					levelScene = new LevelScene {
+						name = level.name,
+						sceneIndex = -1,
+					}
+				});
 		}
 		#endregion
 
 		#region Functions
-		private void TakeCareOfLevel(Level level) {
-			level.OnLoaded += () => OnLevelLoaded(level);
-			level.OnUnloaded += () => OnLevelUnloaded(level);
+		private void TakeCareOfLevel(LoadedLevel ll) {
+			if(ll.level == null)
+				return;
+
+			if(!ll.level.IsLoaded)
+				ll.level.OnLoaded += () => OnLevelLoaded(ll);
+			else
+				OnLevelLoaded(ll);
+
+			ll.level.OnUnloaded += () => OnLevelUnloaded(ll);
 		}
 
-		private void OnLevelLoaded(Level level) {
-			loadedLevels.Add(level);
-			Debug.Log($"Level {level.name} loaded.", level);
-		}
-
-		private void OnLevelUnloaded(Level level) {
-			loadedLevels.Remove(level);
-		}
-
-		private Level InstantiateLevelTemplate(Level template) {
-			Debug.Log($"Instantiating and loading level from template {template}.", template);
-
-			// Temporarily disables protagonist input when loading the level, or else the stuck
-			// would cause bad experience.
-			bool movement = UsesProtagonistMovement, orientation = UsesProtagonistOrientation;
-			UsesProtagonistMovement = false;
-			UsesProtagonistOrientation = false;
-
-			var level = Instantiate(template.gameObject).GetComponent<Level>();
-			level.gameObject.name = template.name;
-			TakeCareOfLevel(level);
-
-			UsesProtagonistMovement = movement;
-			UsesProtagonistOrientation = orientation;
-
-			return level;
-		}
-
-		private Level FindLevelTemplateByName(string name) {
-			foreach(var level in Settings.levelTemplates) {
-				if(level == null)
+		private void OnLevelLoaded(LoadedLevel ll) {
+			loadedLevels.Add(ll);
+			Debug.Log($"Level {ll.levelScene.name} loaded.", ll.level);
+			foreach(var cb in levelLoadCallbacks) {
+				if(cb == null || !cb.isActiveAndEnabled)
 					continue;
-				if(level.Name == name)
-					return level;
+				cb.Invoke();
+			}
+			DropLevelLoadCallbacks();
+		}
+
+		private void OnLevelUnloaded(LoadedLevel ll) {
+			loadedLevels.Remove(ll);
+		}
+
+		private LevelScene? FindLevelSceneByName(string name) {
+			foreach(var ls in Settings.levelScenes) {
+				if(ls.name == name)
+					return ls;
 			}
 			return null;
 		}
 
-		private Level FindLoadedLevelOfName(string name) {
-			foreach(var level in loadedLevels) {
-				if(level == null)
+		private void LoadLevel(LevelScene ls) {
+			StartCoroutine(LoadLevelCoroutine(ls));
+		}
+
+		private System.Collections.IEnumerator LoadLevelCoroutine(LevelScene ls) {
+			Debug.Log($"Loading level {ls.name}.");
+
+			var loadOperation = SceneManager.LoadSceneAsync(ls.sceneIndex, LoadSceneMode.Additive);
+			yield return new WaitUntil(() => loadOperation.isDone);
+
+			Scene scene = SceneManager.GetSceneByBuildIndex(ls.sceneIndex);
+			if(!scene.IsValid()) {
+				Debug.LogWarning($"Failed to load level {ls.name}.");
+				yield break;
+			}
+
+			yield return new WaitUntil(() => scene.isLoaded);
+
+			var rootObjs = scene.GetRootGameObjects();
+			Level level = null;
+			foreach(var rootObj in rootObjs) {
+				if(!rootObj.TryGetComponent(out level))
 					continue;
-				if(level.Name != name)
+				break;
+			}
+			if(level == null) {
+				Debug.LogWarning($"Failed to load level {ls.name}.");
+				SceneManager.UnloadSceneAsync(scene);
+				yield break;
+			}
+
+			TakeCareOfLevel(new() {
+				level = level,
+				levelScene = ls,
+			});
+		}
+
+		private LoadedLevel? FindLoadedLevelOfName(string name) {
+			foreach(var ll in loadedLevels) {
+				if(ll.level == null)
 					continue;
-				return level;
+				if(ll.levelScene.name != name)
+					continue;
+				return ll;
 			}
 			return null;
 		}
 
-		private void HideLevel(Level level) {
-			level.gameObject.SetActive(false);
+		private void UnloadLevel(LoadedLevel ll) {
+			StartCoroutine(UnloadLevelCoroutine(ll));
 		}
 
-		private void UnloadLevel(Level level) {
-			HideLevel(level);
-			Destroy(level.gameObject);
-			Debug.Log($"Level {level.name} unloaded.", level);
+		private System.Collections.IEnumerator UnloadLevelCoroutine(LoadedLevel ll) {
+			Debug.Log($"Unloading level {ll.levelScene.name}.");
+			ll.level.gameObject.SetActive(false);
+			if(ll.levelScene.sceneIndex >= 0) {
+				var operation = SceneManager.UnloadSceneAsync(ll.levelScene.sceneIndex);
+				yield return new WaitUntil(() => operation.isDone);
+			}
+			else {
+				Destroy(ll.level.gameObject);
+			}
+			Debug.Log($"Level {ll.levelScene.name} unloaded.");
 		}
 		#endregion
 	}

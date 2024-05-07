@@ -3,10 +3,6 @@ using UnityEngine;
 namespace NaniCore.Bordure {
 	[RequireComponent(typeof(Camera))]
 	public class MainCameraManager : MonoBehaviour {
-		#region Serialized fields
-		[SerializeField] private UnityEngine.UI.RawImage renderOutputImage;
-		#endregion
-
 		#region Fields
 		private new Camera camera;
 		private CameraRenderingTarget renderingTarget;
@@ -26,7 +22,7 @@ namespace NaniCore.Bordure {
 		#region Life cycle
 		protected void Start() {
 			renderingTarget = transform.EnsureComponent<CameraRenderingTarget>();
-			renderingTarget.onTextureChanged = texture => renderOutputImage.texture = texture;
+			renderingTarget.onTextureChanged = texture => GameManager.Instance.RenderOutput.texture = texture;
 			renderingTarget.onRenderingFinished += OnRenderingFinished;
 		}
 		#endregion

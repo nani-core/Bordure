@@ -85,10 +85,6 @@ namespace NaniCore.Bordure {
 			Instance.LoadLevelByName(name);
 		}
 
-		public void HideLevelByName(string name) {
-			Instance.HideLevelByName(name);
-		}
-
 		public void UnloadLevelByName(string name) {
 			Instance.UnloadLevelByName(name);
 		}
@@ -96,9 +92,21 @@ namespace NaniCore.Bordure {
 		public void AlignSpawnPoints(string names) {
 			Instance.AlignSpawnPoints(names);
 		}
+
+		public void AddLevelLoadCallback(Logic logic) {
+			Instance.AddLevelLoadCallback(logic);
+		}
+
+		public void DropLevelLoadCallbacks() {
+			Instance.DropLevelLoadCallbacks();
+		}
 		#endregion
 
 		#region Game
+		public void StartGame() {
+			Instance.StartGame();
+		}
+
 		public void QuitGame() {
 			Instance.QuitGame();
 		}
@@ -107,6 +115,20 @@ namespace NaniCore.Bordure {
 		#region Log
 		public void PrintLog(string message) {
 			Debug.Log(message);
+		}
+		#endregion
+
+		#region UI
+		public void OpenStartMenu() {
+			Instance.Ui.OpenStartMenu();
+		}
+
+		public void OpenSettings() {
+			Instance.Ui.OpenSettings();
+		}
+
+		public void CloseLastUi() {
+			Instance.Ui.CloseLastUi();
 		}
 		#endregion
 	}

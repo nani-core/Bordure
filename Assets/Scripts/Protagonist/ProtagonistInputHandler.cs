@@ -5,22 +5,19 @@ namespace NaniCore.Bordure {
 	[RequireComponent(typeof(Protagonist))]
 	public class ProtagonistInputHandler : MonoBehaviour {
 		#region Fields
-		protected Protagonist protagonist;
-		protected PlayerInput playerInput;
+		private Protagonist protagonist;
+		[SerializeField] private PlayerInput playerInput;
 
-		protected Vector3 moveVelocity;
-		protected float floating = 0f, sinking = 0f;
+		private Vector3 moveVelocity;
+		private float floating = 0f, sinking = 0f;
 		#endregion
 
 		#region Life cycle
 		protected void Start() {
 			protagonist = GetComponent<Protagonist>();
 
-			playerInput = gameObject.EnsureComponent<PlayerInput>();
-			playerInput.notificationBehavior = PlayerNotifications.SendMessages;
-			foreach(var map in playerInput.actions.actionMaps) {
+			foreach(var map in playerInput.actions.actionMaps)
 				map.Enable();
-			}
 		}
 
 		protected void FixedUpdate() {
@@ -34,11 +31,17 @@ namespace NaniCore.Bordure {
 			}
 		}
 
-		protected void OnDisable() {
-			// Reset cached input values on disabling, or the protagonist would keep
-			// receiving false input when re-enabled.
-			moveVelocity = Vector3.zero;
+		protected void OnEnable() {
+			playerInput.enabled = true;
 		}
+
+		protected void OnDisable() {
+			playerInput.enabled = false;
+		}
+		#endregion
+
+		#region Functions
+		private GameManager Game => GameManager.Instance;
 		#endregion
 
 		#region Handlers
@@ -50,18 +53,24 @@ namespace NaniCore.Bordure {
 
 		protected void OnCheat() => protagonist?.Cheat();
 
-		protected void OnLeave() {
-			GameManager game = GameManager.Instance;
-			if(game.CurrentSeat?.canLeaveManually ?? false)
-				game.ProtagonistLeaveSeat();
+		protected void OnPause() {
+			Game.Ui.OpenStartMenu();
 		}
 
 		// Movement
 
 		protected void OnMoveVelocity(InputValue value) {
 			var raw = value.Get<Vector2>();
-			moveVelocity.x = raw.x;
-			moveVelocity.z = raw.y;
+			if(Game.CurrentSeat == null) {
+				// Normal movement
+				moveVelocity.x = raw.x;
+				moveVelocity.z = raw.y;
+			}
+			else {
+				// Leave seat
+				if(raw.magnitude > 0.5f && Game.CurrentSeat.canLeaveManually)
+					Game.ProtagonistLeaveSeat();
+			}
 		}
 
 		protected void OnSetSprinting(InputValue value) {
@@ -86,6 +95,7 @@ namespace NaniCore.Bordure {
 
 		protected void OnOrientDelta(InputValue value) {
 			Vector2 raw = value.Get<Vector2>();
+			raw *= Game.mouseSensitivityGain;
 			if(!protagonist.GrabbingOrienting) {
 				if(protagonist.UsesOrientation)
 					protagonist.OrientDelta(raw);

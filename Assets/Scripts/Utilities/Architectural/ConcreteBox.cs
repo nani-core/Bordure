@@ -126,7 +126,7 @@ namespace NaniCore {
 #endif
 
 			foreach(var face in Faces) {
-				var faceObj = new GameObject($"{gameObject.name} (wall {face.name})");
+				GameObject faceObj = new($"{gameObject.name} (wall {face.name})");
 				faceObj.isStatic = gameObject.isStatic;
 
 				var faceTransform = faceObj.transform;

@@ -64,12 +64,14 @@ namespace NaniCore.Bordure {
 			StampHandler.Stamp(gameObject, GameManager.Instance?.MainCamera);
 
 			GameObject hollowShape = GenerateHollowShape(shape, GameManager.Instance?.MainCamera);
+			List<GameObject> generatedShapes = new();
 
 			float epsilon = 1e-3f;
 			// Create the intersecting gastro object.
 			// There should only be one `resultFilter` and is assigned to `neoGastro`.
 			foreach(var (filter, resultFilter) in gameObject.OperateMesh(hollowShape, CSG.Operation.Intersection, epsilon, sectionMaterial)) {
 				var hollowedObject = resultFilter.gameObject;
+				generatedShapes.Add(hollowedObject);
 				hollowedObject.name = $"{filter.gameObject.name} (hollowed)";
 
 				// Generate physics
@@ -93,6 +95,8 @@ namespace NaniCore.Bordure {
 
 			// Create the subtracting blasto frame object.
 			foreach(var (filter, resultFilter) in gameObject.OperateMesh(hollowShape, CSG.Operation.Subtract, epsilon, sectionMaterial)) {
+				generatedShapes.Add(filter.gameObject);
+
 				filter.sharedMesh = resultFilter.sharedMesh;
 				filter.EnsureComponent<MeshCollider>().sharedMesh = resultFilter.sharedMesh;
 				List<Material> newMatList = new();
@@ -113,6 +117,13 @@ namespace NaniCore.Bordure {
 			}
 
 			Destroy(hollowShape);
+
+			// Move the generated shapes under the level hierarchy, or they don't get
+			// unloaded along with the level.
+			Level level = GetComponentInParent<Level>(true);
+			foreach(var generatedShape in generatedShapes) {
+				generatedShape.transform.SetParent(level.transform, true);
+			}
 		}
 	}
 	#endregion

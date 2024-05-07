@@ -16,7 +16,7 @@ namespace NaniCore {
 		protected void Start() {
 #if UNITY_EDITOR
 			if(!Application.isPlaying) {
-				RegenerateInEditMode();
+				Regenerate();
 				return;
 			}
 #endif
@@ -31,7 +31,7 @@ namespace NaniCore {
 				return;
 			if(!(enabled && gameObject.activeInHierarchy))
 				return;
-			UnityEditor.EditorApplication.delayCall += RegenerateInEditMode;
+			UnityEditor.EditorApplication.delayCall += Regenerate;
 		}
 #endif
 
@@ -59,12 +59,16 @@ namespace NaniCore {
 		public void Construct() {
 #if UNITY_EDITOR
 			if(!Application.isPlaying) {
-				RegenerateInEditMode();
+				Regenerate();
 				return;
 			}
 #endif
+			Ungarrison();
+		}
+		[ContextMenu("Ungarrison")]
+		public void Ungarrison() {
 			Construct(transform);
-			Destroy(this);
+			HierarchyUtility.Destroy(this);
 		}
 
 		protected GameObject InstantiateGizmos(GameObject template, Transform under) {
@@ -74,8 +78,8 @@ namespace NaniCore {
 		}
 
 #if UNITY_EDITOR
-		[ContextMenu("Regenerate in Edit Mode")]
-		protected void RegenerateInEditMode() {
+		[ContextMenu("Regenerate")]
+		protected void Regenerate() {
 			if(Application.isPlaying || this == null)
 				return;
 			if(this == null)

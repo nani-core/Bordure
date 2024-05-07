@@ -121,6 +121,18 @@ namespace NaniCore {
 				Destroy(child.gameObject);
 		}
 
+		public static IEnumerable<T> FindObjectsByName<T>(string name, bool includeInactive = false) where T : Component {
+			FindObjectsInactive includingFlag = includeInactive ? FindObjectsInactive.Include : FindObjectsInactive.Exclude;
+			var instances = Object.FindObjectsByType<T>(includingFlag, FindObjectsSortMode.None);
+			return instances.Where(i => i.name == name);
+		}
+
+		public static T FindObjectByName<T>(string name, bool includeInactive = false) where T : Component {
+			return FindObjectsByName<T>(name, includeInactive).FirstOrDefault();
+		}
+		#endregion
+
+		#region Shape & transformation
 		public static void RotateAlong(this Transform target, Vector3 pivot, Quaternion rotation) {
 			Transform pivotTransform = new GameObject().transform;
 			pivotTransform.position = pivot;
@@ -128,7 +140,7 @@ namespace NaniCore {
 			target.SetParent(pivotTransform, true);
 			pivotTransform.rotation = rotation;
 			target.SetParent(parent, true);
-			Object.Destroy(pivotTransform.gameObject);
+			Destroy(pivotTransform.gameObject);
 		}
 
 		/// <param name="target">The GameObject to ge aligned in space.</param>
@@ -158,14 +170,22 @@ namespace NaniCore {
 			}
 		}
 
-		public static IEnumerable<T> FindObjectsByName<T>(string name, bool includeInactive = false) where T : Component {
-			FindObjectsInactive includingFlag = includeInactive ? FindObjectsInactive.Include : FindObjectsInactive.Exclude;
-			var instances = Object.FindObjectsByType<T>(includingFlag, FindObjectsSortMode.None);
-			return instances.Where(i => i.name == name);
-		}
+		public static Bounds CalculateBoundingBox(this Transform parent) {
+			Bounds res = new() {
+				center = parent.position,
+				size = Vector3.zero,
+			};
 
-		public static T FindObjectByName<T>(string name, bool includeInactive = false) where T : Component {
-			return FindObjectsByName<T>(name, includeInactive).FirstOrDefault();
+			if(parent.TryGetComponent(out Renderer renderer))
+				res = MathUtility.BoundingUnion(renderer.bounds, res);
+
+			if(parent.TryGetComponent(out Collider collider))
+				res = MathUtility.BoundingUnion(collider.bounds, res);
+
+			foreach(var child in parent.Children())
+				res = MathUtility.BoundingUnion(res, CalculateBoundingBox(child));
+
+			return res;
 		}
 		#endregion
 	}
