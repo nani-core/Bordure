@@ -3213,7 +3213,7 @@ GameObject:
   - component: {fileID: 1224066063834979953}
   - component: {fileID: 5780698072118753179}
   m_Layer: 0
-  m_Name: Local Volumetric Fog
+  m_Name: Volumetric Fog
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3228,7 +3228,7 @@ Transform:
   m_GameObject: {fileID: 786967807106794748}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 25.68, z: 0}
+  m_LocalPosition: {x: 0, y: 11.579, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3258,10 +3258,10 @@ MonoBehaviour:
     positiveFade: {x: 0, y: 0, z: 0}
     negativeFade: {x: 0, y: 0, z: 0}
     m_EditorUniformFade: 0
-    m_EditorPositiveFade: {x: 0.0076923072, y: 0.002, z: 0.0076923072}
-    m_EditorNegativeFade: {x: 0.0076923072, y: 0.002, z: 0.0076923072}
+    m_EditorPositiveFade: {x: 0.0076923072, y: 0.0045454544, z: 0.0076923072}
+    m_EditorNegativeFade: {x: 0.0076923072, y: 0.0045454544, z: 0.0076923072}
     m_EditorAdvancedFade: 0
-    size: {x: 13, y: 50, z: 13}
+    size: {x: 13, y: 22, z: 13}
     invertFade: 0
     distanceFadeStart: 0
     distanceFadeEnd: 1000
@@ -3856,7 +3856,7 @@ GameObject:
   - component: {fileID: 1125727750501926988}
   - component: {fileID: 4084964058373595072}
   m_Layer: 0
-  m_Name: Rooms
+  m_Name: Lower Part
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3896,8 +3896,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 75.78485, y: 36.266163, z: 60.543728}
-  m_Center: {x: -0.03717804, y: 6.3390713, z: -3.675314}
+  m_Size: {x: 55.98956, y: 36.266163, z: 47.37828}
+  m_Center: {x: 0.2897567, y: 6.3390713, z: -2.2827325}
 --- !u!114 &4084964058373595072
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16095,8 +16095,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 5941371074441834731}
   - {fileID: 2746342890467558866}
+  - {fileID: 5941371074441834731}
   m_Father: {fileID: 7304947832152873616}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4999320172778146006
@@ -17203,7 +17203,7 @@ GameObject:
   - component: {fileID: 7247491555522052001}
   - component: {fileID: 3586606735613995964}
   m_Layer: 0
-  m_Name: Tower
+  m_Name: Upper Part
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17244,8 +17244,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 10.495457, y: 52.885868, z: 15.778345}
-  m_Center: {x: -0.117982864, y: 16.911428, z: 0.9884844}
+  m_Size: {x: 13.436816, y: 32.120678, z: 13.526366}
+  m_Center: {x: -0.02606582, y: 6.5288353, z: 0.00037097922}
 --- !u!114 &3586606735613995964
 MonoBehaviour:
   m_ObjectHideFlags: 0
