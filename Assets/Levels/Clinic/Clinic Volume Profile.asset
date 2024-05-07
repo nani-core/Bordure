@@ -42,7 +42,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   components:
   - {fileID: 8253661456544223782}
-  - {fileID: 4016291419330171695}
   - {fileID: 7128212348477016354}
   - {fileID: 3772340243033211115}
   - {fileID: 8990677829514545376}
@@ -135,37 +134,6 @@ MonoBehaviour:
   directionalLightsOnly:
     m_OverrideState: 0
     m_Value: 0
---- !u!114 &4016291419330171695
-MonoBehaviour:
-  m_ObjectHideFlags: 3
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d7593b3a9277ac4696b20006c21dde2, type: 3}
-  m_Name: VisualEnvironment
-  m_EditorClassIdentifier: 
-  active: 1
-  skyType:
-    m_OverrideState: 1
-    m_Value: 1
-  cloudType:
-    m_OverrideState: 1
-    m_Value: 0
-  skyAmbientMode:
-    m_OverrideState: 0
-    m_Value: 1
-  windOrientation:
-    m_OverrideState: 1
-    m_Value: 0
-  windSpeed:
-    m_OverrideState: 1
-    m_Value: 0
-  fogType:
-    m_OverrideState: 1
-    m_Value: 0
 --- !u!114 &7128212348477016354
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -189,7 +157,7 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 1
   fixedExposure:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 10
   compensation:
     m_OverrideState: 1
@@ -362,7 +330,7 @@ MonoBehaviour:
     m_Value: 0
   hdriSky:
     m_OverrideState: 1
-    m_Value: {fileID: 8900000, guid: 2fb630b0ac81a9b40bf9720a0a641f91, type: 3}
+    m_Value: {fileID: 0}
   distortionMode:
     m_OverrideState: 0
     m_Value: 0
