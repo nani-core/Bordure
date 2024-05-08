@@ -17,6 +17,15 @@ namespace Nianyi {
 			public bool useTangents;
 			public bool useColors;
 			public uint uvMask;
+
+			public Descriptor Union(Descriptor other) {
+				return new() {
+					useNormals = useNormals || other.useNormals,
+					useTangents = useTangents || other.useTangents,
+					useColors = useColors || other.useColors,
+					uvMask = uvMask | other.uvMask,
+				};
+			}
 		}
 
 		public class Vertex {
