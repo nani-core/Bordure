@@ -33,6 +33,7 @@ namespace NaniCore.Bordure {
 		#region Interfaces
 		public bool IsLoaded => gameObject.activeSelf;
 
+		[ContextMenu("Load")]
 		public void Load() {
 			isLoaded = true;
 			gameObject.SetActive(true);

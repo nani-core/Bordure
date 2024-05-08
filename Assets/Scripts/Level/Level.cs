@@ -16,6 +16,13 @@ namespace NaniCore.Bordure {
 		public string Name => name;
 		public System.Action OnLoaded, OnUnloaded;
 		public bool IsLoaded => isLoaded;
+
+		[ContextMenu("Load All Sections")]
+		public void LoadAllSections() {
+			foreach(var section in GetComponentsInChildren<LevelSection>(true)) {
+				section.Load();
+			}
+		}
 		#endregion
 
 		#region Life cycle
