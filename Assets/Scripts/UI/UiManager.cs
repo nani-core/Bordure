@@ -65,10 +65,8 @@ namespace NaniCore.Bordure {
 			else
 				gameObject.SetActive(false);
 		}
-		#endregion
 
-		#region Functions
-		private void OpenUi(Ui target) {
+		public void OpenUi(Ui target) {
 			if(target == null) {
 				Debug.LogWarning("Warning: Cannot open empty UI.");
 				return;
@@ -84,7 +82,7 @@ namespace NaniCore.Bordure {
 			target.OnShow();
 		}
 
-		private Ui CurrentUi {
+		public Ui CurrentUi {
 			get {
 				if(uiEntries.Count <= 0)
 					return null;
