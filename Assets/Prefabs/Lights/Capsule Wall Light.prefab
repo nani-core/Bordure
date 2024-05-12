@@ -335,7 +335,7 @@ GameObject:
   - component: {fileID: 8800579203571293232}
   - component: {fileID: 1721903003912369555}
   - component: {fileID: 4650797503710464141}
-  - component: {fileID: 8528450267860055136}
+  - component: {fileID: 3523296487783815201}
   m_Layer: 0
   m_Name: Frame
   m_TagString: Untagged
@@ -353,7 +353,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.29999995, y: 0.6, z: 0.5999999}
+  m_LocalScale: {x: 0.29999995, y: 0.6, z: 0.65}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8111704355517821273}
@@ -408,29 +408,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &8528450267860055136
-CapsuleCollider:
+--- !u!114 &3523296487783815201
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6027879766178015941}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3252e05ce982e1428962f17b570e27b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  selectiveSubmesh: 0
+  submeshIndices: 
 --- !u!1 &7982908041321702512
 GameObject:
   m_ObjectHideFlags: 0
@@ -440,6 +431,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8111704355517821273}
+  - component: {fileID: 2042105608871974050}
+  - component: {fileID: 742969185227017388}
+  - component: {fileID: 4095520129187096295}
   m_Layer: 0
   m_Name: Capsule Wall Light
   m_TagString: Untagged
@@ -465,3 +459,144 @@ Transform:
   - {fileID: 3614683271138708569}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2042105608871974050
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7982908041321702512}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d6e294ff361bcd44898b5e77c7933ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  oneTime: 0
+  onOpen:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4095520129187096295}
+        m_TargetAssemblyTypeName: NaniCore.DtCarrier, Assembly-CSharp
+        m_MethodName: ToggleOpeningState
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 3523296487783815201}
+        m_TargetAssemblyTypeName: NaniCore.Bordure.ModelHighlighter, Assembly-CSharp
+        m_MethodName: Highlight
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onValidated:
+    m_PersistentCalls:
+      m_Calls: []
+  onInvalidated:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &742969185227017388
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7982908041321702512}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0b1f49cf0faacd47afb0c5ba87bfc06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  loopshape: {fileID: 2042105608871974050}
+  overrideTarget: 0
+  target: {fileID: 0}
+  includeChildren: 1
+  maxDistance: 0
+--- !u!114 &4095520129187096295
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7982908041321702512}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ccbeed49de33f86429e414eca8c05d61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 4480507069987414484}
+  movingSound: {fileID: 0}
+  onClosedSound: {fileID: 0}
+  closedTransform: {fileID: 0}
+  onOpenedSound: {fileID: 0}
+  openedTransform: {fileID: 0}
+  isOpened: 1
+  openingDuration: 0
+  easingFactor: 0
+  onOpened:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7331068251491095961}
+        m_TargetAssemblyTypeName: UnityEngine.Renderer, UnityEngine
+        m_MethodName: set_material
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 2100000, guid: 69d87c215b6c69343917ddd28c6f6f91, type: 2}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Material, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 3126156951226882350}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+  onClosed:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7331068251491095961}
+        m_TargetAssemblyTypeName: UnityEngine.Renderer, UnityEngine
+        m_MethodName: set_material
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 2100000, guid: 4afd6cc7b88c5fa4eb1493cdd8ec3c6a, type: 2}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Material, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 3126156951226882350}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onToggled:
+    m_PersistentCalls:
+      m_Calls: []
