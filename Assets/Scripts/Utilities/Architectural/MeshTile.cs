@@ -53,7 +53,7 @@ namespace NaniCore {
 				}
 			}
 
-			if(batch)
+			if(batch && GameManager.Instance != null)
 				BatchMeshes(under, instances);
 		}
 
