@@ -14,7 +14,7 @@ Material:
   m_ValidKeywords:
   - _COLORMAP
   - _EMISSIVEMAP
-  - _MATERIAL_AFFECTS_MASKMAP
+  - _MATERIAL_AFFECTS_ALBEDO
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 1
@@ -28,6 +28,8 @@ Material:
   - TransparentBackface
   - TransparentBackfaceDebugDisplay
   - MOTIONVECTORS
+  - DecalMeshForwardEmissive
+  - DecalProjectorForwardEmissive
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
@@ -155,11 +157,11 @@ Material:
     - _AORemapMin: 0
     - _ATDistance: 1
     - _AffectAO: 0
-    - _AffectAlbedo: 0
-    - _AffectEmission: 1
-    - _AffectMetal: 1
+    - _AffectAlbedo: 1
+    - _AffectEmission: 0
+    - _AffectMetal: 0
     - _AffectNormal: 0
-    - _AffectSmoothness: 1
+    - _AffectSmoothness: 0
     - _AlbedoAffectEmissive: 0
     - _AlphaCutoff: 0.5
     - _AlphaCutoffEnable: 0
@@ -175,10 +177,10 @@ Material:
     - _CullModeForward: 2
     - _Cutoff: 0.5
     - _DecalBlend: 1
-    - _DecalColorMask0: 0
+    - _DecalColorMask0: 15
     - _DecalColorMask1: 0
-    - _DecalColorMask2: 11
-    - _DecalColorMask3: 8
+    - _DecalColorMask2: 0
+    - _DecalColorMask3: 0
     - _DecalLayerMaskFromDecal: 1
     - _DecalMaskMapBlueScale: 1
     - _DecalMeshBiasType: 0
@@ -295,7 +297,7 @@ Material:
     - _UVEmissive: 0
     - _UVSec: 0
     - _Unity_Identify_HDRP_Decal: 1
-    - _UseEmissiveIntensity: 1
+    - _UseEmissiveIntensity: 0
     - _ZTestMode: 8
     - _ZWrite: 1
     m_Colors:
@@ -304,7 +306,7 @@ Material:
     - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _EmissiveColor: {r: 33.10476, g: 132.86832, b: 132.86832, a: 1000}
-    - _EmissiveColorHDR: {r: 100, g: 100, b: 100, a: 100}
+    - _EmissiveColorHDR: {r: 33.10476, g: 132.86832, b: 132.86832, a: 1000}
     - _EmissiveColorLDR: {r: 0.2, g: 0.4, b: 0.4, a: 1}
     - _InvPrimScale: {r: 1, g: 1, b: 0, a: 0}
     - _SpecularColor: {r: 1, g: 1, b: 1, a: 1}
