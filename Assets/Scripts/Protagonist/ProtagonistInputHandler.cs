@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static UnityEngine.Rendering.DebugUI.Table;
 
 namespace NaniCore.Bordure {
 	[RequireComponent(typeof(Protagonist))]
@@ -7,9 +8,13 @@ namespace NaniCore.Bordure {
 		#region Fields
 		private Protagonist protagonist;
 		[SerializeField] private PlayerInput playerInput;
+		private InputActionMap orientationMap;
 
 		private Vector3 moveVelocity;
 		private float floating = 0f, sinking = 0f;
+
+		private bool grabbingOrienting = false;
+		private bool grabbingDistancing = false;
 		#endregion
 
 		#region Life cycle
@@ -42,6 +47,42 @@ namespace NaniCore.Bordure {
 
 		#region Functions
 		private GameManager Game => GameManager.Instance;
+
+		private InputActionMap OrientationMap {
+			get {
+				if(orientationMap != null)
+					return orientationMap;
+				return orientationMap = playerInput.actions.FindActionMap("Orientation");
+			}
+		}
+
+		private bool ShouldOrientationBeEnabled => !(GrabbingOrienting || GrabbingDistancing);
+
+		private bool OrientationMapEnabled {
+			get => OrientationMap.enabled;
+			set {
+				if(value)
+					OrientationMap.Enable();
+				else
+					OrientationMap.Disable();
+			}
+		}
+
+		private bool GrabbingOrienting {
+			get => grabbingOrienting;
+			set {
+				grabbingOrienting = value;
+				OrientationMapEnabled = ShouldOrientationBeEnabled;
+			}
+		}
+
+		private bool GrabbingDistancing {
+			get => grabbingDistancing;
+			set {
+				grabbingDistancing = value;
+				OrientationMapEnabled = ShouldOrientationBeEnabled;
+			}
+		}
 		#endregion
 
 		#region Handlers
@@ -94,30 +135,42 @@ namespace NaniCore.Bordure {
 		// Orientation
 
 		protected void OnOrientDelta(InputValue value) {
+			if(!OrientationMapEnabled || !protagonist.UsesOrientation)
+				return;
+
 			Vector2 raw = value.Get<Vector2>();
 			raw *= Game.mouseSensitivityGain;
-			if(!protagonist.GrabbingOrienting) {
-				if(protagonist.UsesOrientation)
-					protagonist.OrientDelta(raw);
-			}
-			else {
-				protagonist.GrabbingOrientDelta(raw);
-			}
+			protagonist.OrientDelta(raw);
 		}
 
 		// Grabbing
 
 		protected void OnSetGrabbingOrienting(InputValue value) {
 			bool raw = value.Get<float>() > .5f;
-			protagonist.GrabbingOrienting = raw;
+			GrabbingOrienting = raw;
 		}
 
-		protected void OnSetGrabbingDistanceDelta(InputValue value) {
+		protected void OnSetGrabbingDistancing(InputValue value) {
+			bool raw = value.Get<float>() > .5f;
+			GrabbingDistancing = raw;
+		}
+
+		protected void OnGrabbingDistanceDelta(InputValue value) {
+			if(protagonist.GrabbingObject == null || !GrabbingDistancing)
+				return;
+
 			float raw = value.Get<float>();
-			if(protagonist.GrabbingOrienting) {
-				raw *= protagonist.Profile.grabbingDistanceScrollingSpeed;
-				protagonist.GrabbingDistance += raw;
-			}
+			raw *= protagonist.Profile.grabbingDistanceScrollingSpeed;
+			protagonist.GrabbingDistance += raw;
+		}
+
+		protected void OnGrabbingOrientDelta(InputValue value) {
+			if(protagonist.GrabbingObject == null || !GrabbingOrienting)
+				return;
+
+			Vector2 raw = value.Get<Vector2>();
+			raw *= Game.mouseSensitivityGain;
+			protagonist.GrabbingOrientDelta(raw);
 		}
 		#endregion
 	}

@@ -320,27 +320,34 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Set Grabbing Distance Delta",
+                    "name": "Set Grabbing Distancing",
+                    "type": "Button",
+                    "id": "eb3cde29-8788-4e49-b010-4924031e2aa9",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press(behavior=2)",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Grabbing Distance Delta",
                     "type": "Value",
                     "id": "90658fd0-95f9-4c78-a591-c1bfe3cac81e",
                     "expectedControlType": "Axis",
                     "processors": "Normalize(min=-1,max=1),Clamp(min=-1,max=1)",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "Grabbing Orient Delta",
+                    "type": "Value",
+                    "id": "f3ebf242-fd20-4900-af9a-2b4aa1d100df",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
-                {
-                    "name": "",
-                    "id": "192c7105-c8c2-4996-84cf-c1bc19ae42fc",
-                    "path": "<Mouse>/rightButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "PC",
-                    "action": "Set Grabbing Orienting",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
                 {
                     "name": "",
                     "id": "d1839021-203c-4e7e-9c45-181a6de17f40",
@@ -359,7 +366,73 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "PC",
-                    "action": "Set Grabbing Distance Delta",
+                    "action": "Grabbing Distance Delta",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c009bb9c-95f9-4fdd-8982-7ddd6675d327",
+                    "path": "<Gamepad>/rightStick/y",
+                    "interactions": "",
+                    "processors": "Scale(factor=0.1)",
+                    "groups": "Gamepad",
+                    "action": "Grabbing Distance Delta",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "fb5ac0db-25e9-4f53-a034-84c78d700d9c",
+                    "path": "<Gamepad>/leftTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Set Grabbing Distancing",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "450142a0-9ecc-4f10-9e50-b758d2ef9a08",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PC",
+                    "action": "Set Grabbing Distancing",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a85052d1-b4d6-4475-9e6b-254f61912e82",
+                    "path": "<Mouse>/delta",
+                    "interactions": "",
+                    "processors": "ScaleVector2(x=0.004,y=0.004)",
+                    "groups": "PC",
+                    "action": "Grabbing Orient Delta",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "17ef2ca9-9b73-42ef-a75b-dad7b00b2caa",
+                    "path": "<Gamepad>/rightStick",
+                    "interactions": "",
+                    "processors": "ScaleVector2(x=0.1,y=0.1)",
+                    "groups": "Gamepad",
+                    "action": "Grabbing Orient Delta",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8c3aa1cb-6cd1-4a68-88ee-6867995dceb4",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PC",
+                    "action": "Set Grabbing Orienting",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

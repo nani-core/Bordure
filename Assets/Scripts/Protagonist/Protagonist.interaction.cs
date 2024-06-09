@@ -10,7 +10,6 @@ namespace NaniCore.Bordure {
 		#region Fields
 		private GameObject lookingAtObject = null;
 		private Transform grabbingObject;
-		private bool grabbingOrienting;
 		private RaycastHit lookingHit;
 		#endregion
 
@@ -50,11 +49,6 @@ namespace NaniCore.Bordure {
 					GrabbingDistance -= 0.04f; // To prevent clipping through floor.
 				}
 			}
-		}
-
-		public bool GrabbingOrienting {
-			get => GrabbingObject != null && grabbingOrienting;
-			set => grabbingOrienting = GrabbingObject != null && value;
 		}
 
 		public void GrabbingOrientDelta(Vector3 delta) {
