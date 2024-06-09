@@ -47,6 +47,14 @@ namespace NaniCore.Bordure {
 		}
 
 		public void MoveProtagonistToSpawnPoint(SpawnPoint spawnPoint) {
+			if(spawnPoint == null) {
+				Debug.LogWarning("Warning: Trying to move the protagonist to an empty spawn point, aborting.");
+				return;
+			}
+			var levelSection = spawnPoint.transform.GetComponentInParent<LevelSection>(true);
+			if(levelSection != null)
+				levelSection.Load();
+
 			if(UsesProtagonist) {
 				Protagonist.transform.AlignWith(spawnPoint.transform);
 			}

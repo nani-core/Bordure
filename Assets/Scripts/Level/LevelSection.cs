@@ -36,6 +36,8 @@ namespace NaniCore.Bordure {
 		[ContextMenu("Load")]
 		public void Load() {
 			isLoaded = true;
+			if(gameObject.activeInHierarchy)
+				return;
 			gameObject.SetActive(true);
 			Debug.Log($"Level section \"{name}\" is loaded.", this);
 		}
