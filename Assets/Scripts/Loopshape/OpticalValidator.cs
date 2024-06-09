@@ -185,7 +185,7 @@ namespace NaniCore.Bordure {
 		protected new void Update() {
 			base.Update();
 
-			visible = childRenderers.Any(r => r.isVisible);
+			visible = childRenderers.Any(r => r != null && r.isVisible);
 			if(validatingCoroutine == null) {
 				validatingCoroutine = StartCoroutine(PerformValidationCoroutine(FinishValidation));
 			}

@@ -6,11 +6,6 @@ using UnityEditor;
 
 namespace NaniCore.Bordure {
 	public partial class GameManager {
-		#region Serialized fields
-		[SerializeField] private UnityEvent onAwake;
-		[SerializeField] private UnityEvent onStart;
-		#endregion
-
 		#region Fields
 		private bool isBeingDestroyed = false;
 		private bool gameStarted = false;
@@ -43,7 +38,6 @@ namespace NaniCore.Bordure {
 			gameStarted = true;
 			Ui.CloseLastUi();
 			UsesProtagonist = true;
-			onStart?.Invoke();
 		}
 
 		public void QuitGame() {
@@ -60,6 +54,20 @@ namespace NaniCore.Bordure {
 		#endregion
 
 		#region Functions
+		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+		private static void InstantiateOnGameStart() {
+			if(FindObjectOfType<DontSpawnGameManager>() != null)
+				return;
+
+			GameObject prefab = Resources.Load<GameObject>("Game Manager");
+			if(prefab == null || !prefab.TryGetComponent<GameManager>(out _)) {
+				throw new UnityException("Error: Failed to instantiate the game manager.");
+			}
+
+			var instance = Instantiate(prefab);
+			instance.name = prefab.name;
+		}
+
 		protected void Initialize() {
 			InitializeConstants();
 			InitializeLevel();
@@ -67,7 +75,6 @@ namespace NaniCore.Bordure {
 			InitializeDebug();
 			Ui.OnLoaded += () => Ui.OpenStartMenu();
 			eventSystem.gameObject.SetActive(true);
-			onAwake?.Invoke();
 		}
 
 #pragma warning disable CS0465
