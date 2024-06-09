@@ -112,10 +112,6 @@ namespace NaniCore.Bordure {
 			protagonist.GrabbingOrienting = raw;
 		}
 
-		protected void OnResetGrabbingTransform() {
-			protagonist.ResetGrabbingTransform();
-		}
-
 		protected void OnSetGrabbingDistanceDelta(InputValue value) {
 			float raw = value.Get<float>();
 			if(protagonist.GrabbingOrienting) {

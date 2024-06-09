@@ -89,13 +89,6 @@ namespace NaniCore.Bordure {
 			}
 		}
 
-		public void ResetGrabbingTransform() {
-			if(GrabbingObject == null)
-				return;
-
-			StartCoroutine(GrabCoroutine(GrabbingObject));
-		}
-
 		public bool EyeCast(out RaycastHit hit) {
 			return PhysicsUtility.Raycast(EyeRay, out hit, Profile.maxInteractionDistance, GameManager.Instance.InteractionLayerMask, false);
 		}
@@ -143,29 +136,6 @@ namespace NaniCore.Bordure {
 				// focus.Opacity = 1f;
 			}
 			// focus.Opacity = 1f;
-		}
-
-		private IEnumerator GrabCoroutine(Transform target) {
-			float grabbingDistance = Vector3.Distance(target.position, eye.transform.position);
-			float grabbingAzimuth = target.localRotation.eulerAngles.y * Mathf.PI / 180;
-
-			Vector3
-				startPosition = target.localPosition,
-				endPosition = Vector3.forward * grabbingDistance;
-			Quaternion
-				startRotation = target.localRotation,
-				endRotation = Quaternion.Euler(0, grabbingAzimuth * 180 / Mathf.PI, 0);
-
-			float startTime = Time.time;
-			for(float t; (t = (Time.time - startTime) / Profile.grabbingTransitionDuration) < 1;) {
-				t = MathUtility.Ease(t, Profile.grabbingEasingFactor);
-				target.SetLocalPositionAndRotation(
-					Vector3.Lerp(startPosition, endPosition, t),
-					Quaternion.Slerp(startRotation, endRotation, t)
-				);
-				yield return new WaitForFixedUpdate();
-			}
-			target.SetLocalPositionAndRotation(endPosition, endRotation);
 		}
 
 		public void Interact() {
