@@ -327,6 +327,15 @@
                     "processors": "",
                     "interactions": "Press",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Set Grabbing Distance Delta",
+                    "type": "Value",
+                    "id": "90658fd0-95f9-4c78-a591-c1bfe3cac81e",
+                    "expectedControlType": "Axis",
+                    "processors": "Normalize(min=-1,max=1),Clamp(min=-1,max=1)",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -371,6 +380,17 @@
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "Reset Grabbing Transform",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3014c33b-0612-4612-adb8-adfd6514239f",
+                    "path": "<Mouse>/scroll/y",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PC",
+                    "action": "Set Grabbing Distance Delta",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

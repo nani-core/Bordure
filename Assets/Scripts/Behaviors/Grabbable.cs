@@ -13,8 +13,12 @@ namespace NaniCore.Bordure {
 		private new Rigidbody rigidbody;
 		private bool wasKinematicWhenGrabbingStarted = false;
 		private bool isKinematic = false;
+
+		// Overwritten fields
 		private RigidbodyConstraints originalConstraints;
 		private Transform originalParent;
+		private CollisionDetectionMode originalCollisionDetectionMode;
+		private int originalLayer;
 		#endregion
 
 		#region Interfaces
@@ -47,18 +51,30 @@ namespace NaniCore.Bordure {
 				if(value == isKinematic)
 					return;
 				if(value) {
+					// Fetch the fields from the rigid body.
 					originalConstraints = Rigidbody.constraints;
 					originalParent = transform.parent;
+					originalCollisionDetectionMode = Rigidbody.collisionDetectionMode;
+					originalLayer = gameObject.layer;
 
+					// Overwrite the fields.
 					Rigidbody.constraints = RigidbodyConstraints.FreezeAll;
 					transform.SetParent(null);
+					Rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+					gameObject.layer = GameManager.Instance.GrabbedLayer;
 				}
 				else {
+					// Restore the fields in the rigid body.
 					Rigidbody.constraints = originalConstraints;
 					transform.SetParent(originalParent);
+					Rigidbody.collisionDetectionMode = originalCollisionDetectionMode;
+					gameObject.layer = originalLayer;
 
+					// Write in default values.
 					originalConstraints = RigidbodyConstraints.None;
 					originalParent = null;
+					originalCollisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+					originalLayer = GameManager.Instance.DefaultLayer;
 				}
 				isKinematic = value;
 			}

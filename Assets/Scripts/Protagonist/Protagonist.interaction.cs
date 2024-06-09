@@ -31,6 +31,13 @@ namespace NaniCore.Bordure {
 					Debug.Log($"{grabbingObject} is dropped.", grabbingObject);
 				}
 
+				// Cannot grab the object being stood on.
+				if(value != null && IsOnGround) {
+					if(steppingGround.transform?.IsChildOf(value) ?? false) {
+						Debug.LogWarning($"Warning: Cannot grab {value} now because it is being stood on.", value);
+						return;
+					}
+				}
 				grabbingObject = value;
 
 				if(grabbingObject != null) {
@@ -39,6 +46,8 @@ namespace NaniCore.Bordure {
 
 					grabbingObject.transform.SetParent(eye.transform, true);
 					Debug.Log($"{grabbingObject} is grabbed.", grabbingObject);
+
+					GrabbingDistance -= 0.04f; // To prevent clipping through floor.
 				}
 			}
 		}
@@ -48,11 +57,36 @@ namespace NaniCore.Bordure {
 			set => grabbingOrienting = GrabbingObject != null && value;
 		}
 
-		public void GrabbingOrientDelta(float delta) {
+		public void GrabbingOrientDelta(Vector3 delta) {
 			delta *= Profile.orientingSpeed;
-			float grabbingAzimuth = GrabbingObject.localRotation.eulerAngles.y * Mathf.PI / 180;
-			grabbingAzimuth += delta;
-			GrabbingObject.localRotation = Quaternion.Euler(0, grabbingAzimuth * 180 / Mathf.PI, 0);
+			Vector3 euler = new Vector3(delta.y, -delta.x, 0) * Mathf.Rad2Deg;
+			Quaternion deltaQuat = Quaternion.Euler(euler);
+			Quaternion t = Quaternion.Inverse(GrabbingObject.rotation) * Eye.rotation;
+			deltaQuat = t * deltaQuat * Quaternion.Inverse(t);
+			GrabbingObject.localRotation *= deltaQuat;
+		}
+
+		public float GrabbingDistance {
+			get {
+				if(GrabbingObject == null)
+					return Mathf.Infinity;
+				return Vector3.Distance(Eye.position, GrabbingObject.position);
+			}
+			set {
+				if(GrabbingObject == null)
+					return;
+
+				float min = 0;
+				if(GrabbingObject.TryGetComponent(out Collider shape))
+					min = shape.bounds.size.magnitude;
+				float max = Profile.maxInteractionDistance;
+				if(GrabbingObject.TryGetComponent(out FocusValidator focusValidator))
+					max = Mathf.Min(max, focusValidator.MaxDistance);
+				value = Mathf.Clamp(value, min, max);
+
+				Vector3 direction = Vector3.Normalize(GrabbingObject.position - Eye.position);
+				GrabbingObject.position = Eye.position + direction * value;
+			}
 		}
 
 		public void ResetGrabbingTransform() {

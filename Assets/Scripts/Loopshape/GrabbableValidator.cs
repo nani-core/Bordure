@@ -52,5 +52,17 @@ namespace NaniCore.Bordure {
 				Grabbable.Drop();
 		}
 		#endregion
+
+		#region Message handlers
+		// When stepped by protagonist.
+		protected void OnStepped() {
+			enabled = false;
+		}
+
+		// When not stepped any more by protagonist.
+		protected void OnNotStepped() {
+			enabled = true;
+		}
+		#endregion
 	}
 }

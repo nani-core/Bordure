@@ -101,7 +101,7 @@ namespace NaniCore.Bordure {
 					protagonist.OrientDelta(raw);
 			}
 			else {
-				protagonist.GrabbingOrientDelta(-raw.x);
+				protagonist.GrabbingOrientDelta(raw);
 			}
 		}
 
@@ -114,6 +114,14 @@ namespace NaniCore.Bordure {
 
 		protected void OnResetGrabbingTransform() {
 			protagonist.ResetGrabbingTransform();
+		}
+
+		protected void OnSetGrabbingDistanceDelta(InputValue value) {
+			float raw = value.Get<float>();
+			if(protagonist.GrabbingOrienting) {
+				raw *= protagonist.Profile.grabbingDistanceScrollingSpeed;
+				protagonist.GrabbingDistance += raw;
+			}
 		}
 		#endregion
 	}

@@ -15,6 +15,7 @@ namespace NaniCore.Bordure {
 		[Range(0, 1)] public float acceleration = .5f;
 		[Range(0, 90)] public float maxGroundingAngle = 45f;
 		[Min(0)] public float orientingSpeed = 1f;
+		[Min(0)] public float grabbingDistanceScrollingSpeed = 0.1f;
 		[Min(0)] public float jumpingHeight = 1f;
 		[Range(0, 1)] public float coyoteTime = 0.5f;
 		[Min(0)] public float stepHeight = .3f;
