@@ -98,6 +98,9 @@ namespace NaniCore {
 		}
 
 		public static void Destroy(this RenderTexture texture) {
+			if(texture == null)
+				return;
+
 			if(RenderTexture.active == texture)
 				RenderTexture.active = null;
 			RenderTexture.ReleaseTemporary(texture);
