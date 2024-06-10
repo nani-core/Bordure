@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using static UnityEngine.Rendering.DebugUI.Table;
 
 namespace NaniCore.Bordure {
 	[RequireComponent(typeof(Protagonist))]
