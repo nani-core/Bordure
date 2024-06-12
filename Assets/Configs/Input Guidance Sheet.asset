@@ -13,7 +13,25 @@ MonoBehaviour:
   m_Name: Input Guidance Sheet
   m_EditorClassIdentifier: 
   guidances:
+  - key: Move
+    effectSprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+    inputs:
+    - device: 0
+      inputSprites:
+      - {fileID: 21300000, guid: c7be6620ed512964caa93f887c6b5c19, type: 3}
+    - device: 1
+      inputSprites:
+      - {fileID: 10915, guid: 0000000000000000f000000000000000, type: 0}
   - key: Orient
+    effectSprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+    inputs:
+    - device: 0
+      inputSprites:
+      - {fileID: 21300000, guid: c7be6620ed512964caa93f887c6b5c19, type: 3}
+    - device: 1
+      inputSprites:
+      - {fileID: 10915, guid: 0000000000000000f000000000000000, type: 0}
+  - key: Jump
     effectSprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
     inputs:
     - device: 0

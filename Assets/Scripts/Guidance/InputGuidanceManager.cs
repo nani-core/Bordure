@@ -51,7 +51,7 @@ namespace NaniCore.Bordure {
 			}
 
 			// TODO: Ease it.
-			guidances.Remove(key);
+			currentGuidances.RemoveAll(pair => pair.Key == key);
 			instance.Destroy();
 		}
 		#endregion

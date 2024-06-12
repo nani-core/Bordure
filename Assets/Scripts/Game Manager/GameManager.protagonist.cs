@@ -9,6 +9,8 @@ namespace NaniCore.Bordure {
 		#endregion
 
 		#region Interfaces
+		public System.Action onProtagonistEnabled, onProtagonistDisabled;
+
 		public Protagonist Protagonist {
 			get {
 				if(protagonist == null) {
@@ -36,12 +38,16 @@ namespace NaniCore.Bordure {
 					AlignCameraTo(anchor);
 
 					Destroy(anchor.gameObject);
+
+					onProtagonistEnabled?.Invoke();
 				}
 				else {
 					if(Protagonist == null)
 						return;
 					RetrieveCameraHierarchy();
 					Protagonist.gameObject.SetActive(false);
+
+					onProtagonistDisabled?.Invoke();
 				}
 			}
 		}

@@ -1,6 +1,4 @@
 using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
 
 namespace NaniCore.Bordure {
 	public partial class GameManager {
@@ -15,6 +13,16 @@ namespace NaniCore.Bordure {
 
 		public void HideGuidance(string key) {
 			inputGuidance.HideByKey(key);
+		}
+
+		public void ShowGuidanceList(params string[] keys) {
+			foreach(var key in keys)
+				ShowGuidance(key);
+		}
+
+		public void HideGuidanceList(params string[] keys) {
+			foreach(var key in keys)
+				HideGuidance(key);
 		}
 		#endregion
 	}
