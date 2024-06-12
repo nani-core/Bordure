@@ -7,11 +7,7 @@ namespace NaniCore.Bordure {
 			if(!isOnGameStart)
 				return;
 
-			if(!TryGetComponent(out Logic logic))
-				return;
-
-			logic.Invoke();
-			SetFlagOnNextFrame();
+			StartCoroutine(OnStartCoroutine());
 		}
 		#endregion
 
@@ -23,13 +19,13 @@ namespace NaniCore.Bordure {
 			isOnGameStart = true;
 		}
 
-		private System.Collections.IEnumerator SetFlagOnNextFrameCoroutine() {
+		private System.Collections.IEnumerator OnStartCoroutine() {
+			if(TryGetComponent(out Logic logic)) {
+				yield return new WaitForEndOfFrame();
+				logic.Invoke();
+			}
 			yield return new WaitForEndOfFrame();
 			isOnGameStart = false;
-		}
-
-		private void SetFlagOnNextFrame() {
-			StartCoroutine(SetFlagOnNextFrameCoroutine());
 		}
 		#endregion
 	}

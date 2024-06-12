@@ -131,5 +131,15 @@ namespace NaniCore.Bordure {
 			Instance.Ui.CloseLastUi();
 		}
 		#endregion
+
+		#region Guidance
+		public void ShowGuidance(string key) {
+			Instance.ShowGuidance(key);
+		}
+
+		public void HideGuidance(string key) {
+			Instance.HideGuidance(key);
+		}
+		#endregion
 	}
 }
