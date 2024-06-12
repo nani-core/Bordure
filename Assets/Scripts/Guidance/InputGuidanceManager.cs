@@ -11,12 +11,12 @@ namespace NaniCore.Bordure {
 		#endregion
 
 		#region Fields
-		private readonly Dictionary<string, InputGuidance> guidances = new();
+		private readonly Dictionary<string, InputGuidanceEntry> guidances = new();
 		private readonly List<KeyValuePair<string, InputGuidanceInstance>> currentGuidances = new();
 		#endregion
 
 		#region Properties
-		public IDictionary<string, InputGuidance> Guidances => guidances;
+		public IDictionary<string, InputGuidanceEntry> Guidances => guidances;
 		#endregion
 
 		#region Interfaces

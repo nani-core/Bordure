@@ -12,7 +12,7 @@ namespace NaniCore.Bordure {
 	}
 
 	[System.Serializable]
-	public struct InputGuidance {
+	public struct InputGuidanceEntry {
 		public string key;
 		public Sprite effectSprite;
 		public InputGuidanceInput[] inputs;

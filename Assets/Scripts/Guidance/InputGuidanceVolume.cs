@@ -1,10 +1,12 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace NaniCore.Bordure {
 	[RequireComponent(typeof(Collider))]
 	public class InputGuidanceVolume : MonoBehaviour {
 		#region Serialized fields
 		[SerializeField] private string[] keys;
+		public UnityEvent onShown, onHidden;
 		#endregion
 
 		#region Life cycle
@@ -17,52 +19,48 @@ namespace NaniCore.Bordure {
 		}
 
 		protected void OnDisable() {
-			Showing = false;
+			SetVisibility(false);
 		}
 
 		protected void OnTriggerEnter(Collider other) {
 			if(other.gameObject != GameManager.Instance.Protagonist.gameObject)
 				return;
 
-			Showing = true;
+			SendMessage("Show", SendMessageOptions.DontRequireReceiver);
 		}
 
 		protected void OnTriggerExit(Collider other) {
 			if(other.gameObject != GameManager.Instance.Protagonist.gameObject)
 				return;
 
-			Showing = false;
-			gameObject.SetActive(false);
+			SendMessage("Hide", SendMessageOptions.DontRequireReceiver);
 		}
 		#endregion
 
 		#region Fields
-		private bool showing = false;
+		private bool isVisible = false;
+		#endregion
+
+		#region Functions
+		private void SetVisibility(bool value) {
+			if(isVisible == value)
+				return;
+			if(isVisible = value)
+				GameManager.Instance.ShowGuidanceList(keys);
+			else
+				GameManager.Instance.HideGuidanceList(keys);
+		}
 		#endregion
 
 		#region Interfaces
-		public bool Showing {
-			get => showing;
-			set {
-				if(showing == value)
-					return;
-				if(showing = value) {
-					GameManager.Instance.ShowGuidanceList(keys);
-					SendMessage("OnShown", SendMessageOptions.DontRequireReceiver);
-				}
-				else {
-					GameManager.Instance.HideGuidanceList(keys);
-					SendMessage("OnHidden", SendMessageOptions.DontRequireReceiver);
-				}
-			}
-		}
-
 		public void Show() {
-			Showing = false;
+			SetVisibility(true);
+			onShown?.Invoke();
 		}
 
 		public void Hide() {
-			Showing = false;
+			SetVisibility(false);
+			onHidden?.Invoke();
 		}
 		#endregion
 	}
