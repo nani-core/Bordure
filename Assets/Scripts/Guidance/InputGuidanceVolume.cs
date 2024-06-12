@@ -45,10 +45,14 @@ namespace NaniCore.Bordure {
 		private void SetVisibility(bool value) {
 			if(isVisible == value)
 				return;
-			if(isVisible = value)
+			if(isVisible = value) {
 				GameManager.Instance.ShowGuidanceList(keys);
-			else
+				SendMessage("OnShown", SendMessageOptions.DontRequireReceiver);
+			}
+			else {
 				GameManager.Instance.HideGuidanceList(keys);
+				SendMessage("OnHidden", SendMessageOptions.DontRequireReceiver);
+			}
 		}
 		#endregion
 
