@@ -90,14 +90,15 @@ namespace NaniCore.Bordure {
 
 		#region Life cycle
 		private void UpdateInteraction() {
-			bool hasHit = EyeCast(out lookingHit);
+			if(GrabbingObject == null) {
+				bool hasHit = EyeCast(out lookingHit);
 
-			GameObject newLookingAtObject = hasHit ? lookingHit.transform.gameObject : null;
-			if(newLookingAtObject != lookingAtObject) {
-				lookingAtObject = newLookingAtObject;
-				//Debug.Log($"Now looking at {newLookingAtObject}.", newLookingAtObject);
+				GameObject newLookingAtObject = hasHit ? lookingHit.transform.gameObject : null;
+				if(newLookingAtObject != lookingAtObject) {
+					lookingAtObject = newLookingAtObject;
+					//Debug.Log($"Now looking at {newLookingAtObject}.", newLookingAtObject);
+				}
 			}
-
 			UpdateFocusUi();
 		}
 		#endregion

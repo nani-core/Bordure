@@ -14,8 +14,8 @@ namespace NaniCore.Bordure {
 		#region Interfaces
 		public int DefaultLayer => defaultLayer;
 		public LayerMask WaterLayer => waterLayer;
-		public LayerMask GroundLayerMask => ~((1 << waterLayer) | (1 << concreteLayer));
-		public LayerMask InteractionLayerMask => (1 << defaultLayer) | (1 << concreteLayer) | (1 << noSelfCollisionLayer) | (1 << noCollisionSolidLayer);
+		public LayerMask GroundLayerMask => ~UnionLayers(waterLayer, concreteLayer);
+		public LayerMask InteractionLayerMask => UnionLayers(defaultLayer, concreteLayer, noSelfCollisionLayer, noCollisionSolidLayer, grabbedLayer);
 		public int GrabbedLayer => grabbedLayer;
 		#endregion
 
@@ -27,6 +27,16 @@ namespace NaniCore.Bordure {
 			noSelfCollisionLayer = LayerMask.NameToLayer("NoSelfCollidion");
 			noCollisionSolidLayer = LayerMask.NameToLayer("NoCollisionSolid");
 			grabbedLayer = LayerMask.NameToLayer("Grabbed");
+		}
+		#endregion
+
+		#region Functions
+		private static LayerMask UnionLayers(params int[] layers) {
+			LayerMask result = 0;
+			foreach(var layer in layers) {
+				result |= 1 << layer;
+			}
+			return result;
 		}
 		#endregion
 	}
