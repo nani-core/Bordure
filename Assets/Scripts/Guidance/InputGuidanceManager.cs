@@ -51,6 +51,7 @@ namespace NaniCore.Bordure {
 			}
 
 			// TODO: Ease it.
+			guidances.Remove(key);
 			instance.Destroy();
 		}
 		#endregion

@@ -8,7 +8,7 @@ namespace NaniCore {
 		#endregion
 
 		private IEnumerator InvokingCoroutine() {
-			yield return new WaitForSeconds(delayTime);
+			yield return new WaitForSecondsRealtime(delayTime);
 			callback.Invoke();
 		}
 
