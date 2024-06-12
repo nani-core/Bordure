@@ -1,7 +1,6 @@
 using UnityEngine;
 
 namespace NaniCore.Bordure {
-	[RequireComponent(typeof(InputGuidanceVolume))]
 	public class TimedHider : MonoBehaviour {
 		[Min(0)] public float time = 5f;
 
@@ -16,7 +15,7 @@ namespace NaniCore.Bordure {
 
 		private System.Collections.IEnumerator TimerCoroutine() {
 			yield return new WaitForSeconds(time);
-			GetComponent<InputGuidanceVolume>().Hide();
+			SendMessage("Hide");
 		}
 	}
 }

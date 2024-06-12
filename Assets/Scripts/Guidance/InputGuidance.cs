@@ -2,8 +2,7 @@ using UnityEngine;
 using UnityEngine.Events;
 
 namespace NaniCore.Bordure {
-	[RequireComponent(typeof(Collider))]
-	public class InputGuidanceVolume : MonoBehaviour {
+	public class InputGuidance : MonoBehaviour {
 		#region Serialized fields
 		[SerializeField] private string[] keys;
 		public UnityEvent onShown, onHidden;
@@ -20,20 +19,6 @@ namespace NaniCore.Bordure {
 
 		protected void OnDisable() {
 			SetVisibility(false);
-		}
-
-		protected void OnTriggerEnter(Collider other) {
-			if(other.gameObject != GameManager.Instance.Protagonist.gameObject)
-				return;
-
-			SendMessage("Show", SendMessageOptions.DontRequireReceiver);
-		}
-
-		protected void OnTriggerExit(Collider other) {
-			if(other.gameObject != GameManager.Instance.Protagonist.gameObject)
-				return;
-
-			SendMessage("Hide", SendMessageOptions.DontRequireReceiver);
 		}
 		#endregion
 
