@@ -194,13 +194,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a42573664acedef42b14d4c5f967e29a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  oneTime: 0
+  oneTime: 1
   onEnter:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1665848275951599520}
         m_TargetAssemblyTypeName: NaniCore.Bordure.Loopshape, Assembly-CSharp
         m_MethodName: Open
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 5024633690207734720}
+        m_TargetAssemblyTypeName: NaniCore.Logic, Bordure
+        m_MethodName: Invoke
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -672,59 +684,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9069698035221976526, guid: 78a769c0a30e0444cbf9901fecb2b50f, type: 3}
       propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 9069698035221976526, guid: 78a769c0a30e0444cbf9901fecb2b50f, type: 3}
-      propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.data[2].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9069698035221976526, guid: 78a769c0a30e0444cbf9901fecb2b50f, type: 3}
-      propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.data[3].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9069698035221976526, guid: 78a769c0a30e0444cbf9901fecb2b50f, type: 3}
-      propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.data[2].m_Target
-      value: 
-      objectReference: {fileID: 5024633690207734720}
-    - target: {fileID: 9069698035221976526, guid: 78a769c0a30e0444cbf9901fecb2b50f, type: 3}
-      propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.data[3].m_Target
-      value: 
-      objectReference: {fileID: 5024633690207734720}
-    - target: {fileID: 9069698035221976526, guid: 78a769c0a30e0444cbf9901fecb2b50f, type: 3}
-      propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.data[2].m_CallState
       value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 9069698035221976526, guid: 78a769c0a30e0444cbf9901fecb2b50f, type: 3}
-      propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.data[3].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 9069698035221976526, guid: 78a769c0a30e0444cbf9901fecb2b50f, type: 3}
-      propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
-      value: Invoke
-      objectReference: {fileID: 0}
-    - target: {fileID: 9069698035221976526, guid: 78a769c0a30e0444cbf9901fecb2b50f, type: 3}
-      propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.data[3].m_MethodName
-      value: Invoke
-      objectReference: {fileID: 0}
-    - target: {fileID: 9069698035221976526, guid: 78a769c0a30e0444cbf9901fecb2b50f, type: 3}
-      propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.data[2].m_TargetAssemblyTypeName
-      value: NaniCore.Logic, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 9069698035221976526, guid: 78a769c0a30e0444cbf9901fecb2b50f, type: 3}
-      propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.data[3].m_TargetAssemblyTypeName
-      value: NaniCore.Logic, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 9069698035221976526, guid: 78a769c0a30e0444cbf9901fecb2b50f, type: 3}
-      propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_BoolArgument
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9069698035221976526, guid: 78a769c0a30e0444cbf9901fecb2b50f, type: 3}
-      propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
-    - target: {fileID: 9069698035221976526, guid: 78a769c0a30e0444cbf9901fecb2b50f, type: 3}
-      propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.data[3].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
