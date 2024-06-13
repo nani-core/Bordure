@@ -14,29 +14,76 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guidances:
   - key: Move
-    effectSprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+    effectSprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
     inputs:
     - device: 0
       inputSprites:
-      - {fileID: 21300000, guid: c7be6620ed512964caa93f887c6b5c19, type: 3}
+      - {fileID: 21300000, guid: 54fa157d9c435ce478f843e85ff3a7a5, type: 3}
     - device: 1
       inputSprites:
-      - {fileID: 10915, guid: 0000000000000000f000000000000000, type: 0}
+      - {fileID: 21300000, guid: 389cf6860607ea94584573813edab9e2, type: 3}
   - key: Orient
-    effectSprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+    effectSprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
     inputs:
     - device: 0
       inputSprites:
-      - {fileID: 21300000, guid: c7be6620ed512964caa93f887c6b5c19, type: 3}
+      - {fileID: 21300000, guid: 15eac10865fe1e444b448d80e21d7812, type: 3}
     - device: 1
       inputSprites:
-      - {fileID: 10915, guid: 0000000000000000f000000000000000, type: 0}
+      - {fileID: 21300000, guid: 5502bfa190919b642a153b2561a84849, type: 3}
   - key: Jump
-    effectSprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+    effectSprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
     inputs:
     - device: 0
       inputSprites:
-      - {fileID: 21300000, guid: c7be6620ed512964caa93f887c6b5c19, type: 3}
+      - {fileID: 21300000, guid: b031b7e9c5e614b469d6f23318bcb525, type: 3}
     - device: 1
       inputSprites:
-      - {fileID: 10915, guid: 0000000000000000f000000000000000, type: 0}
+      - {fileID: 21300000, guid: 77516c8d84d82554e811740a72c978d9, type: 3}
+  - key: Sprint
+    effectSprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+    inputs:
+    - device: 0
+      inputSprites:
+      - {fileID: 21300000, guid: 98c8a8453f90dff4a823ba82b123e506, type: 3}
+    - device: 1
+      inputSprites:
+      - {fileID: 21300000, guid: fe6a3ca5b044c6d4a80f9e21a9c64418, type: 3}
+  - key: Interact
+    effectSprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+    inputs:
+    - device: 0
+      inputSprites:
+      - {fileID: 21300000, guid: 807bf34558beb384c9b45b99c5e9559d, type: 3}
+    - device: 1
+      inputSprites:
+      - {fileID: 21300000, guid: 302cfc7fea0aa974caecc17598507a89, type: 3}
+  - key: Grabbing Orient
+    effectSprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+    inputs:
+    - device: 0
+      inputSprites:
+      - {fileID: 21300000, guid: 791fdb15866b1244585fdea5f9f53a5d, type: 3}
+    - device: 1
+      inputSprites:
+      - {fileID: 21300000, guid: 157b8bbfdd4003340a53df87416be11d, type: 3}
+      - {fileID: 21300000, guid: 5502bfa190919b642a153b2561a84849, type: 3}
+  - key: Grabbing Distance
+    effectSprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+    inputs:
+    - device: 0
+      inputSprites:
+      - {fileID: 21300000, guid: cce753599c39c8247bb2ea7ae1f1822d, type: 3}
+    - device: 1
+      inputSprites:
+      - {fileID: 21300000, guid: fe6a3ca5b044c6d4a80f9e21a9c64418, type: 3}
+      - {fileID: 21300000, guid: 5502bfa190919b642a153b2561a84849, type: 3}
+  - key: Pause
+    effectSprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+    inputs:
+    - device: 0
+      inputSprites:
+      - {fileID: 21300000, guid: 474742fdbf96f0c40ac500cf096ce739, type: 3}
+    - device: 1
+      inputSprites:
+      - {fileID: 21300000, guid: 85323fc46a140a54fa20fb46db644319, type: 3}
