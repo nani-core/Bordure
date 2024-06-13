@@ -1,6 +1,8 @@
 using UnityEngine;
-using System.Collections.Generic;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace NaniCore.Bordure {
 	public class InputGuidanceManager : MonoBehaviour {
@@ -13,6 +15,7 @@ namespace NaniCore.Bordure {
 		#region Fields
 		private readonly Dictionary<string, InputGuidanceEntry> guidances = new();
 		private readonly List<KeyValuePair<string, InputGuidanceInstance>> currentGuidances = new();
+		private readonly Dictionary<InputGuidanceDevice, bool> controlSchemeValidation = new();
 		#endregion
 
 		#region Properties
@@ -20,6 +23,7 @@ namespace NaniCore.Bordure {
 		#endregion
 
 		#region Interfaces
+
 		public void ShowByKey(string key) {
 			if(GetGuidanceObjByKey(key) != null) {
 				Debug.LogWarning($"Warning: Input guidance of key \"{key}\" is already shown.");
@@ -35,6 +39,8 @@ namespace NaniCore.Bordure {
 			instance.EffectSprite = guidance.effectSprite;
 			List<Sprite> inputSprites = new();
 			foreach(var input in guidance.inputs) {
+				if(!IsControlSchemeValidated(input.device))
+					continue;
 				inputSprites.AddRange(input.inputSprites);
 			}
 			instance.InputSprites = inputSprites;
@@ -53,6 +59,30 @@ namespace NaniCore.Bordure {
 			// TODO: Ease it.
 			currentGuidances.RemoveAll(pair => pair.Key == key);
 			instance.Destroy();
+		}
+
+		public void UpdateControlSchemeValidations() {
+			if(!GameManager.Instance.UsesProtagonist) {
+				controlSchemeValidation.Clear();
+				return;
+			}
+
+			var schemes = GameManager.Instance.Protagonist.GetComponent<PlayerInput>().actions.controlSchemes;
+
+			foreach(var scheme in schemes) {
+				InputGuidanceDevice key = default;
+				switch(scheme.name) {
+					case "PC":
+						key = InputGuidanceDevice.PC;
+						break;
+					case "Gamepad":
+						key = InputGuidanceDevice.Gamepad;
+						break;
+					default:
+						continue;
+				}
+				controlSchemeValidation[key] = ValidateControlScheme(scheme);
+			}
 		}
 		#endregion
 
@@ -93,10 +123,20 @@ namespace NaniCore.Bordure {
 			return null;
 		}
 
-		private void A() {
-			//InputAction act = default;
-			//act.controls[0].device;
-			//InputSystem.devices;
+		private bool ValidateControlScheme(in InputControlScheme scheme) {
+			var deviceRequirements = scheme.deviceRequirements.ToArray();
+			var currentDevices = InputSystem.devices.ToArray();
+			foreach(var requirement in deviceRequirements) {
+				if(requirement.isOptional)
+					continue;
+				if(!currentDevices.Any(device => requirement.controlPath.Contains(device.name)))
+					return false;
+			}
+			return true;
+		}
+
+		private bool IsControlSchemeValidated(InputGuidanceDevice device) {
+			return controlSchemeValidation.ContainsKey(device) && controlSchemeValidation[device];
 		}
 		#endregion
 	}

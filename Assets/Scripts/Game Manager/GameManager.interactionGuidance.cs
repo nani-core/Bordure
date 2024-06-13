@@ -7,7 +7,9 @@ namespace NaniCore.Bordure {
 		#endregion
 
 		#region Interfaces
-		public void ShowGuidance(string key) {
+		public void ShowGuidance(string key, bool update = true) {
+			if(update)
+				inputGuidance.UpdateControlSchemeValidations();
 			inputGuidance.ShowByKey(key);
 		}
 
@@ -16,8 +18,9 @@ namespace NaniCore.Bordure {
 		}
 
 		public void ShowGuidanceList(params string[] keys) {
+			inputGuidance.UpdateControlSchemeValidations();
 			foreach(var key in keys)
-				ShowGuidance(key);
+				ShowGuidance(key, false);
 		}
 
 		public void HideGuidanceList(params string[] keys) {

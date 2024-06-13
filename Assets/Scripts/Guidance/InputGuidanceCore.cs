@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace NaniCore.Bordure {
 	public enum InputGuidanceDevice {
-		PC, Console,
+		PC, Gamepad,
 	}
 		
 	[System.Serializable]
