@@ -1,3 +1,4 @@
+using Unity.VisualScripting.YamlDotNet.Core.Tokens;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -7,7 +8,6 @@ namespace NaniCore.Bordure {
 		#region Fields
 		private Protagonist protagonist;
 		[SerializeField] private PlayerInput playerInput;
-		private InputActionMap orientationMap;
 
 		private Vector3 moveVelocity;
 		private float floating = 0f, sinking = 0f;
@@ -22,6 +22,8 @@ namespace NaniCore.Bordure {
 
 			foreach(var map in playerInput.actions.actionMaps)
 				map.Enable();
+
+			UpdateMapsEnability();
 		}
 
 		protected void FixedUpdate() {
@@ -47,40 +49,41 @@ namespace NaniCore.Bordure {
 		#region Functions
 		private GameManager Game => GameManager.Instance;
 
-		private InputActionMap OrientationMap {
-			get {
-				if(orientationMap != null)
-					return orientationMap;
-				return orientationMap = playerInput.actions.FindActionMap("Orientation");
-			}
-		}
-
 		private bool ShouldOrientationBeEnabled => !(GrabbingOrienting || GrabbingDistancing);
-
-		private bool OrientationMapEnabled {
-			get => OrientationMap.enabled;
-			set {
-				if(value)
-					OrientationMap.Enable();
-				else
-					OrientationMap.Disable();
-			}
-		}
+		private bool IsGrabbing => protagonist.GrabbingObject != null;
 
 		private bool GrabbingOrienting {
 			get => grabbingOrienting;
 			set {
+				if(!IsGrabbing)
+					value = false;
 				grabbingOrienting = value;
-				OrientationMapEnabled = ShouldOrientationBeEnabled;
+				UpdateMapsEnability();
 			}
 		}
 
 		private bool GrabbingDistancing {
 			get => grabbingDistancing;
 			set {
+				if(!IsGrabbing)
+					value = false;
 				grabbingDistancing = value;
-				OrientationMapEnabled = ShouldOrientationBeEnabled;
+				UpdateMapsEnability();
 			}
+		}
+
+		private void UpdateMapsEnability() {
+			var orientationMap = playerInput.actions.FindActionMap("Orientation");
+			var grabbingMap = playerInput.actions.FindActionMap("Grabbing");
+			SetEnability(orientationMap, ShouldOrientationBeEnabled);
+			SetEnability(grabbingMap, IsGrabbing);
+		}
+
+		public static void SetEnability(InputActionMap map, bool value) {
+			if(map == null)
+				return;
+			if(value) map.Enable();
+			else map.Disable();
 		}
 		#endregion
 
@@ -134,7 +137,7 @@ namespace NaniCore.Bordure {
 		// Orientation
 
 		protected void OnOrientDelta(InputValue value) {
-			if(!OrientationMapEnabled || !protagonist.UsesOrientation)
+			if(!protagonist.UsesOrientation)
 				return;
 
 			Vector2 raw = value.Get<Vector2>();
