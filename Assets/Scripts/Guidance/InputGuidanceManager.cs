@@ -124,15 +124,11 @@ namespace NaniCore.Bordure {
 		}
 
 		private bool ValidateControlScheme(in InputControlScheme scheme) {
-			var deviceRequirements = scheme.deviceRequirements.ToArray();
-			var currentDevices = InputSystem.devices.ToArray();
-			foreach(var requirement in deviceRequirements) {
-				if(requirement.isOptional)
-					continue;
-				if(!currentDevices.Any(device => requirement.controlPath.Contains(device.name)))
-					return false;
+			foreach(var device in InputSystem.devices) {
+				if(scheme.SupportsDevice(device))
+					return true;
 			}
-			return true;
+			return false;
 		}
 
 		private bool IsControlSchemeValidated(InputGuidanceDevice device) {
