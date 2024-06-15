@@ -54,6 +54,7 @@ namespace NaniCore.Bordure {
 #endif
 
 		[Header("Level")]
+		public float deathHeight = -200f;
 		public LevelScene[] levelScenes;
 	}
 }

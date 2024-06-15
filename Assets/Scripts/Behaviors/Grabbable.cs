@@ -10,15 +10,8 @@ namespace NaniCore.Bordure {
 		#endregion
 
 		#region Fields
-		private new Rigidbody rigidbody;
-		private bool wasKinematicWhenGrabbingStarted = false;
-		private bool isKinematic = false;
-
-		// Overwritten fields
-		private RigidbodyConstraints originalConstraints;
-		private Transform originalParent;
-		private CollisionDetectionMode originalCollisionDetectionMode;
-		private int originalLayer;
+		private Vector3 initialPosition;
+		private Quaternion initialRotation;
 		#endregion
 
 		#region Interfaces
@@ -34,74 +27,26 @@ namespace NaniCore.Bordure {
 		}
 		#endregion
 
-		#region Functions
-		protected Rigidbody Rigidbody {
-			get {
-				if(rigidbody != null && rigidbody.transform == transform)
-					return rigidbody;
-				return rigidbody = GetComponent<Rigidbody>();
-			}
-		}
-
-		private bool IsKinematic {
-			get => isKinematic;
-			set {
-				if(Rigidbody == null)
-					return;
-				if(value == isKinematic)
-					return;
-				if(value) {
-					// Fetch the fields from the rigid body.
-					originalConstraints = Rigidbody.constraints;
-					originalParent = transform.parent;
-					originalCollisionDetectionMode = Rigidbody.collisionDetectionMode;
-					originalLayer = gameObject.layer;
-
-					// Overwrite the fields.
-					Rigidbody.constraints = RigidbodyConstraints.FreezeAll;
-					transform.SetParent(null);
-					Rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
-					gameObject.layer = GameManager.Instance.GrabbedLayer;
-				}
-				else {
-					// Restore the fields in the rigid body.
-					Rigidbody.constraints = originalConstraints;
-					transform.SetParent(originalParent);
-					Rigidbody.collisionDetectionMode = originalCollisionDetectionMode;
-					gameObject.layer = originalLayer;
-
-					// Write in default values.
-					originalConstraints = RigidbodyConstraints.None;
-					originalParent = null;
-					originalCollisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
-					originalLayer = GameManager.Instance.DefaultLayer;
-				}
-				isKinematic = value;
-			}
-		}
-		#endregion
-
 		#region Message handlers
 		protected void OnGrabBegin() {
-			wasKinematicWhenGrabbingStarted = IsKinematic;
-			IsKinematic = true;
 			onGrabBegin.Invoke();
 		}
 
 		protected void OnGrabEnd() {
-			if(!wasKinematicWhenGrabbingStarted)
-				IsKinematic = false;
 			onGrabEnd.Invoke();
 		}
 		#endregion
 
 		#region Life cycle
 		protected void Start() {
-			wasKinematicWhenGrabbingStarted = IsKinematic;
-
 			var loopshape = transform.EnsureComponent<Loopshape>();
 			loopshape.onOpen.AddListener(Grab);
 			transform.EnsureComponent<GrabbableValidator>();
+
+			initialPosition = transform.position;
+			initialRotation = transform.rotation;
+
+			StartCoroutine(CheckForDeathHeight());
 		}
 
 		protected void OnCollisionEnter(Collision _) {
@@ -110,6 +55,26 @@ namespace NaniCore.Bordure {
 
 		protected void OnDisable() {
 			Drop();
+		}
+		#endregion
+
+		#region Functions
+
+		protected System.Collections.IEnumerator CheckForDeathHeight() {
+			while(true) {
+				yield return new WaitForSeconds(2f);
+				if(GameManager.Instance == null)
+					continue;
+				if(transform.position.y < GameManager.Instance.Settings.deathHeight) {
+					transform.position = initialPosition;
+					transform.rotation = initialRotation;
+					if(TryGetComponent(out Rigidbody rb)) {
+						rb.velocity = default;
+						rb.angularVelocity = default;
+					}
+					Debug.LogWarning($"Warning: {name} has fallen below death height and is put back.", this);
+				}
+			}
 		}
 		#endregion
 	}

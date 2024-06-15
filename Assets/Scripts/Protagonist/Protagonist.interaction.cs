@@ -12,8 +12,12 @@ namespace NaniCore.Bordure {
 		private GameObject lookingAtObject = null;
 		private Transform grabbingObject;
 		private RaycastHit lookingHit;
-
 		private Vector3 previousGrabbingPosition;
+
+		// Original properties of the grabbing object's.
+		private Transform originalParent;
+		private int originalLayer;
+		private bool originalIsKinematic;
 		#endregion
 
 		#region Interfaces
@@ -27,7 +31,11 @@ namespace NaniCore.Bordure {
 					return;
 
 				if(grabbingObject != null) {
-					grabbingObject.transform.SetParent(null, true);
+					grabbingObject.transform.SetParent(originalParent, true);
+					grabbingObject.gameObject.layer = originalLayer;
+					if(grabbingObject.transform.TryGetComponent(out Rigidbody rb))
+						rb.isKinematic = originalIsKinematic;
+
 					grabbingObject.SendMessage("OnGrabEnd");
 					PlaySfx(GameManager.Instance.Settings.audio.onDropSound);
 					Debug.Log($"{grabbingObject} is dropped.", grabbingObject);
@@ -43,10 +51,19 @@ namespace NaniCore.Bordure {
 				grabbingObject = value;
 
 				if(grabbingObject != null) {
+					originalParent = grabbingObject.transform.parent;
+					originalLayer = grabbingObject.gameObject.layer;
+					if(grabbingObject.transform.TryGetComponent(out Rigidbody rb))
+						originalIsKinematic = rb.isKinematic;
+
 					grabbingObject.SendMessage("OnGrabBegin");
 					PlaySfx(GameManager.Instance.Settings.audio.onGrabSound);
 
 					grabbingObject.transform.SetParent(eye.transform, true);
+					grabbingObject.gameObject.layer = GameManager.Instance.GrabbedLayer;
+					if(rb != null)
+						rb.isKinematic = true;
+
 					previousGrabbingPosition = grabbingObject.transform.position;
 					Debug.Log($"{grabbingObject} is grabbed.", grabbingObject);
 				}
