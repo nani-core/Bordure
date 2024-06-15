@@ -12,6 +12,8 @@ namespace NaniCore.Bordure {
 		private GameObject lookingAtObject = null;
 		private Transform grabbingObject;
 		private RaycastHit lookingHit;
+		private bool hasStartedGrabbing;
+		private Vector3 initialGrabbingPosition;
 		private Vector3 previousGrabbingPosition;
 
 		// Original properties of the grabbing object's.
@@ -64,7 +66,8 @@ namespace NaniCore.Bordure {
 					if(rb != null)
 						rb.isKinematic = true;
 
-					previousGrabbingPosition = grabbingObject.transform.position;
+					hasStartedGrabbing = false;
+					previousGrabbingPosition = initialGrabbingPosition = grabbingObject.transform.position;
 					Debug.Log($"{grabbingObject} is grabbed.", grabbingObject);
 				}
 			}
@@ -182,12 +185,17 @@ namespace NaniCore.Bordure {
 
 			safePosition = GrabbingObject.position;
 
-			Vector3 delta = GrabbingObject.position - previousGrabbingPosition;
-			if(delta.magnitude <= 0f)
+			if(!hasStartedGrabbing) {
+				if(Vector3.Distance(initialGrabbingPosition, GrabbingObject.position) > 0.01f)
+					hasStartedGrabbing = true;
+			}
+			if(!hasStartedGrabbing)
 				return false;
 
+			Vector3 delta = GrabbingObject.position - previousGrabbingPosition;
 			Vector3 start = previousGrabbingPosition - delta.normalized * 0.1f, end = GrabbingObject.position;
 			if(rb.SweepTest(start, end, out RaycastHit hit, GameManager.Instance.InteractionLayerMask)) {
+				// TODO: Calculate the exact safe position.
 				safePosition = previousGrabbingPosition;
 				return true;
 			}

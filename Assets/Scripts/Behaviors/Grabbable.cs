@@ -49,10 +49,6 @@ namespace NaniCore.Bordure {
 			StartCoroutine(CheckForDeathHeight());
 		}
 
-		protected void OnCollisionEnter(Collision _) {
-			Drop();
-		}
-
 		protected void OnDisable() {
 			Drop();
 		}
