@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.UIElements;
 
 namespace NaniCore.Bordure {
 	public partial class Protagonist : MonoBehaviour {
@@ -11,6 +12,8 @@ namespace NaniCore.Bordure {
 		private GameObject lookingAtObject = null;
 		private Transform grabbingObject;
 		private RaycastHit lookingHit;
+
+		private Vector3 previousGrabbingPosition;
 		#endregion
 
 		#region Interfaces
@@ -44,9 +47,8 @@ namespace NaniCore.Bordure {
 					PlaySfx(GameManager.Instance.Settings.audio.onGrabSound);
 
 					grabbingObject.transform.SetParent(eye.transform, true);
+					previousGrabbingPosition = grabbingObject.transform.position;
 					Debug.Log($"{grabbingObject} is grabbed.", grabbingObject);
-
-					GrabbingDistance -= 0.04f; // To prevent clipping through floor.
 				}
 			}
 		}
@@ -99,6 +101,16 @@ namespace NaniCore.Bordure {
 					//Debug.Log($"Now looking at {newLookingAtObject}.", newLookingAtObject);
 				}
 			}
+			else {
+				if(PreventGrabbingObjectClipping(out Vector3 safePosition)) {
+					GrabbingObject.position = safePosition;
+					GrabbingObject = null;
+					Debug.Log("Prevented grabbing object from clipping.", grabbingObject);
+				}
+				else {
+					previousGrabbingPosition = GrabbingObject.position;
+				}
+			}
 			UpdateFocusUi();
 		}
 		#endregion
@@ -142,7 +154,29 @@ namespace NaniCore.Bordure {
 				foreach(var loopshape in GameManager.Instance.ValidLoopshapes)
 					loopshape.Open();
 			}
-			#endregion
 		}
+
+		private bool PreventGrabbingObjectClipping(out Vector3 safePosition) {
+			safePosition = default;
+			if(GrabbingObject == null)
+				return false;
+			if(!GrabbingObject.TryGetComponent(out Rigidbody rb))
+				return false;
+
+			safePosition = GrabbingObject.position;
+
+			Vector3 delta = GrabbingObject.position - previousGrabbingPosition;
+			if(delta.magnitude <= 0f)
+				return false;
+
+			Vector3 start = previousGrabbingPosition - delta.normalized * 0.1f, end = GrabbingObject.position;
+			if(rb.SweepTest(start, end, out RaycastHit hit, GameManager.Instance.InteractionLayerMask)) {
+				safePosition = previousGrabbingPosition;
+				return true;
+			}
+
+			return false;
+		}
+		#endregion
 	}
 }
