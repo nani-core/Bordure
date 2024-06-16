@@ -39625,7 +39625,7 @@ GameObject:
   - component: {fileID: 756900228714093576}
   - component: {fileID: 2567287454761599043}
   m_Layer: 0
-  m_Name: Chest
+  m_Name: Crate
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -61733,9 +61733,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1393069119224533597, guid: 0ef718b5da19213408a5203d12e2ecad, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6046495964333670057}
-    - targetCorrespondingSourceObject: {fileID: 1393069119224533597, guid: 0ef718b5da19213408a5203d12e2ecad, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 3320304755152999147}
   m_SourcePrefab: {fileID: 100100000, guid: 0ef718b5da19213408a5203d12e2ecad, type: 3}
 --- !u!1 &632974710518638116 stripped
 GameObject:
@@ -61766,9 +61763,9 @@ MonoBehaviour:
   onOpened:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3320304755152999147}
-        m_TargetAssemblyTypeName: NaniCore.DelayedLogic, Assembly-CSharp
-        m_MethodName: Invoke
+      - m_Target: {fileID: 6046495964333670057}
+        m_TargetAssemblyTypeName: NaniCore.DtCarrier, Bordure
+        m_MethodName: ToggleOpeningState
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -61856,34 +61853,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &3320304755152999147
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 632974710518638116}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c3b6f7a58290b7a46a87a43915a05b72, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  callback:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6046495964333670057}
-        m_TargetAssemblyTypeName: NaniCore.DtCarrier, Assembly-CSharp
-        m_MethodName: ToggleOpeningState
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  delayTime: 1
 --- !u!23 &1516991167555009116 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 1049484618034597413, guid: 0ef718b5da19213408a5203d12e2ecad, type: 3}
@@ -63035,6 +63004,9 @@ PrefabInstance:
       addedObject: {fileID: 3119540855169148421}
     - targetCorrespondingSourceObject: {fileID: 2222627388677307835, guid: 28577d3bcb02bd54cbf42b91839d52bb, type: 3}
       insertIndex: 2
+      addedObject: {fileID: 7118586473075809221}
+    - targetCorrespondingSourceObject: {fileID: 2222627388677307835, guid: 28577d3bcb02bd54cbf42b91839d52bb, type: 3}
+      insertIndex: 3
       addedObject: {fileID: 240412218756806555}
     - targetCorrespondingSourceObject: {fileID: 2222627388677307835, guid: 28577d3bcb02bd54cbf42b91839d52bb, type: 3}
       insertIndex: -1
@@ -63072,7 +63044,30 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 2}
+  m_Size: {x: 1, y: 0.5, z: 2}
+  m_Center: {x: 0, y: 0.25, z: -1}
+--- !u!136 &7118586473075809221
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4288608537807709441}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 2
   m_Center: {x: 0, y: 0, z: -1}
 --- !u!54 &240412218756806555
 Rigidbody:
