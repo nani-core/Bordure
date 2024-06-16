@@ -123,17 +123,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!114 &361438112 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6454801288449946064, guid: 0f198d7a8fb3fdb418b8996bf316f37d, type: 3}
-  m_PrefabInstance: {fileID: 6911280125399600632}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f93d73c3d716d4a47a38ba7cd6a67865, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1418986834
 GameObject:
   m_ObjectHideFlags: 0
@@ -172,7 +161,7 @@ MonoBehaviour:
         m_MethodName: MoveProtagonistToSpawnPoint
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 361438112}
+          m_ObjectArgument: {fileID: 6911280125399600633}
           m_ObjectArgumentAssemblyTypeName: NaniCore.Bordure.SpawnPoint, Bordure
           m_IntArgument: 0
           m_FloatArgument: 0
@@ -298,17 +287,25 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: -1.124999
       objectReference: {fileID: 0}
+    - target: {fileID: 4633717774428772303, guid: 0f198d7a8fb3fdb418b8996bf316f37d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.0000014007094
+      objectReference: {fileID: 0}
+    - target: {fileID: 4633717774428772303, guid: 0f198d7a8fb3fdb418b8996bf316f37d, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -1.7500019
+      objectReference: {fileID: 0}
     - target: {fileID: 5419255997625890540, guid: 0f198d7a8fb3fdb418b8996bf316f37d, type: 3}
       propertyPath: m_Name
       value: Pool
       objectReference: {fileID: 0}
     - target: {fileID: 6324751181341835331, guid: 0f198d7a8fb3fdb418b8996bf316f37d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -0.0000011920929
       objectReference: {fileID: 0}
     - target: {fileID: 6324751181341835331, guid: 0f198d7a8fb3fdb418b8996bf316f37d, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1.1250007
+      value: -2.3750007
       objectReference: {fileID: 0}
     - target: {fileID: 6994995348887763452, guid: 0f198d7a8fb3fdb418b8996bf316f37d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -325,6 +322,10 @@ PrefabInstance:
     - target: {fileID: 7434015258237012674, guid: 0f198d7a8fb3fdb418b8996bf316f37d, type: 3}
       propertyPath: m_LocalPosition.z
       value: -1.1250002
+      objectReference: {fileID: 0}
+    - target: {fileID: 7632678495839750755, guid: 0f198d7a8fb3fdb418b8996bf316f37d, type: 3}
+      propertyPath: m_ExcludeLayers.m_Bits
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8679832475627891361, guid: 0f198d7a8fb3fdb418b8996bf316f37d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -343,6 +344,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0f198d7a8fb3fdb418b8996bf316f37d, type: 3}
+--- !u!114 &6911280125399600633 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6454801288449946064, guid: 0f198d7a8fb3fdb418b8996bf316f37d, type: 3}
+  m_PrefabInstance: {fileID: 6911280125399600632}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f93d73c3d716d4a47a38ba7cd6a67865, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
