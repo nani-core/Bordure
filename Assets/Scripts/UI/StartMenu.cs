@@ -1,5 +1,5 @@
 namespace NaniCore.Bordure {
-	public class StartMenuUi : Ui {
+	public class StartMenu : Menu {
 		public override void OnEnter() {
 			GameManager.Instance.Paused = true;
 		}

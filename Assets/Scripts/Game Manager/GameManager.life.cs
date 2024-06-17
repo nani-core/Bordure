@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Events;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -36,7 +35,7 @@ namespace NaniCore.Bordure {
 
 		public void StartGame() {
 			gameStarted = true;
-			Ui.CloseLastUi();
+			PauseMenu.CloseLastUi();
 			UsesProtagonist = true;
 		}
 
@@ -48,6 +47,12 @@ namespace NaniCore.Bordure {
 #if UNITY_EDITOR
 			EditorApplication.isPlaying = false;
 #endif
+		}
+
+		// Dummy feature, not used.
+		public void RestartGame() {
+			ResetAchievementProgress();
+			// TODO: Unload all levels and trigger the game start logic.
 		}
 
 		public bool GameStarted => gameStarted;
@@ -73,7 +78,7 @@ namespace NaniCore.Bordure {
 			InitializeLevel();
 			InitializePhysics();
 			InitializeDebug();
-			Ui.OnLoaded += () => Ui.OpenStartMenu();
+			PauseMenu.OnLoaded += () => PauseMenu.OpenStartMenu();
 			eventSystem.gameObject.SetActive(true);
 		}
 

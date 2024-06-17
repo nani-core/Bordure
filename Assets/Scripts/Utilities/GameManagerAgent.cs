@@ -110,6 +110,10 @@ namespace NaniCore.Bordure {
 		public void QuitGame() {
 			Instance.QuitGame();
 		}
+
+		public void RestartGame() {
+			Instance.RestartGame();
+		}
 		#endregion
 
 		#region Log
@@ -120,15 +124,15 @@ namespace NaniCore.Bordure {
 
 		#region UI
 		public void OpenStartMenu() {
-			Instance.Ui.OpenStartMenu();
+			Instance.PauseMenu.OpenStartMenu();
 		}
 
 		public void OpenSettings() {
-			Instance.Ui.OpenSettings();
+			Instance.PauseMenu.OpenSettings();
 		}
 
 		public void CloseLastUi() {
-			Instance.Ui.CloseLastUi();
+			Instance.PauseMenu.CloseLastUi();
 		}
 		#endregion
 
@@ -139,6 +143,20 @@ namespace NaniCore.Bordure {
 
 		public void HideGuidance(string key) {
 			Instance.HideGuidance(key);
+		}
+		#endregion
+
+		#region Achievements
+		public void FinishAchievement(string key) {
+			Instance.FinishAchievement(key);
+		}
+
+		public void ResetAchievementProgress() {
+			Instance.ResetAchievementProgress();
+		}
+
+		public void IncreaseDuckAchievementCount() {
+			Instance.IncreaseDuckAchievementCount();
 		}
 		#endregion
 	}

@@ -1,7 +1,7 @@
 using UnityEngine;
 
 namespace NaniCore.Bordure {
-	public class Ui : MonoBehaviour {
+	public class Menu : MonoBehaviour {
 		#region Interfaces
 		public virtual void OnEnter() {
 		}

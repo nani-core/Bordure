@@ -6,13 +6,13 @@ namespace NaniCore.Bordure {
 	public partial class GameManager : MonoBehaviour {
 		#region Serialized fields
 		[SerializeField][Expandable] private GameSettings settings;
-		[SerializeField] private UiManager ui;
+		[SerializeField] private PauseMenuManager pauseMenu;
 		[SerializeField] private EventSystem eventSystem;
 		#endregion
 
 		#region Interfaces
 		public GameSettings Settings => settings;
-		public UiManager Ui => ui;
+		public PauseMenuManager PauseMenu => pauseMenu;
 		#endregion
 
 		#region Life cycle

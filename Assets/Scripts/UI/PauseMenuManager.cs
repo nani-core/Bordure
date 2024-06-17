@@ -2,21 +2,21 @@ using UnityEngine;
 using System.Collections.Generic;
 
 namespace NaniCore.Bordure {
-	public class UiManager : MonoBehaviour {
+	public class PauseMenuManager : MonoBehaviour {
 		#region Serialized fields
-		[SerializeField] private Ui startMenu;
-		[SerializeField] private Ui settings;
+		[SerializeField] private Menu startMenu;
+		[SerializeField] private Menu settings;
 		#endregion
 
 		#region Fields
-		private readonly List<Ui> uiEntries = new();
+		private readonly List<Menu> uiEntries = new();
 		#endregion
 
 		#region Life cycle
 		protected void Start() {
 			// Disable all UI.
 			foreach(var child in transform.Children()) {
-				if(!child.TryGetComponent<Ui>(out var ui))
+				if(!child.TryGetComponent<Menu>(out var ui))
 					continue;
 				ui.gameObject.SetActive(false);
 			}
@@ -32,15 +32,15 @@ namespace NaniCore.Bordure {
 				if(CurrentUi == startMenu)
 					return;
 			}
-			game.Ui.CloseLastUi();
+			game.PauseMenu.CloseLastUi();
 		}
 		#endregion
 
 		#region Interfaces
 		public System.Action OnLoaded;
 
-		public Ui StartMenu => startMenu;
-		public Ui Settings => settings;
+		public Menu StartMenu => startMenu;
+		public Menu Settings => settings;
 
 		public void OpenStartMenu() {
 			OpenUi(startMenu);
@@ -66,7 +66,7 @@ namespace NaniCore.Bordure {
 				gameObject.SetActive(false);
 		}
 
-		public void OpenUi(Ui target) {
+		public void OpenUi(Menu target) {
 			if(target == null) {
 				Debug.LogWarning("Warning: Cannot open empty UI.");
 				return;
@@ -82,7 +82,7 @@ namespace NaniCore.Bordure {
 			target.OnShow();
 		}
 
-		public Ui CurrentUi {
+		public Menu CurrentUi {
 			get {
 				if(uiEntries.Count <= 0)
 					return null;

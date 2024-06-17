@@ -97,7 +97,7 @@ namespace NaniCore.Bordure {
 		protected void OnCheat() => protagonist?.Cheat();
 
 		protected void OnPause() {
-			Game.Ui.OpenStartMenu();
+			Game.PauseMenu.OpenStartMenu();
 		}
 
 		// Movement

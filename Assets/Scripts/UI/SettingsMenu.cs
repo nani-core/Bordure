@@ -1,7 +1,7 @@
 using UnityEngine.UI;
 
 namespace NaniCore.Bordure {
-	public class SettingsUi : Ui {
+	public class SettingsMenu : Menu {
 		#region Serialized fields
 		public Slider mouseSensivity;
 		#endregion
