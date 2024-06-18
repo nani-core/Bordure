@@ -1,5 +1,4 @@
 using NaughtyAttributes;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -27,7 +26,6 @@ namespace NaniCore.Bordure {
 		private bool validated = false;
 		private bool visible = false;
 		private IEnumerable<Renderer> childRenderers;
-		private Coroutine validatingCoroutine;
 		#endregion
 
 		#region Functions
@@ -155,7 +153,6 @@ namespace NaniCore.Bordure {
 					Debug.Log($"{Loopshape.name} is invalidated.", Loopshape);
 			}
 			validated = result;
-			validatingCoroutine = null;
 		}
 		#endregion
 
