@@ -35,21 +35,17 @@ namespace NaniCore.Bordure {
 
 		protected override bool Validate() => isActiveAndEnabled && validated;
 
-		private IEnumerator PerformValidationCoroutine(System.Action<bool> continuation) {
-			if(!visible || gastro == null || !isActiveAndEnabled || !gastro.activeInHierarchy) {
-				continuation(false);
-				yield break;
-			}
+		private bool PerformValidation() {
+			if(!visible || gastro == null || !isActiveAndEnabled || !gastro.activeInHierarchy)
+				return false;
 
 			// Rough, geometry-based invalidation.
 
 			if(gastro != null) {
 				// Invalidate if not focusing on the gastro or the blasto (self).
 				var lookingAtObject = GameManager.Instance?.Protagonist?.LookingAtObject;
-				if(lookingAtObject == null || !(lookingAtObject.IsChildOf(gastro) || lookingAtObject.IsChildOf(gameObject))) {
-					continuation(false);
-					yield break;
-				}
+				if(lookingAtObject == null || !(lookingAtObject.IsChildOf(gastro) || lookingAtObject.IsChildOf(gameObject)))
+					return false;
 			}
 
 			// Real optical validation.
@@ -57,20 +53,15 @@ namespace NaniCore.Bordure {
 
 			// Render masks
 			Camera mainCamera = GameManager.Instance?.MainCamera;
-			if(mainCamera == null) {
-				continuation(false);
-				yield break;
-			}
+			if(mainCamera == null)
+				return false;
 			RenderTexture
 				blastoMask = RenderUtility.CreateRT(validationSize),
 				gastroMask = RenderUtility.CreateRT(validationSize);
-			yield return WaitForMaskRenderingOpportunity();
 			blastoMask.RenderMask(gameObject, mainCamera);
 			blastoMask.DenoiseMask();
-			yield return WaitForMaskRenderingOpportunity();
 			gastroMask.RenderMask(gastro, mainCamera);
 			gastroMask.InfectByValue(Color.white, 2);
-			yield return WaitForMaskRenderingOpportunity();
 
 			float bordureWidth;
 			{
@@ -84,15 +75,7 @@ namespace NaniCore.Bordure {
 			blastoMask.Destroy();
 			gastroMask.Destroy();
 
-			continuation(validated);
-		}
-
-		private static CustomYieldInstruction WaitForMaskRenderingOpportunity() {
-			float start = Time.time;
-			return new WaitUntil(() => {
-				float timePassed = Time.time - start;
-				return timePassed >= GameSettings.desiredOpticalValidationInterval;
-			});
+			return validated;
 		}
 
 		private bool ValidateByMask(RenderTexture blastoMask, RenderTexture gastroMask, float bordureWidth) {
@@ -186,9 +169,7 @@ namespace NaniCore.Bordure {
 			base.Update();
 
 			visible = childRenderers.Any(r => r != null && r.isVisible);
-			if(validatingCoroutine == null) {
-				validatingCoroutine = StartCoroutine(PerformValidationCoroutine(FinishValidation));
-			}
+			FinishValidation(PerformValidation());
 		}
 		#endregion
 	}

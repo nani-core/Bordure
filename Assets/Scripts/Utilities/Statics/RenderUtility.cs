@@ -195,7 +195,8 @@ namespace NaniCore {
 				mask.IndicateByValue(Color.clear);  // Invert.
 			}
 			else {
-				mask.IndicateByValue(Color.white);
+				// TODO: This needs to be worked out.
+				mask.IndicateByValue(Color.white, 10);
 			}
 			texture.Overlay(mask);
 			mask.Destroy();
