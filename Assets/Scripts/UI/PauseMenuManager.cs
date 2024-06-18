@@ -4,12 +4,13 @@ using System.Collections.Generic;
 namespace NaniCore.Bordure {
 	public class PauseMenuManager : MonoBehaviour {
 		#region Serialized fields
-		[SerializeField] private Menu startMenu;
-		[SerializeField] private Menu settings;
+		[SerializeField] private StartMenu startMenu;
+		[SerializeField] private SettingsMenu settings;
+		[SerializeField] private RestartMenu restart;
 		#endregion
 
 		#region Fields
-		private readonly List<Menu> uiEntries = new();
+		private readonly List<Menu> uiStack = new();
 		#endregion
 
 		#region Life cycle
@@ -34,8 +35,8 @@ namespace NaniCore.Bordure {
 		#region Interfaces
 		public System.Action OnLoaded;
 
-		public Menu StartMenu => startMenu;
-		public Menu Settings => settings;
+		public StartMenu StartMenu => startMenu;
+		public SettingsMenu Settings => settings;
 
 		public void OpenStartMenu() {
 			OpenUi(startMenu);
@@ -45,18 +46,22 @@ namespace NaniCore.Bordure {
 			OpenUi(settings);
 		}
 
+		public void OpenRestart() {
+			OpenUi(restart);
+		}
+
 		public void CloseLastUi() {
-			if(uiEntries.Count <= 0)
+			if(uiStack.Count <= 0)
 				return;
 
-			var lastUi = uiEntries[^1];
-			uiEntries.RemoveAt(uiEntries.Count - 1);
+			var lastUi = uiStack[^1];
+			uiStack.RemoveAt(uiStack.Count - 1);
 
 			lastUi.OnHide();
 			lastUi.OnExit();
 
-			if(uiEntries.Count > 0)
-				uiEntries[^1].OnShow();
+			if(uiStack.Count > 0)
+				uiStack[^1].OnShow();
 			else
 				gameObject.SetActive(false);
 		}
@@ -67,21 +72,21 @@ namespace NaniCore.Bordure {
 				return;
 			}
 
-			if(uiEntries.Count > 0)
-				uiEntries[^1].OnHide();
+			if(uiStack.Count > 0)
+				uiStack[^1].OnHide();
 			else
 				gameObject.SetActive(true);
 
-			uiEntries.Add(target);
+			uiStack.Add(target);
 			target.OnEnter();
 			target.OnShow();
 		}
 
 		public Menu CurrentUi {
 			get {
-				if(uiEntries.Count <= 0)
+				if(uiStack.Count <= 0)
 					return null;
-				return uiEntries[^1];
+				return uiStack[^1];
 			}
 		}
 		#endregion

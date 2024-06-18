@@ -131,6 +131,10 @@ namespace NaniCore.Bordure {
 			Instance.PauseMenu.OpenSettings();
 		}
 
+		public void OpenRestart() {
+			Instance.PauseMenu.OpenRestart();
+		}
+
 		public void CloseLastUi() {
 			Instance.PauseMenu.CloseLastUi();
 		}

@@ -1,4 +1,3 @@
-using Unity.VisualScripting.YamlDotNet.Core.Tokens;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -39,6 +38,7 @@ namespace NaniCore.Bordure {
 
 		protected void OnEnable() {
 			playerInput.enabled = true;
+			FlushInput();
 		}
 
 		protected void OnDisable() {
@@ -84,6 +84,14 @@ namespace NaniCore.Bordure {
 				return;
 			if(value) map.Enable();
 			else map.Disable();
+		}
+
+		private void FlushInput() {
+			moveVelocity = default;
+			floating = default;
+			sinking = default;
+			grabbingDistancing = false;
+			grabbingOrienting = false;
 		}
 		#endregion
 

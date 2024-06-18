@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -19,21 +20,23 @@ namespace NaniCore.Bordure {
 				if(value) {
 					if(Protagonist != null) {
 						wasUsingProtagonist = UsesProtagonist;
-						Protagonist.enabled = false;
+						UsesProtagonist = false;
 					}
 					TimeScale = 0.0f;
 				}
 				else {
 					TimeScale = 1.0f;
 					if(Protagonist != null) {
-						Protagonist.enabled = wasUsingProtagonist;
+						UsesProtagonist = wasUsingProtagonist;
 					}
 				}
 			}
 		}
 
 		public void StartGame() {
-			UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(Settings.gameStartScene);
+			if(SceneManager.GetSceneByBuildIndex(Settings.gameStartScene).isLoaded) {
+				SceneManager.UnloadSceneAsync(Settings.gameStartScene);
+			}
 		}
 
 		public void QuitGame() {
@@ -47,10 +50,12 @@ namespace NaniCore.Bordure {
 		}
 
 		public void RestartGame() {
+			UsesProtagonist = false;
 			ResetAchievementProgress();
-			UnloadAllLevels();
 			InvokeOnGameStart.ResetStaticFlag();
-			UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(Settings.gameStartScene);
+			SceneManager.LoadScene(Settings.gameStartScene, LoadSceneMode.Single);
+			PauseMenu.StartMenu.ResetToInitialState();
+			PauseMenu.OpenStartMenu();
 		}
 		#endregion
 

@@ -14,6 +14,7 @@ namespace NaniCore.Bordure {
 		public Protagonist Protagonist {
 			get {
 				if(protagonist == null) {
+					// To flush invalidated Unity references.
 					protagonist = null;
 					return null;
 				}
@@ -24,8 +25,6 @@ namespace NaniCore.Bordure {
 		public bool UsesProtagonist {
 			get => Protagonist != null && Protagonist.isActiveAndEnabled;
 			set {
-				if(value == UsesProtagonist)
-					return;
 				if(value) {
 					// Spawn the temporary camera anchor.
 					var anchor = new GameObject().transform;
@@ -33,7 +32,7 @@ namespace NaniCore.Bordure {
 					anchor.SetParent(null, true);
 
 					protagonist = GetProtagonistSingleton();
-					Protagonist.gameObject.SetActive(true);
+					Protagonist.enabled = true;
 					AttachCameraTo(Protagonist.Eye, true);
 					AlignCameraTo(anchor);
 
@@ -45,7 +44,7 @@ namespace NaniCore.Bordure {
 					if(Protagonist == null)
 						return;
 					RetrieveCameraHierarchy();
-					Protagonist.gameObject.SetActive(false);
+					Protagonist.enabled = false;
 
 					onProtagonistDisabled?.Invoke();
 				}

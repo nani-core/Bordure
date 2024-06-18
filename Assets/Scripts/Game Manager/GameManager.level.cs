@@ -101,13 +101,6 @@ namespace NaniCore.Bordure {
 			Quaternion deltaOrientation = anchor.transform.rotation * Quaternion.Inverse(alignee.transform.rotation);
 			level.transform.RotateAlong(alignee.transform.position, deltaOrientation);
 		}
-
-		public void UnloadAllLevels() {
-			DropLevelLoadCallbacks();
-			foreach(var level in loadedLevels) {
-				UnloadLevel(level);
-			}
-		}
 		#endregion
 
 		#region Life cycle
