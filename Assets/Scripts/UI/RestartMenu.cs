@@ -1,5 +1,3 @@
-using UnityEngine;
-
 namespace NaniCore.Bordure {
 	public class RestartMenu : Menu {
 		public override void OnEnter() {
@@ -7,6 +5,7 @@ namespace NaniCore.Bordure {
 		}
 
 		public override void OnExit() {
+			GameManager.Instance.UsesProtagonist = false;
 		}
 	}
 }

@@ -23,6 +23,8 @@ namespace NaniCore.Bordure {
 		#endregion
 
 		#region Interfaces
+		public AchievementSheet Sheet => sheet;
+
 		public void Finish(string key) {
 			if(HasBeenFinished(key)) {
 				Debug.LogWarning($"Warning: Achievement \"{key}\" has already been finished.");

@@ -9,6 +9,8 @@ namespace NaniCore.Bordure {
 		#region Fields
 		private bool isBeingDestroyed = false;
 		private bool wasUsingProtagonist;
+		private bool isFirstCycle = true;
+		private float runStartTime;
 		#endregion
 
 		#region Interfaces
@@ -33,10 +35,9 @@ namespace NaniCore.Bordure {
 			}
 		}
 
+		// Called when clicking the start button in the pause menu.
 		public void StartGame() {
-			if(SceneManager.GetSceneByBuildIndex(Settings.gameStartScene).isLoaded) {
-				SceneManager.UnloadSceneAsync(Settings.gameStartScene);
-			}
+			ResetStates();
 		}
 
 		public void QuitGame() {
@@ -49,13 +50,32 @@ namespace NaniCore.Bordure {
 #endif
 		}
 
+		// Called after the previous game ends and before reloading the start scene.
 		public void RestartGame() {
+			// Disable play controls.
 			UsesProtagonist = false;
-			ResetAchievementProgress();
-			InvokeOnGameStart.ResetStaticFlag();
+
+			ResetStates();
+
+			// Reload scenes.
 			SceneManager.LoadScene(Settings.gameStartScene, LoadSceneMode.Single);
 			PauseMenu.StartMenu.ResetToInitialState();
 			PauseMenu.OpenStartMenu();
+		}
+
+		public void FinishGame() {
+			UsesProtagonist = false;
+			PauseMenu.OpenRestart();
+			if(isFirstCycle) {
+				isFirstCycle = false;
+				float runTime = Time.time - runStartTime;
+				FinishSpeedrunAchievement(runTime);
+			}
+		}
+
+		public void UnloadStartScene() {
+			if(SceneManager.GetSceneByBuildIndex(Settings.gameStartScene).isLoaded)
+				SceneManager.UnloadSceneAsync(Settings.gameStartScene);
 		}
 		#endregion
 
@@ -91,6 +111,13 @@ namespace NaniCore.Bordure {
 			ReleaseAllTemporaryResources();
 		}
 #pragma warning restore
+
+		private void ResetStates() {
+			ResetAchievementProgress();
+			isFirstCycle = true;
+			runStartTime = Time.time;
+			InvokeOnGameStart.ResetStaticFlag();
+		}
 		#endregion
 	}
 }

@@ -1,4 +1,6 @@
 using UnityEngine;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace NaniCore.Bordure {
 	public partial class GameManager {
@@ -23,6 +25,18 @@ namespace NaniCore.Bordure {
 		public void IncreaseDuckAchievementCount() {
 			++duckCount;
 			FinishAchievement($"duck{duckCount}");
+		}
+
+		public void FinishSpeedrunAchievement(float runTime) {
+			var levels = achievement.Sheet.speedrunLevels.ToList();
+			levels.Sort((a, b) => (int)Mathf.Sign(a.maxTime - b.maxTime));
+			foreach(var level in levels) {
+				if(runTime > level.maxTime)
+					continue;
+				FinishAchievement(level.key);
+				return;
+			}
+			FinishAchievement(achievement.Sheet.levelFinishKey);
 		}
 		#endregion
 	}

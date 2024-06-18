@@ -114,6 +114,14 @@ namespace NaniCore.Bordure {
 		public void RestartGame() {
 			Instance.RestartGame();
 		}
+
+		public void FinishGame() {
+			Instance.FinishGame();
+		}
+
+		public void UnloadStartScene() {
+			Instance.UnloadStartScene();
+		}
 		#endregion
 
 		#region Log
