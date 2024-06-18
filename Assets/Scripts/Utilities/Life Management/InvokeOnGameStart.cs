@@ -15,7 +15,7 @@ namespace NaniCore.Bordure {
 		private static bool isOnGameStart = true;
 
 		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-		private static void ResetStaticFlag() {
+		public static void ResetStaticFlag() {
 			isOnGameStart = true;
 		}
 

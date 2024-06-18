@@ -55,6 +55,7 @@ namespace NaniCore.Bordure {
 
 		[Header("Level")]
 		public float deathHeight = -200f;
+		[NaughtyAttributes.Scene] public int gameStartScene;
 		public LevelScene[] levelScenes;
 	}
 }

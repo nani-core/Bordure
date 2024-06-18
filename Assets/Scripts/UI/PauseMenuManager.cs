@@ -27,12 +27,7 @@ namespace NaniCore.Bordure {
 
 		#region Input message handler
 		protected void OnPause() {
-			var game = GameManager.Instance;
-			if(!game.GameStarted) {
-				if(CurrentUi == startMenu)
-					return;
-			}
-			game.PauseMenu.CloseLastUi();
+			GameManager.Instance.PauseMenu.CloseLastUi();
 		}
 		#endregion
 

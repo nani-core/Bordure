@@ -7,7 +7,6 @@ namespace NaniCore.Bordure {
 	public partial class GameManager {
 		#region Fields
 		private bool isBeingDestroyed = false;
-		private bool gameStarted = false;
 		private bool wasUsingProtagonist;
 		#endregion
 
@@ -34,9 +33,7 @@ namespace NaniCore.Bordure {
 		}
 
 		public void StartGame() {
-			gameStarted = true;
-			PauseMenu.CloseLastUi();
-			UsesProtagonist = true;
+			UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(Settings.gameStartScene);
 		}
 
 		public void QuitGame() {
@@ -49,13 +46,12 @@ namespace NaniCore.Bordure {
 #endif
 		}
 
-		// Dummy feature, not used.
 		public void RestartGame() {
 			ResetAchievementProgress();
-			// TODO: Unload all levels and trigger the game start logic.
+			UnloadAllLevels();
+			InvokeOnGameStart.ResetStaticFlag();
+			UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(Settings.gameStartScene);
 		}
-
-		public bool GameStarted => gameStarted;
 		#endregion
 
 		#region Functions
