@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Rendering.HighDefinition;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -190,6 +191,20 @@ namespace NaniCore.Bordure {
 				level = level,
 				levelScene = ls,
 			});
+
+			// Trigger shadow maps update after scene has changed.
+			if(false) {
+				yield return new WaitForEndOfFrame();
+				foreach(var lightData in FindObjectsOfType<HDAdditionalLightData>()) {
+					switch(lightData.type) {
+						case HDLightType.Directional:
+							lightData.RequestShadowMapRendering();
+							yield return new WaitForEndOfFrame();
+							lightData.RequestShadowMapRendering();
+							break;
+					}
+				}
+			}
 		}
 
 		private LoadedLevel? FindLoadedLevelOfName(string name) {
