@@ -73,7 +73,7 @@ namespace NaniCore.Bordure {
 			Debug.Log($"Finished achievement \"{key}\".");
 
 			yield return new WaitUntil(() => IsOpened);
-			yield return new WaitForSeconds(1f);
+			yield return new WaitForSeconds(2f);
 
 			IsOpened = false;
 		}
