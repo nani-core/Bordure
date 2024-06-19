@@ -45,6 +45,7 @@ namespace NaniCore.Bordure {
 						break;
 				}
 			}
+			GameManager.Instance.FinishAchievement("cheater");
 		}
 		#endregion
 

@@ -6,20 +6,11 @@ namespace NaniCore.Bordure {
 	public class AchievementManager : MonoBehaviour {
 		#region Serialized fields
 		[SerializeField] private AchievementSheet sheet;
-		[SerializeField] private Image icon;
-		[SerializeField] private Text title;
-		[SerializeField] private Text description;
-		[SerializeField] private DtCarrier carrier;
+		[SerializeField] private LayoutGroup list;
 		#endregion
 
 		#region Fields
 		private readonly HashSet<string> finishedAchievements = new();
-		#endregion
-
-		#region Life cycle
-		protected void Start() {
-			carrier.Progress = 0f;
-		}
 		#endregion
 
 		#region Interfaces
@@ -40,11 +31,6 @@ namespace NaniCore.Bordure {
 		#endregion
 
 		#region Functions
-		private bool IsOpened {
-			get => carrier.IsOpened;
-			set => carrier.IsOpened = value;
-		}
-
 		private bool HasBeenFinished(string key) {
 			return finishedAchievements.Contains(key);
 		}
@@ -66,18 +52,31 @@ namespace NaniCore.Bordure {
 				yield break;
 			}
 
-			icon.sprite = achievement.icon;
-			title.text = achievement.title;
-			description.text = achievement.description;
+			GameObject obj = Instantiate(Resources.Load<GameObject>("Achievement Instance"), list.transform);
+			list.CalculateLayoutInputHorizontal();
+			list.CalculateLayoutInputVertical();
 
-			IsOpened = true;
+			var instance = obj.GetComponent<AchievementInstance>();
+			instance.Icon = achievement.icon;
+			instance.Title = achievement.title;
+			instance.Description = achievement.description;
 
-			Debug.Log($"Finished achievement \"{key}\".");
+			instance.ShowPercent = 0f;
+			yield return ProgressCoroutine(1f, p => instance.ShowPercent = p);
+			yield return new WaitForSecondsRealtime(2f);
+			yield return ProgressCoroutine(1f, p => instance.ShowPercent = 1 - p);
 
-			yield return new WaitUntil(() => IsOpened);
-			yield return new WaitForSeconds(2f);
+			Destroy(instance.gameObject);
+			list.CalculateLayoutInputHorizontal();
+			list.CalculateLayoutInputVertical();
+		}
 
-			IsOpened = false;
+		private static System.Collections.IEnumerator ProgressCoroutine(float duration, System.Action<float> continuation) {
+			for(float startTime = Time.time, progress; (progress = (Time.time - startTime) / duration) < 1.0f;) {
+				continuation(progress);
+				yield return new WaitForSecondsRealtime(Time.deltaTime);
+			}
+			continuation(1.0f);
 		}
 		#endregion
 	}
