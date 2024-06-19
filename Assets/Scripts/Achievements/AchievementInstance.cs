@@ -9,6 +9,7 @@ namespace NaniCore.Bordure {
 		[SerializeField] private Image icon;
 		[SerializeField] private Text title;
 		[SerializeField] private Text description;
+		[SerializeField] private GameObject notAchievedMask;
 		#endregion
 
 		#region Interfaces
@@ -35,6 +36,11 @@ namespace NaniCore.Bordure {
 		public string Description {
 			get => description.text;
 			set => description.text = value;
+		}
+
+		public bool IsAchieved {
+			get => !notAchievedMask.activeSelf;
+			set => notAchievedMask.SetActive(!value);
 		}
 		#endregion
 	}

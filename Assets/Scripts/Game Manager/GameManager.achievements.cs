@@ -1,5 +1,4 @@
 using UnityEngine;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace NaniCore.Bordure {
@@ -13,6 +12,8 @@ namespace NaniCore.Bordure {
 		#endregion
 
 		#region Interfaces
+		public AchievementManager Achievement => achievement;
+
 		public void FinishAchievement(string key) {
 			achievement.Finish(key);
 		}

@@ -7,6 +7,7 @@ namespace NaniCore.Bordure {
 		public Sprite icon;
 		public string title;
 		public string description;
+		public bool hidden;
 	}
 
 	[System.Serializable]

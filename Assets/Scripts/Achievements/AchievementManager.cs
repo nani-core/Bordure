@@ -22,19 +22,20 @@ namespace NaniCore.Bordure {
 				return;
 			}
 
+			finishedAchievements.Add(key);
 			StartCoroutine(FinishCoroutine(key));
 		}
 
 		public void ResetProgress() {
 			finishedAchievements.Clear();
 		}
+
+		public bool HasBeenFinished(string key) {
+			return finishedAchievements.Contains(key);
+		}
 		#endregion
 
 		#region Functions
-		private bool HasBeenFinished(string key) {
-			return finishedAchievements.Contains(key);
-		}
-
 		private bool Find(string key, out AchievementEntry achievement) {
 			foreach(var entry in sheet.achievements) {
 				if(entry.key != key)
@@ -47,10 +48,7 @@ namespace NaniCore.Bordure {
 		}
 
 		private System.Collections.IEnumerator FinishCoroutine(string key) {
-			if(!Find(key, out var achievement)) {
-				Debug.LogWarning($"Warning: Cannot find achievement \"{key}\".");
-				yield break;
-			}
+			Find(key, out var achievement);
 
 			GameObject obj = Instantiate(Resources.Load<GameObject>("Achievement Instance"), list.transform);
 			list.CalculateLayoutInputHorizontal();
@@ -72,7 +70,7 @@ namespace NaniCore.Bordure {
 		}
 
 		private static System.Collections.IEnumerator ProgressCoroutine(float duration, System.Action<float> continuation) {
-			for(float startTime = Time.time, progress; (progress = (Time.time - startTime) / duration) < 1.0f;) {
+			for(float startTime = Time.unscaledTime, progress; (progress = (Time.unscaledTime - startTime) / duration) < 1.0f;) {
 				continuation(progress);
 				yield return new WaitForSecondsRealtime(Time.deltaTime);
 			}
