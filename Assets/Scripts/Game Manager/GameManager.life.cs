@@ -37,7 +37,7 @@ namespace NaniCore.Bordure {
 
 		// Called when clicking the start button in the pause menu.
 		public void StartGame() {
-			ResetStates();
+			UsesProtagonist = true;
 		}
 
 		public void QuitGame() {
@@ -60,6 +60,7 @@ namespace NaniCore.Bordure {
 			// Reload scenes.
 			SceneManager.LoadScene(Settings.gameStartScene, LoadSceneMode.Single);
 			PauseMenu.StartMenu.ResetToInitialState();
+			UsesProtagonist = true;
 			PauseMenu.OpenStartMenu();
 		}
 

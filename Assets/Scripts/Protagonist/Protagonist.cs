@@ -71,6 +71,8 @@ namespace NaniCore.Bordure {
 
 		protected void OnDisable() {
 			IsControlEnabled = false;
+			isWalking = false;
+			UpdateMovingAnimation();
 		}
 		#endregion
 	}
