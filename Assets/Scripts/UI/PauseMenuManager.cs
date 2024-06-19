@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System.Collections.Generic;
 
 namespace NaniCore.Bordure {
@@ -7,6 +8,8 @@ namespace NaniCore.Bordure {
 		[SerializeField] private StartMenu startMenu;
 		[SerializeField] private SettingsMenu settings;
 		[SerializeField] private RestartMenu restart;
+		[SerializeField] private Toggle timerToggle;
+		[SerializeField] private Text timer;
 		#endregion
 
 		#region Fields
@@ -22,7 +25,13 @@ namespace NaniCore.Bordure {
 				ui.gameObject.SetActive(false);
 			}
 
+			timerToggle.onValueChanged.AddListener(timer.gameObject.SetActive);
+
 			OnLoaded?.Invoke();
+		}
+
+		protected void Update() {
+			timer.text = $"{GameManager.Instance.RunTime}";
 		}
 		#endregion
 
@@ -62,8 +71,6 @@ namespace NaniCore.Bordure {
 
 			if(uiStack.Count > 0)
 				uiStack[^1].OnShow();
-			else
-				gameObject.SetActive(false);
 		}
 
 		public void OpenUi(Menu target) {
@@ -74,8 +81,6 @@ namespace NaniCore.Bordure {
 
 			if(uiStack.Count > 0)
 				uiStack[^1].OnHide();
-			else
-				gameObject.SetActive(true);
 
 			uiStack.Add(target);
 			target.OnEnter();

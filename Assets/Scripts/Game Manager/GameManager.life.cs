@@ -35,6 +35,10 @@ namespace NaniCore.Bordure {
 			}
 		}
 
+		public float ScaledTime => Time.time;
+
+		public float RunTime => ScaledTime - runStartTime;
+
 		// Called when clicking the start button in the pause menu.
 		public void StartGame() {
 			UsesProtagonist = true;
@@ -69,8 +73,7 @@ namespace NaniCore.Bordure {
 			PauseMenu.OpenRestart();
 			if(isFirstCycle) {
 				isFirstCycle = false;
-				float runTime = Time.time - runStartTime;
-				FinishSpeedrunAchievement(runTime);
+				FinishSpeedrunAchievement(RunTime);
 			}
 		}
 
@@ -116,7 +119,7 @@ namespace NaniCore.Bordure {
 		private void ResetStates() {
 			ResetAchievementProgress();
 			isFirstCycle = true;
-			runStartTime = Time.time;
+			runStartTime = ScaledTime;
 			InvokeOnGameStart.ResetStaticFlag();
 		}
 		#endregion
