@@ -120,13 +120,19 @@ namespace NaniCore.Bordure {
 					if(GameManager.Instance.CurrentSeat == null)
 						IsKinematic = false;
 				}
+				else {
+					isWalking = false;
+					isSprinting = false;
+				}
 				usesMovement = value;
 			}
 		}
 
 		public bool UsesOrientation {
 			get => usesOrientation;
-			set => usesOrientation = value;
+			set {
+				usesOrientation = value;
+			}
 		}
 
 		public bool IsKinematic {

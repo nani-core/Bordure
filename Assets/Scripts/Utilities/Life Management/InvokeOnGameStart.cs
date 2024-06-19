@@ -4,9 +4,6 @@ namespace NaniCore.Bordure {
 	public class InvokeOnGameStart : MonoBehaviour {
 		#region Life cycle
 		protected void Start() {
-			if(!isOnGameStart)
-				return;
-
 			StartCoroutine(OnStartCoroutine());
 		}
 		#endregion
@@ -20,12 +17,13 @@ namespace NaniCore.Bordure {
 		}
 
 		private System.Collections.IEnumerator OnStartCoroutine() {
-			if(TryGetComponent(out Logic logic)) {
-				yield return new WaitForEndOfFrame();
-				logic.Invoke();
-			}
 			yield return new WaitForEndOfFrame();
-			isOnGameStart = false;
+			if(TryGetComponent(out Logic logic)) {
+				if(isOnGameStart) {
+					logic.Invoke();
+					isOnGameStart = false;
+				}
+			}
 		}
 		#endregion
 	}
