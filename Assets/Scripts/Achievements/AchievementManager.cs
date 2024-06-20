@@ -17,10 +17,8 @@ namespace NaniCore.Bordure {
 		public AchievementSheet Sheet => sheet;
 
 		public void Finish(string key) {
-			if(HasBeenFinished(key)) {
-				Debug.LogWarning($"Warning: Achievement \"{key}\" has already been finished.");
+			if(HasBeenFinished(key))
 				return;
-			}
 
 			finishedAchievements.Add(key);
 			StartCoroutine(FinishCoroutine(key));

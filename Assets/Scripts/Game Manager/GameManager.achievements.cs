@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace NaniCore.Bordure {
@@ -8,7 +9,8 @@ namespace NaniCore.Bordure {
 		#endregion
 
 		#region Fields
-		private int duckCount = 0;
+		private readonly HashSet<string> triggeredDucks = new();
+		private readonly HashSet<Light> allLights = new();
 		#endregion
 
 		#region Interfaces
@@ -20,24 +22,56 @@ namespace NaniCore.Bordure {
 
 		public void ResetAchievementProgress() {
 			achievement.ResetProgress();
-			duckCount = 0;
+			triggeredDucks.Clear();
+			allLights.Clear();
 		}
 
-		public void IncreaseDuckAchievementCount() {
-			++duckCount;
-			FinishAchievement($"duck{duckCount}");
+		public void TriggerDuckAchievement(string key) {
+			if(triggeredDucks.Contains(key))
+				return;
+
+			triggeredDucks.Add(key);
+			achievement.Finish($"duck{triggeredDucks.Count}");
 		}
 
 		public void FinishSpeedrunAchievement(float runTime) {
+			FinishAchievement(achievement.Sheet.levelFinishKey);
+
 			var levels = achievement.Sheet.speedrunLevels.ToList();
 			levels.Sort((a, b) => (int)Mathf.Sign(a.maxTime - b.maxTime));
 			foreach(var level in levels) {
 				if(runTime > level.maxTime)
 					continue;
 				FinishAchievement(level.key);
-				return;
+				break;
 			}
-			FinishAchievement(achievement.Sheet.levelFinishKey);
+		}
+
+		public void TriggerLightOffAchievement(Light light) {
+			if(light.isActiveAndEnabled)
+				return;
+
+			achievement.Finish("light off");
+
+			ClearInvalidatedLights();
+			if(allLights.All(light => !light.isActiveAndEnabled)) {
+				achievement.Finish("light all off");
+			}
+		}
+		#endregion
+
+		#region Functions
+		private void RegisterLightsInLevel(Level level) {
+			foreach(Light light in level.transform.GetComponentsInChildren<Light>(true)) {
+				if(light.GetComponentsInParent<Loopshape>() == null)
+					continue;
+
+				allLights.Add(light);
+			}
+		}
+
+		private void ClearInvalidatedLights() {
+			allLights.RemoveWhere(light => light == null);
 		}
 		#endregion
 	}

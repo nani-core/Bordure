@@ -159,12 +159,20 @@ namespace NaniCore.Bordure {
 		}
 
 		protected void OnTriggerEnter(Collider other) {
-			if(other.transform.TryGetComponent<Rigidbody>(out var rigidbody))
-				floatingBodies.Add(rigidbody);
+			if(!other.transform.TryGetComponent<Rigidbody>(out var rigidbody))
+				return;
+
+			floatingBodies.Add(rigidbody);
+
+			var gm = GameManager.Instance;
+			if(gm.UsesProtagonist && rigidbody.gameObject == gm.Protagonist.gameObject)
+				gm.FinishAchievement("swimming");
 		}
 		protected void OnTriggerExit(Collider other) {
-			if(other.transform.TryGetComponent<Rigidbody>(out var rigidbody))
-				floatingBodies.Remove(rigidbody);
+			if(!other.transform.TryGetComponent<Rigidbody>(out var rigidbody))
+				return;
+
+			floatingBodies.Remove(rigidbody);
 		}
 
 		protected void FixedUpdate() {

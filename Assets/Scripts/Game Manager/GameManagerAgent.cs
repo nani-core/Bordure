@@ -167,8 +167,12 @@ namespace NaniCore.Bordure {
 			Instance.ResetAchievementProgress();
 		}
 
-		public void IncreaseDuckAchievementCount() {
-			Instance.IncreaseDuckAchievementCount();
+		public void TriggerDuckAchievement(string key) {
+			Instance.TriggerDuckAchievement(key);
+		}
+
+		public void TriggerLightOffAchievement(Light light) {
+			Instance.TriggerLightOffAchievement(light);
 		}
 		#endregion
 	}

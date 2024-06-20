@@ -140,6 +140,7 @@ namespace NaniCore.Bordure {
 					continue;
 				cb.Invoke();
 			}
+			RegisterLightsInLevel(ll.level);
 			DropLevelLoadCallbacks();
 		}
 
