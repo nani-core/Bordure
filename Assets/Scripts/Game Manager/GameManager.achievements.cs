@@ -48,9 +48,6 @@ namespace NaniCore.Bordure {
 		}
 
 		public void TriggerLightOffAchievement(Light light) {
-			if(light.isActiveAndEnabled)
-				return;
-
 			achievement.Finish("light off");
 
 			ClearInvalidatedLights();
