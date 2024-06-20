@@ -6,6 +6,7 @@ namespace NaniCore.Bordure {
 		private Protagonist protagonist;
 		private Seat currentSeat;
 		[System.NonSerialized] public float mouseSensitivityGain = 1.0f;
+		private Coroutine sittingCoroutine;
 		#endregion
 
 		#region Interfaces
@@ -111,22 +112,17 @@ namespace NaniCore.Bordure {
 		public Seat CurrentSeat => currentSeat;
 
 		public void ProtagonistSitOn(Seat seat) {
-			if(seat == null)
-				return;
-
-			ProtagonistIsKinematic = true;
-			UsesProtagonistMovement = false;
-			UsesProtagonistOrientation = seat.canOrient;
-
-			TransitCameraTo(seat.transform);
-
-			currentSeat = seat;
-			currentSeat.SendMessage("OnSitOn", SendMessageOptions.DontRequireReceiver);
+			StartCoroutine(SittingCoroutine(seat));
 		}
 
 		public void ProtagonistLeaveSeat() {
 			if(currentSeat == null)
 				return;
+
+			if(sittingCoroutine != null) {
+				StopCoroutine(sittingCoroutine);
+				sittingCoroutine = null;
+			}
 
 			ProtagonistIsKinematic = false;
 			UsesProtagonistMovement = true;
@@ -173,6 +169,22 @@ namespace NaniCore.Bordure {
 				protagonist = CreateProtagonist();
 
 			return protagonist;
+		}
+
+		private System.Collections.IEnumerator SittingCoroutine(Seat seat) {
+			if(seat == null)
+				yield break;
+
+			ProtagonistIsKinematic = true;
+			UsesProtagonistMovement = false;
+			UsesProtagonistOrientation = seat.canOrient;
+
+			yield return sittingCoroutine = TransitCameraTo(seat.transform);
+
+			currentSeat = seat;
+			currentSeat.SendMessage("OnSitOn", SendMessageOptions.DontRequireReceiver);
+
+			sittingCoroutine = null;
 		}
 		#endregion
 	}
