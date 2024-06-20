@@ -61301,6 +61301,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1362824686018037528, guid: 7c603fdd6f5b88d4b8068dcb91fca600, type: 3}
   m_PrefabInstance: {fileID: 1372763994166020572}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &675588402108656067 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1904219478572998687, guid: 7c603fdd6f5b88d4b8068dcb91fca600, type: 3}
+  m_PrefabInstance: {fileID: 1372763994166020572}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6839403045476067491}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0b1f49cf0faacd47afb0c5ba87bfc06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &2104224836491650951 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1026465312034647643, guid: 7c603fdd6f5b88d4b8068dcb91fca600, type: 3}
@@ -61355,6 +61366,18 @@ MonoBehaviour:
   onClosed:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 675588402108656067}
+        m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
+        m_MethodName: set_enabled
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
       - m_Target: {fileID: 4841326297438418139}
         m_TargetAssemblyTypeName: UnityEngine.Renderer, UnityEngine
         m_MethodName: set_material
@@ -61370,6 +61393,18 @@ MonoBehaviour:
   onToggled:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 675588402108656067}
+        m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
+        m_MethodName: set_enabled
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 4841326297438418139}
         m_TargetAssemblyTypeName: UnityEngine.Renderer, UnityEngine
         m_MethodName: set_material
