@@ -60840,6 +60840,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7051749619339427640}
     m_Modifications:
+    - target: {fileID: 1163730658680393176, guid: f0288144a59b09b4eb63d1f901f69323, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3413758969586555195, guid: f0288144a59b09b4eb63d1f901f69323, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -60878,6 +60882,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3413758969586555195, guid: f0288144a59b09b4eb63d1f901f69323, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3437884609807200816, guid: f0288144a59b09b4eb63d1f901f69323, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3437884609807200816, guid: f0288144a59b09b4eb63d1f901f69323, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3437884609807200816, guid: f0288144a59b09b4eb63d1f901f69323, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3437884609807200816, guid: f0288144a59b09b4eb63d1f901f69323, type: 3}
+      propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3726480913713492088, guid: f0288144a59b09b4eb63d1f901f69323, type: 3}
@@ -61536,6 +61556,22 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1075083399502251344, guid: 7c603fdd6f5b88d4b8068dcb91fca600, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1075083399502251344, guid: 7c603fdd6f5b88d4b8068dcb91fca600, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1075083399502251344, guid: 7c603fdd6f5b88d4b8068dcb91fca600, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1075083399502251344, guid: 7c603fdd6f5b88d4b8068dcb91fca600, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1362824686018037528, guid: 7c603fdd6f5b88d4b8068dcb91fca600, type: 3}
       propertyPath: m_LocalScale.z
       value: 34
@@ -61575,6 +61611,10 @@ PrefabInstance:
     - target: {fileID: 1993573894775849414, guid: 7c603fdd6f5b88d4b8068dcb91fca600, type: 3}
       propertyPath: m_Size.z
       value: 0.125
+      objectReference: {fileID: 0}
+    - target: {fileID: 3564812063198362296, guid: 7c603fdd6f5b88d4b8068dcb91fca600, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5585013556241469641, guid: 7c603fdd6f5b88d4b8068dcb91fca600, type: 3}
       propertyPath: m_LocalPosition.x
@@ -61742,11 +61782,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1026465312034647643, guid: 7c603fdd6f5b88d4b8068dcb91fca600, type: 3}
   m_PrefabInstance: {fileID: 1372763994166020572}
   m_PrefabAsset: {fileID: 0}
---- !u!23 &4841326297438418139 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 5774407511514070279, guid: 7c603fdd6f5b88d4b8068dcb91fca600, type: 3}
+--- !u!114 &2967297187626169009 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4188625307048049517, guid: 7c603fdd6f5b88d4b8068dcb91fca600, type: 3}
   m_PrefabInstance: {fileID: 1372763994166020572}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f19d9143a39eb3b46bc4563e9889cfbd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6839403045476067491 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5613588780920676735, guid: 7c603fdd6f5b88d4b8068dcb91fca600, type: 3}
@@ -61803,12 +61849,13 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 4841326297438418139}
-        m_TargetAssemblyTypeName: UnityEngine.Renderer, UnityEngine
+      - m_Target: {fileID: 2967297187626169009}
+        m_TargetAssemblyTypeName: UnityEngine.Rendering.HighDefinition.DecalProjector,
+          Unity.RenderPipelines.HighDefinition.Runtime
         m_MethodName: set_material
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 2100000, guid: 24ad09b7b6db11e4fab6c796a55732b3, type: 2}
+          m_ObjectArgument: {fileID: 2100000, guid: 268d5b8f38abf7e458164f3b592ee898, type: 2}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Material, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
@@ -61830,12 +61877,13 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 4841326297438418139}
-        m_TargetAssemblyTypeName: UnityEngine.Renderer, UnityEngine
+      - m_Target: {fileID: 2967297187626169009}
+        m_TargetAssemblyTypeName: UnityEngine.Rendering.HighDefinition.DecalProjector,
+          Unity.RenderPipelines.HighDefinition.Runtime
         m_MethodName: set_material
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 2100000, guid: 1794d5b7b48c97a45a43eb1f61175d57, type: 2}
+          m_ObjectArgument: {fileID: 2100000, guid: b6c82b626d1ede043a3b89b5a37f764a, type: 2}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Material, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
@@ -62752,24 +62800,26 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 7701252879102335034}
-        m_TargetAssemblyTypeName: UnityEngine.Renderer, UnityEngine
+      - m_Target: {fileID: 4243648824878374205}
+        m_TargetAssemblyTypeName: UnityEngine.Rendering.HighDefinition.DecalProjector,
+          Unity.RenderPipelines.HighDefinition.Runtime
         m_MethodName: set_material
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 2100000, guid: 636e30f5bb0b5264c8369fd3eb2067b2, type: 2}
+          m_ObjectArgument: {fileID: 2100000, guid: 7dda1a27c46f27d4e97cd6915018205e, type: 2}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Material, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 1516991167555009116}
-        m_TargetAssemblyTypeName: UnityEngine.Renderer, UnityEngine
+      - m_Target: {fileID: 9155610106273905718}
+        m_TargetAssemblyTypeName: UnityEngine.Rendering.HighDefinition.DecalProjector,
+          Unity.RenderPipelines.HighDefinition.Runtime
         m_MethodName: set_material
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 2100000, guid: 24ad09b7b6db11e4fab6c796a55732b3, type: 2}
+          m_ObjectArgument: {fileID: 2100000, guid: 268d5b8f38abf7e458164f3b592ee898, type: 2}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Material, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
@@ -62791,35 +62841,43 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 7701252879102335034}
-        m_TargetAssemblyTypeName: UnityEngine.Renderer, UnityEngine
+      - m_Target: {fileID: 4243648824878374205}
+        m_TargetAssemblyTypeName: UnityEngine.Rendering.HighDefinition.DecalProjector,
+          Unity.RenderPipelines.HighDefinition.Runtime
         m_MethodName: set_material
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 2100000, guid: ee12480861ef7e9468a1579268deb7d0, type: 2}
+          m_ObjectArgument: {fileID: 2100000, guid: a463e73a0a1d7f546af1f2f76b45a9e5, type: 2}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Material, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1516991167555009116}
-        m_TargetAssemblyTypeName: UnityEngine.Renderer, UnityEngine
+      - m_Target: {fileID: 9155610106273905718}
+        m_TargetAssemblyTypeName: UnityEngine.Rendering.HighDefinition.DecalProjector,
+          Unity.RenderPipelines.HighDefinition.Runtime
         m_MethodName: set_material
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 2100000, guid: 1794d5b7b48c97a45a43eb1f61175d57, type: 2}
+          m_ObjectArgument: {fileID: 2100000, guid: b6c82b626d1ede043a3b89b5a37f764a, type: 2}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Material, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!23 &1516991167555009116 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 1049484618034597413, guid: 0ef718b5da19213408a5203d12e2ecad, type: 3}
+--- !u!114 &4243648824878374205 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2412121535739603268, guid: 0ef718b5da19213408a5203d12e2ecad, type: 3}
   m_PrefabInstance: {fileID: 1990005953020638329}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f19d9143a39eb3b46bc4563e9889cfbd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &5409107544263371008 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5804270729784532345, guid: 0ef718b5da19213408a5203d12e2ecad, type: 3}
@@ -62841,11 +62899,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0b1f49cf0faacd47afb0c5ba87bfc06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!23 &7701252879102335034 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 8177889783988382787, guid: 0ef718b5da19213408a5203d12e2ecad, type: 3}
+--- !u!114 &9155610106273905718 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7247040829797926991, guid: 0ef718b5da19213408a5203d12e2ecad, type: 3}
   m_PrefabInstance: {fileID: 1990005953020638329}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f19d9143a39eb3b46bc4563e9889cfbd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2095741211846656571
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -63989,11 +64053,17 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 8431664760961355771}
   m_SourcePrefab: {fileID: 100100000, guid: 28577d3bcb02bd54cbf42b91839d52bb, type: 3}
---- !u!23 &2756654830653929849 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 224603412944888259, guid: 28577d3bcb02bd54cbf42b91839d52bb, type: 3}
+--- !u!114 &695961741285760536 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3239465749551498914, guid: 28577d3bcb02bd54cbf42b91839d52bb, type: 3}
   m_PrefabInstance: {fileID: 2692142588740655290}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f19d9143a39eb3b46bc4563e9889cfbd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4288608537807709441 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2222627388677307835, guid: 28577d3bcb02bd54cbf42b91839d52bb, type: 3}
@@ -64121,24 +64191,26 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 6461729968528415519}
-        m_TargetAssemblyTypeName: UnityEngine.Renderer, UnityEngine
+      - m_Target: {fileID: 695961741285760536}
+        m_TargetAssemblyTypeName: UnityEngine.Rendering.HighDefinition.DecalProjector,
+          Unity.RenderPipelines.HighDefinition.Runtime
         m_MethodName: set_material
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 2100000, guid: 636e30f5bb0b5264c8369fd3eb2067b2, type: 2}
+          m_ObjectArgument: {fileID: 2100000, guid: 7dda1a27c46f27d4e97cd6915018205e, type: 2}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Material, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 2756654830653929849}
-        m_TargetAssemblyTypeName: UnityEngine.Renderer, UnityEngine
+      - m_Target: {fileID: 5495437702496403219}
+        m_TargetAssemblyTypeName: UnityEngine.Rendering.HighDefinition.DecalProjector,
+          Unity.RenderPipelines.HighDefinition.Runtime
         m_MethodName: set_material
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 2100000, guid: 24ad09b7b6db11e4fab6c796a55732b3, type: 2}
+          m_ObjectArgument: {fileID: 2100000, guid: 268d5b8f38abf7e458164f3b592ee898, type: 2}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Material, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
@@ -64160,24 +64232,26 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 6461729968528415519}
-        m_TargetAssemblyTypeName: UnityEngine.Renderer, UnityEngine
+      - m_Target: {fileID: 695961741285760536}
+        m_TargetAssemblyTypeName: UnityEngine.Rendering.HighDefinition.DecalProjector,
+          Unity.RenderPipelines.HighDefinition.Runtime
         m_MethodName: set_material
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 2100000, guid: ee12480861ef7e9468a1579268deb7d0, type: 2}
+          m_ObjectArgument: {fileID: 2100000, guid: a463e73a0a1d7f546af1f2f76b45a9e5, type: 2}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Material, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 2756654830653929849}
-        m_TargetAssemblyTypeName: UnityEngine.Renderer, UnityEngine
+      - m_Target: {fileID: 5495437702496403219}
+        m_TargetAssemblyTypeName: UnityEngine.Rendering.HighDefinition.DecalProjector,
+          Unity.RenderPipelines.HighDefinition.Runtime
         m_MethodName: set_material
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 2100000, guid: 1794d5b7b48c97a45a43eb1f61175d57, type: 2}
+          m_ObjectArgument: {fileID: 2100000, guid: b6c82b626d1ede043a3b89b5a37f764a, type: 2}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Material, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
@@ -64212,11 +64286,17 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   delayTime: 3
---- !u!23 &6461729968528415519 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 9002911434509091749, guid: 28577d3bcb02bd54cbf42b91839d52bb, type: 3}
+--- !u!114 &5495437702496403219 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7575017270640928681, guid: 28577d3bcb02bd54cbf42b91839d52bb, type: 3}
   m_PrefabInstance: {fileID: 2692142588740655290}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f19d9143a39eb3b46bc4563e9889cfbd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &7244869221243700070 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4744149957851880412, guid: 28577d3bcb02bd54cbf42b91839d52bb, type: 3}
@@ -65115,6 +65195,22 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: -0
       objectReference: {fileID: 0}
+    - target: {fileID: 5789697404971562610, guid: 0ef718b5da19213408a5203d12e2ecad, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5789697404971562610, guid: 0ef718b5da19213408a5203d12e2ecad, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5789697404971562610, guid: 0ef718b5da19213408a5203d12e2ecad, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5789697404971562610, guid: 0ef718b5da19213408a5203d12e2ecad, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5804270729784532345, guid: 0ef718b5da19213408a5203d12e2ecad, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.6
@@ -65171,6 +65267,10 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8055413703885179290, guid: 0ef718b5da19213408a5203d12e2ecad, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 520135651936689596, guid: 0ef718b5da19213408a5203d12e2ecad, type: 3}
     m_RemovedGameObjects: []
@@ -65223,24 +65323,13 @@ MonoBehaviour:
   onClosed:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6644331402755268997}
-        m_TargetAssemblyTypeName: UnityEngine.Renderer, UnityEngine
+      - m_Target: {fileID: 5321691700576683401}
+        m_TargetAssemblyTypeName: UnityEngine.Rendering.HighDefinition.DecalProjector,
+          Unity.RenderPipelines.HighDefinition.Runtime
         m_MethodName: set_material
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 2100000, guid: 636e30f5bb0b5264c8369fd3eb2067b2, type: 2}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Material, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 2582919836785918947}
-        m_TargetAssemblyTypeName: UnityEngine.Renderer, UnityEngine
-        m_MethodName: set_material
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 2100000, guid: 24ad09b7b6db11e4fab6c796a55732b3, type: 2}
+          m_ObjectArgument: {fileID: 2100000, guid: 268d5b8f38abf7e458164f3b592ee898, type: 2}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Material, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
@@ -65250,30 +65339,30 @@ MonoBehaviour:
   onToggled:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6644331402755268997}
-        m_TargetAssemblyTypeName: UnityEngine.Renderer, UnityEngine
+      - m_Target: {fileID: 5321691700576683401}
+        m_TargetAssemblyTypeName: UnityEngine.Rendering.HighDefinition.DecalProjector,
+          Unity.RenderPipelines.HighDefinition.Runtime
         m_MethodName: set_material
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 2100000, guid: ee12480861ef7e9468a1579268deb7d0, type: 2}
+          m_ObjectArgument: {fileID: 2100000, guid: b6c82b626d1ede043a3b89b5a37f764a, type: 2}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Material, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 2582919836785918947}
-        m_TargetAssemblyTypeName: UnityEngine.Renderer, UnityEngine
-        m_MethodName: set_material
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 2100000, guid: 1794d5b7b48c97a45a43eb1f61175d57, type: 2}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Material, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+--- !u!114 &5321691700576683401 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7247040829797926991, guid: 0ef718b5da19213408a5203d12e2ecad, type: 3}
+  m_PrefabInstance: {fileID: 3263099114016935366}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f19d9143a39eb3b46bc4563e9889cfbd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!23 &6644331402755268997 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 8177889783988382787, guid: 0ef718b5da19213408a5203d12e2ecad, type: 3}
