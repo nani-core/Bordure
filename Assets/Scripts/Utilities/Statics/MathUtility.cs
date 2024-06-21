@@ -1,5 +1,4 @@
 using UnityEngine;
-using System;
 
 namespace NaniCore {
 	public static class MathUtility {
@@ -88,6 +87,22 @@ namespace NaniCore {
 				max = Vector2.Max(max, vectors[i]);
 			}
 			return new() { min = min, max = max };
+		}
+
+		public static System.Collections.IEnumerator ProgressCoroutine(float duration, System.Action<float> continuation, float easingFactor = 0.0f) {
+			for(float startTime = Time.time, progress; (progress = (Time.time - startTime) / duration) < 1.0f; ) {
+				float easedProgress = Ease(progress, easingFactor);
+				continuation(easedProgress);
+				yield return new WaitForFixedUpdate();
+			}
+			continuation(1.0f);
+		}
+
+		public static Bounds BoundingUnion(Bounds a, Bounds b) {
+			return new() {
+				min = Vector3.Min(a.min, b.min),
+				max = Vector3.Max(a.max, b.max),
+			};
 		}
 	}
 }

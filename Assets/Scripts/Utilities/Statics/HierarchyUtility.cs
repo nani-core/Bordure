@@ -1,10 +1,10 @@
 using UnityEngine;
-using Unity.VisualScripting;
-
 #if UNITY_EDITOR
 using UnityEditor;
+using UnityEditor.SceneManagement;
 #endif
 using System.Collections.Generic;
+using System.Linq;
 
 namespace NaniCore {
 	public static class HierarchyUtility {
@@ -43,6 +43,14 @@ namespace NaniCore {
 			PrefabUtility.RevertPrefabInstance(target, InteractionMode.AutomatedAction);
 #endif
 		}
+
+		public static bool IsInPrefabMode() {
+#if UNITY_EDITOR
+			return PrefabStageUtility.GetCurrentPrefabStage() != null;
+#else
+			return false;
+#endif
+		}
 		#endregion
 
 		#region Serilization
@@ -76,22 +84,6 @@ namespace NaniCore {
 			if(hideInEditor)
 				hideFlags |= HideFlags.HideInInspector | HideFlags.HideInHierarchy;
 			realTarget.hideFlags = hideFlags;
-		}
-
-		public static IEnumerable<T> FindAllComponentsInEditor<T>(this GameObject root, bool includeInactive = false) where T : Component {
-#if UNITY_EDITOR
-			if(!Application.isPlaying) {
-				foreach(Transform child in root.transform) {
-					if(child.TryGetComponent<T>(out var here))
-						yield return here;
-					foreach(var grandchild in child.gameObject.FindAllComponentsInEditor<T>(includeInactive))
-						yield return grandchild;
-				}
-				yield break;
-			}
-#endif
-			foreach(var component in root.GetComponentsInChildren<T>(includeInactive))
-				yield return component;
 		}
 		#endregion
 
@@ -129,6 +121,18 @@ namespace NaniCore {
 				Destroy(child.gameObject);
 		}
 
+		public static IEnumerable<T> FindObjectsByName<T>(string name, bool includeInactive = false) where T : Component {
+			FindObjectsInactive includingFlag = includeInactive ? FindObjectsInactive.Include : FindObjectsInactive.Exclude;
+			var instances = Object.FindObjectsByType<T>(includingFlag, FindObjectsSortMode.None);
+			return instances.Where(i => i.name == name);
+		}
+
+		public static T FindObjectByName<T>(string name, bool includeInactive = false) where T : Component {
+			return FindObjectsByName<T>(name, includeInactive).FirstOrDefault();
+		}
+		#endregion
+
+		#region Shape & transformation
 		public static void RotateAlong(this Transform target, Vector3 pivot, Quaternion rotation) {
 			Transform pivotTransform = new GameObject().transform;
 			pivotTransform.position = pivot;
@@ -136,7 +140,7 @@ namespace NaniCore {
 			target.SetParent(pivotTransform, true);
 			pivotTransform.rotation = rotation;
 			target.SetParent(parent, true);
-			Object.Destroy(pivotTransform.gameObject);
+			Destroy(pivotTransform.gameObject);
 		}
 
 		/// <param name="target">The GameObject to ge aligned in space.</param>
@@ -151,6 +155,37 @@ namespace NaniCore {
 		}
 		public static void AlignWith(this Transform target, Transform alignment) {
 			target.SetPositionAndRotation(alignment.position, alignment.rotation);
+		}
+
+		public static void Lerp(this Transform target, Transform start, Transform end, float t) {
+			Vector3 position = Vector3.Lerp(start.position, end.position, t);
+			Quaternion orientation = Quaternion.Slerp(start.rotation, end.rotation, t);
+
+			if(target.TryGetComponent(out Rigidbody rb)) {
+				rb.MovePosition(position);
+				rb.MoveRotation(orientation);
+			}
+			else {
+				target.SetPositionAndRotation(position, orientation);
+			}
+		}
+
+		public static Bounds CalculateBoundingBox(this Transform parent) {
+			Bounds res = new() {
+				center = parent.position,
+				size = Vector3.zero,
+			};
+
+			if(parent.TryGetComponent(out Renderer renderer))
+				res = MathUtility.BoundingUnion(renderer.bounds, res);
+
+			if(parent.TryGetComponent(out Collider collider))
+				res = MathUtility.BoundingUnion(collider.bounds, res);
+
+			foreach(var child in parent.Children())
+				res = MathUtility.BoundingUnion(res, CalculateBoundingBox(child));
+
+			return res;
 		}
 		#endregion
 	}

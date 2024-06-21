@@ -1,39 +1,49 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 namespace NaniCore.Bordure {
 	public class Level : MonoBehaviour {
 		#region Serialized fields
-		[SerializeField] private SpawnPoint spawnPoint;
-#if DEBUG
-		[SerializeField] private SpawnPoint debugSpawnPoint;
-#endif
+		[SerializeField] private new string name;
+		[SerializeField] private List<LevelSection> preloadedSections = new();
+		#endregion
+
+		#region Fields
+		private bool isLoaded = false;
 		#endregion
 
 		#region Interfaces
-		public delegate void LevelCallback(Level self);
-		public LevelCallback onLoaded, onUnloaded;
+		public string Name => name;
+		public System.Action OnLoaded, OnUnloaded;
+		public bool IsLoaded => isLoaded;
 
-		public SpawnPoint SpawnPoint => spawnPoint;
-
-		public SpawnPoint DebugSpawnPoint {
-			get {
-#if DEBUG
-				return debugSpawnPoint ?? spawnPoint;
-#else
-				return spawnPoint;
-#endif
+		[ContextMenu("Load All Sections")]
+		public void LoadAllSections() {
+			foreach(var section in GetComponentsInChildren<LevelSection>(true)) {
+				section.Load();
 			}
 		}
 		#endregion
 
 		#region Life cycle
 		protected void Start() {
-			onLoaded?.Invoke(this);
+			foreach(var section in preloadedSections) {
+				section.Load();
+			}
+
+			OnLoaded?.Invoke();
+			isLoaded = true;
 		}
 
 		protected void OnDestroy() {
-			onUnloaded?.Invoke(this);
+			OnUnloaded?.Invoke();
 		}
 		#endregion
+	}
+
+	public static class LevelUtility {
+		public static Level GetLevel(this Transform target) {
+			return target.GetComponentInParent<Level>(true);
+		}
 	}
 }

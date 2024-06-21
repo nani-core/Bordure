@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2563312218709737929}
   - component: {fileID: 3863871226229502798}
+  - component: {fileID: 8396070739923480244}
   m_Layer: 0
   m_Name: Street Barrier
   m_TagString: Untagged
@@ -52,8 +53,21 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.9, y: 1, z: 0.1}
+  m_Size: {x: 2, y: 1, z: 0.1}
   m_Center: {x: 0, y: 0.5, z: 0.05}
+--- !u!114 &8396070739923480244
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8621217147127105828}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38c10526267b2fb4e900b5e19a2f9e65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tier: 8
 --- !u!1001 &7069583759667719021
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -109,39 +123,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 0e1475b9a205a844f93c383b27fcc786, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 203943319449886315}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0e1475b9a205a844f93c383b27fcc786, type: 3}
 --- !u!4 &7320193843995872390 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 0e1475b9a205a844f93c383b27fcc786, type: 3}
   m_PrefabInstance: {fileID: 7069583759667719021}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &7988643743707190844 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 0e1475b9a205a844f93c383b27fcc786, type: 3}
-  m_PrefabInstance: {fileID: 7069583759667719021}
-  m_PrefabAsset: {fileID: 0}
---- !u!65 &203943319449886315
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7988643743707190844}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 2.04, y: 0.11999998, z: 0.99989784}
-  m_Center: {x: 0, y: 0, z: 0.49994892}

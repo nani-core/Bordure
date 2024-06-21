@@ -1,57 +1,35 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using NaughtyAttributes;
 
 namespace NaniCore.Bordure {
-	[ExecuteInEditMode]
 	public partial class GameManager : MonoBehaviour {
 		#region Serialized fields
 		[SerializeField][Expandable] private GameSettings settings;
-		[SerializeField] private Level startLevel;
+		[SerializeField] private PauseMenuManager pauseMenu;
+		[SerializeField] private EventSystem eventSystem;
 		#endregion
 
 		#region Interfaces
 		public GameSettings Settings => settings;
+		public PauseMenuManager PauseMenu => pauseMenu;
 		#endregion
 
 		#region Life cycle
 		protected void Awake() {
-#if UNITY_EDITOR
-			if(!Application.isPlaying)
-				return;
-#endif
 			if(!EnsureSingleton())
 				return;
 
 			Initialize();
 		}
 
-		protected void Initialize() {
-			InitializeConstants();
-			InitializeLevel();
-			InitializeRigidbody();
-			InitializeAudio();
-			protagonist = InitializeProtagonist();
-			InitializeDebugUi();
-		}
-
 		protected void Update() {
-#if UNITY_EDITOR
-			if(!Application.isPlaying) {
-				OnEditUpdate();
-				return;
-			}
-#endif
 			UpdateLoopShape();
-			UpdateDebugUi();
+			UpdateDebug();
 		}
 
 		protected void OnDestroy() {
-#if UNITY_EDITOR
-			if(!Application.isPlaying)
-				return;
-#endif
-			FinalizeDebugUi();
-			RenderUtility.ReleasePooledResources();
+			Finalize();
 		}
 		#endregion
 	}

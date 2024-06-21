@@ -40,6 +40,19 @@ namespace NaniCore {
 			return true;
 		}
 
+		public static bool SweepTest(this Rigidbody rb, Vector3 from, Vector3 to, out RaycastHit hit, LayerMask layerMask) {
+			Vector3 originalPos = rb.transform.position, delta = to - from;
+			rb.transform.position = from;
+			var hits = SweepTestAll(rb, delta.normalized, delta.magnitude, 0, Vector3.zero, layerMask);
+			rb.transform.position = originalPos;
+			if(hits.Count == 0) {
+				hit = default;
+				return false;
+			}
+			hit = hits[0];
+			return true;
+		}
+
 
 		public static List<RaycastHit> RaycastAll(Vector3 origin, Vector3 direction, float distance, LayerMask layerMask, bool includeTriggers) {
 #pragma warning disable UNT0028 // Use non-allocating physics APIs

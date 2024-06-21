@@ -3,13 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace NaniCore {
+	using MeshEx = Nianyi.MeshEx;
+	using Bordure;
+
 	public class MeshTile : ArchitectureGenerator {
 		#region Serialized fields
 		public GameObject[] tiles = new GameObject[0];
 		public Vector3 i = Vector3.right, j = Vector3.up, k = Vector3.forward;
 		public Vector3Int count = Vector3Int.one;
 		public Vector3 uvw = Vector3.one * .5f;
-		public List<GameObject> hollowObjects = new List<GameObject>();
+		public List<GameObject> hollowObjects = new();
+		public bool batch = true;
 		#endregion
 
 		#region Interfaces
@@ -23,9 +27,12 @@ namespace NaniCore {
 			var usableTiles = UsableTiles;
 			if(usableTiles.Length <= 0)
 				return;
+
 			if(under == null) {
 				Debug.LogWarning("Base transform is null.");
 			}
+
+			List<GameObject> instances = new();
 			for(int ix = 0; ix < count.x; ++ix) {
 				for(int iy = 0; iy < count.y; ++iy) {
 					for(int iz = 0; iz < count.z; ++iz) {
@@ -41,8 +48,116 @@ namespace NaniCore {
 						var instance = instantiator(tile, under).transform;
 						instance.localPosition = localPosition;
 						instance.gameObject.isStatic = gameObject.isStatic;
+						instances.Add(instance.gameObject);
 					}
 				}
+			}
+
+			if(batch && GameManager.Instance != null)
+				BatchMeshes(under, instances);
+		}
+
+		private struct BatchInfo {
+			public int submeshIndexOffset;
+			public Mesh originalMesh;
+			public MeshEx templateMeshEx;
+		}
+
+		private void BatchMeshes(Transform under, List<GameObject> targetObjects) {
+			if(!Application.isPlaying)
+				return;
+			if(tiles.Length != 1)
+				return;
+			if(under == null)
+				under = new GameObject().transform;
+
+			// List mesh instances.
+			List<(MeshFilter, MeshRenderer)> pairs = new();
+			foreach(var targetObject in targetObjects) {
+				foreach(var renderer in targetObject.GetComponentsInChildren<MeshRenderer>()) {
+					if(!renderer.TryGetComponent(out MeshFilter filter))
+						continue;
+					Mesh mesh = filter.sharedMesh;
+					if(mesh == null)
+						continue;
+					if(!mesh.isReadable) {
+						Debug.LogWarning($"Warning: {mesh} is not CPU-readable, skipping batching.", mesh);
+						continue;
+					}
+					pairs.Add((filter, renderer));
+				}
+			}
+			if(pairs.Count == 0)
+				return;
+			
+			// Sort out submesh information.
+			Dictionary<Mesh, BatchInfo> batchInfos = new();
+			List<Material> materials = new();
+			int submeshIndexOffset = 0;
+			foreach(var (filter, renderer) in pairs) {
+				Mesh mesh = filter.sharedMesh;
+				if(batchInfos.ContainsKey(mesh))
+					continue;
+
+				materials.AddRange(renderer.sharedMaterials);
+
+				BatchInfo info = new() {
+					submeshIndexOffset = submeshIndexOffset,
+					originalMesh = mesh,
+					templateMeshEx = new MeshEx(mesh),
+				};
+				batchInfos[mesh] = info;
+
+				submeshIndexOffset += mesh.subMeshCount;
+			}
+
+			// Merge into one sum meshex.
+			MeshEx sum = new();
+			MeshEx.Descriptor sumDescriptor = sum.descriptor;
+			foreach(var (filter, renderer) in pairs) {
+				if(!batchInfos.ContainsKey(filter.sharedMesh))
+					continue;
+				var info = batchInfos[filter.sharedMesh];
+				sumDescriptor = sumDescriptor.Union(info.templateMeshEx.descriptor);
+				AddToMeshEx(sum,
+					info.templateMeshEx,
+					info.submeshIndexOffset,
+					MathUtility.RelativeTransform(filter.transform, under)
+				);
+			}
+			sum.descriptor = sumDescriptor;
+
+			// Destroy original objects.
+			foreach(var targetObject in targetObjects)
+				Destroy(targetObject);
+
+			// Create the new mesh.
+			Mesh sumMesh = sum.ToMesh();
+			sumMesh.name = $"Batched Mesh ({string.Join(", ", batchInfos.Values.Select(i => i.originalMesh.name))})";
+			GameManager.Instance.RegisterTemporaryResource(sumMesh);
+			under.gameObject.AddComponent<MeshFilter>().sharedMesh = sumMesh;
+			under.gameObject.AddComponent<MeshRenderer>().sharedMaterials = materials.ToArray();
+			under.gameObject.AddComponent<MeshCollider>();
+
+			// Generate the agent
+			if(tiles[0].TryGetComponent<RigidbodyAgent>(out var agent)) {
+				var newAgent = under.gameObject.AddComponent<RigidbodyAgent>();
+				newAgent.Tier = agent.Tier;
+			}
+		}
+
+		private static void AddToMeshEx(MeshEx destination, MeshEx add, int subMeshOffset, Matrix4x4 transformation) {
+			// Guarantee enough submesh seats.
+			int desiredSubmeshCount = subMeshOffset + add.Submeshes.Count;
+			while(destination.Submeshes.Count < desiredSubmeshCount)
+				destination.CreateSubmesh();
+
+			MeshEx copy = new(add);
+			copy.Transform(transformation);
+			for(int i = 0; i < copy.Submeshes.Count; ++i) {
+				var targetSubmesh = destination.Submeshes[i + subMeshOffset];
+				foreach(var triangle in copy.Submeshes[i].Triangles)
+					targetSubmesh.AddTriangle(triangle);
 			}
 		}
 

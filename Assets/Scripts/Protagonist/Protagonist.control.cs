@@ -4,16 +4,19 @@ namespace NaniCore.Bordure {
 	[RequireComponent(typeof(RigidbodyAgent))]
 	public partial class Protagonist : MonoBehaviour {
 		#region Serialized fields
-		[SerializeField] private new Camera camera;
 		[SerializeField] private Animator animator;
-		[SerializeField] private Transform eye;
+		[SerializeField] private Transform eye, foot;
 		#endregion
 
 		#region Fields
 		private CapsuleCollider capsuleCollider;
 		private new Rigidbody rigidbody;
 		private RigidbodyAgent rigidbodyAgent;
+		private bool usesMovement = true, usesOrientation = true;
 		private bool isOnGround = false;
+		private float coyoteTimer = 0f;
+		private bool isJumping = false;
+		private RaycastHit steppingGround = default;
 		private bool hasJustMoved = false;
 		private bool isWalking = false;
 		private bool isSprinting = false;
@@ -22,14 +25,44 @@ namespace NaniCore.Bordure {
 		private Vector3 bufferedMovement;
 		/// <summary>The target velocity due to movement, in world space.</summary>
 		private Vector3 desiredHorizontalMovement;
+		private ProtagonistInputHandler inputHandler;
 		#endregion
 
 		#region Properties
+		private ProtagonistInputHandler InputHandler {
+			get {
+				if(inputHandler != null)
+					return inputHandler;
+				inputHandler = transform.GetComponent<ProtagonistInputHandler>();
+				return inputHandler;
+			}
+		}
+
+		public bool IsControlEnabled {
+			get {
+				if(InputHandler == null)
+					return false;
+				return InputHandler.isActiveAndEnabled;
+			}
+			set {
+				if(InputHandler == null)
+					return;
+
+				InputHandler.enabled = value;
+
+				if(value) {
+					Cursor.lockState = CursorLockMode.Locked;
+				}
+				else {
+					Cursor.lockState = CursorLockMode.None;
+				}
+			}
+		}
+
 		public Transform Eye => eye;
-		public Camera Camera => camera;
 		public Vector3 Upward => transform.up;
 
-		public Ray EyeRay => camera.ViewportPointToRay(new Vector2(.5f, .5f));
+		public Ray EyeRay => GameManager.Instance.MainCamera.ViewportPointToRay(new Vector2(.5f, .5f));
 
 		public bool IsInWater => isInWater;
 		public bool IsOnGround => isOnGround;
@@ -79,6 +112,33 @@ namespace NaniCore.Bordure {
 				eye.localRotation = Quaternion.Euler(-degree, 0, 0);
 			}
 		}
+
+		public bool UsesMovement {
+			get => usesMovement;
+			set {
+				if(value) {
+					if(GameManager.Instance.CurrentSeat == null)
+						IsKinematic = false;
+				}
+				else {
+					isWalking = false;
+					isSprinting = false;
+				}
+				usesMovement = value;
+			}
+		}
+
+		public bool UsesOrientation {
+			get => usesOrientation;
+			set {
+				usesOrientation = value;
+			}
+		}
+
+		public bool IsKinematic {
+			get => rigidbody.isKinematic;
+			set => rigidbody.isKinematic = value;
+		}
 		#endregion
 
 		#region Life cycle
@@ -88,12 +148,6 @@ namespace NaniCore.Bordure {
 
 			ApplyGeometry();
 
-			if(eye == null) {
-				eye = transform.Find("Eye");
-				if(eye == null)
-					eye = new GameObject("Eye").transform;
-			}
-			eye.SetParent(transform, false);
 			eye.SetLocalPositionAndRotation(
 				Vector3.up * (Profile.height - Profile.eyeHanging),
 				Quaternion.identity
@@ -103,61 +157,10 @@ namespace NaniCore.Bordure {
 			rigidbodyAgent = GetComponent<RigidbodyAgent>();
 		}
 
-#if UNITY_EDITOR
-		protected void ValidateControl() {
-			ApplyGeometry();
-		}
-#endif
-
-		protected void FixedUpdateControl() {
+		protected void FixedUpdateControl(float dt) {
 			ValidateMovementConditions();
-
-			if(!IsInWater) {
-				// Walking.
-
-				desiredHorizontalMovement = eye.transform.right * bufferedMovement.x + transform.forward * bufferedMovement.z;
-				desiredHorizontalMovement *= WalkingSpeed;
-				if(!IsOnGround)
-					desiredHorizontalMovement *= Profile.midAirAttenuation;
-
-				var deltaVelocity = (desiredHorizontalMovement - rigidbody.velocity) * Profile.acceleration;
-				// Only taking horizontal movement into account.
-				deltaVelocity = deltaVelocity.ProjectOntoPlane(Upward);
-				rigidbody.AddForce(deltaVelocity, ForceMode.VelocityChange);
-			}
-			else {
-				// Swimming.
-
-				// Extract vertical movement.
-				var verticalMovement = bufferedMovement.y;
-				bufferedMovement.y = 0;
-
-				// Apply horizontal movement.
-				desiredHorizontalMovement = eye.transform.localToWorldMatrix.MultiplyVector(bufferedMovement) * Profile.swimmingSpeed;
-				Vector3 deltaVelovity = desiredHorizontalMovement - rigidbody.velocity;
-				if(desiredHorizontalMovement.magnitude > .1f)
-					deltaVelovity = deltaVelovity.ProjectOntoAxis(desiredHorizontalMovement);
-				else
-					deltaVelovity = -rigidbody.velocity.ProjectOntoPlane(Upward);
-				rigidbody.AddForce(deltaVelovity * Profile.acceleration, ForceMode.VelocityChange);
-
-				// Apply vertical movement.
-				if(Mathf.Abs(verticalMovement) > .1f) {
-					float verticalForce = verticalMovement * Profile.swimmingSpeed - Vector3.Dot(rigidbody.velocity, Upward);
-					rigidbody.AddForce(Upward * (verticalForce * Profile.acceleration), ForceMode.VelocityChange);
-				}
-
-				// Apply friction.
-				rigidbody.AddForce(-rigidbody.velocity * .08f, ForceMode.VelocityChange);
-				// Apply buoyancy.
-				rigidbody.AddForce(-Physics.gravity * (.3f * rigidbody.mass), ForceMode.Force);
-			}
-
-			if(IsOnGround && hasJustMoved && !IsInWater)
-				DealStepping(Time.fixedDeltaTime);
-
-			UpdateMovingAnimation();
-
+			if(UsesMovement)
+				DealBufferedMovement(bufferedMovement, dt);
 			bufferedMovement = Vector3.zero;
 		}
 		#endregion
@@ -206,9 +209,21 @@ namespace NaniCore.Bordure {
 			hasJustMoved = hasJustMoved || velocity.magnitude > .01f;
 		}
 
-		public void Jump(float height) {
-			if(!IsOnGround)
+		public void Jump(float height, bool resetCoyote = true) {
+			if(IsInWater)
 				return;
+
+			if(coyoteTimer <= 0.0f)
+				return;
+#if DEBUG
+			if(!IsOnGround) {
+				Debug.Log($"Jump is successful due to coyote time ({coyoteTimer}).");
+			}
+#endif
+			if(resetCoyote) {
+				isJumping = true;
+				coyoteTimer = 0.0f;
+			}
 
 			var gravity = -Vector3.Dot(Physics.gravity, Upward);
 			float desiredSpeed = Mathf.Sqrt(2f * gravity * height);
@@ -220,8 +235,84 @@ namespace NaniCore.Bordure {
 		public void Jump() => Jump(Profile.jumpingHeight);
 
 		private void ValidateMovementConditions() {
-			isOnGround = SweepTestGround(out RaycastHit _, Profile.skinDepth);
+			Transform previousGround = steppingGround.transform;
+			isOnGround = SweepTestGround(out steppingGround, Profile.skinDepth);
+			Transform newGround = steppingGround.transform;
+			if(previousGround != newGround) {
+				if(previousGround != null)
+					previousGround.SendMessage("OnNotStepped", SendMessageOptions.DontRequireReceiver);
+				if(newGround != null)
+					newGround.SendMessage("OnStepped", SendMessageOptions.DontRequireReceiver);
+			}
 			isInWater = rigidbodyAgent.IsOverlappingWithLayers(1 << GameManager.Instance.WaterLayer);
+		}
+
+		private void DealBufferedMovement(Vector3 bufferedMovement, float dt) {
+			// Check & update movement state.
+			if(!IsInWater) {
+				// Walking.
+
+				desiredHorizontalMovement = eye.transform.right * bufferedMovement.x + transform.forward * bufferedMovement.z;
+				desiredHorizontalMovement *= WalkingSpeed;
+				if(!IsOnGround) {
+					desiredHorizontalMovement *= Profile.midAirAttenuation;
+				}
+
+				var deltaVelocity = (desiredHorizontalMovement - rigidbody.velocity) * Profile.acceleration;
+				// Only taking horizontal movement into account.
+				deltaVelocity = deltaVelocity.ProjectOntoPlane(Upward);
+				rigidbody.AddForce(deltaVelocity, ForceMode.VelocityChange);
+			}
+			else {
+				// Swimming.
+
+				// Extract vertical movement.
+				var verticalMovement = bufferedMovement.y;
+				bufferedMovement.y = 0;
+
+				// Apply horizontal movement.
+				desiredHorizontalMovement = eye.transform.localToWorldMatrix.MultiplyVector(bufferedMovement) * Profile.swimmingSpeed;
+				Vector3 deltaVelovity = desiredHorizontalMovement - rigidbody.velocity;
+				if(desiredHorizontalMovement.magnitude > .1f)
+					deltaVelovity = deltaVelovity.ProjectOntoAxis(desiredHorizontalMovement);
+				else
+					deltaVelovity = -rigidbody.velocity.ProjectOntoPlane(Upward);
+				rigidbody.AddForce(deltaVelovity * Profile.acceleration, ForceMode.VelocityChange);
+
+				// Apply vertical movement.
+				if(Mathf.Abs(verticalMovement) > .1f) {
+					float verticalForce = verticalMovement * Profile.swimmingSpeed - Vector3.Dot(rigidbody.velocity, Upward);
+					rigidbody.AddForce(Upward * (verticalForce * Profile.acceleration), ForceMode.VelocityChange);
+				}
+
+				// Apply friction.
+				rigidbody.AddForce(-rigidbody.velocity * .08f, ForceMode.VelocityChange);
+				// Apply buoyancy.
+				rigidbody.AddForce(-Physics.gravity * (.3f * rigidbody.mass), ForceMode.Force);
+			}
+
+			// Stepping.
+			if(IsOnGround && hasJustMoved && !IsInWater)
+				DealStepping(dt);
+
+			// Jumping.
+			if(isJumping) {
+				// Don't update coyote time on the frame of jumping.
+				if(IsOnGround)
+					isJumping = false;
+			}
+			else {
+				if(IsOnGround) {
+					coyoteTimer = Profile.coyoteTime;
+				}
+				else {
+					if(coyoteTimer > 0.0f)
+						coyoteTimer -= dt;
+				}
+			}
+
+			// Animate.
+			UpdateMovingAnimation();
 		}
 
 		private void DealStepping(float deltaTime) {
@@ -242,7 +333,7 @@ namespace NaniCore.Bordure {
 			// Don't do downward steppings.
 			if(deltaY < 1e-1f)
 				return;
-			Jump(deltaY);
+			Jump(deltaY, false);
 		}
 
 		private void UpdateMovingAnimation() {
@@ -253,6 +344,6 @@ namespace NaniCore.Bordure {
 				animator.SetBool("Sprinting", IsSprinting);
 			}
 		}
-		#endregion
+#endregion
 	}
 }

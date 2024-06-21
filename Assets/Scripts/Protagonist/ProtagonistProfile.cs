@@ -1,5 +1,4 @@
 using UnityEngine;
-using System.Collections.Generic;
 
 namespace NaniCore.Bordure {
 	[CreateAssetMenu(menuName = "Nani Core/Protagonist Profile")]
@@ -16,7 +15,9 @@ namespace NaniCore.Bordure {
 		[Range(0, 1)] public float acceleration = .5f;
 		[Range(0, 90)] public float maxGroundingAngle = 45f;
 		[Min(0)] public float orientingSpeed = 1f;
+		[Min(0)] public float grabbingDistanceScrollingSpeed = 0.1f;
 		[Min(0)] public float jumpingHeight = 1f;
+		[Range(0, 1)] public float coyoteTime = 0.5f;
 		[Min(0)] public float stepHeight = .3f;
 		[Min(0)] public float stepDetectionDistance = .2f;
 		[Tooltip("How will the control ability decrease when midair.")]
@@ -27,11 +28,5 @@ namespace NaniCore.Bordure {
 		[Min(0)] public float maxInteractionDistance = 20f;
 		[Range(0, 1)] public float grabbingTransitionDuration = .2f;
 		[Range(0, 1)] public float grabbingEasingFactor = .3f;
-
-		[Header("Sound")]
-		public AudioClip onFocusSound;
-		public AudioClip onGrabSound;
-		public AudioClip onDropSound;
-		public List<AudioClip> stepAudioClips = new List<AudioClip>();
 	}
 }

@@ -16,13 +16,20 @@ namespace NaniCore.Bordure {
 
 		#region Interfaces
 		public Rigidbody Rigidbody => rigidbody;
-		public RigidbodyTier Tier => tier;
+		public RigidbodyTier Tier {
+			get => tier;
+			set => tier = value;
+		}
 
 		public Dictionary<Collider, ContactPoint[]> ColliderContacts => colliderContacts;
 		public HashSet<Collider> OverlappingTriggers => overlappingTriggers;
 
 		public bool IsOverlappingWithLayers(LayerMask layerMask) {
-			return overlappingTriggers.Any(trigger => ((1 << trigger.gameObject.layer) & layerMask) != 0);
+			return overlappingTriggers.Any(trigger => {
+				if(trigger == null)
+					return false;
+				return ((1 << trigger.gameObject.layer) & layerMask) != 0;
+			});
 		}
 		#endregion
 
@@ -119,7 +126,9 @@ namespace NaniCore.Bordure {
 		protected void FixedUpdate() {
 			// Remove all invalidated targets.
 
-			var collidersToBeRemoved = colliderContacts.Keys.Where(collider => collider == null);
+			var collidersToBeRemoved = colliderContacts.Keys
+				.Where(collider => collider == null)
+				.ToArray();
 			foreach(var removee in collidersToBeRemoved)
 				colliderContacts.Remove(removee);
 

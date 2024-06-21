@@ -1,75 +1,110 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 namespace NaniCore.Bordure {
-	public partial class GameManager : MonoBehaviour {
-		#region Fields
-		private AudioListener audioListener;
-		#endregion
-
+	public partial class GameManager {
 		#region Interfaces
-		public AudioListener AudioListener {
-			get => audioListener;
-			set {
-				if(value == null)
-					value = null;
-				if(audioListener != null && value == audioListener)
-					return;
+		public void PlayCollisionSound(RigidbodyAgent agent, float energy, Vector3 point) {
+			if(agent == null && point == null)
+				return;
 
-				if(audioListener != null) {
-#if UNITY_EDITOR
-					if(Application.isPlaying)
-						DestroyImmediate(audioListener);
-					else
-						Destroy(audioListener);
-#else
-					Destroy(audioListener);
-#endif
-				}
-
-				audioListener = value;
-
-				if(audioListener == null) {
-					audioListener = gameObject.EnsureComponent<AudioListener>();
-				}
+			if(agent == null) {
+				// Ensure it's a real null instead of an invalidated object.
+				agent = null;
 			}
+
+			RigidbodyTier tier = agent?.Tier ?? RigidbodyTier.Default;
+			var audio = Settings.audio;
+			var soundSet = GetSoundsSetByTier(audio.collisionSoundSets, audio.defaultCollisionSounds, tier);
+			var sound = soundSet.PickRandom();
+			if(sound == null)
+				return;
+			float soundEnergy = sound.CalculateTotalEnergy();
+			float theoreticalVolume = energy / soundEnergy;
+			float playingVolume = Mathf.Min(theoreticalVolume, audio.maxVolume);
+
+			if(Settings.makeAudioLogs && agent != null) {
+				Debug.Log($"{agent.name} (tier: {tier}) is making an collision sound.", agent);
+				Debug.Log(
+					string.Join(", ", new string[] {
+						$"desired energy = {energy}",
+						$"actual enery of {sound.name} = {soundEnergy}",
+						$"volume = {theoreticalVolume}" + (playingVolume == theoreticalVolume ? "" : " (clippped)")
+					}),
+					sound
+				);
+			}
+			PlayWorldSound(sound, point, agent?.transform, playingVolume);
 		}
 
-		public void PlayPhysicalSound(AudioClip sound, Vector3 position, Transform under, float strength) {
-			float maxGain = Settings.maxPhysicalSoundGain;
-			float volume = (1f - 1f / (strength / maxGain + 1f)) * maxGain;
-			volume *= Settings.physicalSoundBaseGain;
+		public void PlayCollisionSound(Collider collider, float energy, Vector3 point) {
+			if(collider == null)
+				return;
 
-			// 这b玩意死活调不好，给我整红温了。
-			Vector2 range = Vector2.zero;
-			range.y = Settings.physicalSoundRange * strength;
-			range.x = range.y * Mathf.Exp(-Settings.physicalSoundAttenuation);
-			range.y *= strength;
+			if(collider.transform.TryGetComponent<RigidbodyAgent>(out var agent)) {
+				PlayCollisionSound(agent, energy, point);
+				return;
+			}
 
-			var coroutine = AudioUtility.PlayOneShotAtCoroutine(
-				sound, position, under,
-				new() {
-					volume = volume,
-					range = range,
-					spatialBlend = 1f,
-				}
-			);
+			if(point == null)
+				point = collider.transform.position;
+			if(Settings.makeAudioLogs) {
+				Debug.Log($"{collider.name} is making an collision sound.", agent);
+			}
+			PlayCollisionSound(null as RigidbodyAgent, energy, point);
+		}
+
+		public void PlayWorldSound(AudioClip sound, Transform transform, float volume = 1.0f) {
+			PlayWorldSound(sound, transform.position, transform.transform, volume);
+		}
+
+		public void PlayWorldSound(AudioClip sound, Vector3 position, Transform under = null, float volume = 1.0f) {
+			var audio = Settings?.audio;
+			if(sound == null || audio == null)
+				return;
+
+			float maxRange = Mathf.Pow(audio.rangeExponentialBase, volume * audio.rangeFactorA) * audio.rangeFactorB;
+			AudioUtility.AudioPlayConfig config = new() {
+				volume = volume,
+				spatialBlend = 1.0f,
+				rolloffMode = AudioRolloffMode.Linear,
+				range = new Vector2(0.0f, maxRange),
+			};
+			var coroutine = AudioUtility.PlayOneShotAtCoroutine(sound, position, under, config);
+
+			if(Settings.makeAudioLogs) {
+				Debug.Log($"Sound \"{sound.name}\" is played (volume: {volume}, range = {maxRange}).", sound);
+			}
 			Instance.StartCoroutine(coroutine);
 		}
 
-		public void PlayPhysicalSound(AudioClip sound, Rigidbody rb) {
-			float strength = rb.mass;
-			if(!rb.isKinematic) {
-				if((rb.constraints | RigidbodyConstraints.FreezePosition) == 0)
-					strength *= rb.velocity.magnitude;
+		public IList<AudioClip> GetSoundsSetByTier(
+			IList<AudioSettings.SoundSet> soundSets,
+			IList<AudioClip> defaultSet,
+			RigidbodyTier tier
+		) {
+			if(tier == RigidbodyTier.Default)
+				return defaultSet;
+
+			int bestIndex = -1;
+			RigidbodyTier bestTier = RigidbodyTier.Default;
+			for(int i = 0; i < soundSets.Count; ++i) {
+				var set = soundSets[i];
+				if(!tier.IsDerivedFromTier(set.tier))
+					continue;
+
+				// See if this tier is a better match.
+				bool isBetter = set.tier > bestTier;
+				if(!isBetter)
+					continue;
+
+				bestIndex = i;
+				bestTier = set.tier;
 			}
 
-			PlayPhysicalSound(sound, rb.position, rb.transform, strength);
-		}
-		#endregion
-
-		#region Life cycle
-		protected void InitializeAudio() {
-			AudioListener = AudioListener;
+			if(bestIndex < 0)
+				return defaultSet;
+			return soundSets[bestIndex].sounds;
 		}
 		#endregion
 	}

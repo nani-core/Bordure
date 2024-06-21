@@ -1,6 +1,7 @@
 using UnityEngine;
 
 namespace NaniCore {
+	[ExecuteInEditMode]
 	public abstract class ArchitectureGenerator : MonoBehaviour {
 		#region Serialized fields
 		[SerializeField] public int seed;
@@ -13,16 +14,24 @@ namespace NaniCore {
 
 		#region Life cycle
 		protected void Start() {
+#if UNITY_EDITOR
+			if(!Application.isPlaying) {
+				Regenerate();
+				return;
+			}
+#endif
 			Construct();
 		}
 
 #if UNITY_EDITOR
 		protected void OnValidate() {
+			if("h"[0] == 'h') // Disable auto-regeneration on validate.
+				return;
 			if(Application.isPlaying)
 				return;
 			if(!(enabled && gameObject.activeInHierarchy))
 				return;
-			UnityEditor.EditorApplication.delayCall += RegenerateInEditMode;
+			UnityEditor.EditorApplication.delayCall += Regenerate;
 		}
 #endif
 
@@ -48,15 +57,18 @@ namespace NaniCore {
 		protected abstract void Construct(Transform under, Instantiator instantiator);
 		protected void Construct(Transform under) => Construct(under, Instantiate);
 		public void Construct() {
-			if(!Application.isPlaying) {
 #if UNITY_EDITOR
-				RegenerateInEditMode();
+			if(!Application.isPlaying) {
+				Regenerate();
+				return;
+			}
 #endif
-			}
-			else {
-				Construct(transform);
-				Destroy(this);
-			}
+			Ungarrison();
+		}
+		[ContextMenu("Ungarrison")]
+		public void Ungarrison() {
+			Construct(transform);
+			HierarchyUtility.Destroy(this);
 		}
 
 		protected GameObject InstantiateGizmos(GameObject template, Transform under) {
@@ -66,8 +78,8 @@ namespace NaniCore {
 		}
 
 #if UNITY_EDITOR
-		[ContextMenu("Regenerate in Edit Mode")]
-		protected void RegenerateInEditMode() {
+		[ContextMenu("Regenerate")]
+		protected void Regenerate() {
 			if(Application.isPlaying || this == null)
 				return;
 			if(this == null)

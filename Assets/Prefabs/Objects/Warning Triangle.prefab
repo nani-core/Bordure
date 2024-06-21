@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4479182318839734699}
   - component: {fileID: 2785648697453138077}
   - component: {fileID: 4296130273738135144}
+  - component: {fileID: 3369658246526682597}
   m_Layer: 0
   m_Name: Leg (Z)
   m_TagString: Untagged
@@ -105,6 +106,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 35.333332, y: 2.0000012, z: 5.333334}
   m_Center: {x: 0, y: 0, z: 2.6666665}
+--- !u!114 &3369658246526682597
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2265660069843335192}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38c10526267b2fb4e900b5e19a2f9e65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tier: 4
 --- !u!1 &2884299839407023349
 GameObject:
   m_ObjectHideFlags: 0
@@ -151,6 +165,7 @@ GameObject:
   - component: {fileID: 7138289876953728988}
   - component: {fileID: 1689299860539069569}
   - component: {fileID: 5847293502031601957}
+  - component: {fileID: 2314222960780021106}
   m_Layer: 0
   m_Name: Blasto
   m_TagString: Untagged
@@ -261,6 +276,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selectiveSubmesh: 0
   submeshIndices: 
+--- !u!114 &2314222960780021106
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3230585215888941600}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38c10526267b2fb4e900b5e19a2f9e65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tier: 4
 --- !u!1 &3955522368144167289
 GameObject:
   m_ObjectHideFlags: 0
@@ -275,6 +303,7 @@ GameObject:
   - component: {fileID: 973068067035285561}
   - component: {fileID: 6592480216851674848}
   - component: {fileID: 5233830358438867442}
+  - component: {fileID: 4959567142140205224}
   m_Layer: 0
   m_Name: Gastro
   m_TagString: Untagged
@@ -414,7 +443,32 @@ MonoBehaviour:
   ejectionOrigin: {x: 0, y: 0, z: 0}
   onDetached:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: b2f1048833879fd4eb780ed41474578f, type: 2}
+        m_TargetAssemblyTypeName: NaniCore.Bordure.GameManagerAgent, Bordure
+        m_MethodName: FinishAchievement
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: triangle plate
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &4959567142140205224
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3955522368144167289}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38c10526267b2fb4e900b5e19a2f9e65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tier: 4
 --- !u!1 &5064082393099457639
 GameObject:
   m_ObjectHideFlags: 0
@@ -558,6 +612,7 @@ GameObject:
   - component: {fileID: 5768891077932636254}
   - component: {fileID: 5897878288010762346}
   - component: {fileID: 7436222422875492412}
+  - component: {fileID: 6605883238738869805}
   m_Layer: 0
   m_Name: Leg (X)
   m_TagString: Untagged
@@ -651,3 +706,16 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 35.333332, y: 2.0000005, z: 5.3333344}
   m_Center: {x: 0, y: 0, z: 2.6666672}
+--- !u!114 &6605883238738869805
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8227094710535249237}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38c10526267b2fb4e900b5e19a2f9e65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tier: 4

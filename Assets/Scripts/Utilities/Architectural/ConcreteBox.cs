@@ -8,6 +8,7 @@ namespace NaniCore {
 		[System.Serializable]
 		public struct FaceConfig {
 			public GameObject[] tiles;
+			public bool dontGenerateConcrete;
 			public Material concreteMaterial;
 			[Min(0)] public float concreteThickness;
 			[Min(0)] public float concreteDepth;
@@ -114,8 +115,18 @@ namespace NaniCore {
 		}
 
 		protected override void Construct(Transform under, Instantiator instantiator) {
+			bool shouldGenerateConcrete = true;
+#if DEBUG && UNITY_EDITOR
+			if(!Application.isPlaying) {
+				var manager = FindObjectOfType<Bordure.GameManager>(true);
+				if(manager?.Settings != null) {
+					shouldGenerateConcrete = manager.Settings.generateConcreteInEditMode;
+				}
+			}
+#endif
+
 			foreach(var face in Faces) {
-				var faceObj = new GameObject($"{gameObject.name} (wall {face.name})");
+				GameObject faceObj = new($"{gameObject.name} (wall {face.name})");
 				faceObj.isStatic = gameObject.isStatic;
 
 				var faceTransform = faceObj.transform;
@@ -150,27 +161,32 @@ namespace NaniCore {
 				meshTile.Construct();
 
 				// Generate concrete.
-				{
-					var concreteObj = GameObject.CreatePrimitive(PrimitiveType.Cube);
-					concreteObj.name = $"{gameObject.name} (concrete {face.name})";
-					concreteObj.isStatic = gameObject.isStatic;
-					concreteObj.layer = LayerMask.NameToLayer("Concrete");
-					var concreteTransform = concreteObj.transform;
-					concreteTransform.SetParent(faceTransform, false);
+				if(!face.config.dontGenerateConcrete) {
+					if(shouldGenerateConcrete) {
+						var concreteObj = GameObject.CreatePrimitive(PrimitiveType.Cube);
+						concreteObj.name = $"{gameObject.name} (concrete {face.name})";
+						concreteObj.isStatic = gameObject.isStatic;
+						concreteObj.layer = LayerMask.NameToLayer("Concrete");
+						var concreteTransform = concreteObj.transform;
+						concreteTransform.SetParent(faceTransform, false);
 
-					concreteTransform.localPosition = Vector3.forward * (face.config.concreteThickness * .5f + face.config.concreteDepth);
+						concreteTransform.localPosition = Vector3.forward * (face.config.concreteThickness * .5f + face.config.concreteDepth);
 
-					var size = Vector3.one * face.config.concreteThickness;
-					var hSize = Vector3.Scale(count, spacing);
-					hSize += Vector3.one * ((inward && !face.config.preventOverlapping ? 1 : -1) * face.config.concreteDepth * 2);
-					if(inward && face.config.forceFillCorner)
-						hSize += spacing * 2;
-					size[0] = hSize[face.countDim.Item1];
-					size[1] = hSize[face.countDim.Item2];
-					concreteTransform.localScale = size;
+						var size = Vector3.one * face.config.concreteThickness;
+						var hSize = Vector3.Scale(count, spacing);
+						hSize += Vector3.one * ((inward && !face.config.preventOverlapping ? 1 : -1) * face.config.concreteDepth * 2);
+						if(inward && face.config.forceFillCorner)
+							hSize += spacing * 2;
+						size[0] = hSize[face.countDim.Item1];
+						size[1] = hSize[face.countDim.Item2];
+						concreteTransform.localScale = size;
 
-					if(face.config.concreteMaterial != null)
-						concreteObj.GetComponent<Renderer>().sharedMaterial = face.config.concreteMaterial;
+						var renderer = concreteObj.GetComponent<Renderer>();
+						if(face.config.concreteMaterial != null)
+							renderer.sharedMaterial = face.config.concreteMaterial;
+						else
+							renderer.sharedMaterials = new Material[0];
+					}
 				}
 			}
 		}

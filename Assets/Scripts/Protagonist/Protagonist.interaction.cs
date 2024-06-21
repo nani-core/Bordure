@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.UIElements;
 
 namespace NaniCore.Bordure {
 	public partial class Protagonist : MonoBehaviour {
@@ -10,8 +11,15 @@ namespace NaniCore.Bordure {
 		#region Fields
 		private GameObject lookingAtObject = null;
 		private Transform grabbingObject;
-		private bool grabbingOrienting;
 		private RaycastHit lookingHit;
+		private bool hasStartedGrabbing;
+		private Vector3 initialGrabbingPosition;
+		private Vector3 previousGrabbingPosition;
+
+		// Original properties of the grabbing object's.
+		private Transform originalParent;
+		private int originalLayer;
+		private bool originalIsKinematic;
 		#endregion
 
 		#region Interfaces
@@ -25,61 +33,104 @@ namespace NaniCore.Bordure {
 					return;
 
 				if(grabbingObject != null) {
-					grabbingObject.transform.SetParent(null, true);
+					grabbingObject.transform.SetParent(originalParent, true);
+					grabbingObject.gameObject.layer = originalLayer;
+					if(grabbingObject.transform.TryGetComponent(out Rigidbody rb))
+						rb.isKinematic = originalIsKinematic;
+
 					grabbingObject.SendMessage("OnGrabEnd");
-					PlaySfx(Profile.onDropSound);
+					PlaySfx(GameManager.Instance.Settings.audio.onDropSound);
+					Debug.Log($"{grabbingObject} is dropped.", grabbingObject);
 				}
 
+				// Cannot grab the object being stood on.
+				if(value != null && IsOnGround) {
+					if(steppingGround.transform?.IsChildOf(value) ?? false) {
+						Debug.LogWarning($"Warning: Cannot grab {value} now because it is being stood on.", value);
+						return;
+					}
+				}
 				grabbingObject = value;
 
 				if(grabbingObject != null) {
+					originalParent = grabbingObject.transform.parent;
+					originalLayer = grabbingObject.gameObject.layer;
+					if(grabbingObject.transform.TryGetComponent(out Rigidbody rb))
+						originalIsKinematic = rb.isKinematic;
+
 					grabbingObject.SendMessage("OnGrabBegin");
-					PlaySfx(Profile.onGrabSound);
+					PlaySfx(GameManager.Instance.Settings.audio.onGrabSound);
 
 					grabbingObject.transform.SetParent(eye.transform, true);
-				}
+					grabbingObject.gameObject.layer = GameManager.Instance.GrabbedLayer;
+					if(rb != null)
+						rb.isKinematic = true;
 
-				inputHandler.SetGrabbingActionEnabled(grabbingObject != null);
+					hasStartedGrabbing = false;
+					previousGrabbingPosition = initialGrabbingPosition = grabbingObject.transform.position;
+					Debug.Log($"{grabbingObject} is grabbed.", grabbingObject);
+				}
 			}
 		}
 
-		public bool GrabbingOrienting {
-			get => GrabbingObject != null && grabbingOrienting;
-			set => grabbingOrienting = GrabbingObject != null && value;
-		}
-
-		public void GrabbingOrientDelta(float delta) {
+		public void GrabbingOrientDelta(Vector3 delta) {
 			delta *= Profile.orientingSpeed;
-			float grabbingAzimuth = GrabbingObject.localRotation.eulerAngles.y * Mathf.PI / 180;
-			grabbingAzimuth += delta;
-			GrabbingObject.localRotation = Quaternion.Euler(0, grabbingAzimuth * 180 / Mathf.PI, 0);
+			Vector3 euler = new Vector3(delta.y, -delta.x, 0) * Mathf.Rad2Deg;
+			Quaternion deltaQuat = Quaternion.Euler(euler);
+			Quaternion t = Quaternion.Inverse(GrabbingObject.rotation) * Eye.rotation;
+			deltaQuat = t * deltaQuat * Quaternion.Inverse(t);
+			GrabbingObject.localRotation *= deltaQuat;
 		}
 
-		public void ResetGrabbingTransform() {
-			if(GrabbingObject == null)
-				return;
+		public float GrabbingDistance {
+			get {
+				if(GrabbingObject == null)
+					return Mathf.Infinity;
+				return Vector3.Distance(Eye.position, GrabbingObject.position);
+			}
+			set {
+				if(GrabbingObject == null)
+					return;
 
-			StartCoroutine(GrabCoroutine(GrabbingObject));
+				float min = 0;
+				if(GrabbingObject.TryGetComponent(out Collider shape))
+					min = shape.bounds.size.magnitude;
+				float max = Profile.maxInteractionDistance;
+				if(GrabbingObject.TryGetComponent(out FocusValidator focusValidator))
+					max = Mathf.Min(max, focusValidator.MaxDistance);
+				value = Mathf.Clamp(value, min, max);
+
+				Vector3 direction = Vector3.Normalize(GrabbingObject.position - Eye.position);
+				GrabbingObject.position = Eye.position + direction * value;
+			}
 		}
 
 		public bool EyeCast(out RaycastHit hit) {
-			return PhysicsUtility.Raycast(EyeRay, out hit, Profile.maxInteractionDistance, GameManager.Instance.GrabbingLayerMask, false);
+			return PhysicsUtility.Raycast(EyeRay, out hit, Profile.maxInteractionDistance, GameManager.Instance.InteractionLayerMask, false);
 		}
 		#endregion
 
 		#region Life cycle
-		private void InitializeInteraction() {
-			inputHandler = gameObject.EnsureComponent<ProtagonistInputHandler>();
-
-			if(focus == null) {
-				Debug.LogWarning("No FocusUi component found in the protagonist interaction UI prefab.", this);
-			}
-		}
-
 		private void UpdateInteraction() {
-			bool hasHit = EyeCast(out lookingHit);
-			lookingAtObject = hasHit ? lookingHit.transform.gameObject : null;
+			if(GrabbingObject == null) {
+				bool hasHit = EyeCast(out lookingHit);
 
+				GameObject newLookingAtObject = hasHit ? lookingHit.transform.gameObject : null;
+				if(newLookingAtObject != lookingAtObject) {
+					lookingAtObject = newLookingAtObject;
+					//Debug.Log($"Now looking at {newLookingAtObject}.", newLookingAtObject);
+				}
+			}
+			else {
+				if(PreventGrabbingObjectClipping(out Vector3 safePosition)) {
+					GrabbingObject.position = safePosition;
+					GrabbingObject = null;
+					Debug.Log("Prevented grabbing object from clipping.", grabbingObject);
+				}
+				else {
+					previousGrabbingPosition = GrabbingObject.position;
+				}
+			}
 			UpdateFocusUi();
 		}
 		#endregion
@@ -101,39 +152,17 @@ namespace NaniCore.Bordure {
 						maxCastDistance = Mathf.Min(maxCastDistance, fv.MaxDistance);
 					}
 				}
-				focus.Opacity = 1 - Mathf.Clamp01(effectiveCastDistance / maxCastDistance);
+				// focus.Opacity = 1 - Mathf.Clamp01(effectiveCastDistance / maxCastDistance);
 			}
 			else if(!GrabbingObject) {
 				focus.CurrentStatus = FocusUi.Status.Normal;
-				focus.Opacity = 1 - Mathf.Clamp01(effectiveCastDistance / Profile.maxInteractionDistance);
+				// focus.Opacity = 1 - Mathf.Clamp01(effectiveCastDistance / Profile.maxInteractionDistance);
 			}
 			else {
 				focus.CurrentStatus = FocusUi.Status.Grabbing;
-				focus.Opacity = 1f;
+				// focus.Opacity = 1f;
 			}
-		}
-
-		private IEnumerator GrabCoroutine(Transform target) {
-			float grabbingDistance = Vector3.Distance(target.position, eye.transform.position);
-			float grabbingAzimuth = target.localRotation.eulerAngles.y * Mathf.PI / 180;
-
-			Vector3
-				startPosition = target.localPosition,
-				endPosition = Vector3.forward * grabbingDistance;
-			Quaternion
-				startRotation = target.localRotation,
-				endRotation = Quaternion.Euler(0, grabbingAzimuth * 180 / Mathf.PI, 0);
-
-			float startTime = Time.time;
-			for(float t; (t = (Time.time - startTime) / Profile.grabbingTransitionDuration) < 1;) {
-				t = MathUtility.Ease(t, Profile.grabbingEasingFactor);
-				target.SetLocalPositionAndRotation(
-					Vector3.Lerp(startPosition, endPosition, t),
-					Quaternion.Slerp(startRotation, endRotation, t)
-				);
-				yield return new WaitForFixedUpdate();
-			}
-			target.SetLocalPositionAndRotation(endPosition, endRotation);
+			// focus.Opacity = 1f;
 		}
 
 		public void Interact() {
@@ -145,7 +174,34 @@ namespace NaniCore.Bordure {
 				foreach(var loopshape in GameManager.Instance.ValidLoopshapes)
 					loopshape.Open();
 			}
-			#endregion
 		}
+
+		private bool PreventGrabbingObjectClipping(out Vector3 safePosition) {
+			safePosition = default;
+			if(GrabbingObject == null)
+				return false;
+			if(!GrabbingObject.TryGetComponent(out Rigidbody rb))
+				return false;
+
+			safePosition = GrabbingObject.position;
+
+			if(!hasStartedGrabbing) {
+				if(Vector3.Distance(initialGrabbingPosition, GrabbingObject.position) > 0.01f)
+					hasStartedGrabbing = true;
+			}
+			if(!hasStartedGrabbing)
+				return false;
+
+			Vector3 delta = GrabbingObject.position - previousGrabbingPosition;
+			Vector3 start = previousGrabbingPosition - delta.normalized * 0.1f, end = GrabbingObject.position;
+			if(rb.SweepTest(start, end, out RaycastHit hit, GameManager.Instance.InteractionLayerMask)) {
+				// TODO: Calculate the exact safe position.
+				safePosition = previousGrabbingPosition;
+				return true;
+			}
+
+			return false;
+		}
+		#endregion
 	}
 }

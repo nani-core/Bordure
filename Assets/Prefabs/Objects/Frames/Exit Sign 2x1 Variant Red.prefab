@@ -16,6 +16,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Exit Sign 2x1 Variant Red
       objectReference: {fileID: 0}
+    - target: {fileID: 2412121535739603268, guid: 0ef718b5da19213408a5203d12e2ecad, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 2100000, guid: 17e759f3bd5740f46bde5ab255eb2b4f, type: 2}
     - target: {fileID: 5481892618077855949, guid: 0ef718b5da19213408a5203d12e2ecad, type: 3}
       propertyPath: ejectionVelocity.z
       value: 1
@@ -60,6 +64,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7247040829797926991, guid: 0ef718b5da19213408a5203d12e2ecad, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 2100000, guid: 48195cf4533dddc48a8fe9a833808a6b, type: 2}
     - target: {fileID: 8177889783988382787, guid: 0ef718b5da19213408a5203d12e2ecad, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -67,5 +75,26 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2012810330610301662, guid: 0ef718b5da19213408a5203d12e2ecad, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1331061770196663850}
   m_SourcePrefab: {fileID: 100100000, guid: 0ef718b5da19213408a5203d12e2ecad, type: 3}
+--- !u!1 &955799380452480859 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2012810330610301662, guid: 0ef718b5da19213408a5203d12e2ecad, type: 3}
+  m_PrefabInstance: {fileID: 1634065783416679813}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1331061770196663850
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 955799380452480859}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38c10526267b2fb4e900b5e19a2f9e65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tier: 4

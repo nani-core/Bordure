@@ -5,65 +5,123 @@ namespace NaniCore.Bordure {
 	[RequireComponent(typeof(Protagonist))]
 	public class ProtagonistInputHandler : MonoBehaviour {
 		#region Fields
-		protected Protagonist protagonist;
-		protected PlayerInput playerInput;
-		private InputActionMap grabbingActionMap;
+		private Protagonist protagonist;
+		[SerializeField] private PlayerInput playerInput;
 
-		protected Vector3 moveVelocity;
-		protected float floating = 0f, sinking = 0f;
+		private Vector3 moveVelocity;
+		private float floating = 0f, sinking = 0f;
+
+		private bool grabbingOrienting = false;
+		private bool grabbingDistancing = false;
 		#endregion
 
 		#region Life cycle
 		protected void Start() {
 			protagonist = GetComponent<Protagonist>();
 
-			playerInput = gameObject.EnsureComponent<PlayerInput>();
-			playerInput.notificationBehavior = PlayerNotifications.SendMessages;
-			playerInput.actions.FindActionMap("Normal").Enable();
+			foreach(var map in playerInput.actions.actionMaps)
+				map.Enable();
 
-			grabbingActionMap = playerInput.actions.FindActionMap("Grabbing");
-		}
-
-		protected void OnEnable() {
-			Cursor.lockState = CursorLockMode.Locked;
-		}
-
-		protected void OnDisable() {
-			Cursor.lockState = CursorLockMode.None;
+			UpdateMapsEnability();
 		}
 
 		protected void FixedUpdate() {
-			if(!protagonist.IsInWater)
-				moveVelocity.y = 0;
-			else
-				moveVelocity.y = floating - sinking;
+			if(protagonist.UsesMovement) {
+				if(!protagonist.IsInWater)
+					moveVelocity.y = 0;
+				else
+					moveVelocity.y = floating - sinking;
 
-			protagonist.MoveVelocity(moveVelocity);
+				protagonist.MoveVelocity(moveVelocity);
+			}
+		}
+
+		protected void OnEnable() {
+			playerInput.enabled = true;
+			FlushInput();
+		}
+
+		protected void OnDisable() {
+			playerInput.enabled = false;
 		}
 		#endregion
 
 		#region Functions
-		public void SetGrabbingActionEnabled(bool enabled) {
-			if(enabled)
-				grabbingActionMap.Enable();
-			else
-				grabbingActionMap.Disable();
+		private GameManager Game => GameManager.Instance;
+
+		private bool ShouldOrientationBeEnabled => !(GrabbingOrienting || GrabbingDistancing);
+		private bool IsGrabbing => protagonist.GrabbingObject != null;
+
+		private bool GrabbingOrienting {
+			get => grabbingOrienting;
+			set {
+				if(!IsGrabbing)
+					value = false;
+				grabbingOrienting = value;
+				UpdateMapsEnability();
+			}
+		}
+
+		private bool GrabbingDistancing {
+			get => grabbingDistancing;
+			set {
+				if(!IsGrabbing)
+					value = false;
+				grabbingDistancing = value;
+				UpdateMapsEnability();
+			}
+		}
+
+		private void UpdateMapsEnability() {
+			var orientationMap = playerInput.actions.FindActionMap("Orientation");
+			var grabbingMap = playerInput.actions.FindActionMap("Grabbing");
+			SetEnability(orientationMap, ShouldOrientationBeEnabled);
+			SetEnability(grabbingMap, IsGrabbing);
+		}
+
+		public static void SetEnability(InputActionMap map, bool value) {
+			if(map == null)
+				return;
+			if(value) map.Enable();
+			else map.Disable();
+		}
+
+		private void FlushInput() {
+			moveVelocity = default;
+			floating = default;
+			sinking = default;
+			grabbingDistancing = false;
+			grabbingOrienting = false;
 		}
 		#endregion
 
 		#region Handlers
-		protected void OnMoveVelocity(InputValue value) {
-			var raw = value.Get<Vector2>();
-			moveVelocity.x = raw.x;
-			moveVelocity.z = raw.y;
+		// Normal
+
+		protected void OnInteract() {
+			protagonist.Interact();
 		}
 
-		protected void OnOrientDelta(InputValue value) {
-			Vector2 raw = value.Get<Vector2>();
-			if(!protagonist.GrabbingOrienting)
-				protagonist.OrientDelta(raw);
-			else
-				protagonist.GrabbingOrientDelta(-raw.x);
+		protected void OnCheat() => protagonist?.Cheat();
+
+		protected void OnPause() {
+			Game.PauseMenu.OpenStartMenu();
+		}
+
+		// Movement
+
+		protected void OnMoveVelocity(InputValue value) {
+			var raw = value.Get<Vector2>();
+			if(Game.CurrentSeat == null) {
+				// Normal movement
+				moveVelocity.x = raw.x;
+				moveVelocity.z = raw.y;
+			}
+			else {
+				// Leave seat
+				if(raw.magnitude > 0.5f && Game.CurrentSeat.canLeaveManually)
+					Game.ProtagonistLeaveSeat();
+			}
 		}
 
 		protected void OnSetSprinting(InputValue value) {
@@ -75,8 +133,7 @@ namespace NaniCore.Bordure {
 			floating = raw;
 			if(raw > 0) {
 				// Can jump in water.
-				if(protagonist.IsOnGround)
-					protagonist.Jump();
+				protagonist.Jump();
 			}
 		}
 
@@ -85,19 +142,45 @@ namespace NaniCore.Bordure {
 			sinking = raw;
 		}
 
-		protected void OnInteract() {
-			protagonist.Interact();
+		// Orientation
+
+		protected void OnOrientDelta(InputValue value) {
+			if(!protagonist.UsesOrientation)
+				return;
+
+			Vector2 raw = value.Get<Vector2>();
+			raw *= Game.mouseSensitivityGain;
+			protagonist.OrientDelta(raw);
 		}
 
-		protected void OnCheat() => protagonist?.Cheat();
+		// Grabbing
 
 		protected void OnSetGrabbingOrienting(InputValue value) {
 			bool raw = value.Get<float>() > .5f;
-			protagonist.GrabbingOrienting = raw;
+			GrabbingOrienting = raw;
 		}
 
-		protected void OnResetGrabbingTransform() {
-			protagonist.ResetGrabbingTransform();
+		protected void OnSetGrabbingDistancing(InputValue value) {
+			bool raw = value.Get<float>() > .5f;
+			GrabbingDistancing = raw;
+		}
+
+		protected void OnGrabbingDistanceDelta(InputValue value) {
+			if(protagonist.GrabbingObject == null || !GrabbingDistancing)
+				return;
+
+			float raw = value.Get<float>();
+			raw *= protagonist.Profile.grabbingDistanceScrollingSpeed;
+			protagonist.GrabbingDistance += raw;
+		}
+
+		protected void OnGrabbingOrientDelta(InputValue value) {
+			if(protagonist.GrabbingObject == null || !GrabbingOrienting)
+				return;
+
+			Vector2 raw = value.Get<Vector2>();
+			raw *= Game.mouseSensitivityGain;
+			protagonist.GrabbingOrientDelta(raw);
 		}
 		#endregion
 	}
