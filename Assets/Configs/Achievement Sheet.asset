@@ -1,0 +1,123 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99adabccc5b26604cbfb3696c69ed344, type: 3}
+  m_Name: Achievement Sheet
+  m_EditorClassIdentifier: 
+  achievements:
+  - key: ophthalmology
+    icon: {fileID: 21300000, guid: eee983c7ab3a4fb4cbaa3601f63a961b, type: 3}
+    title: "\u6CE8\u610F\u7528\u773C\u536B\u751F"
+    description: "\u4F7F\u7528\u9A8C\u5149\u4EEA\u6D4B\u89C6\u529B"
+    hidden: 0
+  - key: triangle plate
+    icon: {fileID: 21300000, guid: 2e7b165cd1425ca4db188c2f09c1079e, type: 3}
+    title: "\u8FD9\u6846\u771F\u5E05\u5427"
+    description: "\u5C1D\u8BD5\u627E\u5230\u66F4\u591A\u7684\u56DE\u5F62\uFF01"
+    hidden: 0
+  - key: swimming
+    icon: {fileID: 21300000, guid: ef861ef6723914d4eb55fa9ef250a511, type: 3}
+    title: "\u6E38\u6CF3\u6280\u672F"
+    description: "\u8FDB\u5165\u6C34\u6C60"
+    hidden: 0
+  - key: light off
+    icon: {fileID: 21300000, guid: 45c72c3a1e11dd349a7e8171c4c93206, type: 3}
+    title: "\u968F\u624B\u5173\u706F"
+    description: "\u5173\u6389\u4E00\u76CF\u706F"
+    hidden: 0
+  - key: diving pool
+    icon: {fileID: 21300000, guid: 24e804eba5e65794ea282bb8852efc33, type: 3}
+    title: "\u618B\u6C14\u8FBE\u4EBA"
+    description: "\u88AB\u5173\u5728\u6DF1\u6F5C\u6C60\u91CC"
+    hidden: 0
+  - key: end game
+    icon: {fileID: 21300000, guid: 98c2f9b43065a0c4480e369f65cd57a8, type: 3}
+    title: "\u5B8C\u6210\u6E38\u620F"
+    description: "\u611F\u8C22\u6E38\u73A9\uFF01"
+    hidden: 0
+  - key: light all off
+    icon: {fileID: 21300000, guid: 0356eb9762ce4ae429cc7c41c33906e3, type: 3}
+    title: "\u8282\u80FD\u5148\u950B"
+    description: "\u5173\u6389\u6240\u6709\u80FD\u5173\u7684\u706F"
+    hidden: 1
+  - key: sit down
+    icon: {fileID: 21300000, guid: 5524dda1582f8c04b9a9be3890b4463f, type: 3}
+    title: "3A \u5927\u5750"
+    description: "\u53D1\u73B0\u4E86\u6905\u5B50\u80FD\u5750"
+    hidden: 1
+  - key: glass pane
+    icon: {fileID: 21300000, guid: e981598e05c748f4abe04412636dd3dd, type: 3}
+    title: "\u4E0D\u649E\u5357\u5899\u4E0D\u56DE\u5934"
+    description: "\u8BD5\u56FE\u901A\u8FC7\u73BB\u7483"
+    hidden: 1
+  - key: copper
+    icon: {fileID: 21300000, guid: c3a747b88d0b54e478f7e9f88347734a, type: 3}
+    title: "\u901F\u901A\u94DC\u724C"
+    description: "\u572810\u5206\u949F\u5185\u5B8C\u6210\u6E38\u620F"
+    hidden: 1
+  - key: silver
+    icon: {fileID: 21300000, guid: 7f5a7dae5a192fe45923626309822b86, type: 3}
+    title: "\u901F\u901A\u94F6\u724C"
+    description: "\u5728360\u79D2\u5185\u5B8C\u6210\u6E38\u620F"
+    hidden: 1
+  - key: gold
+    icon: {fileID: 21300000, guid: 63f65d2488ae3734f93df579d0300863, type: 3}
+    title: "\u901F\u901A\u91D1\u724C"
+    description: "\u5728180\u79D2\u5185\u5B8C\u6210\u6E38\u620F"
+    hidden: 1
+  - key: duck1
+    icon: {fileID: 21300000, guid: 788694749c8b2894dad510491246383d, type: 3}
+    title: "\u95E8\u524D\u5927\u6865\u4E0B"
+    description: "\u627E\u5230\u4E00\u53EA\u9E2D\u5B50 (1/7)"
+    hidden: 1
+  - key: duck2
+    icon: {fileID: 21300000, guid: 788694749c8b2894dad510491246383d, type: 3}
+    title: "\u6E38\u8FC7\u4E00\u7FA4\u9E2D"
+    description: "\u627E\u5230\u4E24\u53EA\u9E2D\u5B50 (2/7)"
+    hidden: 1
+  - key: duck3
+    icon: {fileID: 21300000, guid: 788694749c8b2894dad510491246383d, type: 3}
+    title: "\u5FEB\u6765\u5FEB\u6765\u6570\u4E00\u6570"
+    description: "\u627E\u5230\u4E09\u53EA\u9E2D\u5B50 (3/7)"
+    hidden: 1
+  - key: duck4
+    icon: {fileID: 21300000, guid: 788694749c8b2894dad510491246383d, type: 3}
+    title: "\u4E8C\u56DB\u516D\u4E03\u516B"
+    description: "\u627E\u5230\u56DB\u53EA\u9E2D\u5B50 (4/7)"
+    hidden: 1
+  - key: duck5
+    icon: {fileID: 21300000, guid: 788694749c8b2894dad510491246383d, type: 3}
+    title: "\u5495\u560E\u5495\u560E"
+    description: "\u627E\u5230\u4E94\u53EA\u9E2D\u5B50 (5/7)"
+    hidden: 1
+  - key: duck6
+    icon: {fileID: 21300000, guid: 788694749c8b2894dad510491246383d, type: 3}
+    title: "\u771F\u5440\u771F\u591A\u9E2D"
+    description: "\u627E\u5230\u516D\u53EA\u9E2D\u5B50 (6/7)"
+    hidden: 1
+  - key: duck7
+    icon: {fileID: 21300000, guid: 788694749c8b2894dad510491246383d, type: 3}
+    title: "\u6570\u4E0D\u6E05\u5230\u5E95\u591A\u5C11\u9E2D"
+    description: "\u627E\u9F50\u6240\u6709\u9E2D\u5B50 (7/7)"
+    hidden: 1
+  - key: cheater
+    icon: {fileID: 21300000, guid: 0ca8516d6b7a9d1429988df84ed980a6, type: 3}
+    title: "\u4F5C\u5F0A\u8005"
+    description: "\u4F7F\u7528\u4E86\u4F5C\u5F0A\u6309\u952E"
+    hidden: 1
+  levelFinishKey: end game
+  speedrunLevels:
+  - maxTime: 600
+    key: copper
+  - maxTime: 360
+    key: silver
+  - maxTime: 180
+    key: gold

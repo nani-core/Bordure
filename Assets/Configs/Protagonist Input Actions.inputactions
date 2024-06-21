@@ -31,6 +31,24 @@
                     "processors": "",
                     "interactions": "Press",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Set Grabbing Orienting",
+                    "type": "Button",
+                    "id": "0b7cf583-d569-4939-a473-7dcd5046c7fa",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press(behavior=2)",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Set Grabbing Distancing",
+                    "type": "Button",
+                    "id": "b6747844-a020-4884-9110-2ee8ced61a73",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press(behavior=2)",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -48,7 +66,7 @@
                 {
                     "name": "",
                     "id": "b5549af2-6e73-499d-af53-52976d5a4f87",
-                    "path": "<Gamepad>/buttonEast",
+                    "path": "<Gamepad>/rightShoulder",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
@@ -75,6 +93,61 @@
                     "processors": "",
                     "groups": "PC",
                     "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "91b1907b-67b7-4858-8e0c-1e559fa48a6d",
+                    "path": "<Gamepad>/start",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c793fd75-4bac-4b7a-964f-3d409c8fb827",
+                    "path": "<Gamepad>/rightTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Set Grabbing Orienting",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "285a628a-8c58-4cdf-ab55-c30d34971868",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PC",
+                    "action": "Set Grabbing Orienting",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7e1cdf64-8b34-4c79-8077-b59f64a24dd7",
+                    "path": "<Gamepad>/leftTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Set Grabbing Distancing",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "013885ab-2a6b-4c9f-ac56-fc6ed54a6ab4",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PC",
+                    "action": "Set Grabbing Distancing",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -202,7 +275,7 @@
                 {
                     "name": "",
                     "id": "7c87d06f-7b3a-46a4-bf2e-199a8146a252",
-                    "path": "<Gamepad>/leftShoulder",
+                    "path": "<Gamepad>/leftTrigger",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
@@ -224,7 +297,7 @@
                 {
                     "name": "",
                     "id": "58001d94-43be-44b8-9083-6b407fb6cb10",
-                    "path": "<Gamepad>/buttonWest",
+                    "path": "<Gamepad>/buttonSouth",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
@@ -234,8 +307,19 @@
                 },
                 {
                     "name": "",
+                    "id": "9290371b-4678-4495-bc61-e6cbfdb4eef0",
+                    "path": "<Gamepad>/leftShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "cdaa3378-5ce8-49bb-a8f9-83084029de94",
-                    "path": "<Gamepad>/buttonSouth",
+                    "path": "<Gamepad>/leftStickPress",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
@@ -289,66 +373,66 @@
             "id": "e34f51e8-a057-4165-b140-a53d0a12a58f",
             "actions": [
                 {
-                    "name": "Set Grabbing Orienting",
-                    "type": "Button",
-                    "id": "c994d009-9813-47d5-a76e-42857e971bae",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "Press(behavior=2)",
-                    "initialStateCheck": false
+                    "name": "Grabbing Distance Delta",
+                    "type": "Value",
+                    "id": "90658fd0-95f9-4c78-a591-c1bfe3cac81e",
+                    "expectedControlType": "Axis",
+                    "processors": "Normalize(min=-1,max=1),Clamp(min=-1,max=1)",
+                    "interactions": "",
+                    "initialStateCheck": true
                 },
                 {
-                    "name": "Reset Grabbing Transform",
-                    "type": "Button",
-                    "id": "07d8f3b9-7046-4cb2-90f2-b1dd56892b75",
-                    "expectedControlType": "Button",
+                    "name": "Grabbing Orient Delta",
+                    "type": "Value",
+                    "id": "f3ebf242-fd20-4900-af9a-2b4aa1d100df",
+                    "expectedControlType": "Vector2",
                     "processors": "",
-                    "interactions": "Press",
-                    "initialStateCheck": false
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
                 {
                     "name": "",
-                    "id": "192c7105-c8c2-4996-84cf-c1bc19ae42fc",
-                    "path": "<Mouse>/rightButton",
+                    "id": "3014c33b-0612-4612-adb8-adfd6514239f",
+                    "path": "<Mouse>/scroll/y",
                     "interactions": "",
                     "processors": "",
                     "groups": "PC",
-                    "action": "Set Grabbing Orienting",
+                    "action": "Grabbing Distance Delta",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "d1839021-203c-4e7e-9c45-181a6de17f40",
-                    "path": "<Gamepad>/rightShoulder",
+                    "id": "c009bb9c-95f9-4fdd-8982-7ddd6675d327",
+                    "path": "<Gamepad>/rightStick/y",
                     "interactions": "",
-                    "processors": "",
+                    "processors": "Scale(factor=0.1)",
                     "groups": "Gamepad",
-                    "action": "Set Grabbing Orienting",
+                    "action": "Grabbing Distance Delta",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "aa10239e-ed8f-484f-bf17-82be6785ab60",
-                    "path": "<Mouse>/middleButton",
+                    "id": "a85052d1-b4d6-4475-9e6b-254f61912e82",
+                    "path": "<Mouse>/delta",
                     "interactions": "",
-                    "processors": "",
+                    "processors": "ScaleVector2(x=0.004,y=0.004)",
                     "groups": "PC",
-                    "action": "Reset Grabbing Transform",
+                    "action": "Grabbing Orient Delta",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "ad1e4dde-3b50-4f2d-8ed0-6885499c9e2f",
-                    "path": "<Gamepad>/buttonNorth",
+                    "id": "17ef2ca9-9b73-42ef-a75b-dad7b00b2caa",
+                    "path": "<Gamepad>/rightStick",
                     "interactions": "",
-                    "processors": "",
+                    "processors": "ScaleVector2(x=0.1,y=0.1)",
                     "groups": "Gamepad",
-                    "action": "Reset Grabbing Transform",
+                    "action": "Grabbing Orient Delta",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

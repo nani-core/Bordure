@@ -6,12 +6,16 @@ namespace NaniCore.Bordure {
 		private Protagonist protagonist;
 		private Seat currentSeat;
 		[System.NonSerialized] public float mouseSensitivityGain = 1.0f;
+		private Coroutine sittingCoroutine;
 		#endregion
 
 		#region Interfaces
+		public System.Action onProtagonistEnabled, onProtagonistDisabled;
+
 		public Protagonist Protagonist {
 			get {
 				if(protagonist == null) {
+					// To flush invalidated Unity references.
 					protagonist = null;
 					return null;
 				}
@@ -22,8 +26,6 @@ namespace NaniCore.Bordure {
 		public bool UsesProtagonist {
 			get => Protagonist != null && Protagonist.isActiveAndEnabled;
 			set {
-				if(value == UsesProtagonist)
-					return;
 				if(value) {
 					// Spawn the temporary camera anchor.
 					var anchor = new GameObject().transform;
@@ -31,22 +33,34 @@ namespace NaniCore.Bordure {
 					anchor.SetParent(null, true);
 
 					protagonist = GetProtagonistSingleton();
-					Protagonist.gameObject.SetActive(true);
+					Protagonist.enabled = true;
 					AttachCameraTo(Protagonist.Eye, true);
 					AlignCameraTo(anchor);
 
 					Destroy(anchor.gameObject);
+
+					onProtagonistEnabled?.Invoke();
 				}
 				else {
 					if(Protagonist == null)
 						return;
 					RetrieveCameraHierarchy();
-					Protagonist.gameObject.SetActive(false);
+					Protagonist.enabled = false;
+
+					onProtagonistDisabled?.Invoke();
 				}
 			}
 		}
 
 		public void MoveProtagonistToSpawnPoint(SpawnPoint spawnPoint) {
+			if(spawnPoint == null) {
+				Debug.LogWarning("Warning: Trying to move the protagonist to an empty spawn point, aborting.");
+				return;
+			}
+			var levelSection = spawnPoint.transform.GetComponentInParent<LevelSection>(true);
+			if(levelSection != null)
+				levelSection.Load();
+
 			if(UsesProtagonist) {
 				Protagonist.transform.AlignWith(spawnPoint.transform);
 			}
@@ -98,22 +112,17 @@ namespace NaniCore.Bordure {
 		public Seat CurrentSeat => currentSeat;
 
 		public void ProtagonistSitOn(Seat seat) {
-			if(seat == null)
-				return;
-
-			ProtagonistIsKinematic = true;
-			UsesProtagonistMovement = false;
-			UsesProtagonistOrientation = seat.canOrient;
-
-			TransitCameraTo(seat.transform);
-
-			currentSeat = seat;
-			currentSeat.SendMessage("OnSitOn", SendMessageOptions.DontRequireReceiver);
+			StartCoroutine(SittingCoroutine(seat));
 		}
 
 		public void ProtagonistLeaveSeat() {
 			if(currentSeat == null)
 				return;
+
+			if(sittingCoroutine != null) {
+				StopCoroutine(sittingCoroutine);
+				sittingCoroutine = null;
+			}
 
 			ProtagonistIsKinematic = false;
 			UsesProtagonistMovement = true;
@@ -160,6 +169,22 @@ namespace NaniCore.Bordure {
 				protagonist = CreateProtagonist();
 
 			return protagonist;
+		}
+
+		private System.Collections.IEnumerator SittingCoroutine(Seat seat) {
+			if(seat == null)
+				yield break;
+
+			ProtagonistIsKinematic = true;
+			UsesProtagonistMovement = false;
+			UsesProtagonistOrientation = seat.canOrient;
+
+			yield return sittingCoroutine = TransitCameraTo(seat.transform);
+
+			currentSeat = seat;
+			currentSeat.SendMessage("OnSitOn", SendMessageOptions.DontRequireReceiver);
+
+			sittingCoroutine = null;
 		}
 		#endregion
 	}

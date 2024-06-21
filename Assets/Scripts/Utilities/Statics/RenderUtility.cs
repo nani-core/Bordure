@@ -98,6 +98,9 @@ namespace NaniCore {
 		}
 
 		public static void Destroy(this RenderTexture texture) {
+			if(texture == null)
+				return;
+
 			if(RenderTexture.active == texture)
 				RenderTexture.active = null;
 			RenderTexture.ReleaseTemporary(texture);
@@ -192,7 +195,8 @@ namespace NaniCore {
 				mask.IndicateByValue(Color.clear);  // Invert.
 			}
 			else {
-				mask.IndicateByValue(Color.white);
+				// TODO: This needs to be worked out.
+				mask.IndicateByValue(Color.white, 10);
 			}
 			texture.Overlay(mask);
 			mask.Destroy();

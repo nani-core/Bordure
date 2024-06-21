@@ -120,13 +120,19 @@ namespace NaniCore.Bordure {
 					if(GameManager.Instance.CurrentSeat == null)
 						IsKinematic = false;
 				}
+				else {
+					isWalking = false;
+					isSprinting = false;
+				}
 				usesMovement = value;
 			}
 		}
 
 		public bool UsesOrientation {
 			get => usesOrientation;
-			set => usesOrientation = value;
+			set {
+				usesOrientation = value;
+			}
 		}
 
 		public bool IsKinematic {
@@ -229,7 +235,15 @@ namespace NaniCore.Bordure {
 		public void Jump() => Jump(Profile.jumpingHeight);
 
 		private void ValidateMovementConditions() {
+			Transform previousGround = steppingGround.transform;
 			isOnGround = SweepTestGround(out steppingGround, Profile.skinDepth);
+			Transform newGround = steppingGround.transform;
+			if(previousGround != newGround) {
+				if(previousGround != null)
+					previousGround.SendMessage("OnNotStepped", SendMessageOptions.DontRequireReceiver);
+				if(newGround != null)
+					newGround.SendMessage("OnStepped", SendMessageOptions.DontRequireReceiver);
+			}
 			isInWater = rigidbodyAgent.IsOverlappingWithLayers(1 << GameManager.Instance.WaterLayer);
 		}
 

@@ -53,7 +53,7 @@ namespace NaniCore {
 				}
 			}
 
-			if(batch)
+			if(batch && GameManager.Instance != null)
 				BatchMeshes(under, instances);
 		}
 
@@ -113,16 +113,19 @@ namespace NaniCore {
 
 			// Merge into one sum meshex.
 			MeshEx sum = new();
+			MeshEx.Descriptor sumDescriptor = sum.descriptor;
 			foreach(var (filter, renderer) in pairs) {
 				if(!batchInfos.ContainsKey(filter.sharedMesh))
 					continue;
 				var info = batchInfos[filter.sharedMesh];
+				sumDescriptor = sumDescriptor.Union(info.templateMeshEx.descriptor);
 				AddToMeshEx(sum,
 					info.templateMeshEx,
 					info.submeshIndexOffset,
 					MathUtility.RelativeTransform(filter.transform, under)
 				);
 			}
+			sum.descriptor = sumDescriptor;
 
 			// Destroy original objects.
 			foreach(var targetObject in targetObjects)
