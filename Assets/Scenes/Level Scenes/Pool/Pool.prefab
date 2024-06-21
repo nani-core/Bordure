@@ -1744,6 +1744,7 @@ Transform:
   - {fileID: 6929373469329635379}
   - {fileID: 7845338554670633674}
   - {fileID: 4549950009376312969}
+  - {fileID: 3150833267760835326}
   m_Father: {fileID: 4125685728895157053}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!1 &233140560493912545
@@ -4812,6 +4813,151 @@ MonoBehaviour:
     hollowObjects: []
     preventOverlapping: 0
     forceFillCorner: 0
+--- !u!1 &744845114250400286
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3150833267760835326}
+  - component: {fileID: 8968604174086932488}
+  m_Layer: 0
+  m_Name: Achievement Logic
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3150833267760835326
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 744845114250400286}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6832958967516850618}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8968604174086932488
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 744845114250400286}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b72f0aa01625cd24299a03aed81b0a3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  callback:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: b2f1048833879fd4eb780ed41474578f, type: 2}
+        m_TargetAssemblyTypeName: NaniCore.Bordure.GameManagerAgent, Bordure
+        m_MethodName: FinishAchievement
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: pictures
+          m_BoolArgument: 0
+        m_CallState: 2
+  targetCount: 5
+--- !u!1 &748208796829914072
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 855407073789116032}
+  - component: {fileID: 587722282120253635}
+  - component: {fileID: 1708624877664766863}
+  m_Layer: 0
+  m_Name: Achievement Trigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &855407073789116032
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 748208796829914072}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.5, z: 2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2197850084957417476}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &587722282120253635
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 748208796829914072}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 1015
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2, y: 1, z: 2}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1708624877664766863
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 748208796829914072}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a42573664acedef42b14d4c5f967e29a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  oneTime: 1
+  onEnter:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: b2f1048833879fd4eb780ed41474578f, type: 2}
+        m_TargetAssemblyTypeName: NaniCore.Bordure.GameManagerAgent, Bordure
+        m_MethodName: FinishAchievement
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: tiny room
+          m_BoolArgument: 0
+        m_CallState: 2
+  onExit:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &749027908679888484
 GameObject:
   m_ObjectHideFlags: 0
@@ -12622,6 +12768,7 @@ Transform:
   - {fileID: 4791305082983207406}
   - {fileID: 7360316244074576754}
   - {fileID: 1019931822439358384}
+  - {fileID: 855407073789116032}
   m_Father: {fileID: 352547476236210107}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1944680719889562048
@@ -59368,6 +59515,34 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6832958967516850618}
     m_Modifications:
+    - target: {fileID: 1168554033187518002, guid: d97bf2dd32710664a87276146992b362, type: 3}
+      propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1168554033187518002, guid: d97bf2dd32710664a87276146992b362, type: 3}
+      propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.data[2].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1168554033187518002, guid: d97bf2dd32710664a87276146992b362, type: 3}
+      propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.data[2].m_Target
+      value: 
+      objectReference: {fileID: 8968604174086932488}
+    - target: {fileID: 1168554033187518002, guid: d97bf2dd32710664a87276146992b362, type: 3}
+      propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.data[2].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1168554033187518002, guid: d97bf2dd32710664a87276146992b362, type: 3}
+      propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
+      value: Invoke
+      objectReference: {fileID: 0}
+    - target: {fileID: 1168554033187518002, guid: d97bf2dd32710664a87276146992b362, type: 3}
+      propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.data[2].m_TargetAssemblyTypeName
+      value: NaniCore.TallyLogic, Bordure
+      objectReference: {fileID: 0}
+    - target: {fileID: 1168554033187518002, guid: d97bf2dd32710664a87276146992b362, type: 3}
+      propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 2634109635775690870, guid: d97bf2dd32710664a87276146992b362, type: 3}
       propertyPath: m_Name
       value: Picture Frame (3)
@@ -60316,6 +60491,34 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6832958967516850618}
     m_Modifications:
+    - target: {fileID: 1168554033187518002, guid: d97bf2dd32710664a87276146992b362, type: 3}
+      propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1168554033187518002, guid: d97bf2dd32710664a87276146992b362, type: 3}
+      propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.data[2].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1168554033187518002, guid: d97bf2dd32710664a87276146992b362, type: 3}
+      propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.data[2].m_Target
+      value: 
+      objectReference: {fileID: 8968604174086932488}
+    - target: {fileID: 1168554033187518002, guid: d97bf2dd32710664a87276146992b362, type: 3}
+      propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.data[2].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1168554033187518002, guid: d97bf2dd32710664a87276146992b362, type: 3}
+      propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
+      value: Invoke
+      objectReference: {fileID: 0}
+    - target: {fileID: 1168554033187518002, guid: d97bf2dd32710664a87276146992b362, type: 3}
+      propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.data[2].m_TargetAssemblyTypeName
+      value: NaniCore.TallyLogic, Bordure
+      objectReference: {fileID: 0}
+    - target: {fileID: 1168554033187518002, guid: d97bf2dd32710664a87276146992b362, type: 3}
+      propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 2634109635775690870, guid: d97bf2dd32710664a87276146992b362, type: 3}
       propertyPath: m_Name
       value: Picture Frame (2)
@@ -68097,6 +68300,34 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6832958967516850618}
     m_Modifications:
+    - target: {fileID: 1168554033187518002, guid: d97bf2dd32710664a87276146992b362, type: 3}
+      propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1168554033187518002, guid: d97bf2dd32710664a87276146992b362, type: 3}
+      propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.data[2].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1168554033187518002, guid: d97bf2dd32710664a87276146992b362, type: 3}
+      propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.data[2].m_Target
+      value: 
+      objectReference: {fileID: 8968604174086932488}
+    - target: {fileID: 1168554033187518002, guid: d97bf2dd32710664a87276146992b362, type: 3}
+      propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.data[2].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1168554033187518002, guid: d97bf2dd32710664a87276146992b362, type: 3}
+      propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
+      value: Invoke
+      objectReference: {fileID: 0}
+    - target: {fileID: 1168554033187518002, guid: d97bf2dd32710664a87276146992b362, type: 3}
+      propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.data[2].m_TargetAssemblyTypeName
+      value: NaniCore.TallyLogic, Bordure
+      objectReference: {fileID: 0}
+    - target: {fileID: 1168554033187518002, guid: d97bf2dd32710664a87276146992b362, type: 3}
+      propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 2634109635775690870, guid: d97bf2dd32710664a87276146992b362, type: 3}
       propertyPath: m_Name
       value: Picture Frame (4)
@@ -68175,6 +68406,34 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6832958967516850618}
     m_Modifications:
+    - target: {fileID: 1168554033187518002, guid: d97bf2dd32710664a87276146992b362, type: 3}
+      propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1168554033187518002, guid: d97bf2dd32710664a87276146992b362, type: 3}
+      propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.data[2].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1168554033187518002, guid: d97bf2dd32710664a87276146992b362, type: 3}
+      propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.data[2].m_Target
+      value: 
+      objectReference: {fileID: 8968604174086932488}
+    - target: {fileID: 1168554033187518002, guid: d97bf2dd32710664a87276146992b362, type: 3}
+      propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.data[2].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1168554033187518002, guid: d97bf2dd32710664a87276146992b362, type: 3}
+      propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
+      value: Invoke
+      objectReference: {fileID: 0}
+    - target: {fileID: 1168554033187518002, guid: d97bf2dd32710664a87276146992b362, type: 3}
+      propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.data[2].m_TargetAssemblyTypeName
+      value: NaniCore.TallyLogic, Bordure
+      objectReference: {fileID: 0}
+    - target: {fileID: 1168554033187518002, guid: d97bf2dd32710664a87276146992b362, type: 3}
+      propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 2634109635775690870, guid: d97bf2dd32710664a87276146992b362, type: 3}
       propertyPath: m_Name
       value: Picture Frame
@@ -68899,6 +69158,34 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6832958967516850618}
     m_Modifications:
+    - target: {fileID: 1168554033187518002, guid: d97bf2dd32710664a87276146992b362, type: 3}
+      propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1168554033187518002, guid: d97bf2dd32710664a87276146992b362, type: 3}
+      propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.data[2].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1168554033187518002, guid: d97bf2dd32710664a87276146992b362, type: 3}
+      propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.data[2].m_Target
+      value: 
+      objectReference: {fileID: 8968604174086932488}
+    - target: {fileID: 1168554033187518002, guid: d97bf2dd32710664a87276146992b362, type: 3}
+      propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.data[2].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1168554033187518002, guid: d97bf2dd32710664a87276146992b362, type: 3}
+      propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
+      value: Invoke
+      objectReference: {fileID: 0}
+    - target: {fileID: 1168554033187518002, guid: d97bf2dd32710664a87276146992b362, type: 3}
+      propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.data[2].m_TargetAssemblyTypeName
+      value: NaniCore.TallyLogic, Bordure
+      objectReference: {fileID: 0}
+    - target: {fileID: 1168554033187518002, guid: d97bf2dd32710664a87276146992b362, type: 3}
+      propertyPath: onOpen.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 2634109635775690870, guid: d97bf2dd32710664a87276146992b362, type: 3}
       propertyPath: m_Name
       value: Picture Frame (1)
