@@ -20,5 +20,11 @@ namespace NaniCore {
         public override void Invoke() {
             IncrementalInvoke();
         }
+
+        public void Rewind() {
+            if (count == 0) return;
+
+            count--;
+        }
     }
 }
