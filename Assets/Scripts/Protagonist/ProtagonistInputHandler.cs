@@ -166,7 +166,14 @@ namespace NaniCore.Bordure {
 		}
 
 		protected void OnGrabbingDistanceDelta(InputValue value) {
-			if(protagonist.GrabbingObject == null || !GrabbingDistancing)
+			if(!GrabbingDistancing)
+				return;
+
+			OnGrabbingDistanceDeltaDirect(value);
+		}
+
+		protected void OnGrabbingDistanceDeltaDirect(InputValue value) {
+			if(protagonist.GrabbingObject == null)
 				return;
 
 			float raw = value.Get<float>();
