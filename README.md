@@ -20,3 +20,8 @@ Simply clone the repository into your computer and open it with Unity.
 本项目使用 Unity 2022.3.16f1 开发。
 
 The project is developed with Unity 2022.3.16f1.
+
+# 相关链接 / Related Links
+
+[机制设计文档 / Design Documentation](https://github.com/nani-core/Design-Documentation)
+[程序设计文档 / Dev Documentation](https://github.com/nani-core/Dev-Documentation)
