@@ -382,6 +382,15 @@
                     "initialStateCheck": true
                 },
                 {
+                    "name": "Grabbing Distance Delta Direct",
+                    "type": "Value",
+                    "id": "32aff446-3a22-4a66-8663-fdec4e386ee4",
+                    "expectedControlType": "Axis",
+                    "processors": "Normalize(min=-1,max=1),Clamp(min=-1,max=1)",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
                     "name": "Grabbing Orient Delta",
                     "type": "Value",
                     "id": "f3ebf242-fd20-4900-af9a-2b4aa1d100df",
@@ -392,17 +401,6 @@
                 }
             ],
             "bindings": [
-                {
-                    "name": "",
-                    "id": "3014c33b-0612-4612-adb8-adfd6514239f",
-                    "path": "<Mouse>/scroll/y",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "PC",
-                    "action": "Grabbing Distance Delta",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
                 {
                     "name": "",
                     "id": "c009bb9c-95f9-4fdd-8982-7ddd6675d327",
@@ -433,6 +431,17 @@
                     "processors": "ScaleVector2(x=0.1,y=0.1)",
                     "groups": "Gamepad",
                     "action": "Grabbing Orient Delta",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8c75d14b-769c-4661-a954-e4169976711d",
+                    "path": "<Mouse>/scroll/y",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PC",
+                    "action": "Grabbing Distance Delta Direct",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
